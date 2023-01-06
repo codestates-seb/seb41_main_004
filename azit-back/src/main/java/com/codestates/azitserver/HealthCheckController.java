@@ -20,7 +20,7 @@ public class HealthCheckController {
 		response.put("greet", greet);
 		response.put("time", LocalDateTime.now());
 		response.put("word", "hello");
-		response.put("hello", "everyone");
+		response.put("hollow", "every2one");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
