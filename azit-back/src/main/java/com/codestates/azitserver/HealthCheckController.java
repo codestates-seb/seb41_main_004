@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthCheckController {
 	@GetMapping("/health-check")
-	public ResponseEntity<?> healthCheck(@RequestParam(required=false) String name) {
+	public ResponseEntity<?> healthCheck(@RequestParam(required = false) String name) {
 		String greet = name == null ? "Hello Admin!" : String.format("Hello %s!", name);
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("greet", greet);
 		response.put("time", LocalDateTime.now());
+		response.put("word", "hello");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
