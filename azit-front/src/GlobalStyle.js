@@ -54,6 +54,7 @@ const GlobalStyle = createGlobalStyle`
 #root {
    width:100%;
    max-width:50rem;
+   background-color: var(--white-color);
 }
 `;
 export default GlobalStyle;
