@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: azit-server
+server:
+  servlet:
+    encoding:
+      force-response: true
+
+#mail:
+#  smtp:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${EMAIL_USERNAME}
+#    password: ${EMAIL_PASSWORD}
+#    auth: true
+#    starttls:
+#      enable: true
+
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: ${GOOGLE_CLIENT_ID}
+#            client-secret: ${GOOGLE_CLIENT_SECRET}
+#            scope:
+#              - email
+#              - profile
+#          github:
+#            client-id: ${GITHUB_CLIENT}
+#            client-secret: ${GITHUB_SECRET}
+#            scope:
+#              - user
+#              - user:email
+
+#jwt:
+#  secret-key: ${JWT_SECRET_KEY}
+#  access-token-expiration-minutes: ${ACCESS_TOKEN_EXPIRATION_MINUTES}
+#  refresh-token-expiration-minutes: ${REFRESH_TOKEN_EXPIRATION_MINUTES}
+#
+#redis:
+#  port: 6379
+#  host: localhost
