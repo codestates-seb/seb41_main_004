@@ -3,6 +3,7 @@ package com.codestates.azitserver.global.config;
 import static org.springframework.security.config.Customizer.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,7 +60,7 @@ public class SecurityConfig {
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/auth/login").permitAll() // 로그인 누구나 가능
 				.antMatchers(HttpMethod.POST, "/auth/logout").hasRole("USER") // 로그아웃 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/passwords").hasRole("USER") // 비밀번호 찾기 유저 가능
+				.antMatchers(HttpMethod.POST, "/**/passwords").permitAll() // 비밀번호 찾기 유저 가능
 				.antMatchers(HttpMethod.POST, "/**/passwords/matchers").hasRole("USER") // 비밀번호 인증 유저 가능
 				.antMatchers(HttpMethod.PATCH, "/**/passwords").hasAnyRole("USER", "ADMIN") // 비밀번호 변경 유저 가능(랜덤 비밀번호 발생 시 admin 권한 필요)
 				/*======member======*/
