@@ -67,5 +67,11 @@ input:focus {
    outline:none;
    border:1px solid var(--point-color);
 }
+label {
+   font-size:var(--main-font);
+   color:var(--sub-font-color);
+   margin-bottom: .5rem;
+   display: block;
+}
 `;
 export default GlobalStyle;
