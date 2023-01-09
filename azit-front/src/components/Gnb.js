@@ -23,6 +23,7 @@ const StyledGnbWrapper = styled.div`
   height: 8rem;
   background-color: var(--white-color);
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.4);
+  z-index: 99;
   > a {
     display: flex;
     flex-direction: column;
