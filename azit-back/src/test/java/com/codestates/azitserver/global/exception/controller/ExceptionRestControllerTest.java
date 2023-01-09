@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -25,9 +27,10 @@ import com.codestates.azitserver.config.CustomExceptionCodeSnippet;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(value = ExceptionRestController.class)
+@WebMvcTest(value = ExceptionRestController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
+@AutoConfigureMockMvc(addFilters = false)
 class ExceptionRestControllerTest {
 	@Autowired
 	MockMvc mockMvc;
