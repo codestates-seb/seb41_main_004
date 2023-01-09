@@ -37,9 +37,9 @@ out/
 ### VS Code ###
 .vscode/
 
-### env ###
-env.yml
-env.properties
+#### env ###
+#env.yml
+#env.properties
 
 ### restdocs ###
 src/main/resources/static/docs/index.html
