@@ -1,29 +1,26 @@
 import styled from "styled-components";
+import editIcon from "../images/edit-icon.png";
 
 const HeaderWrap = styled.header`
   height: 5.5rem;
   display: flex;
-  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
   padding: 0 2rem;
-  > h2 {
-    font-size: var(--title-font);
-    font-weight: var(--bold-weight);
-  }
+  border-bottom: 1px solid var(--border-color);
 `;
-const Header = styled.div`
-  display: flex;
+const Header = styled.div``;
+const Edit = styled.span``;
+const Img = styled.img`
+  width: 20px;
+  height: 20px;
 `;
-const Edit = styled.span`
-  display: flex;
-  justify-content: end;
-`;
+
 const MyPage_Header = () => {
   return (
     <HeaderWrap>
-      <Header>
-        <Edit>프로필 수정</Edit>
-      </Header>
+      <Header />
+      <Edit>프로필 수정 </Edit> <Img alt="editIcon" src={editIcon} />
     </HeaderWrap>
   );
 };

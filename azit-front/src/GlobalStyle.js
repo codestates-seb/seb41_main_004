@@ -14,11 +14,11 @@ const GlobalStyle = createGlobalStyle`
     --green-color : #18A52E;
 
     /* FontSize */
-    --title-font : 2rem;
-    --big-font : 1.4rem;
-    --main-font : 1.2rem;
-    --small-font : 0.8rem;
-    --caption-font : 1rem;
+    --title-font : 2.2rem;
+    --big-font : 1.6rem;
+    --main-font : 1.4rem;
+    --small-font : 1rem;
+    --caption-font : 1.2rem;
 
     /* FontWeight*/
     --regular-weight: 400;
@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
  }
  body {
     margin : 0;
-    font-size:1.2rem;
+    font-size:var(--main-font);
     font-family: 'Noto Sans KR', sans-serif;
     display:flex;
     flex-direction:row;
