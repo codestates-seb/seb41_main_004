@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ReviewCreate from "./pages/ReviewCreate"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>
           <Route path="/edit" element={<Home />}></Route>
+          <Route path="/review/Create" element={<ReviewCreate />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
         </Routes>
