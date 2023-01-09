@@ -1,0 +1,24 @@
+= Azit Application Api Documentation
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+CAUTION: 요청 Host 주소는 예시입니다. 실제 Host 주소가 아닙니다.
+
+// TODO: 맨 뒤로 배치 예정
+== 에러 코드
+
+=== 커스텀 에러 코드 조회
+.curl-request
+include::{snippets}/exception-code/curl-request.adoc[]
+
+.http-request
+include::{snippets}/exception-code/http-request.adoc[]
+
+.http-response
+include::{snippets}/exception-code/http-response.adoc[]
+
+.exception-code
+include::{snippets}/exception-code/exception-code-fields.adoc[]
