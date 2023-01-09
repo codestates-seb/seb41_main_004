@@ -23,11 +23,10 @@ public class MemberDetailsService implements UserDetailsService {
 	private final MemberRepository memberRepository;
 	private final CustomAuthorityUtils authorityUtils;
 
-	// MemberStatus가 Active인 회원 중, Email로 회원 찾아서 UserDetails 반환
+	// Email로 회원 찾아서 UserDetails 반환
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Optional<Member> optionalMember = memberRepository.findByEmailAndMemberStatus(email,
-			Member.MemberStatus.ACTIVE);
+		Optional<Member> optionalMember = memberRepository.findByEmail(email);
 		Member findMember = optionalMember.orElseThrow(
 			() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
@@ -41,6 +40,7 @@ public class MemberDetailsService implements UserDetailsService {
 			setEmail(member.getEmail());
 			setPassword(member.getPassword());
 			setRoles(member.getRoles());
+			setMemberStatus(member.getMemberStatus());
 		}
 
 		@Override
@@ -70,6 +70,9 @@ public class MemberDetailsService implements UserDetailsService {
 
 		@Override
 		public boolean isEnabled() {
+			if (getMemberStatus() == MemberStatus.DELETED) {
+				return false;
+			}
 			return true;
 		}
 	}
