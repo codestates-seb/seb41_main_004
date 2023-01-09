@@ -56,5 +56,16 @@ const GlobalStyle = createGlobalStyle`
    max-width:50rem;
    background-color: var(--white-color);
 }
+input {
+   width:100%;
+   border-radius:5px;
+   border:1px solid var(--border-color);
+   padding: 1.5rem;
+   height: 4.5rem;
+}
+input:focus {
+   outline:none;
+   border:1px solid var(--point-color);
+}
 `;
 export default GlobalStyle;
