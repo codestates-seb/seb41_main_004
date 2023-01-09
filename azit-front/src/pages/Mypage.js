@@ -1,13 +1,12 @@
 import Gnb from "../components/Gnb";
-import Header from "../components/Header";
-
-const Mypage = () => {
+import MyPage_Header from "../components/MyPage_Header";
+const MyPage = () => {
   return (
     <>
-      <Header />
+      <MyPage_Header />
       <Gnb />
     </>
   );
 };
 
-export default Mypage;
+export default MyPage;

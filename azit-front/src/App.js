@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Mypage from "./pages/Mypage";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
           <Route path="/edit" element={<Home />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/mypage" element={<Mypage />}></Route>
+          <Route path="/mypage" element={<MyPage />}></Route>
         </Routes>
       </BrowserRouter>
     </>
