@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.jwt;
+package com.codestates.azitserver.domain.auth.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.filter;
+package com.codestates.azitserver.domain.auth.filter;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.codestates.azitserver.global.auth.jwt.JwtTokenizer;
-import com.codestates.azitserver.global.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;

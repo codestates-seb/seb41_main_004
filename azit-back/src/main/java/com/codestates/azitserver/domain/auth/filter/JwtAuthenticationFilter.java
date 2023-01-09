@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.filter;
+package com.codestates.azitserver.domain.auth.filter;
 
 import java.io.IOException;
 import java.util.Date;
@@ -15,9 +15,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.member.entity.Member;
-import com.codestates.azitserver.global.auth.dto.LoginDto;
-import com.codestates.azitserver.global.auth.jwt.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;

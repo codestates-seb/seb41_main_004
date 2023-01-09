@@ -2,7 +2,6 @@ package com.codestates.azitserver.global.config;
 
 import static org.springframework.security.config.Customizer.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -19,14 +18,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.codestates.azitserver.global.auth.filter.JwtAuthenticationFilter;
-import com.codestates.azitserver.global.auth.filter.JwtVerificationFilter;
-import com.codestates.azitserver.global.auth.handler.MemberAccessDeniedHandler;
-import com.codestates.azitserver.global.auth.handler.MemberAuthenticationEntryPoint;
-import com.codestates.azitserver.global.auth.handler.MemberAuthenticationFailureHandler;
-import com.codestates.azitserver.global.auth.handler.MemberAuthenticationSuccessHandler;
-import com.codestates.azitserver.global.auth.jwt.JwtTokenizer;
-import com.codestates.azitserver.global.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.filter.JwtAuthenticationFilter;
+import com.codestates.azitserver.domain.auth.filter.JwtVerificationFilter;
+import com.codestates.azitserver.domain.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationEntryPoint;
+import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailureHandler;
+import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
+import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 
 import lombok.RequiredArgsConstructor;
 

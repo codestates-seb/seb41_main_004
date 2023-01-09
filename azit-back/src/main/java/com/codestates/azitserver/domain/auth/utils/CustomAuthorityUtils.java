@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.utils;
+package com.codestates.azitserver.domain.auth.utils;
 
 import java.util.List;
 import java.util.stream.Collectors;

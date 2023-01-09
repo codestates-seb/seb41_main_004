@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.userdetails;
+package com.codestates.azitserver.domain.auth.userdetails;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
-import com.codestates.azitserver.global.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 

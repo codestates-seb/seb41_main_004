@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.handler;
+package com.codestates.azitserver.domain.auth.handler;
 
 import java.io.IOException;
 

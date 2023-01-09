@@ -1,4 +1,4 @@
-package com.codestates.azitserver.global.auth.dto;
+package com.codestates.azitserver.domain.auth.dto;
 
 import lombok.Getter;
 
