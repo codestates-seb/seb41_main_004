@@ -41,3 +41,6 @@ out/
 ### env ###
 env.yml
 env.properties
+
+### restdocs ###
+src/main/resources/static/docs/index.html
