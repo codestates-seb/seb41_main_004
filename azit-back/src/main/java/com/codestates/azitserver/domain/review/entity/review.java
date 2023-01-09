@@ -3,11 +3,14 @@ package com.codestates.azitserver.domain.review.entity;
 import com.codestates.azitserver.global.Audit.Auditable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class review extends Auditable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
     private Long reviewer; //TODO FK
