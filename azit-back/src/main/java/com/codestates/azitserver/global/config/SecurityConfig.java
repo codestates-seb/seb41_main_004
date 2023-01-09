@@ -77,12 +77,12 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/clubs/recommend/**").hasRole("USER") // 추천 아지트 조회 유저 가능
 				.antMatchers(HttpMethod.GET, "/clubs/members/**").hasRole("USER") // 특정 유저 아지트 조회 유저 가능
 				.antMatchers(HttpMethod.GET, "/clubs/**").permitAll() // 아지트 조회, 검색 누구나 가능
-				.antMatchers(HttpMethod.PATCH, "/clubs/**").hasRole("HOST") // 아지트 수정 호스트 가능
-				.antMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("HOST") // 아지트 삭제 호스트 가능
+				.antMatchers(HttpMethod.PATCH, "/clubs/**").hasRole("USER") // 아지트 수정 호스트 가능
+				.antMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("USER") // 아지트 삭제 호스트 가능
 				.antMatchers(HttpMethod.POST, "/clubs/reports/**").hasRole("USER") // 아지트 신고 유저 가능
 				.antMatchers(HttpMethod.POST, "/**/signups").hasRole("USER") // 아지트 참여 신청 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/signups/**").hasRole("HOST") // 아지트 참여 승인/거부 호스트 가능
-				.antMatchers(HttpMethod.POST, "/**/kicks/**").hasRole("HOST") // 아지트 강퇴 호스트 가능
+				.antMatchers(HttpMethod.POST, "/**/signups/**").hasRole("USER") // 아지트 참여 승인/거부 호스트 가능
+				.antMatchers(HttpMethod.POST, "/**/kicks/**").hasRole("USER") // 아지트 강퇴 호스트 가능
 				/*======review======*/
 				.antMatchers(HttpMethod.POST, "/reviews").hasRole("USER") // 리뷰 유저 가능
 				.antMatchers(HttpMethod.PATCH, "/reviews/**").hasRole("USER") // 리뷰 상태변경 유저 가능

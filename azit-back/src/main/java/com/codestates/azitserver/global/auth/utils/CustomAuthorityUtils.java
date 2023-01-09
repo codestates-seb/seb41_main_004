@@ -16,7 +16,6 @@ public class CustomAuthorityUtils {
 
 	private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
 	private final List<String> USER_ROLES_STRING = List.of("USER");
-	private final List<String> HOST_ROLES_STRING = List.of("HOST");
 
 	// 역할 토대로 권한 부여
 	public List<GrantedAuthority> createAuthorities(List<String> roles) {
@@ -31,10 +30,6 @@ public class CustomAuthorityUtils {
 		if (email.equals(adminMailAddress)) {
 			return ADMIN_ROLES_STRING;
 		}
-
-		// TODO : HOST 역할
-		// Host >> club repository에서 host로 있으면 host role 부여하는 방식으로 구상 중
-
 		return USER_ROLES_STRING;
 	}
 }
