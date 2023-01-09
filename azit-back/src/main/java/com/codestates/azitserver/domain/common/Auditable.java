@@ -1,6 +1,8 @@
-package com.codestates.azitserver.global.Audit;
+package com.codestates.azitserver.domain.common;
 
 import lombok.Getter;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,12 +15,14 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class Auditable {
+public abstract class Auditable {
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @ColumnDefault("CURRENT_TIMESTAMP()")
+    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @LastModifiedDate
-    @Column(name = "last_modified_at")
-    private LocalDateTime lastModifiedAt;
+    @ColumnDefault("CURRENT_TIMESTAMP()")
+    @Column(name = "LAST_MODIFIED_AT", nullable = false)
+    private LocalDateTime lastModifiedAt = LocalDateTime.now();
 }
