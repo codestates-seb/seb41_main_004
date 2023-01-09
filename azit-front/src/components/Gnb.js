@@ -27,6 +27,7 @@ const StyledGnbWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
     > .icon {
       width: 4rem;
       height: 4rem;
