@@ -35,8 +35,8 @@ server:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY:$JWT_SECRET_KEY}
-  access-token-expiration-minutes: ${ACCESS_TOKEN_EXPIRATION_MINUTES:$ACCESS_TOKEN_EXPIRATION_MINUTES}
-  refresh-token-expiration-minutes: ${REFRESH_TOKEN_EXPIRATION_MINUTES:$REFRESH_TOKEN_EXPIRATION_MINUTES}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
 mail:
   address:
     admin: ${ADMIN_EMAIL:$ADMIN_EMAIL}

@@ -25,11 +25,11 @@ public class JwtTokenizer {
 
 	@Getter
 	@Value("${jwt.access-token-expiration-minutes}")
-	private String accessTokenExpirationMinutes;
+	private int accessTokenExpirationMinutes;
 
 	@Getter
 	@Value("${jwt.refresh-token-expiration-minutes}")
-	private String refreshTokenExpirationMinutes;
+	private int refreshTokenExpirationMinutes;
 
 	public String encodeBase64SecretKey(String secretKey) {
 		return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
