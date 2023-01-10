@@ -111,7 +111,7 @@ const Gnb = () => {
         <span className="icon" />
         <span>검색</span>
       </NavLink>
-      <NavLink to="/profile" className="profile">
+      <NavLink to="/userpage" className="profile">
         <span className="icon" />
         <span>프로필</span>
       </NavLink>
