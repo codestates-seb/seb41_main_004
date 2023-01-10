@@ -15,6 +15,7 @@ import SignupAdditional from "./pages/SignupAdditional";
 import Loading from "./pages/Loading";
 import AzitReport from "./pages/AzitReport";
 import UserProfileEdit from "./pages/UserProfileEdit";
+import UserResetPassword from "./pages/UserResetPassword";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/signupadd" element={<SignupAdditional />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/useredit" element={<UserProfileEdit />}></Route>
+          <Route path="/userreset" element={<UserResetPassword />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
