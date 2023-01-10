@@ -20,25 +20,25 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Member extends Auditable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long memberId;
 
-	@Column(unique = true) //TODO FK
-	private Long avatar_image_id;
+    @Column(unique = true) //TODO FK
+    private Long avatar_image_id;
 
-	@Column(nullable = false, unique = true)
-	private String email;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-	@Column(nullable = false, unique = true)
-	private String nickname;
+    @Column(nullable = false, unique = true)
+    private String nickname;
 
-	private String password;
-	private Gender gender;
-	private int birthYear;
-	private String aboutMe;
-	private int reputation;
-	private MemberStatus memberStatus;
+    private String password;
+    private Gender gender;
+    private int birthYear;
+    private String aboutMe;
+    private int reputation;
+    private MemberStatus memberStatus;
 
 	// YH: Roles 필요해서 작성하였습니다. 확인 부탁드립니다!
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -48,22 +48,24 @@ public class Member extends Auditable {
 		MALE("남자"),
 		FEMALE("여자");
 
-		private String gender;
+        private String gender;
 
-		Gender(String gender) {
-			this.gender = gender;
-		}
-	}
+        Gender(String gender) {
+            this.gender = gender;
+        }
+    }
 
-	public enum MemberStatus {
-		ACTIVE("활성"),
-		DELETED("탈퇴");
+    public enum MemberStatus {
+        ACTIVE("활성"),
+        DELETED("탈퇴");
 
-		private String memberStatus;
+        private String memberStatus;
 
-		MemberStatus(String memberStatus) {
-			this.memberStatus = memberStatus;
-		}
-	}
+        MemberStatus(String memberStatus) {
+            this.memberStatus = memberStatus;
+        }
+    }
+
+
 
 }
