@@ -4,7 +4,9 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ReviewCreate from "./pages/ReviewCreate"
+import ReviewCreate from "./pages/ReviewCreate";
+import Azitcreate from "./pages/Azitcreate";
+import UserPage from "./pages/UserPage";
 
 function App() {
   return (
@@ -16,10 +18,11 @@ function App() {
           <Route path="/chat" element={<Home />}></Route>
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>
-          <Route path="/edit" element={<Home />}></Route>
           <Route path="/review/Create" element={<ReviewCreate />}></Route>
+          <Route path="/edit" element={<Azitcreate />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/userpage" element={<UserPage />}></Route>
         </Routes>
       </BrowserRouter>
     </>
