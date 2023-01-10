@@ -1,24 +1,21 @@
 package com.codestates.azitserver.domain.member.entity;
 
+import com.codestates.azitserver.domain.common.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-import com.codestates.azitserver.global.Audit.Auditable;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
 
 @Entity
-@Getter
 @Setter
+@AllArgsConstructor
+@Builder
+@Getter
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +30,7 @@ public class Member extends Auditable {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    //TODO 제약조건
     private String password;
     private Gender gender;
     private int birthYear;
