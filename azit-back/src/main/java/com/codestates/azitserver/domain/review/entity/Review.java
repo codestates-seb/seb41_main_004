@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class review extends Auditable {
+public class Review extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
@@ -19,6 +19,7 @@ public class review extends Auditable {
 
     private Long clubId; //TODO FK
 
+    //TODO 제약조건
     private CommentCategory commentCategory;
     private String commentBody;
     private Boolean reviewStatus; //default - false(숨기지 않음)

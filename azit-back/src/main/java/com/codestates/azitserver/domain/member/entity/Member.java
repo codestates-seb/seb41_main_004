@@ -20,6 +20,7 @@ public class Member extends Auditable {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    //TODO 제약조건
     private String password;
     private Gender gender;
     private int birthYear;
