@@ -9,7 +9,7 @@ const CreateFormWrap = styled.div`
     > .inputContainer {
       margin-top: 2rem;
       > div {
-        width: 60%;
+        width: 70%;
         display: flex;
         flex-direction: row;
         > input {
@@ -27,7 +27,7 @@ const CreateFormWrap = styled.div`
         > span {
           width: 20rem;
           margin-top: 3rem;
-          font-size: 1.1rem;
+          font-size: 1rem;
         }
         > p {
           padding-top: 1rem;
@@ -46,7 +46,7 @@ const CreateFormWrap = styled.div`
       }
       > .gender {
         text-align: center;
-        width: 15%;
+        width: 30%;
       }
     }
     > .radioContainer {
@@ -116,7 +116,7 @@ const AzitcreateForm = () => {
     "창작",
     "성장/자기계발",
   ];
-  const selectGenderList = ["남", "여"];
+  const selectGenderList = ["남", "여", "제한없음"];
   const [selected, setSelected] = useState("문화/예술");
   const [genderSelected, setGenderSelected] = useState("남");
   const [check, setCheck] = useState("offline");
