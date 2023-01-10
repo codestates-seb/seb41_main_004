@@ -3,7 +3,7 @@ import { Button } from "../components/LoginComponent/Button";
 import Logo from "../images/logo.png";
 import Kakao from "../images/kakao-login.png"
 import Google from "../images/google-login.png"
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -18,6 +18,9 @@ const LoginFormWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  > a {
+    width: 100%;
+  }
 `;
 
 const InputWrap = styled.div`
@@ -71,20 +74,22 @@ const Login = () => {
     <LoginContainer>
       <LoginFormWrap>
         <LogoImage alt="LogoImg" src={Logo}/>
-          <InputWrap>
-            <label htmlFor='email'>이메일</label>
-            <input id='email' placeholder="이메일 입력"/>
-            <div className="errorMessage">올바른 이메일을 입력해주세요.</div>
-          </InputWrap>
-          <InputWrap>
-            <label htmlFor='password'>비밀번호</label>
-            <input id='password' placeholder="비밀번호 입력"/>
-            <div className="errorMessage">특수문자, 문자, 숫자 포함 8~16자로 작성해 주세요.</div>
-          </InputWrap>
-        <Button type="submit" disabled={true}>로그인</Button>
+        <InputWrap>
+          <label htmlFor='email'>이메일</label>
+          <input id='email' placeholder="이메일 입력"/>
+          <div className="errorMessage">올바른 이메일을 입력해주세요.</div>
+        </InputWrap>
+        <InputWrap>
+          <label htmlFor='password'>비밀번호</label>
+          <input id='password' placeholder="비밀번호 입력"/>
+          <div className="errorMessage">특수문자, 문자, 숫자 포함 8~16자로 작성해 주세요.</div>
+        </InputWrap>
+        <Link to="/">
+          <Button type="submit" disabled="">로그인</Button>
+        </Link>
       </LoginFormWrap>
       <LoginFooter>
-        <Link to="/">비밀번호를 잊으셨나요?</Link>
+        <Link to="/find">비밀번호를 잊으셨나요?</Link>
         <Link to="/signup">회원가입하기</Link>
       </LoginFooter>
       <Line />

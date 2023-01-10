@@ -10,6 +10,9 @@ import UserPage from "./pages/UserPage";
 import AzitSetting from "./pages/AzitSetting";
 import AzitEdit from "./pages/AzitEdit";
 import AzitJoin from "./pages/AzitJoin";
+import FindPassword from "./pages/FindPassword";
+import SignupAdditional from "./pages/SignupAdditional";
+import Loading from "./pages/Loading";
 
 function App() {
   return (
@@ -24,11 +27,14 @@ function App() {
           <Route path="/review/Create" element={<ReviewCreate />}></Route>
           <Route path="/edit" element={<Azitcreate />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/find" element={<FindPassword />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/signupadd" element={<SignupAdditional />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
+          <Route path="/loading" element={<Loading />}></Route>
         </Routes>
       </BrowserRouter>
     </>
