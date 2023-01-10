@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ReviewCreate from "./pages/ReviewCreate";
+import ReviewCreate from "./pages/ReviewCreate"
 import Azitcreate from "./pages/Azitcreate";
 import UserPage from "./pages/UserPage";
 
@@ -14,7 +14,7 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Home />}></Route>
           <Route path="/chat" element={<Home />}></Route>
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>

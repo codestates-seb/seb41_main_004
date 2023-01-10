@@ -16,44 +16,6 @@ const CreateCellWrap = styled.article`
       margin-bottom: 1rem;
     }
   }
-  .selectBox {
-    position: relative;
-    > .selectArrow {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-bottom: 2px solid var(--border-color);
-      border-right: 2px solid var(--border-color);
-      top: 35%;
-      transform: rotate(45deg);
-      right: 15px;
-      transition: 0.5s all;
-    }
-    > select:focus + .selectArrow {
-      transform: rotate(225deg);
-      border-bottom: 2px solid var(--point-color);
-      border-right: 2px solid var(--point-color);
-    }
-  }
-  select {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid var(--border-color);
-    padding: 1.5rem;
-    appearance: none;
-    position: relative;
-  }
-  textarea {
-    width: 100%;
-    height: 10rem;
-    border-radius: 5px;
-    border: 1px solid var(--border-color);
-  }
-  textarea:focus,
-  select:focus {
-    outline: none;
-    border: 1px solid var(--point-color);
-  }
 `;
 
 const CreateCell = () => {
