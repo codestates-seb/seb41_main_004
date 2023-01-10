@@ -109,6 +109,7 @@ textarea{
       padding: 1.5rem;
       appearance: none;
       position: relative;
+      background-color:var(--white-color);
     }
   }
 `;
