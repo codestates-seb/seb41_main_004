@@ -7,6 +7,33 @@
 
 CAUTION: 요청 Host 주소는 예시입니다. 실제 Host 주소가 아닙니다.
 
+
+== 아지트(모임)
+
+=== 아지트 생성
+.curl-request
+include::{snippets}/post-club/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-club/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-club/request-headers.adoc[]
+
+.request-parts
+include::{snippets}/post-club/request-parts.adoc[]
+
+.request-part-data-fields
+include::{snippets}/post-club/request-part-data-fields.adoc[]
+
+.http-response
+include::{snippets}/post-club/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-club/response-fields.adoc[]
+
+
+
 // TODO: 맨 뒤로 배치 예정
 == 에러 코드
 
