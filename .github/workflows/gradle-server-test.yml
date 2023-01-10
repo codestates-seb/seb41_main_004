@@ -35,5 +35,5 @@ jobs:
         run: chmod +x ./gradlew
 
       # Backend code test
-      - name: Build azit server
+      - name: Server unit test
         run: ./gradlew test
