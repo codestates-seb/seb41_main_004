@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		redisTemplate.opsForValue().set(
 			authResult.getName(),
 			refreshToken,
-			jwtTokenizer.getRefreshTokenExpirationMinutes(),
+			Integer.parseInt(jwtTokenizer.getRefreshTokenExpirationMinutes()),
 			TimeUnit.MINUTES
 		);
 
@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		claims.put("roles", member.getRoles());
 
 		String subject = member.getEmail(); // 제목 지정
-		Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes()); // 만료시간 설정
+		Date expiration = jwtTokenizer.getTokenExpiration(Integer.parseInt(jwtTokenizer.getAccessTokenExpirationMinutes())); // 만료시간 설정
 
 		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(
 			jwtTokenizer.getSecretKey()); // secretKey 인코딩
@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	// RefreshToken 생성
 	private String delegateRefreshToken(Member member) {
 		String subject = member.getEmail();
-		Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+		Date expiration = jwtTokenizer.getTokenExpiration(Integer.parseInt(jwtTokenizer.getRefreshTokenExpirationMinutes()));
 		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
 		String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
