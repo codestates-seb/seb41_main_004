@@ -2,6 +2,9 @@ package com.codestates.azitserver.domain.stub;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+
 import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 
@@ -29,6 +32,7 @@ public class ClubStubData {
 
 	public static ClubDto.Post getClubDtoPost() {
 		ClubDto.Post post = new ClubDto.Post();
+
 		post.setClubName("재밌는 아지트");
 		post.setClubInfo("재밌는 아지트입니다.");
 		post.setMemberLimit(4);
@@ -43,6 +47,23 @@ public class ClubStubData {
 		post.setJoinQuestion("재밌는 아지트 맞을까요?");
 
 		return post;
+	}
+
+	public static ClubDto.Patch getClubDtoPatch() {
+		ClubDto.Patch patch = new ClubDto.Patch();
+
+		patch.setClubName("재밌는 아지트");
+		patch.setClubInfo("재밌는 아지트입니다.");
+		patch.setMemberLimit(4);
+		patch.setFee(10000);
+		patch.setBirthYearMin("1990");
+		patch.setBirthYearMax("2000");
+		patch.setGenderRestriction(Club.GenderRestriction.ALL);
+		patch.setMeetingDate(LocalDateTime.now().plusDays(1));
+		patch.setIsOnline(false);
+		patch.setLocation("서울시 송파구");
+
+		return patch;
 	}
 
 	public static ClubDto.Response getClubDtoResponse() {
@@ -64,5 +85,14 @@ public class ClubStubData {
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
 
 		return response;
+	}
+
+	public static MockMultipartFile getMultipartJsonData(String content) {
+		return new MockMultipartFile(
+			"data",
+			"",
+			MediaType.APPLICATION_JSON_VALUE,
+			content.getBytes()
+		);
 	}
 }
