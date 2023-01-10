@@ -16,6 +16,9 @@ export const Button = styled.button`
     background-color: var(--border-color);
     color: var(--light-font-color);
     cursor: auto;
-  };
+  }
+  :hover:enabled {
+    background-color: var(--hover-color);
+  }
 `
 
