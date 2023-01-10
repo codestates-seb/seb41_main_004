@@ -63,7 +63,7 @@ input {
    padding: 1.5rem;
    height: 4.5rem;
 }
-input:focus {
+input:focus,select:focus,textarea:focus {
    outline:none;
    border:1px solid var(--point-color);
 }
