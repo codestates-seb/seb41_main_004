@@ -8,7 +8,7 @@ const CreateFormWrap = styled.div`
   > .form {
     > .inputContainer {
       margin-top: 2rem;
-      > div {
+      > .wd70 {
         width: 70%;
         display: flex;
         flex-direction: row;
@@ -35,18 +35,12 @@ const CreateFormWrap = styled.div`
           margin-right: 1.5rem;
         }
       }
-      > select {
-        width: 100%;
-        border-radius: 5px;
-        border: 1px solid var(--border-color);
-        background-color: var(--white-color);
-        color: var(--sub-font-color);
-        padding: 1rem;
-        height: 4.5rem;
-      }
+
       > .gender {
-        text-align: center;
         width: 30%;
+        > select {
+          text-align: center;
+        }
       }
     }
     > .radioContainer {
@@ -138,13 +132,16 @@ const AzitcreateForm = () => {
       <form className="form">
         <div className="inputContainer">
           <label>카테고리를 선택해주세요.</label>
-          <select onChange={handleSelect} value={selected}>
-            {selectList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+          <div className="selectBox">
+            <select onChange={handleSelect} value={selected}>
+              {selectList.map((item) => (
+                <option value={item} key={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <span className="selectArrow" />
+          </div>
         </div>
         <div className="inputContainer">
           <label>아지트의 이름을 입력해주세요.</label>
@@ -156,7 +153,7 @@ const AzitcreateForm = () => {
         </div>
         <div className="inputContainer">
           <label>날짜와 시간을 정해볼까요?</label>
-          <div>
+          <div className="wd70">
             <input placeholder="0000-00-00"></input>
             <input placeholder="오전 00:00"></input>
           </div>
@@ -187,21 +184,20 @@ const AzitcreateForm = () => {
         </div>
         <div className="inputContainer">
           <label>멤버의 성별을 알려주세요.</label>
-          <select
-            className="gender"
-            onChange={GenderhandleSelect}
-            value={genderSelected}
-          >
-            {selectGenderList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+          <div className="selectBox gender">
+            <select onChange={GenderhandleSelect} value={genderSelected}>
+              {selectGenderList.map((item) => (
+                <option value={item} key={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <span className="selectArrow" />
+          </div>
         </div>
         <div className="inputContainer">
           <label>멤버의 나이를 알려주세요.</label>
-          <div>
+          <div className="wd70">
             <input></input>
             <p>~</p>
             <input></input>

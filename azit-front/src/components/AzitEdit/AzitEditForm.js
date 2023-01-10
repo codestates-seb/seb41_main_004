@@ -8,16 +8,13 @@ const EditFormWrap = styled.div`
   > form {
     > .inputContainer {
       margin-top: 2rem;
-      > select {
-        border-radius: 5px;
-        border: 1px solid var(--border-color);
-        background-color: var(--white-color);
-        color: var(--sub-font-color);
-        text-align: center;
+      > .selectBox {
         width: 30%;
-        height: 3.5rem;
+        select {
+          text-align: center;
+        }
       }
-      > div {
+      > .wd70 {
         width: 70%;
         display: flex;
         flex-direction: row;
@@ -77,17 +74,20 @@ const AzitEditForm = () => {
         </div>
         <div className="inputContainer">
           <label>성별</label>
-          <select onChange={GenderhandleSelect} value={genderSelected}>
-            {selectGenderList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+          <div className="selectBox">
+            <select onChange={GenderhandleSelect} value={genderSelected}>
+              {selectGenderList.map((item) => (
+                <option value={item} key={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <span className="selectArrow" />
+          </div>
         </div>
         <div className="inputContainer">
           <label>멤버의 나이를 알려주세요.</label>
-          <div>
+          <div className="wd70">
             <input></input>
             <p>~</p>
             <input></input>
