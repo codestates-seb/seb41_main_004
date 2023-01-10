@@ -1,5 +1,7 @@
 import styled from "styled-components";
+import Button from "../components/Button";
 import Header from "../components/Header";
+import CreateCell from "../components/ReviewCreate/CreateCell";
 import TestAvatarUrl from "../images/testProfileImg.png";
 
 const CreateWrap = styled.section`
@@ -18,16 +20,6 @@ const CreateWrap = styled.section`
       > li {
         margin-right: 1rem;
         text-align: center;
-        > .imgWrap {
-          width: 3.8rem;
-          height: 3.8rem;
-          margin: 0 auto;
-          overflow: hidden;
-          border-radius: 50%;
-          img {
-            width: 100%;
-          }
-        }
         > p {
           width: 50px;
         }
@@ -46,9 +38,15 @@ const CreateWrap = styled.section`
       border-radius: 4px;
     }
   }
-  label {
-    margin-bottom:10px;
-  }
+`;
+const UserImgWrap = styled.div`
+  width: 3.8rem;
+  height: 3.8rem;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  background-image: url(${(props) => props.userUrl});
+  background-size: cover;
 `;
 const ReviewCreate = () => {
   const profileList = [
@@ -97,26 +95,21 @@ const ReviewCreate = () => {
     <>
       <Header title="리뷰 작성하기" />
       <CreateWrap>
+        {/* SelectCell */}
         <div className="selectCell">
           <h3>참여 인원</h3>
           <ul className="selectWrap">
-            {profileList.map((profile) => (
-              <li>
-                <div className="imgWrap">
-                  <img alt={profile.userName} src={profile.userUrl} />
-                </div>
+            {profileList.map((profile, idx) => (
+              <li key={idx}>
+                <UserImgWrap userUrl={profile.userUrl} />
                 <p>유저닉네임</p>
               </li>
             ))}
           </ul>
         </div>
-        <article className="createCell">
-            <h3>리뷰 작성</h3>
-            <div className="createWrap">
-                <label htmlFor="password">테스트</label>
-                <input id="password"></input>
-            </div>
-        </article>
+        <CreateCell />
+        <CreateCell />
+        <Button title="리뷰 제출하기"/>
       </CreateWrap>
     </>
   );
