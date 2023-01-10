@@ -4,12 +4,13 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ReviewCreate from "./pages/ReviewCreate"
+import ReviewCreate from "./pages/ReviewCreate";
 import Azitcreate from "./pages/Azitcreate";
 import UserPage from "./pages/UserPage";
 import AzitSetting from "./pages/AzitSetting";
 import AzitEdit from "./pages/AzitEdit";
 import AzitJoin from "./pages/AzitJoin";
+import AzitReport from "./pages/AzitReport";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<Home />}></Route>
           <Route path="/chat" element={<Home />}></Route>
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
+          <Route path="/azitreport" element={<AzitReport />}></Route>
         </Routes>
       </BrowserRouter>
     </>
