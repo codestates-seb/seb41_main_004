@@ -19,8 +19,6 @@ public class HealthCheckController {
 		Map<String, Object> response = new HashMap<>();
 		response.put("greet", greet);
 		response.put("time", LocalDateTime.now());
-		response.put("word", "hello");
-		response.put("hollow", "every2one");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
