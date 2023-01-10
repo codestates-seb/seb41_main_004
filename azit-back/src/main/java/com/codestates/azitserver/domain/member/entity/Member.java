@@ -19,21 +19,31 @@ public class Member extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
-    @Column(unique = true) //TODO FK
+    @Column(name = "AVATAR_IMAGE_ID", unique = true) //TODO FK
     private Long avatar_image_id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 128)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 16)
     private String nickname;
 
-    //TODO 제약조건
+    @Column(nullable = false, length = 32)
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
     private Gender gender;
-    private int birthYear;
+
+    @Column(name = "BIRTH_YEAR", length = 4)
+    private String birthYear;
+
+    @Column(name = "ABOUT_ME", length = 128)
     private String aboutMe;
-    private int reputation;
+
+    private Integer reputation;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "MEMBER_STATUS")
     private MemberStatus memberStatus;
 
     public enum Gender {

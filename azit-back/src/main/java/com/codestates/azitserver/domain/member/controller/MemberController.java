@@ -30,14 +30,6 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
-        //Test
-        member.setMemberId(1L);
-        member.setAvatar_image_id(1L);
-        member.setGender(Member.Gender.MALE);
-        member.setReputation(10);
-        member.setMemberStatus(Member.MemberStatus.ACTIVE);
-        member.setBirthYear(1999);
-        //여기까지 Test
 
         Member response = memberService.createMember(member);
 
