@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
+@ActiveProfiles("local")
 @SpringBootTest
 public class authLoginTest {
 	@Autowired
@@ -83,6 +85,8 @@ public class authLoginTest {
 		// then - 로그인되는지 확인
 		actions
 			.andExpect(status().isOk())
+			.andExpect(header().exists("Authorization"))
+			.andExpect(header().exists("Refresh"))
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),
