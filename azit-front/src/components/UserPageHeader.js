@@ -12,17 +12,18 @@ const HeaderWrap = styled.header`
 const Header = styled.div``;
 const Edit = styled.span``;
 const Img = styled.img`
-  width: 20px;
-  height: 20px;
+  width: 2rem;
+  height: 2rem;
 `;
 
-const MyPage_Header = () => {
+const UserPageHeader = () => {
   return (
     <HeaderWrap>
       <Header />
-      <Edit>프로필 수정 </Edit> <Img alt="editIcon" src={editIcon} />
+      <Edit>프로필 수정 </Edit>&nbsp;&nbsp;&nbsp;{" "}
+      <Img alt="editIcon" src={editIcon} />
     </HeaderWrap>
   );
 };
 
-export default MyPage_Header;
+export default UserPageHeader;

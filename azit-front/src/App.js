@@ -4,8 +4,8 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import MyPage from "./pages/MyPage";
 import ReviewCreate from "./pages/ReviewCreate";
+import UserPage from "./pages/UserPage";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route path="/review/Create" element={<ReviewCreate />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/mypage" element={<MyPage />}></Route>
+          <Route path="/userpage" element={<UserPage />}></Route>
         </Routes>
       </BrowserRouter>
     </>
