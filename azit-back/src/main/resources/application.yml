@@ -34,12 +34,12 @@ server:
 #              - user:email
 
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: ${ACCESS_TOKEN_EXPIRATION_MINUTES}
-  refresh-token-expiration-minutes: ${REFRESH_TOKEN_EXPIRATION_MINUTES}
+  secret-key: ${JWT_SECRET_KEY:$JWT_SECRET_KEY}
+  access-token-expiration-minutes: ${ACCESS_TOKEN_EXPIRATION_MINUTES:$ACCESS_TOKEN_EXPIRATION_MINUTES}
+  refresh-token-expiration-minutes: ${REFRESH_TOKEN_EXPIRATION_MINUTES:$REFRESH_TOKEN_EXPIRATION_MINUTES}
 mail:
   address:
-    admin: ${ADMIN_EMAIL}
+    admin: ${ADMIN_EMAIL:$ADMIN_EMAIL}
 redis:
   port: 6379
   host: localhost
