@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import ReviewCreate from "./pages/ReviewCreate";
 import Azitcreate from "./pages/Azitcreate";
 import UserPage from "./pages/UserPage";
+import AzitSetting from "./pages/AzitSetting";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
+          <Route path="/azitsetting" element={<AzitSetting />}></Route>
         </Routes>
       </BrowserRouter>
     </>
