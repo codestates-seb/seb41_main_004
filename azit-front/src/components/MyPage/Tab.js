@@ -6,35 +6,40 @@ import Reviews from "./Reviews";
 // Styled-Component 라이브러리를 활용해 TabMenu 와 Desc 컴포넌트의 CSS를 구현.
 
 const TabMenu = styled.ul`
-  background-color: #ffffff;
-  color: #d9d9d9;
-  font-weight: bold;
+  color: var(--light-font-color);
+  font-weight: var(--bold-weight);
   display: flex;
+  font-size: var(--big-font);
   flex-direction: row;
-  list-style: none;
-  margin-bottom: 7rem;
-  margin-top: 10px;
+  height: 5rem;
 
   .submenu {
-    // 기본 Tabmenu 에 대한 CSS를 구현
+    position: relative;
     display: flex;
-    /* justify-content: space-between;
-    width: 380px;
-    heigth: 30px; */
     width: calc(100% / 2);
     padding: 10px;
-    transition: 0.5s;
-    border-radius: 10px 10px 0px 0px;
     justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+  }
+  .submenu::after {
+    content: "";
+    display: block;
+    width: calc(100% - 4px);
+    height: 2px;
+    background-color: var(--light-font-color);
+    position: absolute;
+    bottom: 0;
+    transition: 0.5s;
   }
 
   .focused {
-    //선택된 Tabmenu 에만 적용되는 CSS를 구현
-    background-color: #ffffff;
-    color: #222222;
-    border-bottom: solid 1px #222222;
+    color: var(--font-color);
   }
-
+  .focused::after {
+    content: "";
+    background-color: var(--font-color);
+  }
   & div.desc {
     text-align: center;
   }
@@ -70,6 +75,7 @@ const Tab = () => {
           <li className="submenu">{menuArr[2].name}</li> */}
           {menuArr.map((el, index) => (
             <li
+              key={index}
               className={index === currentTab ? "submenu focused" : "submenu"}
               onClick={() => selectMenuHandler(index)}
             >
