@@ -12,5 +12,10 @@ public interface ClubMapper {
 	@Mapping(target = "clubStatus", ignore = true)
 	Club clubDtoPostToClubEntity(ClubDto.Post post);
 
+	@Mapping(target = "joinMethod", ignore = true)
+	@Mapping(target = "joinQuestion", ignore = true)
+	@Mapping(target = "clubStatus", ignore = true)
+	Club clubDtoPatchToClubEntity(ClubDto.Patch patch);
+
 	ClubDto.Response clubToClubDtoResponse(Club club);
 }

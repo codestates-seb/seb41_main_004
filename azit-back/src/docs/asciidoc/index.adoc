@@ -32,6 +32,43 @@ include::{snippets}/post-club/http-response.adoc[]
 .response-fields
 include::{snippets}/post-club/response-fields.adoc[]
 
+=== 아지트 정보 수정
+.curl-request
+include::{snippets}/patch-club/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-club/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-club/path-parameters.adoc[]
+
+.request-parts
+include::{snippets}/patch-club/request-parts.adoc[]
+
+.request-part-data-fields
+include::{snippets}/patch-club/request-part-data-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-club/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-club/response-fields.adoc[]
+
+=== 아지트 예약 취소
+.curl-request
+include::{snippets}/delete-club/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-club/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-club/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-club/http-response.adoc[]
+
+.response-fields
+include::{snippets}/delete-club/response-fields.adoc[]
 
 
 // TODO: 맨 뒤로 배치 예정
