@@ -46,7 +46,7 @@ const Search = () => {
           <div className="default">
             <img alt="searchIcon" src={searchBackIcon} />
             <p>아지트 이름을 검색해보세요.</p>
-          </div>
+          </div> 
         </article>
       </SearchWrap>
     </>
