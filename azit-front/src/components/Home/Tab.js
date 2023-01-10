@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import CategoryTab from "./CategoryTab";
 import RecommendTab from "./RecommendTab";
 
 const TabMenu = styled.ul`
@@ -50,7 +51,7 @@ const Tab = () => {
 
   const menuArr = [
     { name: "추천", content: <RecommendTab /> },
-    { name: "카테고리", content: <RecommendTab /> },
+    { name: "카테고리", content: <CategoryTab /> },
     { name: "날짜별", content: <RecommendTab /> },
   ];
 
