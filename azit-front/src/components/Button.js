@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ButtonWrap = styled.button`
-  width: 350px;
+  width: 100%;
   height: 55px;
   background-color: var(--point-color);
   font-size: var(--big-font);

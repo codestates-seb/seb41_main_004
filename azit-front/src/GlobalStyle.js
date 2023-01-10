@@ -73,5 +73,16 @@ label {
    margin-bottom: .5rem;
    display: block;
 }
+textarea{
+   width:100%;
+   border-radius: 5px;
+   border:1px solid var(--border-color);
+   height: 10rem;
+   padding: 1.5rem;
+}
+textarea:focus {
+   outline:none;
+   border:1px solid var(--point-color);
+}
 `;
 export default GlobalStyle;
