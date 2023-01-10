@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -122,7 +124,7 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,
-				jwtTokenizer);
+				jwtTokenizer, redisTemplate);
 
 			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
 

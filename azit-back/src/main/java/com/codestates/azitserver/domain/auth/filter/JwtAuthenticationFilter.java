@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +30,7 @@ import lombok.SneakyThrows;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenizer jwtTokenizer;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	// 인증 시도하는 메서드
 	@SneakyThrows
@@ -50,6 +54,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		String accessToken = delegateAccessToken(member);
 		String refreshToken = delegateRefreshToken(member);
+
+		// redis에 refreshToken 저장 - 만료 시간지나면 자동 삭제되도록 하기 위함
+		redisTemplate.opsForValue().set(
+			authResult.getName(),
+			refreshToken,
+			jwtTokenizer.getRefreshTokenExpirationMinutes(),
+			TimeUnit.MINUTES
+		);
 
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);

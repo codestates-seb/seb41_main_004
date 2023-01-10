@@ -23,8 +23,8 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate() {
-		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+	public RedisTemplate<String, String> redisTemplate() {
+		RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
 
 		//key, value serializer
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
