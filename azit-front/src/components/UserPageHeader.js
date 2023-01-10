@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import editIcon from "../images/edit-icon.png";
 
@@ -20,7 +21,9 @@ const UserPageHeader = () => {
   return (
     <HeaderWrap>
       <Header />
-      <Edit>프로필 수정 </Edit>&nbsp;&nbsp;&nbsp;{" "}
+      <NavLink to="/profile">
+        <Edit>프로필 수정 </Edit>&nbsp;&nbsp;&nbsp;{" "}
+      </NavLink>
       <Img alt="editIcon" src={editIcon} />
     </HeaderWrap>
   );
