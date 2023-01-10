@@ -7,7 +7,7 @@ const UserPage = () => {
     <>
       <UserPageHeader />
       <Profile />
-      {/* <Gnb /> */}
+      <Gnb />
     </>
   );
 };

@@ -16,6 +16,7 @@ const CreateCellWrap = styled.article`
       margin-bottom: 1rem;
     }
   }
+
 `;
 
 const CreateCell = () => {
