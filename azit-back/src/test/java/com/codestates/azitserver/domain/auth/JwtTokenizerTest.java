@@ -30,7 +30,7 @@ public class JwtTokenizerTest {
 	@BeforeAll
 	public void init() {
 		jwtTokenizer = new JwtTokenizer();
-		secretKey = "test1856301klfjf1057dyixpp380dkfjsk1058fkpotyo1389389test";
+		secretKey = "test1856301klfjf1057dyixpp380dkfjsk1058fkpotyo1389389testirjjfi849083490kldf";
 
 		base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(secretKey);
 	}
