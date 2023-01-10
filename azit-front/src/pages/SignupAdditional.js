@@ -3,6 +3,7 @@ import { Button } from "../components/LoginComponent/Button";
 import Header from "../components/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
+import { Link } from "react-router-dom";
 
 const SignupForm = styled.div`
   display: flex;
@@ -168,7 +169,9 @@ const SignupAdditional = () => {
             )
           }
         </article>
-        <Button disabled={true}>회원가입</Button>
+        <Link to="/login">
+          <Button disabled="">회원가입</Button>
+        </Link>
       </SignupForm>
     </>
   );
