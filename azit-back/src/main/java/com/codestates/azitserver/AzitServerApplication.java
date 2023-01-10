@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-@PropertySource("classpath:/env.properties")
+@PropertySource(value = "classpath:/env.properties", ignoreResourceNotFound = true)
 public class AzitServerApplication {
 
 	public static void main(String[] args) {

@@ -1,6 +1,6 @@
 package com.codestates.azitserver.domain.review.entity;
 
-import com.codestates.azitserver.global.Audit.Auditable;
+import com.codestates.azitserver.domain.common.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
