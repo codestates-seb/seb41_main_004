@@ -52,13 +52,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Member member = (Member)authResult.getPrincipal();
 
 		String accessToken = delegateAccessToken(member);
-		String refreshToken = delegateRefreshToken(member);
+
+		Map.Entry<String, Date> entry = delegateRefreshToken(member).entrySet().iterator().next();
+		String refreshToken = entry.getKey();
+		Long expiration = entry.getValue().getTime();
 
 		// redis에 refreshToken 저장 - 만료 시간지나면 자동 삭제되도록 하기 위함
 		redisTemplate.opsForValue().set(
 			authResult.getName(),
 			refreshToken,
-			jwtTokenizer.getRefreshTokenExpirationMinutes(),
+			expiration,
 			TimeUnit.MINUTES
 		);
 
@@ -85,13 +88,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 
 	// RefreshToken 생성
-	private String delegateRefreshToken(Member member) {
+	private Map<String, Date> delegateRefreshToken(Member member) {
 		String subject = member.getEmail();
 		Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
 		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
 		String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
 
-		return refreshToken;
+		Map<String, Date> refreshInfo = new HashMap<>();
+		refreshInfo.put(refreshToken, expiration);
+
+		return refreshInfo;
 	}
 }
