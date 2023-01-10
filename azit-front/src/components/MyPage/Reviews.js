@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { toDateFormatOfKR } from "../../util/toDateFormatOfUS";
+import { toDateFormatOfKR } from "../../util/toDateFormatOfKR";
 
 const Container = styled.div``;
 const TitleBox = styled.div``;

@@ -4,7 +4,7 @@ import Category from "./Category";
 import Tab from "./Tab";
 
 const ProfileWrapper = styled.div`
-  padding: 3rem;
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
 `;
@@ -22,12 +22,15 @@ const Img = styled.img`
 const ButtonWrapper = styled.span`
   display: flex;
   justify-content: center;
+  position: relative;
 `;
 const Button = styled.button`
   background-color: #bb2649;
   border-radius: 0.5rem;
   border: none;
   color: white;
+  position: absolute;
+  bottom: 0.2rem;
 `;
 const InfoWrapper = styled.div`
   display: flex;
