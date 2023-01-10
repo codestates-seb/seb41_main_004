@@ -55,18 +55,8 @@ const CreateFormWrap = styled.div`
         width: 100%;
         display: flex;
         flex-direction: row;
-
-        > label {
-          text-align: center;
-          display: inline-block;
-          width: 100%;
-          border-radius: 5px;
-          border: 1px solid var(--border-color);
-          padding: 1rem;
-          height: 4.5rem;
-
-          > input {
-          }
+        > input {
+          display: none;
         }
       }
       > .selectPlace {
@@ -91,6 +81,31 @@ const CreateFormWrap = styled.div`
   }
 `;
 
+const Label = styled.label`
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  height: 4.5rem;
+  margin-right: 1rem;
+  ${(props) =>
+    props.check ? "background-color: var(--point-color); color:white;" : ""}
+`;
+
+const Label2 = styled.label`
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  height: 4.5rem;
+  ${(props) =>
+    props.check ? "background-color: var(--point-color); color:white;" : ""}
+`;
+
 const AzitcreateForm = () => {
   const selectList = [
     "문화/예술",
@@ -104,6 +119,11 @@ const AzitcreateForm = () => {
   const selectGenderList = ["남", "여"];
   const [selected, setSelected] = useState("문화/예술");
   const [genderSelected, setGenderSelected] = useState("남");
+  const [check, setCheck] = useState("offline");
+
+  const handleChkChange = (e) => {
+    setCheck(e.target.id);
+  };
 
   const handleSelect = (e) => {
     setSelected(e.target.value);
@@ -144,14 +164,24 @@ const AzitcreateForm = () => {
         <div className="radioContainer">
           <label>장소를 정해볼까요?</label>
           <div>
-            <label forhtml="오프라인">
-              <input type="radio" id="오프라인" name="place" />
+            <input
+              onChange={handleChkChange}
+              id="offline"
+              type="radio"
+              name="place"
+            />
+            <Label check={check === "offline"} htmlFor="offline">
               오프라인
-            </label>
-            <label forhtml="온라인">
-              <input type="radio" id="온라인" name="place" />
+            </Label>
+            <input
+              onChange={handleChkChange}
+              id="online"
+              type="radio"
+              name="place"
+            />
+            <Label2 check={check === "online"} htmlFor="online">
               온라인
-            </label>
+            </Label2>
           </div>
           <div className="selectPlace">장소를 입력해주세요.</div>
         </div>
