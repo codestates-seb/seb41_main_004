@@ -21,6 +21,7 @@ import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
 import Chat from "./components/ChatList/Chat";
 import AzitDetail from "./pages/AzitDetail";
+import AzitPreview from "./pages/AzitPreview";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/loading" element={<Loading />}></Route>
           <Route path="/azitreport" element={<AzitReport />}></Route>
           <Route path="/azitdetail" element={<AzitDetail />}></Route>
+          <Route path="/azitpreview" element={<AzitPreview />}></Route>
         </Routes>
       </BrowserRouter>
     </>
