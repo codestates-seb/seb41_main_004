@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Header from "../components/Header";
+import Button from "../components/Button";
 import { useState } from "react";
 
 const ReportWrap = styled.div`
+  position: relative;
   margin-right: 2rem;
   margin-left: 2rem;
   display: flex;
   flex-direction: column;
-  min-height: 84.4rem;
+  height: 100vh;
   > .ReportForm {
+    height: 100%;
     margin-top: 7.5rem;
     > div {
       > textarea {
@@ -24,16 +27,8 @@ const ReportWrap = styled.div`
       margin-bottom: 2rem;
     }
   }
-  > .submitButton {
-    width: 100%;
-    height: 5.5rem;
-    margin-top: 45rem;
+  > .buttonWrap {
     margin-bottom: 2rem;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: var(--border-color);
-    color: var(--light-font-color);
-    font-size: var(--big-font);
   }
 `;
 
@@ -74,7 +69,9 @@ const AzitReport = () => {
           </li>
         </div>
       </div>
-      <button className="submitButton">신고 하기</button>
+      <div className="buttonWrap">
+        <Button state="disabled" title="신고 하기" />
+      </div>
     </ReportWrap>
   );
 };

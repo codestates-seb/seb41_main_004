@@ -17,7 +17,7 @@ import AzitReport from "./pages/AzitReport";
 import ChatList from "./pages/ChatList";
 import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
-
+import AzitDetail from "./pages/AzitDetail";
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>
           <Route path="/review/Create" element={<ReviewCreate />}></Route>
-          <Route path="/edit" element={<Azitcreate />}></Route>
+          <Route path="/create" element={<Azitcreate />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/find" element={<FindPassword />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
@@ -43,6 +43,7 @@ function App() {
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/loading" element={<Loading />}></Route>
           <Route path="/azitreport" element={<AzitReport />}></Route>
+          <Route path="/azitDetail" element={<AzitDetail />}></Route>
         </Routes>
       </BrowserRouter>
     </>

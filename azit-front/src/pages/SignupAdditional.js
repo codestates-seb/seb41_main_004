@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "../components/LoginComponent/Button";
+import Button from "../components/Button";
 import Header from "../components/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
@@ -49,6 +49,12 @@ const SignupForm = styled.div`
         }
       }
     }
+  }
+  & > .buttonWrap {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-end;
   }
 `;
 
@@ -157,21 +163,27 @@ const SignupAdditional = () => {
         <article>
           <div className="title">관심사</div>
           {interests.map((interest) => {
-            return  <div className="interestContainer" key={interest.id}>
-                      <div className="subtitle">{interest.subtitle}</div>
-                      <div className="tagContainer">
-                        {interest.tags.map((tag, idx) => {
-                          return <span key={idx} className="tag">{tag}</span> 
-                        })}
-                      </div>
-                    </div> 
-              }
-            )
-          }
+            return (
+              <div className="interestContainer" key={interest.id}>
+                <div className="subtitle">{interest.subtitle}</div>
+                <div className="tagContainer">
+                  {interest.tags.map((tag, idx) => {
+                    return (
+                      <span key={idx} className="tag">
+                        {tag}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </article>
-        <Link to="/login">
-          <Button disabled="">회원가입</Button>
-        </Link>
+        <div className="buttonWrap">
+          <Link to="/login">
+            <Button title="회원가입" state="active"></Button>
+          </Link>
+        </div>
       </SignupForm>
     </>
   );

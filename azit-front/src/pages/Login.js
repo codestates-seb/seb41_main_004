@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "../components/LoginComponent/Button";
+import Button from "../components/Button";
 import Logo from "../images/logo.png";
 import Kakao from "../images/kakao-login.png"
 import Google from "../images/google-login.png"
@@ -85,7 +85,7 @@ const Login = () => {
           <div className="errorMessage">특수문자, 문자, 숫자 포함 8~16자로 작성해 주세요.</div>
         </InputWrap>
         <Link to="/">
-          <Button type="submit" disabled="">로그인</Button>
+          <Button title="로그인" state="active">로그인</Button>
         </Link>
       </LoginFormWrap>
       <LoginFooter>

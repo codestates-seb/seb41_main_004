@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
+import Button from "../Button";
 
 const CreateFormWrap = styled.div`
   margin-top: 2rem;
@@ -61,17 +62,10 @@ const CreateFormWrap = styled.div`
         border-bottom: 1px solid var(--border-color);
       }
     }
-    > .submitButton {
-      width: 100%;
-      height: 5.5rem;
-      margin-top: 3rem;
-      margin-bottom: 2rem;
-      border: none;
-      border-radius: 0.5rem;
-      background-color: var(--border-color);
-      color: var(--light-font-color);
-      font-size: var(--big-font);
-    }
+  }
+  > .buttonWrap {
+    margin-bottom: 2rem;
+    margin-top: 3rem;
   }
 `;
 
@@ -217,10 +211,10 @@ const AzitcreateForm = () => {
           <label>참가 필수 질문을 정해주세요.</label>
           <input placeholder="ex) 커피를 좋아하세요?"></input>
         </div>
-        <button className="submitButton" type="submit">
-          모임 미리보기
-        </button>
       </form>
+      <div className="buttonWrap">
+        <Button state="disabled" title="모임 미리보기" />
+      </div>
     </CreateFormWrap>
   );
 };
