@@ -1,7 +1,6 @@
 import styled from "styled-components";
-
 import UserListIcon from "../images/userListIcon.png";
-
+import { toDateFormatOfMonthDay } from "../util/toDateFormatOfKR";
 const ListWrap = styled.article`
   padding: 1rem;
   border-radius: 5px;
@@ -93,11 +92,9 @@ const Tag = styled.span`
 
 const AzitList = ({ data }) => {
   let meetDate;
+
   if (data) {
-    let month = data.meetingDate.slice(5, 7);
-    let day = data.meetingDate.slice(8, 10);
-    let time = data.meetingDate.slice(-5);
-    meetDate = `${month}월${day}일 ${time}`;
+    meetDate = toDateFormatOfMonthDay(data.meetingDate);
   }
   const repeatAvatar = (data) => {
     let result = [];

@@ -19,6 +19,8 @@ import AzitReport from "./pages/AzitReport";
 import ChatList from "./pages/ChatList";
 import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
+import Chat from "./components/ChatList/Chat";
+
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/chat" element={<ChatList />}></Route>
+          <Route path="/chat/detail" element={<Chat />}></Route>
           <Route path="/search" element={<Search />}></Route>
           <Route path="/profile" element={<Home />}></Route>
           <Route path="/review/Create" element={<ReviewCreate />}></Route>

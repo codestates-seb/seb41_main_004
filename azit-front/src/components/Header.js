@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 const HeaderWrap = styled.header`
+  position: relative;
   width: 100%;
   max-width: 50rem;
   height: 5.5rem;
