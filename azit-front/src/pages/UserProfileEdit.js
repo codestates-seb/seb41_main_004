@@ -5,7 +5,7 @@ import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link } from "react-router-dom";
 
-const SignupForm = styled.div`
+const ProfileEditForm = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -122,37 +122,24 @@ const interests = [
   },
 ]
 
-const SignupAdditional = () => {
+const UserProfileEdit = () => {
 
   return (
     <>
-      <Header title="회원가입" />
-      <SignupForm>
+      <Header title="프로필 수정" />
+      <ProfileEditForm>
         <ProfileImageWrap>
           <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
           <ImageAddIcon src={ImgAddIcon}></ImageAddIcon>
         </ProfileImageWrap>
         <article>
-          <label>자기소개를 입력해주세요.</label>
-          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
+          <label>닉네임</label>
+          {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
+          <input defaultValue="김아무개"></input>
         </article>
         <article>
-          <label>나이 및 성별</label>
-          <div className="selectBox">
-            <select>
-              <option>2023</option>
-              {/*생년 구하는 함수 필요*/}
-            </select>
-            <span className="selectArrow" />
-          </div>
-          <div className="selectBox">
-            <select>
-              <option>남</option>
-              <option>여</option>
-              <option>제한 없음</option>
-            </select>
-            <span className="selectArrow" />
-          </div>
+          <label>자기소개를 입력해주세요.</label>
+          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
         </article>
         <article>
           <div className="title">관심사</div>
@@ -169,12 +156,13 @@ const SignupAdditional = () => {
             )
           }
         </article>
-        <Link to="/login">
-          <Button disabled="">회원가입</Button>
+        {/*Link -> useNavigate 로 변환 필요 / */}
+        <Link to="/">
+          <Button disabled="">수정 완료</Button>
         </Link>
-      </SignupForm>
+      </ProfileEditForm>
     </>
   );
 }
 
-export default SignupAdditional;
+export default UserProfileEdit;

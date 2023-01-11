@@ -18,7 +18,7 @@ const Loading = () => {
   return (
     <>
       <LoadingContainer>
-        <img src={LogoWhite}></img>
+        <img alt="logoWhite" src={LogoWhite}></img>
       </LoadingContainer>
     </>
   )

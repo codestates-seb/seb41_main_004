@@ -8,6 +8,7 @@ const AzitEditWrap = styled.div`
   flex-direction: column;
   > Button {
     margin-top: 9rem;
+    margin-bottom: 2rem;
   }
 `;
 

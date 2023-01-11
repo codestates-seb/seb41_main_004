@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import CategoryTab from "./CategoryTab";
+import DateTab from "./DateTab";
 import RecommendTab from "./RecommendTab";
 
 const TabMenu = styled.ul`
@@ -18,6 +20,7 @@ const TabMenu = styled.ul`
     justify-content: center;
     align-items: center;
     transition: 0.5s;
+    cursor: pointer;
   }
   .submenu::after {
     content: "";
@@ -50,8 +53,8 @@ const Tab = () => {
 
   const menuArr = [
     { name: "추천", content: <RecommendTab /> },
-    { name: "카테고리", content: <RecommendTab /> },
-    { name: "날짜별", content: <RecommendTab /> },
+    { name: "카테고리", content: <CategoryTab /> },
+    { name: "날짜별", content: <DateTab /> },
   ];
 
   const selectMenuHandler = (index) => {

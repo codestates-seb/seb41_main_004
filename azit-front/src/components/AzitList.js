@@ -92,7 +92,6 @@ const Tag = styled.span`
 `;
 
 const AzitList = ({ data }) => {
-  console.log(data);
   let meetDate;
   if (data) {
     let month = data.meetingDate.slice(5, 7);
