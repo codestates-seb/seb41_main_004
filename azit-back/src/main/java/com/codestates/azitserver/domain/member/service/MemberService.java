@@ -1,31 +1,39 @@
 package com.codestates.azitserver.domain.member.service;
 
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.repository.MemberRepository;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
+    private final MemberRepository memberRepository;
     //회원 생성
     public Member createMember(Member member) {
-
-        Member createdMember = member;
-
-        return createdMember; //TODO
+        member.setReputation(10);
+        return memberRepository.save(member);
     }
 
     //전체 회원 조회
-    public Member getMembers(Member member) {
-        return null; //TODO
+    public Page<Member> getMembers(int page, int size) {
+        return memberRepository.findAll(PageRequest.of(page - 1, size));
+
     }
 
     //1명의 회원 조회
-    public Member getMember(Member member) {
-        return null; //TODO
+    public Member getMemberById(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return member;
     }
 
     //회원 수정
@@ -34,7 +42,7 @@ public class MemberService {
     }
 
     // 회원 삭제(탈퇴)
-    public Member deleteMember(Member member) {
+    public Member deleteMember(Long memberId) {
         return null; //TODO
     }
 
