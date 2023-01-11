@@ -25,7 +25,6 @@ public class RedisConfig {
 
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
-		System.out.println("외장 REDIS 진행 중");
 		return new LettuceConnectionFactory(host, port);
 	}
 
