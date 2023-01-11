@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import UserListIcon from '../images/userListIcon.png'
+
+import UserListIcon from "../images/userListIcon.png";
+
 const ListWrap = styled.article`
   padding: 1rem;
   border-radius: 5px;
@@ -37,40 +39,40 @@ const ListWrap = styled.article`
       color: var(--sub-font-color);
       font-size: var(--caption-font);
     }
-    >.etcCell {
-        display:flex;
-        >.profileAvatar {
-            display:flex;
-            margin-right: 5px;
-            >.imgWrap {
-                width:2rem;
-                height: 2rem;
-                border-radius: 50%;
-                overflow: hidden;
-                border: 1px solid var(--white-color);
-                margin-left: -5px;
-                >img {
-                    max-width: 100%;
-                }
-            }
-            >.imgWrap:first-child {
-                margin:0;
-            }
+    > .etcCell {
+      display: flex;
+      > .profileAvatar {
+        display: flex;
+        margin-right: 5px;
+        > .imgWrap {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 1px solid var(--white-color);
+          margin-left: -5px;
+          > img {
+            max-width: 100%;
+          }
         }
-        >.limitCell {
-            display: flex;
-            align-items: center;
-            >img {
-                width:2rem;
-            }
-            >.limitWrap {
-                font-size:var(--small-font);
-                color:var(--light-font-color);
-            }
+        > .imgWrap:first-child {
+          margin: 0;
         }
-        >.clubHost {
-            margin-left: auto;
+      }
+      > .limitCell {
+        display: flex;
+        align-items: center;
+        > img {
+          width: 2rem;
         }
+        > .limitWrap {
+          font-size: var(--small-font);
+          color: var(--light-font-color);
+        }
+      }
+      > .clubHost {
+        margin-left: auto;
+      }
     }
   }
 `;
@@ -89,7 +91,6 @@ const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
 
-
 const AzitList = ({ data }) => {
   console.log(data);
   let meetDate;
@@ -103,14 +104,22 @@ const AzitList = ({ data }) => {
     let result = [];
     if (data.length >= 5) {
       for (let i = 0; i < 5; i++) {
-        result.push(<div key={data[i].userId} className="imgWrap"><img alt={data[i].userName} src={data[i].avatarUrl} /></div>);
+        result.push(
+          <div key={data[i].userId} className="imgWrap">
+            <img alt={data[i].userName} src={data[i].avatarUrl} />
+          </div>
+        );
       }
     } else {
-        for (let i = 0; i < data.length; i++) {
-          result.push(<div key={data[i].userId} className="imgWrap"><img alt={data[i].userName} src={data[i].avatarUrl} /></div>);
-        }
+      for (let i = 0; i < data.length; i++) {
+        result.push(
+          <div key={data[i].userId} className="imgWrap">
+            <img alt={data[i].userName} src={data[i].avatarUrl} />
+          </div>
+        );
+      }
     }
-    return <>{result}</>
+    return <>{result}</>;
   };
   return (
     <ListWrap>
@@ -119,7 +128,7 @@ const AzitList = ({ data }) => {
         <div className="tagWrap">
           {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
           <Tag className="category">{data.category}</Tag>
-          <Tag tagDisplay="none">숨겨짐</Tag>
+          <Tag tagDisplay="">숨겨짐</Tag>
         </div>
         <h2 className="clubName">{data.clubName}</h2>
         <div className="placeTime">
@@ -127,14 +136,12 @@ const AzitList = ({ data }) => {
           <span className="time">{meetDate}</span>
         </div>
         <div className="etcCell">
-          <div className="profileAvatar">
-            {repeatAvatar(data.user)}
-          </div>
+          <div className="profileAvatar">{repeatAvatar(data.user)}</div>
           <div className="limitCell">
-            <img src={UserListIcon} alt='limitIcon'/>
+            <img src={UserListIcon} alt="limitIcon" />
             <div className="limitWrap">
-            <span className="current">{data.user.length} </span>/
-            <span className="limit"> {data.memberLimit}</span>명
+              <span className="current">{data.user.length} </span>/
+              <span className="limit"> {data.memberLimit}</span>명
             </div>
           </div>
           <span className="clubHost">{data.clubHost}</span>

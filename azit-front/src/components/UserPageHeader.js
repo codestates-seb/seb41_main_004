@@ -24,7 +24,9 @@ const UserPageHeader = () => {
       <NavLink to="/profile">
         <Edit>프로필 수정 </Edit>&nbsp;&nbsp;&nbsp;{" "}
       </NavLink>
-      <Img alt="editIcon" src={editIcon} />
+      <NavLink to="/userpage/setting">
+        <Img alt="editIcon" src={editIcon} />
+      </NavLink>
     </HeaderWrap>
   );
 };
