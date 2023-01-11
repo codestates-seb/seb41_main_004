@@ -1,10 +1,7 @@
 package com.codestates.azitserver.domain.member.entity;
 
 import com.codestates.azitserver.domain.common.Auditable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Getter
+@NoArgsConstructor
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

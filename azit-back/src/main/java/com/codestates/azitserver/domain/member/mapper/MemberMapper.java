@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,componentModel = "spring")
 public interface MemberMapper {
@@ -21,4 +22,6 @@ public interface MemberMapper {
     Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
 
     MemberDto.Response memberToMemberResponseDto(Member member);
+
+    List<MemberDto.Response> membersToMemberResponseDtos(List<Member> members);
 }
