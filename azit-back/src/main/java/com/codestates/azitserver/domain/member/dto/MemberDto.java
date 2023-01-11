@@ -29,6 +29,14 @@ public class MemberDto {
          */
         private String password;
 
+        @NotBlank(message = "비밀번호를 한번 더 입력해 주세요")
+        private String passwordCheck;
+
+        @NotBlank(message = "성별을 선택해 주세요")
+        // 이부분 사용자가 직접 타이핑하는게 아니라 선택해서 저절로 입력되는거라
+        // 유효성 검증 적용 안해도 될까요?
+        private Member.Gender gender;
+
         @Length(min = 4, max = 4, message = "생년월일은 4자리 숫자여야 합니다")
         @Pattern(regexp = "\\d{4}", message = "생년월일은 4자리 숫자여야 합니다")
         private String birthYear;
@@ -54,6 +62,9 @@ public class MemberDto {
                 message = "비밀번호는 최소 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상어야 합니다.")
          */
         private String password;
+
+        @NotBlank(message = "비밀번호 확인")
+        private String passwordCheck;
 
         @Length(max = 128, message = "자기소개는 128자 이하여야 합니다")
         private String aboutMe;
