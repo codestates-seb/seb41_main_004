@@ -26,8 +26,7 @@ const SendBtn = styled.button`
   margin: 0;
   padding: 0;
   background-color: transparent;
-  background-image: url(${(props) =>
-    props.btnActive ? SendIconActive : SendIcon});
+  background-image: url(${(props) => props.btnActive ? SendIconActive : SendIcon});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

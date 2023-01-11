@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import testProfile from "../../images/testProfileImg.png";
 import Category from "./Category";
@@ -5,13 +6,13 @@ import Tab from "./Tab";
 
 const ProfileWrapper = styled.div`
   padding: 2rem 0;
-  display: flex;
-  flex-direction: column;
 `;
 
 const ImgWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin-left: 18.8rem;
+  padding-right: 2rem;
 `;
 
 const Img = styled.img`
@@ -22,15 +23,15 @@ const Img = styled.img`
 const ButtonWrapper = styled.span`
   display: flex;
   justify-content: center;
-  position: relative;
+  /* position: relative; */
 `;
 const Button = styled.button`
   background-color: #bb2649;
   border-radius: 0.5rem;
   border: none;
   color: white;
-  position: absolute;
-  bottom: 0.2rem;
+  /* position: absolute; */
+  margin-top: -1rem;
 `;
 const InfoWrapper = styled.div`
   display: flex;
@@ -66,12 +67,27 @@ const FolllowerCount = styled.span`
 const Follower = styled.span`
   color: #777777;
 `;
+const TempWrapper = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: #d9d9d9;
+`;
+const MannerTemp = styled.div`
+  width: 1rem;
+  height: ${(props) => props.height}%;
+  background-color: #bb2649;
+`;
 
 const Profile = () => {
+  const [temp, setTemp] = useState(0);
+
   return (
     <ProfileWrapper>
       <ImgWrapper>
         <Img alt="testProfile" src={testProfile} />
+        <TempWrapper>
+          <MannerTemp height={60}>온도계</MannerTemp>
+        </TempWrapper>
       </ImgWrapper>
       <InfoWrapper>
         <ButtonWrapper>

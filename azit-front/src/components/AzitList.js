@@ -124,7 +124,7 @@ const AzitList = ({ data }) => {
         <div className="tagWrap">
           {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
           <Tag className="category">{data.category}</Tag>
-          <Tag tagDisplay="none">숨겨짐</Tag>
+          <Tag tagDisplay="">숨겨짐</Tag>
         </div>
         <h2 className="clubName">{data.clubName}</h2>
         <div className="placeTime">
