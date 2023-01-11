@@ -46,7 +46,6 @@ const TabMenu = styled.ul`
 const Desc = styled.div`
   background-color: var(--background-color);
   min-height: calc(100vh - 47.5rem);
-  padding: 2rem 2rem 10rem;
 `;
 
 const FollowTab = () => {

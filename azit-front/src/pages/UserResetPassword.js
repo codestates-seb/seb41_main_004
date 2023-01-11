@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/Header";
-import { Button } from "../components/LoginComponent/Button";
+import Button from "../components/Button";
 import { Link } from "react-router-dom";
 
 const ResetForm = styled.div`
@@ -51,7 +51,7 @@ const UserResetPassword = () => {
           </ResetInputWrap>
         </ResetInputContainer>
         <Link to="/">
-          <Button disabled={true}>비밀번호 재설정</Button>
+          <Button title="비밀번호 재설정" state="active"></Button>
         </Link>
       </ResetForm>
     </>
