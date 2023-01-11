@@ -4,6 +4,8 @@ import com.codestates.azitserver.domain.common.Auditable;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -53,6 +55,9 @@ public class Member extends Auditable {
             this.gender = gender;
         }
     }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     public enum MemberStatus {
         ACTIVE("활성"),
