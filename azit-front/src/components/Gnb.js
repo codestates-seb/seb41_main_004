@@ -85,7 +85,7 @@ const StyledGnbWrapper = styled.div`
       background-image: url(${ProfileIconRed});
     }
   }
-  > .edit {
+  > .create {
     img {
       width: 5rem;
       height: 5rem;
@@ -104,7 +104,7 @@ const Gnb = () => {
         <span className="icon" />
         <span>채팅</span>
       </NavLink>
-      <NavLink to="/edit" className="edit">
+      <NavLink to="/create" className="create">
         <img src={PlusIcon} alt="" />
       </NavLink>
       <NavLink to="/search" className="search">
