@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-
-import UsersData from "./UsersData";
+import FollowData from "./FollowData";
+import FollowingData from "./FollowingData";
+import FollowingList from "./FollowingList";
 
 // Styled-Component 라이브러리를 활용해 TabMenu 와 Desc 컴포넌트의 CSS를 구현.
 const TabBox = styled.div`
@@ -44,7 +45,7 @@ const TabMenu = styled.ul`
 `;
 
 const Desc = styled.div`
-  background-color: var(--background-color);
+  background-color: #ffffff;
   min-height: calc(100vh - 47.5rem);
 `;
 
@@ -53,8 +54,8 @@ const FollowTab = () => {
   const [currentTab, clickTab] = useState(0);
 
   const menuArr = [
-    { name: "팔로우", content: <UsersData /> },
-    { name: "팔로워", content: "Tab menu TWO" },
+    { name: "팔로우", content: <FollowData /> },
+    { name: "팔로워", content: <FollowingData /> },
   ];
 
   const selectMenuHandler = (index) => {

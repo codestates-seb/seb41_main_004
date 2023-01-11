@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import UserProfile from "../../images/testProfileImg.png";
+import UserProfile from "../../images/testProfileImg2.png";
 
 const Container = styled.div`
   width: 100%;
@@ -44,8 +44,7 @@ const Button = styled.button`
   color: white;
 `;
 
-const FollowList = ({ data }) => {
-  // console.log(data);
+const FollowingList = ({ data }) => {
   const [follow, SetFollow] = useState(true);
 
   return (
@@ -59,11 +58,11 @@ const FollowList = ({ data }) => {
           <FollowText>{data.clubInfo}</FollowText>
         </FollowBox>
         <ButtonBox>
-          <Button>{follow ? "해제" : "팔로우"}</Button>
+          <Button>{follow ? "팔로우" : "팔로잉"}</Button>
         </ButtonBox>
       </Container>
     </>
   );
 };
 
-export default FollowList;
+export default FollowingList;

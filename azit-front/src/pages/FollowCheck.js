@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import FollowTab from "../components/FollowCheck/FollowTab";
 import Header from "../components/Header";
 

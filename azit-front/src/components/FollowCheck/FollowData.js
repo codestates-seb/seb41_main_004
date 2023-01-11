@@ -1,7 +1,7 @@
 import { ClubData } from "../../dummyData/ClubData";
 import FollowList from "./FollowList";
 
-const UsersData = () => {
+const FollowData = () => {
   return (
     <>
       {ClubData ? (
@@ -13,4 +13,4 @@ const UsersData = () => {
   );
 };
 
-export default UsersData;
+export default FollowData;
