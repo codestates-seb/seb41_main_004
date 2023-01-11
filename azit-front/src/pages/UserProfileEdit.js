@@ -51,6 +51,7 @@ const ProfileEditForm = styled.div`
     }
   }
   & > .buttonWrap {
+    margin-top: 3rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;

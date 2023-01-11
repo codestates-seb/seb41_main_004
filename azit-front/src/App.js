@@ -17,7 +17,6 @@ import AzitReport from "./pages/AzitReport";
 import ChatList from "./pages/ChatList";
 import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
-import AzitDetail from "./pages/AzitDetail";
 
 function App() {
   return (
@@ -43,7 +42,6 @@ function App() {
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/loading" element={<Loading />}></Route>
           <Route path="/azitreport" element={<AzitReport />}></Route>
-          <Route path="/azitDetail" element={<AzitDetail />}></Route>
         </Routes>
       </BrowserRouter>
     </>
