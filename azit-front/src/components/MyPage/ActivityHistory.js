@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { ClubData } from "../../dummyData/ClubData";
+import AzitList from "../AzitList";
 
 const Container = styled.div`
   div.Box {
     display: flex;
     justify-content: space-between;
-    padding: 2rem;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
   input#check_btn {
     display: none;
@@ -60,9 +61,12 @@ const ActivityHistory = () => {
             </select>
           </div>
         </div>
-
-        <div>활동내역 map함수 돌려야함</div>
       </Container>
+      {ClubData ? (
+        ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+      ) : (
+        <></>
+      )}
     </>
   );
 };
