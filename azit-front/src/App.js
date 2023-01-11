@@ -52,7 +52,7 @@ function App() {
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/loading" element={<Loading />}></Route>
           <Route path="/azitreport" element={<AzitReport />}></Route>
-          <Route path="/azitrdetail" element={<AzitDetail />}></Route>
+          <Route path="/azitdetail" element={<AzitDetail />}></Route>
         </Routes>
       </BrowserRouter>
     </>
