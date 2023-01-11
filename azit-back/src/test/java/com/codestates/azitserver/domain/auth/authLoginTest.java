@@ -103,6 +103,5 @@ public class authLoginTest {
 					headerWithName("Authorization").description("액세스 토큰"),
 					headerWithName("Refresh").description("리프레시 토큰")
 				)));
-
 	}
 }
