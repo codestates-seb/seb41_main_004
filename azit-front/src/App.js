@@ -10,18 +10,14 @@ import UserPage from "./pages/UserPage";
 import AzitSetting from "./pages/AzitSetting";
 import AzitEdit from "./pages/AzitEdit";
 import AzitJoin from "./pages/AzitJoin";
-<<<<<<< HEAD
 import UserPageSetting from "./pages/UserPageSetting";
 import FollowCheck from "./pages/FollowCheck";
-=======
 import FindPassword from "./pages/FindPassword";
 import SignupAdditional from "./pages/SignupAdditional";
 import Loading from "./pages/Loading";
 import AzitReport from "./pages/AzitReport";
 import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
-
->>>>>>> 134ed9b5413f0c33ba4d2873b34139bec69eacc2
 
 function App() {
   return (
@@ -40,13 +36,11 @@ function App() {
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signupadd" element={<SignupAdditional />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
-<<<<<<< HEAD
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/followcheck" element={<FollowCheck />}></Route>
-=======
           <Route path="/useredit" element={<UserProfileEdit />}></Route>
           <Route path="/userreset" element={<UserResetPassword />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
@@ -54,7 +48,6 @@ function App() {
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/loading" element={<Loading />}></Route>
           <Route path="/azitreport" element={<AzitReport />}></Route>
->>>>>>> 134ed9b5413f0c33ba4d2873b34139bec69eacc2
         </Routes>
       </BrowserRouter>
     </>

@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import UserProfile from "../../images/testProfileImg.png";
 
-const Container = styled.div``;
+const Container = styled.div`
+  background-color: #ffffff;
+`;
 const ImgBox = styled.div``;
 const UserImg = styled.img.attrs({
   src: `${UserProfile}`,
