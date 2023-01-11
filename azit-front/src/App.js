@@ -39,7 +39,7 @@ function App() {
           <Route path="/signupadd" element={<SignupAdditional />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
-          <Route path="/userpage/user_report" element={<UserReport />}></Route>
+          <Route path="/userpage/userreport" element={<UserReport />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
