@@ -24,7 +24,6 @@ import Chat from "./components/ChatList/Chat";
 import AzitDetail from "./pages/AzitDetail";
 import AzitPreview from "./pages/AzitPreview";
 
-
 function App() {
   return (
     <>
