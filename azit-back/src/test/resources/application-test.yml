@@ -20,5 +20,5 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
-embeddedRedis:
-  port: 6380
+#embeddedRedis:
+#  port: 6379

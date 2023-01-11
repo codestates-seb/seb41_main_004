@@ -1,5 +1,7 @@
 package com.codestates.azitserver.global.config;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ public class RedisConfig {
 
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
+		System.out.println("외장 REDIS 진행 중");
 		return new LettuceConnectionFactory(host, port);
 	}
 
