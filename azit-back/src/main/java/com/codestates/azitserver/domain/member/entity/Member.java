@@ -56,8 +56,8 @@ public class Member extends Auditable {
         }
     }
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    private List<String> roles = new ArrayList<>();
+   @ElementCollection(fetch = FetchType.EAGER)
+   private List<String> roles = new ArrayList<>();
 
     public enum MemberStatus {
         ACTIVE("활성"),
