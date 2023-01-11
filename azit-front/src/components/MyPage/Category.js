@@ -59,7 +59,7 @@ const Category = () => {
   return (
     <Container>
       {interests.map((el, idx) => (
-        <Categorys>{el.tags[0]}</Categorys>
+        <Categorys key={idx}>{el.tags[0]}</Categorys>
       ))}
     </Container>
   );
