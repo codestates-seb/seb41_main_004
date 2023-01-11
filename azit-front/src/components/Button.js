@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
 const ButtonWrap = styled.button`
-width: 100%;
+  width: 100%;
   height: 55px;
   font-size: var(--big-font);
   border-radius: 5px;
   border: none;
-  margin:0;
+  margin: 0;
   padding: 0;
   cursor: pointer;
-  transition:0.5s all;
+  transition: 0.5s all;
   &.active {
     background-color: var(--point-color);
     color: var(--white-color);

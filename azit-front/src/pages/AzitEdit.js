@@ -4,11 +4,11 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 
 const AzitEditWrap = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  > Button {
-    margin-top: 9rem;
-    margin-bottom: 2rem;
+  > .buttonWrap {
+    padding: 2rem;
   }
 `;
 
@@ -17,7 +17,9 @@ const AzitEdit = () => {
     <AzitEditWrap>
       <Header title="아지트 수정" />
       <AzitEditForm />
-      <Button title="수정완료" />
+      <div className="buttonWrap">
+        <Button state="disabled" title="수정완료" />
+      </div>
     </AzitEditWrap>
   );
 };
