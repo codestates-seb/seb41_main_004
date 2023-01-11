@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "../components/LoginComponent/Button";
+import Button from "../components/Button";
 import Header from "../components/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
@@ -49,6 +49,12 @@ const ProfileEditForm = styled.div`
         }
       }
     }
+  }
+  & > .buttonWrap {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-end;
   }
 `;
 
@@ -157,8 +163,9 @@ const UserProfileEdit = () => {
           }
         </article>
         {/*Link -> useNavigate 로 변환 필요 / */}
+        <div className="buttonWrap"></div>
         <Link to="/">
-          <Button disabled="">수정 완료</Button>
+          <Button title="수정 완료" state="active"></Button>
         </Link>
       </ProfileEditForm>
     </>
