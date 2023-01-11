@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import UserProfile from "../../images/testProfileImg2.png";
 
@@ -45,7 +44,7 @@ const Button = styled.button`
 `;
 
 const FollowingList = ({ data }) => {
-  const [follow, SetFollow] = useState(true);
+  // const [follow, SetFollow] = useState(true);
 
   return (
     <>
@@ -58,7 +57,7 @@ const FollowingList = ({ data }) => {
           <FollowText>{data.clubInfo}</FollowText>
         </FollowBox>
         <ButtonBox>
-          <Button>{follow ? "팔로우" : "팔로잉"}</Button>
+          <Button>팔로우</Button>
         </ButtonBox>
       </Container>
     </>
