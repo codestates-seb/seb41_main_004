@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import reportIcon from "../images/reportIcon.png";
+import editIcon from "../images/edit-icon.png";
+
 const HeaderWrap = styled.header`
-  position: relative;
   width: 100%;
   max-width: 50rem;
   height: 5.5rem;
@@ -15,11 +17,6 @@ const HeaderWrap = styled.header`
   justify-content: center;
   border-bottom: 1px solid var(--border-color);
   z-index: 99;
-  > h2 {
-    display: inline-block;
-    font-size: var(--big-font);
-    font-weight: var(--bold-weight);
-  }
   > button {
     position: absolute;
     left: 10px;
@@ -41,16 +38,30 @@ const HeaderWrap = styled.header`
   }
 `;
 
-const Header = ({ title }) => {
+const ReportIcon = styled.img.attrs({ src: `${reportIcon}` })`
+  position: absolute;
+  right: 2rem;
+  width: 2.4rem;
+`;
+
+const EditIcon = styled.img.attrs({ src: `${editIcon}` })`
+  position: absolute;
+  right: 2rem;
+  width: 2.4rem;
+  display: none;
+`;
+
+const AzitDetailHeader = () => {
   const navigate = useNavigate();
   return (
     <HeaderWrap>
       <button onClick={() => navigate(-1)}>
         <span />
       </button>
-      <h2>{title ? title : "test"}</h2>
+      <ReportIcon></ReportIcon>
+      <EditIcon></EditIcon>
     </HeaderWrap>
   );
 };
 
-export default Header;
+export default AzitDetailHeader;
