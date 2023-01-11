@@ -1,6 +1,13 @@
 spring:
   application:
     name: azit-server
+  jpa:
+    defer-datasource-initialization: true  # 초기 데이터값 입력
+  sql:
+    init:
+      encoding: UTF-8  # 한글 깨짐 해결
+      mode: always
+
 server:
   servlet:
     encoding:
