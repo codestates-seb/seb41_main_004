@@ -34,12 +34,12 @@ server:
 #              - user:email
 
 jwt:
-  secret-key: DOFHUEWJKF8971938576439NGBJCBGVYUGFTYSFRC56TUH8NUK6JNYO9UGV8WE678REFKUG3K6HG9283 # dummy
+  secret-key: ${JWT_SECRET_KEY:DOFHUEWJKF8971938576439NGBJCBGVYUGFTYSFRC56TUH8NUK6JNYO9UGV8WE678REFKUG3K6HG9283}
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
 mail:
   address:
-    admin: admin@gmail.com # dummy
+    admin: admin@gmail.com
 redis:
   port: 6379
   host: localhost
