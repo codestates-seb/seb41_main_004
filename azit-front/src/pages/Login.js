@@ -97,6 +97,7 @@ const Login = () => {
         <SnsLoginButton src={Kakao}></SnsLoginButton>
       </Link>
         <SnsLoginButton src={Google}></SnsLoginButton>
+      <Link>비회원으로 시작</Link>
     </LoginContainer>
   );
 };
