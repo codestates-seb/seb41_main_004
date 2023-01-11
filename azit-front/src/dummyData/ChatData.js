@@ -14,7 +14,7 @@ export const ChatData = [
     chatId:2,
     chatName:"일이삼사오육칠팔구십일이삼사오",
     chatImg:TestProfileImg,
-    lastMsg:"마지막 메시지",
+    lastMsg:"마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지",
     lastView: true,
     chatPeople:15,
     lastMsgDate: "2023-03-05T15:30",

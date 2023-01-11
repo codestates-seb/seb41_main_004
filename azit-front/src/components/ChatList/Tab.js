@@ -43,7 +43,7 @@ const TabMenu = styled.ul`
 
 const Desc = styled.article`  
   min-height: calc(100vh - 10.5rem); 
-  padding:2rem 2rem 10rem;
+  padding:0 0 10rem;
 `;
 
 const Tab = () => {
@@ -51,7 +51,7 @@ const Tab = () => {
     
   const menuArr = [
     { name: "아지트", content: <ChatWrap data={ChatData}/> },
-    { name: "개인", content: <ChatWrap data={ChatData}/> },
+    { name: "개인", content: <ChatWrap data={""}/> },
   ];
 
   const selectMenuHandler = (index) => {
