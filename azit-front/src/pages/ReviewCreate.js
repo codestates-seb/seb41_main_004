@@ -109,7 +109,7 @@ const ReviewCreate = () => {
         </div>
         <CreateCell />
         <CreateCell />
-        <Button title="리뷰 제출하기"/>
+        <Button title="리뷰 제출하기" state="disabled"/>
       </CreateWrap>
     </>
   );
