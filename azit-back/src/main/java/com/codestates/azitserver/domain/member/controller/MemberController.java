@@ -5,6 +5,8 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,10 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
+        // 'password 한번 더' 절차
+        if( memberPostDto.getPassword() != memberPostDto.getPasswordCheck()){
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
+        }
         memberService.createMember(member);
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
 
