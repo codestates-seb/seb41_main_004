@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/Header";
-import { Button } from "../components/LoginComponent/Button";
+import Button from "../components/Button";
 
 const FormContainer = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const FindPassword = () => {
           <label>이메일</label>
           <input placeholder="가입한 계정을 입력해 주세요."></input>
         </div>
-        <Button disabled={true}>인증 메일 보내기</Button>
+        <Button title="인증 메일 보내기" state="active"></Button>
       </FormContainer>
     </>
   )
