@@ -19,9 +19,11 @@ import AzitReport from "./pages/AzitReport";
 import ChatList from "./pages/ChatList";
 import UserProfileEdit from "./pages/UserProfileEdit";
 import UserResetPassword from "./pages/UserResetPassword";
+import UserReport from "./pages/UserReport";
 import Chat from "./components/ChatList/Chat";
 import AzitDetail from "./pages/AzitDetail";
 import AzitPreview from "./pages/AzitPreview";
+
 
 function App() {
   return (
@@ -42,6 +44,7 @@ function App() {
           <Route path="/signupadd" element={<SignupAdditional />}></Route>
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
+          <Route path="/userpage/userreport" element={<UserReport />}></Route>
           <Route path="/azitsetting" element={<AzitSetting />}></Route>
           <Route path="/azitedit" element={<AzitEdit />}></Route>
           <Route path="/azitjoin" element={<AzitJoin />}></Route>
