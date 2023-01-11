@@ -43,4 +43,4 @@ mail:
 redis:
   port: 6379
   host: localhost
-#  password:
+  password: ${REDIS_PASSWORD:redisPassTest0101} # dummy

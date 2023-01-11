@@ -1,8 +1,6 @@
 package com.codestates.azitserver.global.config;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -16,16 +14,17 @@ import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
 @Slf4j
-@Profile("local")
+@Profile("test")
 @Configuration
 public class EmbeddedRedisConfig {
-	@Value("${redis.port}")
+	@Value("${embeddedRedis.port}")
 	private int port;
 
 	private RedisServer redisServer;
 
 	@PostConstruct
 	public void redisServer() throws IOException {
+		// System.out.println("내장 REDIS 진행 중");
 		redisServer = RedisServer.builder()
 			.port(port)
 			.setting("maxmemory 128M")

@@ -31,7 +31,7 @@ import com.google.gson.Gson;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @SpringBootTest
 public class authLoginTest {
 	@Autowired
