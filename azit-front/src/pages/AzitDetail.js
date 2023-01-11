@@ -18,9 +18,7 @@ const AzitDetailWrap = styled.div`
 `;
 
 const AzitDetailForm = styled.div`
-  margin-top: 2rem;
-  margin-right: 2rem;
-  margin-left: 2rem;
+  margin: 2rem;
   > div {
     margin-bottom: 2rem;
     display: flex;
