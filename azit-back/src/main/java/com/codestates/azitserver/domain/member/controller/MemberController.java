@@ -36,6 +36,7 @@ public class MemberController {
         memberService.createMember(member);
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
 
+
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);}
 
     //전체 회원 조회
