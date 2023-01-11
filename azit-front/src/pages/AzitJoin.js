@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import Header from "../components/Header";
+import Button from "../components/Button";
 
 const JoinWrap = styled.div`
+  position: relative;
   margin-right: 2rem;
   margin-left: 2rem;
   display: flex;
   flex-direction: column;
-  min-height: 84.4rem;
+  height: 100vh;
   > .JoinForm {
+    height: 100%;
     margin-top: 7.5rem;
     > div {
       > div {
@@ -20,16 +23,8 @@ const JoinWrap = styled.div`
       }
     }
   }
-  > .submitButton {
-    width: 100%;
-    height: 5.5rem;
-    margin-top: 55.2rem;
+  > .buttonWrap {
     margin-bottom: 2rem;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: var(--border-color);
-    color: var(--light-font-color);
-    font-size: var(--big-font);
   }
 `;
 
@@ -47,7 +42,9 @@ const AzitJoin = () => {
           <input placeholder="답변을 입력해주세요."></input>
         </div>
       </div>
-      <button className="submitButton">신청 하기</button>
+      <div className="buttonWrap">
+        <Button state="disabled" title="신청 하기" />
+      </div>
     </JoinWrap>
   );
 };

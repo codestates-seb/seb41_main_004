@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const EditFormWrap = styled.div`
+  height: 100%;
   margin-top: 5.5rem;
   margin-left: 2rem;
   margin-right: 2rem;
@@ -101,7 +102,7 @@ const AzitEditForm = () => {
         </div>
         <div className="inputContainer">
           <label>날짜 및 시간</label>
-          <div>
+          <div className="wd70">
             <input placeholder="0000-00-00"></input>
             <input placeholder="오전 00:00"></input>
           </div>
