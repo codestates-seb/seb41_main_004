@@ -1,7 +1,17 @@
 package com.codestates.azitserver.domain.member.entity;
 
 import com.codestates.azitserver.domain.common.Auditable;
+
 import lombok.*;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 import javax.persistence.*;
@@ -9,6 +19,7 @@ import javax.persistence.*;
 @Entity
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 @NoArgsConstructor
@@ -44,9 +55,13 @@ public class Member extends Auditable {
     @Column(name = "MEMBER_STATUS")
     private MemberStatus memberStatus;
 
-    public enum Gender {
-        MALE("남자"),
-        FEMALE("여자");
+	// YH: Roles 필요해서 작성하였습니다. 확인 부탁드립니다!
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles = new ArrayList<>();
+
+	public enum Gender {
+		MALE("남자"),
+		FEMALE("여자");
 
         private String gender;
 

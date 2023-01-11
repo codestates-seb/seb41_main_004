@@ -70,6 +70,18 @@ include::{snippets}/delete-club/http-response.adoc[]
 .response-fields
 include::{snippets}/delete-club/response-fields.adoc[]
 
+== 인증
+
+=== 로그인
+.curl-request
+include::{snippets}/login/curl-request.adoc[]
+
+.http-request
+include::{snippets}/login/http-request.adoc[]
+
+.http-response
+include::{snippets}/login/http-response.adoc[]
+
 
 // TODO: 맨 뒤로 배치 예정
 == 에러 코드
