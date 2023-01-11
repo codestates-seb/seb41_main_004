@@ -81,7 +81,7 @@ const LastViewBullet = styled.span`
   right: 2rem;
   display: ${(props) => props.lastView};
 `;
-const ChatWrap = ({ data }) => {
+const ChatListWrap = ({ data }) => {
   return (
     <ChatFlex>
       {data ? (
@@ -92,7 +92,7 @@ const ChatWrap = ({ data }) => {
           }
           return (
             <Chat key={chat.chatId}>
-              <Link to="/">
+              <Link to="/chat/detail">
                 <ImgWrap chatImg={chat.chatImg} />
                 <div className="contentsWrap">
                   <div className="titleWrap">
@@ -114,4 +114,4 @@ const ChatWrap = ({ data }) => {
   );
 };
 
-export default ChatWrap;
+export default ChatListWrap;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import ChatWrap from "./ChatWrap";
+import ChatListWrap from "./ChatListWrap";
 import {ChatData} from "../../dummyData/ChatData"
 
 const TabMenu = styled.ul`
@@ -50,8 +50,8 @@ const Tab = () => {
   const [currentTab, clickTab] = useState(0);
     
   const menuArr = [
-    { name: "아지트", content: <ChatWrap data={ChatData}/> },
-    { name: "개인", content: <ChatWrap data={""}/> },
+    { name: "아지트", content: <ChatListWrap data={ChatData}/> },
+    { name: "개인", content: <ChatListWrap data={""}/> },
   ];
 
   const selectMenuHandler = (index) => {
