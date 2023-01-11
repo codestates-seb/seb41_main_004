@@ -1,4 +1,5 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import testProfile from "../../images/testProfileImg.png";
 import Category from "./Category";
@@ -79,7 +80,7 @@ const MannerTemp = styled.div`
 `;
 
 const Profile = () => {
-  const [temp, setTemp] = useState(0);
+  // const [temp, setTemp] = useState(0);
 
   return (
     <ProfileWrapper>
@@ -98,16 +99,18 @@ const Profile = () => {
           매일 반복되는 일상을 특별하게 만들고 싶다.
           <br /> ㅁㄴㅇㄹㅁㄴㅇㄹ
         </Text>
-        <FollowWrapper>
-          <Following>
-            <FollowingCount>0</FollowingCount>
-            팔로잉&nbsp;&nbsp;
-          </Following>
-          <Follower>
-            <FolllowerCount>3</FolllowerCount>
-            &nbsp;&nbsp; 팔로워
-          </Follower>
-        </FollowWrapper>
+        <NavLink to="/followcheck" className="followCheck">
+          <FollowWrapper>
+            <Following>
+              <FollowingCount>0</FollowingCount>
+              팔로잉&nbsp;&nbsp;
+            </Following>
+            <Follower>
+              <FolllowerCount>3</FolllowerCount>
+              &nbsp;&nbsp; 팔로워
+            </Follower>
+          </FollowWrapper>
+        </NavLink>
       </InfoWrapper>
       <Category></Category>
       <Tab></Tab>
