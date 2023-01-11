@@ -48,7 +48,7 @@ const Header = ({ title }) => {
       <button onClick={() => navigate(-1)}>
         <span />
       </button>
-      <h2>{title ? title : "test"}</h2>
+      <h2>{title ? title : ""}</h2>
     </HeaderWrap>
   );
 };
