@@ -5,12 +5,28 @@
 :toc-title: Table of Contents
 :source-highlighter: prettify
 
-CAUTION: 요청 Host 주소는 예시입니다. 실제 Host 주소가 아닙니다.
+CAUTION: 요청 Host 주소는 예시입니다.실제 Host 주소가 아닙니다.
 
+== 인증
+
+=== 로그인
+
+.curl-request
+include::{snippets}/login/curl-request.adoc[]
+
+.http-request
+include::{snippets}/login/http-request.adoc[]
+
+.http-response
+include::{snippets}/login/http-response.adoc[]
+
+== 회원
+// 회원 부분의 api 작성
 
 == 아지트(모임)
 
 === 아지트 생성
+
 .curl-request
 include::{snippets}/post-club/curl-request.adoc[]
 
@@ -33,6 +49,7 @@ include::{snippets}/post-club/http-response.adoc[]
 include::{snippets}/post-club/response-fields.adoc[]
 
 === 아지트 정보 수정
+
 .curl-request
 include::{snippets}/patch-club/curl-request.adoc[]
 
@@ -41,6 +58,9 @@ include::{snippets}/patch-club/http-request.adoc[]
 
 .path-parameters
 include::{snippets}/patch-club/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-club/request-headers.adoc[]
 
 .request-parts
 include::{snippets}/patch-club/request-parts.adoc[]
@@ -55,6 +75,7 @@ include::{snippets}/patch-club/http-response.adoc[]
 include::{snippets}/patch-club/response-fields.adoc[]
 
 === 아지트 예약 취소
+
 .curl-request
 include::{snippets}/delete-club/curl-request.adoc[]
 
@@ -64,29 +85,74 @@ include::{snippets}/delete-club/http-request.adoc[]
 .path-parameters
 include::{snippets}/delete-club/path-parameters.adoc[]
 
+.request-headers
+include::{snippets}/delete-club/request-headers.adoc[]
+
 .http-response
 include::{snippets}/delete-club/http-response.adoc[]
 
 .response-fields
 include::{snippets}/delete-club/response-fields.adoc[]
 
-== 인증
+== 카테고리
 
-=== 로그인
+=== 전체 카테고리 조회
+
 .curl-request
-include::{snippets}/login/curl-request.adoc[]
+include::{snippets}/get-all-categories/curl-request.adoc[]
 
 .http-request
-include::{snippets}/login/http-request.adoc[]
+include::{snippets}/get-all-categories/http-request.adoc[]
+
+.request-headers
+include::{snippets}/get-all-categories/request-headers.adoc[]
 
 .http-response
-include::{snippets}/login/http-response.adoc[]
+include::{snippets}/get-all-categories/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-all-categories/response-fields.adoc[]
+
+=== 대분류 카테고리 조회
+
+.curl-request
+include::{snippets}/get-all-large-categories/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-all-large-categories/http-request.adoc[]
+
+.request-headers
+include::{snippets}/get-all-large-categories/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-all-large-categories/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-all-large-categories/response-fields.adoc[]
+
+=== 소분류 카테고리 조회
+
+.curl-request
+include::{snippets}/get-all-small-categories/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-all-small-categories/http-request.adoc[]
+
+.request-headers
+include::{snippets}/get-all-small-categories/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-all-small-categories/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-all-small-categories/response-fields.adoc[]
 
 
 // TODO: 맨 뒤로 배치 예정
 == 에러 코드
 
 === 커스텀 에러 코드 조회
+
 .curl-request
 include::{snippets}/exception-code/curl-request.adoc[]
 
