@@ -45,6 +45,7 @@ const InfoWrapper = styled.div`
 const Name = styled.p`
   font-weight: bold;
   font-size: var(--big-font);
+  padding-top: 0.5rem;
 `;
 const Text = styled.p`
   margin: 1rem 0;
