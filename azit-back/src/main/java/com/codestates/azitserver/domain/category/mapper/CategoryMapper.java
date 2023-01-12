@@ -16,7 +16,7 @@ public interface CategoryMapper {
 	List<CategoryDto.LargeResponse> categoryLargeToCategoryLargeResponseDto(List<CategoryLarge> categoryLargeList);
 
 	@Mapping(source = "categoryLarge.categoryLargeId", target = "categoryLargeId")
-	CategoryDto.SmallResponse categoryLargeToCategorySmallResponseDto(CategorySmall categorySmall);
+	CategoryDto.SmallResponse categorySmallToCategorySmallResponseDto(CategorySmall categorySmall);
 
-	List<CategoryDto.SmallResponse> categoryLargeToCategorySmallResponseDto(List<CategorySmall> categorySmallList);
+	List<CategoryDto.SmallResponse> categorySmallToCategorySmallResponseDto(List<CategorySmall> categorySmallList);
 }

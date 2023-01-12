@@ -99,7 +99,7 @@ class CategoryControllerTest implements CategoryControllerTestHelper {
 	void getSmallCategory() throws Exception {
 		// given
 		given(categoryService.getAllSmallCategory()).willReturn(new ArrayList<>());
-		given(mapper.categoryLargeToCategorySmallResponseDto(Mockito.anyList())).willReturn(List.of(smallResponse));
+		given(mapper.categorySmallToCategorySmallResponseDto(Mockito.anyList())).willReturn(List.of(smallResponse));
 
 		// when
 		ResultActions actions = mockMvc.perform(getRequestBuilder(getCategoryUrl() + "/small")

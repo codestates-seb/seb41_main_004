@@ -24,6 +24,7 @@ public class ClubFieldDescriptor {
 			fieldWithPath("isOnline").type(JsonFieldType.BOOLEAN)
 				.description("만남 타입").attributes(key("constraints").value("true : 온라인 | false : 오프라인")),
 			fieldWithPath("location").type(JsonFieldType.STRING).description("오프라인 만남 장소").optional(),
+			fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리"),
 			fieldWithPath("joinQuestion").type(JsonFieldType.STRING).description("참가 신청 질문")
 		);
 	}
@@ -63,7 +64,12 @@ public class ClubFieldDescriptor {
 			fieldWithPath("isOnline").type(JsonFieldType.BOOLEAN).description("만남 타입"),
 			fieldWithPath("location").type(JsonFieldType.STRING).description("오프라인 만남 장소"),
 			fieldWithPath("joinQuestion").type(JsonFieldType.STRING).description("참가 신청 질문"),
-			fieldWithPath("clubStatus").type(JsonFieldType.STRING).description("아지트 활성화 상태")
+			fieldWithPath("clubStatus").type(JsonFieldType.STRING).description("아지트 활성화 상태"),
+			fieldWithPath("categorySmall").type(JsonFieldType.OBJECT).description("아지트 소분류 카테고리")
+		).andWithPrefix("data.categorySmall.",
+			fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리 고유 식별자"),
+			fieldWithPath("categoryName").type(JsonFieldType.STRING).description("아지트 소분류 카테고리 이름").optional(),
+			fieldWithPath("categoryLargeId").type(JsonFieldType.NUMBER).description("아지트 대분류 카테고리 고유 식별자").optional()
 		);
 	}
 }
