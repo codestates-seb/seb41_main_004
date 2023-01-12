@@ -106,19 +106,15 @@ class ClubControllerTest implements ClubControllerTestHelper {
 	}
 
 	@Test
-	void patchClub() throws Exception {
+	void postClubImage() throws Exception {
 		// given
-		Long clubId = 1L;
-		patch.setClubId(clubId);
-		String content = objectMapper.writeValueAsString(patch);
-		MockMultipartFile data = ClubStubData.getMultipartJsonData(content);
+		long clubId = 1L;
 
-		given(mapper.clubDtoPatchToClubEntity(Mockito.any(ClubDto.Patch.class))).willReturn(club);
-		given(clubService.updateClub(Mockito.any(Club.class), any())).willReturn(club);
+		given(clubService.updateClubImage(Mockito.anyLong(), Mockito.any())).willReturn(club);
 		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
 
 		// when
-		ResultActions actions = mockMvc.perform(patchMultipartRequestBuilder(getClubUri(), clubId, image, data)
+		ResultActions actions = mockMvc.perform(postMultipartRequestBuilder(getClubUri(), clubId, image)
 			.header("Authorization", "Required JWT access token"));
 
 		// then
@@ -126,14 +122,41 @@ class ClubControllerTest implements ClubControllerTestHelper {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.clubId").value(1))
 			.andDo(getDefaultDocument(
-					"patch-club",
+					"patch-club-image",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					pathParameters(List.of(
 						parameterWithName("club-id").description("아지트 고유 식별자"))),
-					requestParts(List.of(
-						partWithName("data").description("data"),
-						partWithName("image").description("image").optional())),
-					ClubFieldDescriptor.getPatchRequestPartFieldsSnippet(),
+					requestParts(List.of(partWithName("image").description("image"))),
+					ClubFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void patchClub() throws Exception {
+		// given
+		long clubId = 1L;
+		patch.setClubId(clubId);
+		String content = objectMapper.writeValueAsString(patch);
+
+		given(mapper.clubDtoPatchToClubEntity(Mockito.any(ClubDto.Patch.class))).willReturn(club);
+		given(clubService.updateClub(Mockito.any(Club.class))).willReturn(club);
+		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
+
+		// when
+		ResultActions actions = mockMvc.perform(patchRequestBuilder(getClubUri(), clubId, content)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.clubId").value(1))
+			.andDo(getDefaultDocument(
+					"patch-club-data",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+						parameterWithName("club-id").description("아지트 고유 식별자"))),
+					ClubFieldDescriptor.getPatchRequestFieldsSnippet(),
 					ClubFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
@@ -177,15 +200,13 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl(), queryParams)
-			.header("Authorization", "Required JWT access token"));
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl(), queryParams));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"get-all-clubs",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParameters(
 						List.of(
 							parameterWithName("page").description("Page 번호"),
@@ -205,15 +226,13 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUri(), clubId)
-			.header("Authorization", "Required JWT access token"));
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUri(), clubId));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"get-club-by-club-id",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					pathParameters(List.of(
 						parameterWithName("club-id").description("아지트 고유 식별자"))),
 					ClubFieldDescriptor.getSingleResponseSnippet()
@@ -234,15 +253,13 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/category", queryParams)
-			.header("Authorization", "Required JWT access token"));
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/category", queryParams));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"get-club-by-category-id",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParameters(
 						List.of(
 							parameterWithName("page").description("Page 번호"),
@@ -268,20 +285,19 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/date", queryParams)
-			.header("Authorization", "Required JWT access token"));
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/date", queryParams));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"get-club-by-meeting-date",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParameters(
 						List.of(
 							parameterWithName("page").description("Page 번호"),
 							parameterWithName("size").description("Page 크기"),
-							parameterWithName("days").description("오늘(0) 기준으로 며칠 뒤의 날짜").attributes(key("constraints").value("0 ~ 5 사이의 정수"))
+							parameterWithName("days").description("오늘(0) 기준으로 며칠 뒤의 날짜")
+								.attributes(key("constraints").value("0 ~ 5 사이의 정수"))
 						)
 					),
 					ClubFieldDescriptor.getMultiResponseSnippet()
@@ -316,20 +332,19 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/search", queryParams)
-			.header("Authorization", "Required JWT access token"));
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/search", queryParams));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"search-club",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParameters(
 						List.of(
 							parameterWithName("page").description("Page 번호"),
 							parameterWithName("size").description("Page 크기"),
-							parameterWithName("keyword").description("검색어").attributes(key("constraints").value("빈 문자이면 전체 아지트를 리턴합니다."))
+							parameterWithName("keyword").description("검색어")
+								.attributes(key("constraints").value("빈 문자이면 전체 아지트를 리턴합니다."))
 						)
 					),
 					ClubFieldDescriptor.getMultiResponseSnippet()

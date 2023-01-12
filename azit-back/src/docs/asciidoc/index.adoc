@@ -131,28 +131,48 @@ include::{snippets}/get-club-by-meeting-date/response-fields.adoc[]
 === 아지트 정보 수정
 
 .curl-request
-include::{snippets}/patch-club/curl-request.adoc[]
+include::{snippets}/patch-club-data/curl-request.adoc[]
 
 .http-request
-include::{snippets}/patch-club/http-request.adoc[]
+include::{snippets}/patch-club-data/http-request.adoc[]
 
 .path-parameters
-include::{snippets}/patch-club/path-parameters.adoc[]
+include::{snippets}/patch-club-data/path-parameters.adoc[]
 
 .request-headers
-include::{snippets}/patch-club/request-headers.adoc[]
+include::{snippets}/patch-club-data/request-headers.adoc[]
 
-.request-parts
-include::{snippets}/patch-club/request-parts.adoc[]
-
-.request-part-data-fields
-include::{snippets}/patch-club/request-part-data-fields.adoc[]
+.request-fields
+include::{snippets}/patch-club-data/request-fields.adoc[]
 
 .http-response
-include::{snippets}/patch-club/http-response.adoc[]
+include::{snippets}/patch-club-data/http-response.adoc[]
 
 .response-fields
-include::{snippets}/patch-club/response-fields.adoc[]
+include::{snippets}/patch-club-data/response-fields.adoc[]
+
+=== 아지트 배너 이미지 수정
+
+.curl-request
+include::{snippets}/patch-club-image/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-club-image/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-club-image/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-club-image/request-headers.adoc[]
+
+.request-parts
+include::{snippets}/patch-club-image/request-parts.adoc[]
+
+.http-response
+include::{snippets}/patch-club-image/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-club-image/response-fields.adoc[]
 
 === 아지트 예약 취소
 
