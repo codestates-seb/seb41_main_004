@@ -48,7 +48,7 @@ const ChatCell = styled.div`
     }
     .textWrap {
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       align-items: flex-start;
       > .text {
         border: 1px solid var(--border-color);
@@ -56,7 +56,7 @@ const ChatCell = styled.div`
         border-radius: 30px;
         margin-bottom: 10px;
       }
-      > .text:last-child {
+      > .text:first-child {
         margin: 0;
       }
     }
@@ -124,10 +124,10 @@ const Chat = () => {
           {/* 본인채팅 */}
           <div className="myChat">
             <ul className="textWrap">
-              <li className="text">안녕하세요.</li>
-              <li className="text">안녕하세요.</li>
-              <li className="text">안녕하세요.</li>
-              <li className="text">안녕하세요.</li>
+              <li className="text">안녕하세요.1</li>
+              <li className="text">안녕하세요.2</li>
+              <li className="text">안녕하세요.3</li>
+              <li className="text">안녕하세요.4</li>
               <li className="text">안녕하세요.</li>
               <li className="text">안녕하세요.</li>
               <li className="text">안녕하세요.</li>

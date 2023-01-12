@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import reportIcon from "../images/reportIcon.png";
-import editIcon from "../images/edit-icon.png";
+import reportIcon from "../../images/reportIcon.png";
+import editIcon from "../../images/edit-icon.png";
 
 const HeaderWrap = styled.header`
   width: 100%;
