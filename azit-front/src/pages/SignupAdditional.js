@@ -18,12 +18,12 @@ const SignupForm = styled.div`
   /* justify-content: space-between; */
   > .genderAge {
     width: 40%;
-    >.selectWrap {
+    > .selectWrap {
       display: flex;
-      >.selectBox {
+      > .selectBox {
         flex-basis: 50%;
       }
-      >.selectBox:first-child {
+      > .selectBox:first-child {
         margin-right: 1rem;
       }
     }
@@ -46,13 +46,23 @@ const SignupForm = styled.div`
         margin: 1rem 0rem 1rem;
       }
       & > .tagContainer {
+        display: flex;
         padding-top: 0.5rem;
+        flex-wrap: wrap;
+
         & > .tag {
           border: solid 0.1rem var(--border-color);
           border-radius: 2rem;
           padding: 0.7rem 1rem 0.7rem 1rem;
           margin-right: 1rem;
           text-align: center;
+          margin-bottom: 1rem;
+
+          > label {
+            width: 10rem;
+          }
+          > input {
+          }
         }
         & > .clicked {
           border: solid 0.1rem var(--point-color);
@@ -95,9 +105,22 @@ const ImageAddIcon = styled.img`
 
 const SignupAdditional = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [checkedInputs, setCheckedInputs] = useState([]);
+
   const modalHandler = () => {
     setModalOpen(!modalOpen);
   };
+
+  const changeHandler = (checked, id) => {
+    if (checked) {
+      setCheckedInputs([...checkedInputs, id]);
+    } else {
+      // 체크 해제
+      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    }
+  };
+
+  console.log(checkedInputs);
 
   return (
     <>
@@ -144,8 +167,17 @@ const SignupAdditional = () => {
                 <div className="tagContainer">
                   {interest.tags.map((tag, idx) => {
                     return (
-                      <span key={idx} className="tag">
-                        {tag}
+                      <span className="tag" key={idx}>
+                        <label htmlFor={tag}>{tag}</label>
+                        <input
+                          id={tag}
+                          type="checkbox"
+                          onChange={(e) => {
+                            changeHandler(e.currentTarget.checked, tag);
+                          }}
+                          checked={checkedInputs.includes(tag) ? true : false}
+                          name={tag}
+                        ></input>
                       </span>
                     );
                   })}
