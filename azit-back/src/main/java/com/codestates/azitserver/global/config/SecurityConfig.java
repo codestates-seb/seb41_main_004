@@ -58,38 +58,13 @@ public class SecurityConfig {
 				/*======h2, docs======*/
 				.antMatchers(HttpMethod.GET, "/h2/**").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
-				/*======auth======*/
-				.antMatchers(HttpMethod.POST, "/auth/login").permitAll() // 로그인 누구나 가능
-				.antMatchers(HttpMethod.POST, "/auth/logout").hasRole("USER") // 로그아웃 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/passwords").permitAll() // 비밀번호 찾기 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/passwords/matchers").hasRole("USER") // 비밀번호 인증 유저 가능
-				.antMatchers(HttpMethod.PATCH, "/**/passwords").hasAnyRole("USER", "ADMIN") // 비밀번호 변경 유저 가능(랜덤 비밀번호 발생 시 admin 권한 필요)
-				/*======member======*/
-				.antMatchers(HttpMethod.POST, "/members").permitAll() // 회원 생성 누구나 가능
-				.antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER") // 회원 수정 유저 가능
-				.antMatchers(HttpMethod.GET, "/members").hasRole("ADMIN") // 전체 회원 조회 관리자 가능
-				.antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER", "ADMIN") // 개별 회원 조회 유저, 관리자 가능
-				.antMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER", "ADMIN") // 회원 탈퇴 유저, 관리자 가능
-				.antMatchers(HttpMethod.POST, "/members/follows/**").hasRole("USER") // 팔로우 유저 가능
-				.antMatchers(HttpMethod.POST, "/members/reports/**").hasRole("USER") // 신고 유저 가능
-				.antMatchers(HttpMethod.POST, "/members/blocks/**").hasRole("USER") // 차단 유저 가능
-				/*======club======*/
-				.antMatchers(HttpMethod.POST, "/clubs").hasRole("USER") // 아지트 생성 유저 가능
-				.antMatchers(HttpMethod.GET, "/clubs/recommend/**").hasRole("USER") // 추천 아지트 조회 유저 가능
-				.antMatchers(HttpMethod.GET, "/clubs/members/**").hasRole("USER") // 특정 유저 아지트 조회 유저 가능
-				.antMatchers(HttpMethod.GET, "/clubs/**").permitAll() // 아지트 조회, 검색 누구나 가능
-				.antMatchers(HttpMethod.PATCH, "/clubs/**").hasRole("USER") // 아지트 수정 호스트 가능
-				.antMatchers(HttpMethod.DELETE, "/clubs/**").hasRole("USER") // 아지트 삭제 호스트 가능
-				.antMatchers(HttpMethod.POST, "/clubs/reports/**").hasRole("USER") // 아지트 신고 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/signups").hasRole("USER") // 아지트 참여 신청 유저 가능
-				.antMatchers(HttpMethod.POST, "/**/signups/**").hasRole("USER") // 아지트 참여 승인/거부 호스트 가능
-				.antMatchers(HttpMethod.POST, "/**/kicks/**").hasRole("USER") // 아지트 강퇴 호스트 가능
-				/*======review======*/
-				.antMatchers(HttpMethod.POST, "/reviews").hasRole("USER") // 리뷰 유저 가능
-				.antMatchers(HttpMethod.PATCH, "/reviews/**").hasRole("USER") // 리뷰 상태변경 유저 가능
-				.antMatchers(HttpMethod.GET, "/reviews").hasRole("USER") // 리뷰 전체 조회 유저 가능
 
-				.anyRequest().permitAll()
+				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
+				.antMatchers(HttpMethod.GET, "api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
+				.antMatchers(HttpMethod.GET, "api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
+				.antMatchers(HttpMethod.GET, "api/clubs/**").permitAll()  // 그 외 아지트 조회
+
+				.anyRequest().permitAll()  // TODO : 개발하기 편하게 임시로 .permitAll() 설정 -> 나중에 .authenticated() 바꾸기
 			);
 
 		return http.build();
