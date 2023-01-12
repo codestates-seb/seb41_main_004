@@ -35,25 +35,61 @@ const Container = styled.div`
     color: #ffffff;
     background-color: #d9d9d9;
     background-repeat: no-repeat;
-    background-position: 50%;
+    background-position: 100%;
   }
   div.selectWrapper > select {
-    border: 0.2rem solid #d9d9d9;
+    border: 0.1rem solid #d9d9d9;
     border-radius: 0.5rem;
   }
+  .checkContainer {
+    position: relative;
+    padding-left: 3rem;
+    cursor: pointer;
+    font-size: var(--caption-font);
+    color: var(--font-color);
+    line-height: 2.4rem;
+    margin: 0;
+    input {
+      position: absolute;
+      opacity: 0;
+      height: 0;
+      width: 0;
+      :checked ~ .checkmark {
+        background-color: var(--point-color);
+        ::after {
+          content: "";
+          display: block;
+          width: 1rem;
+          height: 1rem;
+          background-color: var(--white-color);
+          border-radius: 50%;
+        }
+      }
+      ~ .checkmark {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        height: 2.4rem;
+        width: 2.4rem;
+        background-color: var(--border-color);
+        border-radius: 50%;
+      }
+    }
+  }
 `;
-
 const ActivityHistory = () => {
   return (
     <>
       <Container>
         <div className="Box">
-          <div className="check_wrap">
-            <input type="checkbox" id="check_btn" />
-            <label htmlFor="check_btn">
-              <span> &nbsp;호스트인 아지트만 보기</span>
-            </label>
-          </div>
+          <label className="checkContainer">
+            호스트인 아지트만 보기
+            <input type="checkbox" />
+            <span className="checkmark" />
+          </label>
           <div className="selectWrapper">
             <select>
               <option value="전체보기">전체보기</option>
