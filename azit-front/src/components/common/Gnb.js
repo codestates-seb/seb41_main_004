@@ -104,7 +104,7 @@ const Gnb = () => {
         <span className="icon" />
         <span>채팅</span>
       </NavLink>
-      <NavLink to="/create" className="create">
+      <NavLink to="/azit/create" className="create">
         <img src={PlusIcon} alt="" />
       </NavLink>
       <NavLink to="/search" className="search">
