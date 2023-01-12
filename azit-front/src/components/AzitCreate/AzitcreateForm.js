@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../Button";
+import { LocationModal } from "../Modal";
 
 const CreateFormWrap = styled.div`
   margin-top: 2rem;
@@ -120,6 +121,10 @@ const AzitcreateForm = () => {
   const GenderhandleSelect = (e) => {
     setGenderSelected(e.target.value);
   };
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
 
   return (
     <CreateFormWrap>
@@ -174,8 +179,11 @@ const AzitcreateForm = () => {
               온라인
             </Label2>
           </div>
-          <div className="selectPlace">장소를 입력해주세요.</div>
+          <div className="selectPlace" onClick={() => modalHandler()}>
+            장소를 입력해주세요.
+          </div>
         </div>
+        {modalOpen && <LocationModal modalHandler={modalHandler} />}
         <div className="inputContainer">
           <label>멤버의 성별을 알려주세요.</label>
           <div className="selectBox gender">
