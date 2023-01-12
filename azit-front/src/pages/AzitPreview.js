@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
+import Header from "../components/Header";
 import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
 import TestAvatarUrl from "../images/testProfileImg.png";
 import Button from "../components/Button";
 
-const AzitDetailWrap = styled.div`
+const AzitPreviewWrap = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const AzitDetailWrap = styled.div`
   }
 `;
 
-const AzitDetailForm = styled.div`
+const AzitPreviewForm = styled.div`
   margin: 2rem;
   > div {
     margin-bottom: 2rem;
@@ -182,54 +182,18 @@ const UserImgWrap = styled.div`
   background-size: cover;
 `;
 
-const AzitDetail = () => {
+const AzitPreview = () => {
   const profileList = [
     {
       userName: "유저1",
       userUrl: TestAvatarUrl,
     },
-    {
-      userName: "유저2",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저3",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저4",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저5",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저6",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저7",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저8",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저9",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저10",
-      userUrl: TestAvatarUrl,
-    },
   ];
   return (
-    <AzitDetailWrap>
-      <AzitDetailHeader />
+    <AzitPreviewWrap>
+      <Header />
       <img alt="exampleImg" src={ExampleImg}></img>
-      <AzitDetailForm>
+      <AzitPreviewForm>
         <div className="azitTitle">큰 제목</div>
         <div>
           <span>카테고리</span>
@@ -280,10 +244,9 @@ const AzitDetail = () => {
           </ul>
         </div>
         <Button state="active" title="아지트 가입하기" />
-        {/* <Button state="disabled" title= "이미 종료된 아지트입니다" /> */}
-      </AzitDetailForm>
-    </AzitDetailWrap>
+      </AzitPreviewForm>
+    </AzitPreviewWrap>
   );
 };
 
-export default AzitDetail;
+export default AzitPreview;

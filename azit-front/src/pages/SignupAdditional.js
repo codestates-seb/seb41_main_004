@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import { ImgModal } from "../components/Modal";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const SignupForm = styled.div`
   display: flex;
@@ -11,6 +13,7 @@ const SignupForm = styled.div`
   padding: 2rem;
   margin-top: 5.5rem;
   min-height: calc(100vh - 5.5rem);
+  position: relative;
   /* justify-content: space-between; */
   & > article {
     margin-top: 2rem;
@@ -51,6 +54,7 @@ const SignupForm = styled.div`
     }
   }
   & > .buttonWrap {
+    margin-top: 3rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -130,13 +134,19 @@ const interests = [
 
 const SignupAdditional = () => {
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  }
+
   return (
     <>
       <Header title="회원가입" />
       <SignupForm>
         <ProfileImageWrap>
           <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon src={ImgAddIcon}></ImageAddIcon>
+          <ImageAddIcon onClick={() => modalHandler()} src={ImgAddIcon}></ImageAddIcon>
+          {modalOpen && <ImgModal modalHandler={modalHandler}/>}
         </ProfileImageWrap>
         <article>
           <label>자기소개를 입력해주세요.</label>
