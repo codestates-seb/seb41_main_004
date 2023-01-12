@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/common/Header";
+import Button from "../components/common/Button";
 import { Link } from "react-router-dom";
 
 const ResetForm = styled.div`

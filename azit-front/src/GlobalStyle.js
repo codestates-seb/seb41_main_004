@@ -80,6 +80,7 @@ textarea{
    border:1px solid var(--border-color);
    height: 10rem;
    padding: 1.5rem;
+   resize: none;
 }
 .selectBox {
     position: relative;

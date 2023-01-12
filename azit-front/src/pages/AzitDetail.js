@@ -2,8 +2,10 @@ import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
 import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
-import TestAvatarUrl from "../images/testProfileImg.png";
-import Button from "../components/Button";
+import Button from "../components/common/Button";
+import { ProfileList } from "../dummyData/ProfileList";
+import { Link } from "react-router-dom";
+import HostIcon from "../images/AzitDetailHost.png";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -18,8 +20,8 @@ const AzitDetailWrap = styled.div`
 `;
 
 const AzitDetailForm = styled.div`
-  margin: 2rem;
-  > div {
+  padding: 2rem;
+  > .desc {
     margin-bottom: 2rem;
     display: flex;
     flex-direction: row;
@@ -37,48 +39,77 @@ const AzitDetailForm = styled.div`
     > p {
       color: var(--sub-font-color);
     }
+  }
+  > .azitInfo {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     > div {
-      margin-right: 1rem;
       padding: 1.2rem;
-      width: 100%;
       height: 12rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-color);
       border-radius: 1rem;
+      flex-basis: calc(50% - 0.5rem);
       > div {
         display: flex;
         flex-direction: row;
         > label {
           font-size: var(--caption-font);
         }
-        > div {
-          > label {
-            font-size: var(--small-font);
-          }
-          > span {
-            font-size: var(--caption-font);
-          }
-        }
       }
+    }
+    > .hostInfo {
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
       }
-    }
-    > div:nth-child(2) {
-      margin-right: 0;
       > div {
-        display: flex;
+        >a {
+          position: relative;
+          margin-right: 1rem;
+          >.hostIcon {
+            top:0;
+            right: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            position: absolute;
+          }
+        }
+        > div {
+          flex : 1;
+          label {
+            font-size: var(--small-font);
+          }
+          span {
+            font-size: var(--caption-font);
+          }
+        }
+      }
+    }
+    > .azitDetailInfo {
+      justify-content: space-between;
+      > div {
         flex-direction: column;
-        height: 100%;
-        margin-bottom: 1rem;
         > label {
           margin-bottom: 0.2rem;
         }
       }
-      > div:nth-child(2) {
-        margin-bottom: 0;
+    }
+    > .azitDescription {
+      flex-basis: 100%;
+      margin-top:1rem;
+      > label {
+        font-size: var(--caption-font);
+        color: var(--sub-font-color);
+      }
+      > div {
+        height: 10rem;
+        padding: 0;
+        border: none;
       }
     }
   }
@@ -88,22 +119,6 @@ const AzitDetailForm = styled.div`
     width: 100%;
     height: 5.8rem;
     word-break: keep-all;
-  }
-  > .azitDescription {
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    > label {
-      font-size: var(--caption-font);
-      color: var(--sub-font-color);
-    }
-    > div {
-      height: 10rem;
-      padding: 0;
-      border: none;
-    }
   }
 
   > .memberList {
@@ -128,8 +143,8 @@ const AzitDetailForm = styled.div`
       > li {
         margin-right: 1rem;
         text-align: center;
-        > p {
-          width: 50px;
+        p {
+          width: 5rem;
         }
       }
       > li:last-child {
@@ -169,7 +184,6 @@ const AzitDetailForm = styled.div`
 const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
   width: 5rem;
   border-radius: 70%;
-  margin-right: 2rem;
 `;
 
 const UserImgWrap = styled.div`
@@ -183,70 +197,31 @@ const UserImgWrap = styled.div`
 `;
 
 const AzitDetail = () => {
-  const profileList = [
-    {
-      userName: "유저1",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저2",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저3",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저4",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저5",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저6",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저7",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저8",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저9",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저10",
-      userUrl: TestAvatarUrl,
-    },
-  ];
   return (
     <AzitDetailWrap>
       <AzitDetailHeader />
       <img alt="exampleImg" src={ExampleImg}></img>
       <AzitDetailForm>
         <div className="azitTitle">큰 제목</div>
-        <div>
+        <div className="desc">
           <span>카테고리</span>
           <p>nn/nn명</p>
         </div>
-        <div>
-          <div>
+        <div className="azitInfo">
+          <div className="hostInfo">
             <label>아지트 정보</label>
             <div>
-              <TestImg />
+              <Link to="/userpage">
+                <TestImg />
+                <img alt="HostIcon" src={HostIcon} className="hostIcon"/>
+              </Link>
               <div>
                 <label>호스트</label>
                 <span>여덟자의닉네임</span>
               </div>
             </div>
           </div>
-          <div>
+          <div className="azitDetailInfo">
             <div>
               <label>참가방식</label>
               <span>온라인</span>
@@ -256,18 +231,20 @@ const AzitDetail = () => {
               <span>0000-00-00 00:00</span>
             </div>
           </div>
-        </div>
-        <div className="azitDescription">
-          <label>아지트 설명</label>
-          <div>가나다라마바사</div>
+          <div className="azitDescription">
+            <label>아지트 설명</label>
+            <div>가나다라마바사</div>
+          </div>
         </div>
         <div className="memberList">
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
-            {profileList.map((profile, idx) => (
+            {ProfileList.map((profile, idx) => (
               <li key={idx}>
-                <UserImgWrap userUrl={profile.userUrl} />
-                <p>유저네임</p>
+                <Link to="/userpage">
+                  <UserImgWrap userUrl={profile.userUrl} />
+                  <p>유저 네임</p>
+                </Link>
               </li>
             ))}
           </ul>

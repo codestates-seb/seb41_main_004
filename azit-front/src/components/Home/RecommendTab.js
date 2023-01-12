@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
-import AzitList from "../AzitList";
+import AzitList from "../common/AzitList";
 
 const Null = styled.article`
   padding: 8rem 0 0;

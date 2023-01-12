@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
-import AzitList from "../AzitList";
+import AzitList from "../common/AzitList";
 
 const Container = styled.div`
   div.Box {
@@ -8,38 +8,10 @@ const Container = styled.div`
     justify-content: space-between;
     margin-bottom: 1rem;
   }
-  input#check_btn {
-    display: none;
-  }
-
-  input#check_btn + label > span {
-    color: #222222;
-    /* vertical-align: middle;
-    padding-left: 5px; */
-  }
-
-  /* label:before에 체크하기 전 상태 CSS */
-  input#check_btn + label:before {
-    content: "";
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    border: 0.2rem solid #d9d9d9;
-    border-radius: 100%;
-    vertical-align: middle;
-  }
-
-  /* label:before에 체크 된 상태 CSS */
-  input#check_btn:checked + label:before {
-    content: "✓";
-    color: #ffffff;
-    background-color: #d9d9d9;
-    background-repeat: no-repeat;
-    background-position: 100%;
-  }
   div.selectWrapper > select {
     border: 0.1rem solid #d9d9d9;
     border-radius: 0.5rem;
+    padding:5px
   }
   .checkContainer {
     position: relative;
@@ -93,7 +65,9 @@ const ActivityHistory = () => {
           <div className="selectWrapper">
             <select>
               <option value="전체보기">전체보기</option>
-              <option value="전체보기">전체보기</option>
+              <option value="참여중인 모임">참여중인 모임</option>
+              <option value="신청한 모임">신청한 모임</option>
+              <option value="종료된 모임">종료된 모임</option>
             </select>
           </div>
         </div>

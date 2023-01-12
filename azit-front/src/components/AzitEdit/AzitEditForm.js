@@ -2,13 +2,27 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const EditFormWrap = styled.div`
-  height: 100%;
-  margin-top: 5.5rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  flex:1;
+  padding: 7.5rem 2rem 0;
   > form {
     > .inputContainer {
       margin-top: 2rem;
+      > .ageSelect {
+        display: flex;
+        align-items: flex-end;
+        >span:nth-child(2) {
+          display: block;
+          padding:0 1rem;
+          line-height: 4.5rem;
+        }
+        > .selectBox {
+          width: 20%;
+        }
+        > .checkBox {
+          width: auto;
+          height: auto;
+        }
+      }
       > .selectBox {
         width: 30%;
         select {
@@ -88,23 +102,43 @@ const AzitEditForm = () => {
         </div>
         <div className="inputContainer">
           <label>멤버의 나이를 알려주세요.</label>
-          <div className="wd70">
-            <input></input>
-            <p>~</p>
-            <input></input>
+          <div className="ageSelect">
+            <div className="selectBox">
+              <select>
+                <option>2000</option>
+                <option>2001</option>
+                <option>2002</option>
+                <option>2003</option>
+                <option>2004</option>
+                <option>2005</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+            <span>~</span>
+            <div className="selectBox">
+              <select>
+                <option>2000</option>
+                <option>2001</option>
+                <option>2002</option>
+                <option>2003</option>
+                <option>2004</option>
+                <option>2005</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
             <input className="checkBox" type="checkbox" />
             <span>제한없음</span>
           </div>
         </div>
-        <div>
+        <div className="inputContainer">
           <label>예상 참가비</label>
           <input></input>
         </div>
         <div className="inputContainer">
           <label>날짜 및 시간</label>
           <div className="wd70">
-            <input placeholder="0000-00-00"></input>
-            <input placeholder="오전 00:00"></input>
+            <input type="date"></input>
+            <input type="time"></input>
           </div>
         </div>
       </form>

@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import testProfile from "../../images/testProfileImg.png";
 import Category from "./Category";
@@ -122,7 +122,7 @@ const Profile = () => {
 
         <Name>닉네임</Name>
         <Text>매일 반복되는 일상을 특별하게 만들고 싶다. ㅁㄴㅇㄹㅁㄴㅇㄹ</Text>
-        <NavLink to="/followcheck" className="followCheck">
+        <Link to="/userpage/followcheck" className="followCheck">
           <FollowWrapper>
             <Following>
               <FollowingCount>0</FollowingCount>
@@ -133,7 +133,7 @@ const Profile = () => {
               &nbsp;&nbsp; 팔로워
             </Follower>
           </FollowWrapper>
-        </NavLink>
+        </Link>
       </InfoWrapper>
       <Category></Category>
       <Tab></Tab>

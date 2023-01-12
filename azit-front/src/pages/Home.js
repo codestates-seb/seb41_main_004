@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Gnb from "../components/Gnb";
+import Gnb from "../components/common/Gnb";
 import Tab from "../components/Home/Tab";
 import Logo from "../images/logo.png";
 import MainImg from "../images/mainSlideImg01.png";

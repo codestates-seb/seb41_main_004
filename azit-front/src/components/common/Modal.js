@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import CloseIcon from "../images/closeIcon.png"
-import ImgIcon from "../images/imgIcon.png"
-import SearchIcon from "../images/searchIcon.png"
+import CloseIcon from "../../images/closeIcon.png"
+import ImgIcon from "../../images/imgIcon.png"
+import SearchIcon from "../../images/searchIcon.png"
 
 // 모달 사용 시 react component 안에 아래 코드를 붙여넣어서 사용해주세요.
 

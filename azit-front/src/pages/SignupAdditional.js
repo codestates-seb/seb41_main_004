@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import Button from "../components/Button";
-import Header from "../components/Header";
-import { ImgModal } from "../components/Modal";
+import Button from "../components/common/Button";
+import Header from "../components/common/Header";
+import { ImgModal } from "../components/common/Modal";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { interests } from "../dummyData/Category";
 
 const SignupForm = styled.div`
   display: flex;
@@ -15,6 +16,18 @@ const SignupForm = styled.div`
   min-height: calc(100vh - 5.5rem);
   position: relative;
   /* justify-content: space-between; */
+  > .genderAge {
+    width: 40%;
+    >.selectWrap {
+      display: flex;
+      >.selectBox {
+        flex-basis: 50%;
+      }
+      >.selectBox:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
   & > article {
     margin-top: 2rem;
     & > .selectBox {
@@ -66,78 +79,25 @@ const ProfileImageWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const ProfileImage = styled.img`
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
-`
+`;
 
 const ImageAddIcon = styled.img`
   cursor: pointer;
   margin-top: -2.7rem;
   margin-left: 5rem;
-`
-
-const interests = [
-  {
-    id: 1,
-    subtitle: "문화/예술",
-    tags: [
-      "전시", "영화" , "뮤지컬" , "공연" , "디자인"
-    ]
-  },
-  {
-    id: 2,
-    subtitle: "운동/액티비티",
-    tags: [
-      "클라이밍", "등산" , "헬스" , "필라테스" , "골프"
-    ]
-  },
-  {
-    id: 3,
-    subtitle: "푸드/드링크",
-    tags: [
-      "맛집투어", "카페" , "와인" , "커피" , "디저트"
-    ]
-  },
-  {
-    id: 4,
-    subtitle: "취미",
-    tags: [
-      "보드게임", "사진" , "방탈출" , "VR" , "음악감상"
-    ]
-  },
-  {
-    id: 5,
-    subtitle: "여행/동행",
-    tags: [
-      "복합문화공간", "테마파크" , "피크닉" , "드라이브" , "캠핑"
-    ]
-  },
-  {
-    id: 6,
-    subtitle: "창작",
-    tags: [
-      "글쓰기", "드로잉" , "영상편집" , "공예" , "DIY"
-    ]
-  },
-  {
-    id: 7,
-    subtitle: "성장/자기계발",
-    tags: [
-      "습관만들기", "챌린지" , "독서" , "스터디" , "외국어"
-    ]
-  },
-]
+`;
 
 const SignupAdditional = () => {
-
   const [modalOpen, setModalOpen] = useState(false);
   const modalHandler = () => {
-    modalOpen ? setModalOpen(false) : setModalOpen(true);
-  }
+    setModalOpen(!modalOpen);
+  };
 
   return (
     <>
@@ -145,29 +105,34 @@ const SignupAdditional = () => {
       <SignupForm>
         <ProfileImageWrap>
           <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon onClick={() => modalHandler()} src={ImgAddIcon}></ImageAddIcon>
-          {modalOpen && <ImgModal modalHandler={modalHandler}/>}
+          <ImageAddIcon
+            onClick={() => modalHandler()}
+            src={ImgAddIcon}
+          ></ImageAddIcon>
+          {modalOpen && <ImgModal modalHandler={modalHandler} />}
         </ProfileImageWrap>
         <article>
           <label>자기소개를 입력해주세요.</label>
           <textarea placeholder="텍스트를 입력해 주세요."></textarea>
         </article>
-        <article>
+        <article className="genderAge">
           <label>나이 및 성별</label>
-          <div className="selectBox">
-            <select>
-              <option>2023</option>
-              {/*생년 구하는 함수 필요*/}
-            </select>
-            <span className="selectArrow" />
-          </div>
-          <div className="selectBox">
-            <select>
-              <option>남</option>
-              <option>여</option>
-              <option>제한 없음</option>
-            </select>
-            <span className="selectArrow" />
+          <div className="selectWrap">
+            <div className="selectBox">
+              <select>
+                <option>2023</option>
+                {/*생년 구하는 함수 필요*/}
+              </select>
+              <span className="selectArrow" />
+            </div>
+            <div className="selectBox">
+              <select>
+                <option>남</option>
+                <option>여</option>
+                <option>제한 없음</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
           </div>
         </article>
         <article>
@@ -197,6 +162,6 @@ const SignupAdditional = () => {
       </SignupForm>
     </>
   );
-}
+};
 
 export default SignupAdditional;

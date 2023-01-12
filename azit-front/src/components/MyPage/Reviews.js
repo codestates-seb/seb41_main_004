@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { toDateFormatOfKR } from "../../util/toDateFormatOfKR";
 
 const Container = styled.div`
-  padding: 2rem;
   width: 100%;
   height: 100%;
   background-color: #f1f1f1;
@@ -11,6 +10,10 @@ const Box = styled.div`
   padding: 1.5rem;
   background-color: #ffffff;
   border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  :last-child {
+    margin:0;
+  }
 `;
 const TitleBox = styled.div`
   display: flex;

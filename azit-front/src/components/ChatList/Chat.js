@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Header from "../Header";
+import Header from "../common/Header";
 import SendIconActive from "../../images/chatSendBtnActive.png";
 import SendIcon from "../../images/chatSendBtn.png";
 import TestProfileImg from "../../images/testProfileImg.png";

@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import ChatIcon from "../images/chat-icon.png";
-import ChatIconRed from "../images/chat-icon(red).png";
-import ProfileIcon from "../images/profile-icon.png";
-import ProfileIconRed from "../images/profile-icon(red).png";
-import SearchIcon from "../images/search-icon.png";
-import SearchIconRed from "../images/search-icon(red).png";
-import HomeIcon from "../images/home-icon.png";
-import HomeIconRed from "../images/home-icon(red).png";
-import PlusIcon from "../images/plus-icon.png";
+import ChatIcon from "../../images/chat-icon.png";
+import ChatIconRed from "../../images/chat-icon(red).png";
+import ProfileIcon from "../../images/profile-icon.png";
+import ProfileIconRed from "../../images/profile-icon(red).png";
+import SearchIcon from "../../images/search-icon.png";
+import SearchIconRed from "../../images/search-icon(red).png";
+import HomeIcon from "../../images/home-icon.png";
+import HomeIconRed from "../../images/home-icon(red).png";
+import PlusIcon from "../../images/plus-icon.png";
 
 const StyledGnbWrapper = styled.div`
   position: fixed;

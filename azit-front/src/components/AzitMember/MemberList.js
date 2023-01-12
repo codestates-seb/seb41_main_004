@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
 
@@ -79,9 +80,9 @@ const MemberList = ({ data, state }) => {
   return (
     <ListWrap>
       <div className="userWrap">
-        <div className="avatarWrap">
+        <Link to="/userpage" className="avatarWrap">
           <img alt={data.userName} src={data.userAvatar} />
-        </div>
+        </Link>
         <div className="etcWrap">
           <div className="profileWrap">
             <h3 className="name">{data.userName}</h3>

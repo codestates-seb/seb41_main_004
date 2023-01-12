@@ -5,7 +5,7 @@ import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ReviewCreate from "./pages/ReviewCreate";
-import Azitcreate from "./pages/Azitcreate";
+import AzitCreate from "./pages/AzitCreate";
 import UserPage from "./pages/UserPage";
 import AzitSetting from "./pages/AzitSetting";
 import AzitEdit from "./pages/AzitEdit";
@@ -31,31 +31,46 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
+          <Route path="/loading" element={<Loading />}></Route>
           <Route path="/" element={<Home />}></Route>
+
+          {/* 채팅 */}
           <Route path="/chat" element={<ChatList />}></Route>
           <Route path="/chat/detail" element={<Chat />}></Route>
+
+          {/* 검색 */}
           <Route path="/search" element={<Search />}></Route>
-          <Route path="/profile" element={<Home />}></Route>
+
+          {/* 아지트 */}
+          <Route path="/azit/create" element={<AzitCreate />}></Route>
+          <Route path="/azit/setting" element={<AzitSetting />}></Route>
+          <Route path="/azit/edit" element={<AzitEdit />}></Route>
+          <Route path="/azit/join" element={<AzitJoin />}></Route>
+          <Route path="/azit/report" element={<AzitReport />}></Route>
+          <Route path="/azit/detail" element={<AzitDetail />}></Route>
+          <Route path="/azit/member" element={<AzitMember />}></Route>
+          <Route path="/azit/preview" element={<AzitPreview />}></Route>
+
+          {/* 리뷰 */}
           <Route path="/review/Create" element={<ReviewCreate />}></Route>
-          <Route path="/create" element={<Azitcreate />}></Route>
+
+          {/* 로그인 관련 */}
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/find" element={<FindPassword />}></Route>
+          <Route path="/findpw" element={<FindPassword />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/signupadd" element={<SignupAdditional />}></Route>
+          <Route path="/signup/add" element={<SignupAdditional />}></Route>
+          
+          {/* 유저페이지 */}
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
-          <Route path="/userpage/userreport" element={<UserReport />}></Route>
-          <Route path="/followcheck" element={<FollowCheck />}></Route>
-          <Route path="/useredit" element={<UserProfileEdit />}></Route>
-          <Route path="/userreset" element={<UserResetPassword />}></Route>
-          <Route path="/azitsetting" element={<AzitSetting />}></Route>
-          <Route path="/azitedit" element={<AzitEdit />}></Route>
-          <Route path="/azitjoin" element={<AzitJoin />}></Route>
-          <Route path="/loading" element={<Loading />}></Route>
-          <Route path="/azitreport" element={<AzitReport />}></Route>
-          <Route path="/azitdetail" element={<AzitDetail />}></Route>
-          <Route path="/azitmember" element={<AzitMember />}></Route>
-          <Route path="/azitpreview" element={<AzitPreview />}></Route>
+          <Route path="/userpage/report" element={<UserReport />}></Route>
+          <Route path="/userpage/followcheck" element={<FollowCheck />}></Route>
+          <Route path="/userpage/edit" element={<UserProfileEdit />}></Route>
+          <Route
+            path="/userpage/resetpw"
+            element={<UserResetPassword />}
+          ></Route>
+
         </Routes>
       </BrowserRouter>
     </>

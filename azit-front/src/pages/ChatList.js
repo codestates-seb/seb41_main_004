@@ -1,5 +1,5 @@
-import Header from "../components/HeaderTypeGnb";
-import Gnb from "../components/Gnb";
+import Header from "../components/common/HeaderTypeGnb";
+import Gnb from "../components/common/Gnb";
 import Tab from "../components/ChatList/Tab";
 
 const ChatList = () => {

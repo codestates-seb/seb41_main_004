@@ -1,5 +1,5 @@
 import FollowTab from "../components/FollowCheck/FollowTab";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 
 const FollowCheck = () => {
   return (
