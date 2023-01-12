@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../AzitList";
@@ -79,6 +80,16 @@ const Container = styled.div`
       }
     }
   }
+  div.ActivityDetail {
+    display: flex;
+    justify-content: space-between;
+    color: var(--sub-font-color);
+    font-size: var(--caption-font);
+  }
+  > div.ActivityReview {
+    color: var(--sub-font-color);
+    font-size: var(--caption-font);
+  }
 `;
 const ActivityHistory = () => {
   return (
@@ -97,12 +108,22 @@ const ActivityHistory = () => {
             </select>
           </div>
         </div>
+        {ClubData ? (
+          ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+        ) : (
+          <></>
+        )}
+        <div className="ActivityDetail">
+          <div className="ActivityView">
+            <span>활동내역 보이기</span>
+          </div>
+          <Link to="">
+            <div className="ActivityReview">
+              <span>리뷰 작성하러 가기 〉 </span>
+            </div>
+          </Link>
+        </div>
       </Container>
-      {ClubData ? (
-        ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
-      ) : (
-        <></>
-      )}
     </>
   );
 };
