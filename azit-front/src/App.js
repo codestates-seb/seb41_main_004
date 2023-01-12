@@ -45,9 +45,6 @@ function App() {
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
           <Route path="/userpage/userreport" element={<UserReport />}></Route>
-          <Route path="/azitsetting" element={<AzitSetting />}></Route>
-          <Route path="/azitedit" element={<AzitEdit />}></Route>
-          <Route path="/azitjoin" element={<AzitJoin />}></Route>
           <Route path="/followcheck" element={<FollowCheck />}></Route>
           <Route path="/useredit" element={<UserProfileEdit />}></Route>
           <Route path="/userreset" element={<UserResetPassword />}></Route>
