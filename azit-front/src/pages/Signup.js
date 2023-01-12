@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/common/Header";
+import Button from "../components/common/Button";
 import { Link } from "react-router-dom";
 
 const SignupForm = styled.div`
@@ -60,7 +60,7 @@ const Signup = () => {
           <div className="errorMessage">비밀번호와 맞지 않습니다.</div>
         </SignupInputWrap>
       </SignupInputContainer>
-      <Link to="/signupadd">
+      <Link to="/signup/add">
       <Button title="추가 정보 입력" state="active"></Button>
       </Link>
     </SignupForm>

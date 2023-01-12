@@ -1,7 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import editIcon from "../images/edit-icon.png";
-import reportIcon from "../images/reportIcon.png";
+import editIcon from "../../images/edit-icon.png";
+import reportIcon from "../../images/reportIcon.png";
 
 const HeaderWrap = styled.header`
   height: 5.5rem;
@@ -28,15 +28,15 @@ const UserPageHeader = () => {
   return (
     <HeaderWrap>
       <Header />
-      <NavLink to="/useredit">
+      <Link to="/userpage/edit">
         <Edit>프로필 수정 </Edit>&nbsp;&nbsp;&nbsp;{" "}
-      </NavLink>
-      <NavLink to="/userpage/setting">
+      </Link>
+      <Link to="/userpage/setting">
         <Img alt="editIcon" src={editIcon} />
-      </NavLink>
-      <NavLink to="/userpage/userreport">
+      </Link>
+      <Link to="/userpage/report">
         <ReportIcon alt="reportIcon" />
-      </NavLink>
+      </Link>
     </HeaderWrap>
   );
 };

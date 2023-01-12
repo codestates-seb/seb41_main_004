@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
 import TestAvatarUrl from "../images/testProfileImg.png";
-import Button from "../components/Button";
+import Button from "../components/common/Button";
+import { Link } from "react-router-dom";
+import HostIcon from "../images/AzitDetailHost.png";
 
 const AzitPreviewWrap = styled.div`
   width: 100%;
@@ -18,8 +20,8 @@ const AzitPreviewWrap = styled.div`
 `;
 
 const AzitPreviewForm = styled.div`
-  margin: 2rem;
-  > div {
+  padding: 2rem;
+  > .desc {
     margin-bottom: 2rem;
     display: flex;
     flex-direction: row;
@@ -37,48 +39,78 @@ const AzitPreviewForm = styled.div`
     > p {
       color: var(--sub-font-color);
     }
+  }
+  > .azitInfo {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     > div {
-      margin-right: 1rem;
       padding: 1.2rem;
-      width: 100%;
       height: 12rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-color);
       border-radius: 1rem;
+      flex-basis: calc(50% - 0.5rem);
       > div {
         display: flex;
         flex-direction: row;
         > label {
           font-size: var(--caption-font);
         }
-        > div {
-          > label {
-            font-size: var(--small-font);
-          }
-          > span {
-            font-size: var(--caption-font);
-          }
-        }
       }
+    }
+    > .hostInfo {
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
       }
-    }
-    > div:nth-child(2) {
-      margin-right: 0;
       > div {
-        display: flex;
+        >a {
+          position: relative;
+          margin-right: 1rem;
+          pointer-events: none;
+          >.hostIcon {
+            top:0;
+            right: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            position: absolute;
+          }
+        }
+        > div {
+          flex : 1;
+          label {
+            font-size: var(--small-font);
+          }
+          span {
+            font-size: var(--caption-font);
+          }
+        }
+      }
+    }
+    > .azitDetailInfo {
+      justify-content: space-between;
+      > div {
         flex-direction: column;
-        height: 100%;
-        margin-bottom: 1rem;
         > label {
           margin-bottom: 0.2rem;
         }
       }
-      > div:nth-child(2) {
-        margin-bottom: 0;
+    }
+    > .azitDescription {
+      flex-basis: 100%;
+      margin-top:1rem;
+      > label {
+        font-size: var(--caption-font);
+        color: var(--sub-font-color);
+      }
+      > div {
+        height: 10rem;
+        padding: 0;
+        border: none;
       }
     }
   }
@@ -88,22 +120,6 @@ const AzitPreviewForm = styled.div`
     width: 100%;
     height: 5.8rem;
     word-break: keep-all;
-  }
-  > .azitDescription {
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    > label {
-      font-size: var(--caption-font);
-      color: var(--sub-font-color);
-    }
-    > div {
-      height: 10rem;
-      padding: 0;
-      border: none;
-    }
   }
 
   > .memberList {
@@ -128,8 +144,11 @@ const AzitPreviewForm = styled.div`
       > li {
         margin-right: 1rem;
         text-align: center;
-        > p {
-          width: 50px;
+        >a {
+          pointer-events: none;
+        }
+        p {
+          width: 5rem;
         }
       }
       > li:last-child {
@@ -169,7 +188,6 @@ const AzitPreviewForm = styled.div`
 const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
   width: 5rem;
   border-radius: 70%;
-  margin-right: 2rem;
 `;
 
 const UserImgWrap = styled.div`
@@ -195,22 +213,25 @@ const AzitPreview = () => {
       <img alt="exampleImg" src={ExampleImg}></img>
       <AzitPreviewForm>
         <div className="azitTitle">큰 제목</div>
-        <div>
+        <div className="desc">
           <span>카테고리</span>
           <p>nn/nn명</p>
         </div>
-        <div>
-          <div>
+        <div className="azitInfo">
+          <div className="hostInfo">
             <label>아지트 정보</label>
             <div>
-              <TestImg />
+              <Link to="/userpage">
+                <TestImg />
+                <img alt="HostIcon" src={HostIcon} className="hostIcon"/>
+              </Link>
               <div>
                 <label>호스트</label>
                 <span>여덟자의닉네임</span>
               </div>
             </div>
           </div>
-          <div>
+          <div className="azitDetailInfo">
             <div>
               <label>참가방식</label>
               <span>온라인</span>
@@ -220,18 +241,20 @@ const AzitPreview = () => {
               <span>0000-00-00 00:00</span>
             </div>
           </div>
-        </div>
-        <div className="azitDescription">
-          <label>아지트 설명</label>
-          <div>가나다라마바사</div>
+          <div className="azitDescription">
+            <label>아지트 설명</label>
+            <div>가나다라마바사</div>
+          </div>
         </div>
         <div className="memberList">
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
             {profileList.map((profile, idx) => (
               <li key={idx}>
-                <UserImgWrap userUrl={profile.userUrl} />
-                <p>유저네임</p>
+                <Link to="/userpage">
+                  <UserImgWrap userUrl={profile.userUrl} />
+                  <p>유저 네임</p>
+                </Link>
               </li>
             ))}
           </ul>
@@ -244,6 +267,7 @@ const AzitPreview = () => {
           </ul>
         </div>
         <Button state="active" title="아지트 가입하기" />
+        {/* <Button state="disabled" title= "이미 종료된 아지트입니다" /> */}
       </AzitPreviewForm>
     </AzitPreviewWrap>
   );

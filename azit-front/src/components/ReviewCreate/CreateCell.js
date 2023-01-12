@@ -20,6 +20,7 @@ const CreateCellWrap = styled.article`
 `;
 
 const CreateCell = () => {
+
   return (
     <CreateCellWrap>
       <h3>리뷰 작성</h3>

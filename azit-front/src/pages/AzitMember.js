@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 import WaitingMember from "../components/AzitMember/WaitingMember";
 import styled from "styled-components";
 import Member from "../components/AzitMember/Member";

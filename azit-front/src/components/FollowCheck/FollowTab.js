@@ -15,37 +15,22 @@ const TabMenu = styled.ul`
   height: 5rem;
 
   .submenu {
-    /* position: relative; */
     display: flex;
     width: calc(100% / 2);
     padding: 10px;
     justify-content: center;
     align-items: center;
     transition: 0.5s;
-  }
-  .submenu::after {
-    content: "";
-    display: block;
-    width: calc(100% - 4px);
-    height: 2px;
-    background-color: var(--light-font-color);
-    position: absolute;
-    bottom: 0;
-    transition: 0.5s;
+    cursor: pointer;
   }
 
   .focused {
     color: var(--font-color);
   }
-  .focused::after {
-    content: "";
-    background-color: var(--font-color);
-  }
 `;
 
-const Desc = styled.div`
+const Desc = styled.ul`
   background-color: #ffffff;
-  min-height: calc(100vh - 47.5rem);
 `;
 
 const FollowTab = () => {

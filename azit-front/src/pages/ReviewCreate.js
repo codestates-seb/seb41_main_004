@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Button from "../components/Button";
-import Header from "../components/Header";
+import Button from "../components/common/Button";
+import Header from "../components/common/Header";
 import CreateCell from "../components/ReviewCreate/CreateCell";
-import TestAvatarUrl from "../images/testProfileImg.png";
+import { ProfileList } from "../dummyData/ProfileList";
 
 const CreateWrap = styled.section`
   padding: 7.5rem 2rem 2rem;
@@ -20,8 +21,10 @@ const CreateWrap = styled.section`
       > li {
         margin-right: 1rem;
         text-align: center;
-        > p {
-          width: 50px;
+        >a {
+          > p {
+            width: 50px;
+          }
         }
       }
       > li:last-child {
@@ -49,48 +52,7 @@ const UserImgWrap = styled.div`
   background-size: cover;
 `;
 const ReviewCreate = () => {
-  const profileList = [
-    {
-      userName: "유저1",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저2",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저3",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저4",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저5",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저6",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저7",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저8",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저9",
-      userUrl: TestAvatarUrl,
-    },
-    {
-      userName: "유저10",
-      userUrl: TestAvatarUrl,
-    },
-  ];
+
   return (
     <>
       <Header title="리뷰 작성하기" />
@@ -99,10 +61,12 @@ const ReviewCreate = () => {
         <div className="selectCell">
           <h3>참여 인원</h3>
           <ul className="selectWrap">
-            {profileList.map((profile, idx) => (
+            {ProfileList.map((profile, idx) => (
               <li key={idx}>
+                <Link to="/userpage">
                 <UserImgWrap userUrl={profile.userUrl} />
                 <p>유저닉네임</p>
+                </Link>
               </li>
             ))}
           </ul>

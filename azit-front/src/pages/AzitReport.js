@@ -1,18 +1,16 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/common/Header";
+import Button from "../components/common/Button";
 import { useState } from "react";
 
 const ReportWrap = styled.div`
   position: relative;
-  margin-right: 2rem;
-  margin-left: 2rem;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  padding: 7.5rem 2rem 2rem;
+  min-height: 100vh;
   > .ReportForm {
-    height: 100%;
-    margin-top: 7.5rem;
+    flex: 1;
     > div {
       > textarea {
         margin-bottom: 0.4rem;
@@ -26,9 +24,6 @@ const ReportWrap = styled.div`
     > div:first-child {
       margin-bottom: 2rem;
     }
-  }
-  > .buttonWrap {
-    margin-bottom: 2rem;
   }
 `;
 
@@ -69,9 +64,7 @@ const AzitReport = () => {
           </li>
         </div>
       </div>
-      <div className="buttonWrap">
-        <Button state="disabled" title="신고 하기" />
-      </div>
+      <Button state="disabled" title="신고 하기" />
     </ReportWrap>
   );
 };

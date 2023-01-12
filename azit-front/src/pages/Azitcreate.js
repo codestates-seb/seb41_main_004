@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import AzitcreateForm from "../components/AzitCreate/AzitcreateForm";
-import Header from "../components/Header";
+import AzitCreateForm from "../components/AzitCreate/AzitCreateForm";
+import Header from "../components/common/Header";
 import BannerImg from "../images/BannerImg.png";
-import { ImgModal } from "../components/Modal";
+import { ImgModal } from "../components/common/Modal";
 import { useState } from "react";
 
 const AzitaddWrap = styled.div`
@@ -28,7 +28,7 @@ const Azitcreate = () => {
         src={BannerImg}
       ></img>
       {modalOpen && <ImgModal modalHandler={modalHandler} />}
-      <AzitcreateForm />
+      <AzitCreateForm />
     </AzitaddWrap>
   );
 };

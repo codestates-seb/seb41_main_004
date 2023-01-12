@@ -1,15 +1,29 @@
 import styled from "styled-components";
 import { useState } from "react";
-import Button from "../Button";
-import { LocationModal } from "../Modal";
+import Button from "../common/Button";
+import { LocationModal } from "../common/Modal";
 
 const CreateFormWrap = styled.div`
-  margin-top: 2rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  padding: 2rem 2rem 0;
   > .form {
     > .inputContainer {
       margin-top: 2rem;
+      > .ageSelect {
+        display: flex;
+        align-items: flex-end;
+        > span:nth-child(2) {
+          display: block;
+          padding: 0 1rem;
+          line-height: 4.5rem;
+        }
+        > .selectBox {
+          width: 20%;
+        }
+        > .checkBox {
+          width: auto;
+          height: auto;
+        }
+      }
       > .wd70 {
         width: 70%;
         display: flex;
@@ -41,6 +55,12 @@ const CreateFormWrap = styled.div`
       > .gender {
         width: 30%;
         > select {
+          text-align: center;
+        }
+      }
+      &.people {
+        > input {
+          width: 5rem;
           text-align: center;
         }
       }
@@ -95,7 +115,7 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
-const AzitcreateForm = () => {
+const AzitCreateForm = () => {
   const selectList = [
     "문화/예술",
     "운동/액티비티",
@@ -153,8 +173,8 @@ const AzitcreateForm = () => {
         <div className="inputContainer">
           <label>날짜와 시간을 정해볼까요?</label>
           <div className="wd70">
-            <input placeholder="0000-00-00"></input>
-            <input placeholder="오전 00:00"></input>
+            <input type="date"></input>
+            <input type="time"></input>
           </div>
         </div>
         <div className="radioContainer">
@@ -199,15 +219,35 @@ const AzitcreateForm = () => {
         </div>
         <div className="inputContainer">
           <label>멤버의 나이를 알려주세요.</label>
-          <div className="wd70">
-            <input></input>
-            <p>~</p>
-            <input></input>
+          <div className="ageSelect">
+            <div className="selectBox">
+              <select>
+                <option>2000</option>
+                <option>2001</option>
+                <option>2002</option>
+                <option>2003</option>
+                <option>2004</option>
+                <option>2005</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+            <span>~</span>
+            <div className="selectBox">
+              <select>
+                <option>2000</option>
+                <option>2001</option>
+                <option>2002</option>
+                <option>2003</option>
+                <option>2004</option>
+                <option>2005</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
             <input className="checkBox" type="checkbox" />
             <span>제한없음</span>
           </div>
         </div>
-        <div className="inputContainer">
+        <div className="inputContainer people">
           <label>멤버의 인원 수를 정해주세요.(호스트 포함)</label>
           <input></input>
         </div>
@@ -227,4 +267,4 @@ const AzitcreateForm = () => {
   );
 };
 
-export default AzitcreateForm;
+export default AzitCreateForm;

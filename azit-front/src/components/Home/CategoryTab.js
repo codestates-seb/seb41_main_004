@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
-import AzitList from "../AzitList";
+import AzitList from "../common/AzitList";
 import CultureIcon from "../../images/categoryCultureIcon.png";
 import ExerciseIcon from "../../images/categoryExerciseIcon.png";
 import FoodIcon from "../../images/categoryFoodIcon.png";

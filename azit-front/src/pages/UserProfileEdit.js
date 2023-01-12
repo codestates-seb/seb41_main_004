@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "../components/Button";
-import Header from "../components/Header";
+import Button from "../components/common/Button";
+import Header from "../components/common/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link } from "react-router-dom";

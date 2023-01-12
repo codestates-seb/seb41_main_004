@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Button from "../components/Button";
+import Header from "../components/common/Header";
+import Button from "../components/common/Button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ReportWrap = styled.div`
   position: relative;
-  margin-right: 2rem;
-  margin-left: 2rem;
+  margin-top: 5.5rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: calc(100vh - 5.5rem);
+  justify-content: space-between;
   > .ReportForm {
     height: 100%;
-    margin-top: 7.5rem;
     > div {
       > textarea {
         margin-bottom: 0.4rem;
@@ -28,9 +28,6 @@ const ReportWrap = styled.div`
     > div:first-child {
       margin-bottom: 2rem;
     }
-  }
-  > .buttonWrap {
-    margin-bottom: 2rem;
   }
 `;
 
@@ -64,11 +61,9 @@ const UserReport = () => {
         </div>
         <div></div>
       </div>
-      <div className="buttonWrap">
-        <Link to="/userpage">
-          <Button title="신고 하기" state="active"></Button>
-        </Link>
-      </div>
+      <Link to="/userpage">
+        <Button title="신고 하기" state="active"></Button>
+      </Link>
     </ReportWrap>
   );
 };

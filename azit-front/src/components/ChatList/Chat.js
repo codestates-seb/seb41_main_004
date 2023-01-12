@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Header from "../Header";
+import Header from "../common/Header";
 import SendIconActive from "../../images/chatSendBtnActive.png";
 import SendIcon from "../../images/chatSendBtn.png";
 import TestProfileImg from "../../images/testProfileImg.png";
@@ -16,7 +16,7 @@ const SendBtnWrap = styled.div`
     padding: 1.5rem 4.5rem 1.5rem 2rem;
   }
 `;
-const SendBtn = styled.button`
+const SendBtn = styled.button` 
   position: absolute;
   top: 2rem;
   right: 2rem;
