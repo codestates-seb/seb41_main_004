@@ -17,7 +17,7 @@ import lombok.Setter;
 public class CategorySmall {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long CategorySmallId;
+	private Long categorySmallId;
 
 	@ManyToOne
 	@JoinColumn(name = "CATEGORY_LARGE_ID", updatable = false)

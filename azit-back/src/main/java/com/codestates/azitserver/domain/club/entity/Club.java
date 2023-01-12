@@ -6,10 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
 
 import lombok.Getter;
@@ -65,7 +69,12 @@ public class Club extends Auditable {
 	@Column(name = "CLUB_STATUS", nullable = false)
 	private ClubStatus clubStatus = ClubStatus.CLUB_ACTIVE;
 
-	// TODO: category(updatable = false), banner_image, host_id, club_members
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CATEGORY_SMALL_ID", updatable = false)
+	private CategorySmall categorySmall;
+
+
+	// TODO: banner_image, host_id, club_members
 
 	public enum JoinMethod {
 		APPROVAL("승인제"),

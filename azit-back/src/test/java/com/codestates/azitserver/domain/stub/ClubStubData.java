@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.stub;
 
+import static com.codestates.azitserver.domain.stub.CategoryStubData.*;
+
 import java.time.LocalDateTime;
 
 import org.springframework.http.MediaType;
@@ -45,6 +47,7 @@ public class ClubStubData {
 		post.setIsOnline(false);
 		post.setLocation("서울시 송파구");
 		post.setJoinQuestion("재밌는 아지트 맞을까요?");
+		post.setCategorySmallId(1L);
 
 		return post;
 	}
@@ -83,6 +86,7 @@ public class ClubStubData {
 		response.setLocation("서울시 송파구");
 		response.setJoinQuestion("재밌는 아지트 맞을까요?");
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
+		response.setCategorySmall(getSmallResponse());
 
 		return response;
 	}
