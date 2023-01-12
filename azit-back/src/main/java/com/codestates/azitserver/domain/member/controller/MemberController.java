@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/api/members", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -34,7 +35,7 @@ public class MemberController {
     public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
         // 'password 한번 더' 절차
-        if( memberPostDto.getPassword() != memberPostDto.getPasswordCheck()){
+        if( !Objects.equals(memberPostDto.getPassword(), memberPostDto.getPasswordCheck())){
             throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
         }
         memberService.createMember(member);

@@ -79,6 +79,7 @@ class MemberControllerTest {
                 Member.Gender.MALE,"1995", "자기소개");
         String postContent = gson.toJson(post);
 
+
         ResultActions postActions =
                 mockMvc.perform(
                         post("/api/members")

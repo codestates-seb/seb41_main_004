@@ -36,7 +36,7 @@ public class MemberDto {
         @NotBlank(message = "비밀번호를 한번 더 입력해 주세요")
         private String passwordCheck;
 
-        @NotBlank(message = "성별을 선택해 주세요")
+
         // 이부분 사용자가 직접 타이핑하는게 아니라 선택해서 저절로 입력되는거라
         // 유효성 검증 적용 안해도 될까요?
         private Member.Gender gender;

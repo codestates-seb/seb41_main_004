@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,12 +72,12 @@ public class Member extends Auditable {
     public Member(Long memberId, Long avatar_image_id, String email, String nickname,
                   String password, Gender gender, String birthYear, String aboutMe,
                   Integer reputation, MemberStatus memberStatus) {
-        Assert.hasText(email, "email must not be empty");
-        Assert.hasText(nickname, "nickname must not be empty");
-        Assert.hasText(password, "password must not be empty");
-        Assert.notNull(gender, "gender must not be empty");
-        Assert.notNull(reputation, "reputation must not be empty");
-        Assert.notNull(memberStatus, "memberStatus must not be empty");
+//        Assert.hasText(email, "email must not be empty");
+//        Assert.hasText(nickname, "nickname must not be empty");
+//        Assert.hasText(password, "password must not be empty");
+//        Assert.notNull(gender, "gender must not be empty");
+//        Assert.notNull(reputation, "reputation must not be empty");
+//        Assert.notNull(memberStatus, "memberStatus must not be empty");
 
         this.memberId = memberId;
         this.avatar_image_id = avatar_image_id;
