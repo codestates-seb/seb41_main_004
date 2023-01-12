@@ -6,14 +6,14 @@ import Category from "./Category";
 import Tab from "./Tab";
 
 const ProfileWrapper = styled.div`
-  padding: 2rem 0;
+  margin: 2rem 0;
+  position: relative;
 `;
 
 const ImgWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-left: 18.8rem;
-  padding-right: 2rem;
+  justify-content: center;
+  padding-top: 2rem;
 `;
 
 const Img = styled.img`
@@ -33,6 +33,9 @@ const Button = styled.button`
   color: white;
   /* position: absolute; */
   margin-top: -1rem;
+  font-size: var(--caption-font);
+  width: 5.5rem;
+  height: 2rem;
 `;
 const InfoWrapper = styled.div`
   display: flex;
@@ -41,9 +44,15 @@ const InfoWrapper = styled.div`
 `;
 const Name = styled.p`
   font-weight: bold;
+  font-size: var(--big-font);
+  padding-top: 0.5rem;
 `;
 const Text = styled.p`
-  margin: 1rem;
+  margin: 1rem 0;
+  max-width: 25rem;
+  word-break: keep-all;
+  text-align: center;
+  font-size: var(--main-font);
 `;
 const FollowWrapper = styled.div`
   margin-top: 1rem;
@@ -55,6 +64,7 @@ const FollowingCount = styled.span`
   display: flex;
   justify-content: center;
   color: #222222;
+  font-size: var(--main-font);
 `;
 const Following = styled.span`
   color: #777777;
@@ -68,15 +78,27 @@ const FolllowerCount = styled.span`
 const Follower = styled.span`
   color: #777777;
 `;
-const TempWrapper = styled.div`
+const TempWrap = styled.div`
+  position: absolute;
+  right: 2rem;
+  top: 0;
   display: flex;
-  flex-direction: column-reverse;
-  background-color: #d9d9d9;
+  flex-direction: column;
+  align-items: center;
+  height: 17rem;
+  > .tempBack {
+    flex: 1;
+    display: flex;
+    width: 1rem;
+    flex-direction: column-reverse;
+    background-color: #d9d9d9;
+    border-radius: 0.5rem;
+  }
 `;
 const MannerTemp = styled.div`
-  width: 1rem;
   height: ${(props) => props.height}%;
-  background-color: #bb2649;
+  background: linear-gradient(to top, #cf9ba7, #bb2649);
+  border-radius: 0.5rem;
 `;
 
 const Profile = () => {
@@ -86,19 +108,20 @@ const Profile = () => {
     <ProfileWrapper>
       <ImgWrapper>
         <Img alt="testProfile" src={testProfile} />
-        <TempWrapper>
-          <MannerTemp height={60}>온도계</MannerTemp>
-        </TempWrapper>
       </ImgWrapper>
+      <TempWrap>
+        <div className="tempBack">
+          <MannerTemp height={60}></MannerTemp>
+        </div>
+        <span className="tempNum">60°</span>
+      </TempWrap>
       <InfoWrapper>
         <ButtonWrapper>
           <Button>팔로우</Button>
         </ButtonWrapper>
+
         <Name>닉네임</Name>
-        <Text>
-          매일 반복되는 일상을 특별하게 만들고 싶다.
-          <br /> ㅁㄴㅇㄹㅁㄴㅇㄹ
-        </Text>
+        <Text>매일 반복되는 일상을 특별하게 만들고 싶다. ㅁㄴㅇㄹㅁㄴㅇㄹ</Text>
         <NavLink to="/followcheck" className="followCheck">
           <FollowWrapper>
             <Following>

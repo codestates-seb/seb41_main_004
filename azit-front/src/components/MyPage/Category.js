@@ -15,6 +15,7 @@ const Categorys = styled.span`
   background-color: #bb2649;
   color: white;
   border-radius: 2rem;
+  font-size: var(--main-font);
 `;
 
 const Category = () => {

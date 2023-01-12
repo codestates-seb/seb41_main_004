@@ -20,9 +20,18 @@ const TitleBox = styled.div`
 `;
 const Title = styled.p`
   font-weight: bold;
+  font-size: var(--big-font);
 `;
-const Time = styled.span``;
-const ChoiceReview = styled.p``;
+const Time = styled.span`
+  color: var(--sub-font-color);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+`;
+const ChoiceReview = styled.p`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+`;
 const ReviewBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -35,6 +44,7 @@ const Contents = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  color: var(--sub-font-color);
 `;
 
 const Reviews = () => {
@@ -42,7 +52,7 @@ const Reviews = () => {
     <Container>
       <Box>
         <TitleBox>
-          <Title>일이삼사오육칠팔구십일이삼사오육칠팔구십</Title> <br />
+          <Title>일이삼사오육칠팔구십일이삼사오육칠팔구십</Title>
           <Time>{` ${toDateFormatOfKR(new Date())}`}</Time>
         </TitleBox>
         <ReviewBox>
