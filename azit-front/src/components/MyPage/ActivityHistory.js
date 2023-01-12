@@ -12,7 +12,7 @@ const Container = styled.div`
   div.selectWrapper > select {
     border: 0.1rem solid #d9d9d9;
     border-radius: 0.5rem;
-    padding:5px
+    padding: 5px;
   }
   .checkContainer {
     position: relative;
@@ -55,10 +55,8 @@ const Container = styled.div`
   div.ActivityDetail {
     display: flex;
     justify-content: space-between;
-    color: var(--sub-font-color);
-    font-size: var(--caption-font);
   }
-  > div.ActivityReview {
+  > div span {
     color: var(--sub-font-color);
     font-size: var(--caption-font);
   }
@@ -87,11 +85,12 @@ const ActivityHistory = () => {
         ) : (
           <></>
         )}
+
         <div className="ActivityDetail">
           <div className="ActivityView">
             <span>활동내역 보이기</span>
           </div>
-          <Link to="">
+          <Link to="/review/Create">
             <div className="ActivityReview">
               <span>리뷰 작성하러 가기 〉 </span>
             </div>
