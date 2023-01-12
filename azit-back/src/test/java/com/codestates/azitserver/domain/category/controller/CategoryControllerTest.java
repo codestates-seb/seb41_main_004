@@ -101,7 +101,6 @@ class CategoryControllerTest implements CategoryControllerTestHelper {
 		given(categoryService.getAllSmallCategory()).willReturn(new ArrayList<>());
 		given(mapper.categorySmallToCategorySmallResponseDto(Mockito.anyList())).willReturn(List.of(smallResponse));
 
-
 		// when
 		ResultActions actions = mockMvc.perform(getRequestBuilder(getCategoryUrl() + "/small")
 			.header("Authorization", "Required JWT access token"));

@@ -3,7 +3,12 @@ package com.codestates.azitserver.domain.stub;
 import static com.codestates.azitserver.domain.stub.CategoryStubData.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -98,5 +103,10 @@ public class ClubStubData {
 			MediaType.APPLICATION_JSON_VALUE,
 			content.getBytes()
 		);
+	}
+
+	public static Page<Club> getClubPage() {
+		return new PageImpl<>(List.of(getDefaultClub()), PageRequest.of(0, 10,
+			Sort.by("createdAt").descending()), 1);
 	}
 }
