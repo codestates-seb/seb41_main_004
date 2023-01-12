@@ -4,6 +4,7 @@ import static com.codestates.azitserver.global.utils.AsciiDocsUtils.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -18,11 +19,14 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
@@ -53,6 +57,7 @@ class ClubControllerTest implements ClubControllerTestHelper {
 	ClubDto.Patch patch;
 	ClubDto.Response response;
 	MockMultipartFile image;
+	Page<Club> clubPage;
 
 	@BeforeEach
 	void beforeEach() {
@@ -67,6 +72,7 @@ class ClubControllerTest implements ClubControllerTestHelper {
 			MediaType.MULTIPART_FORM_DATA_VALUE,
 			"".getBytes()
 		);
+		clubPage = ClubStubData.getClubPage();
 	}
 
 	@Test
@@ -156,6 +162,177 @@ class ClubControllerTest implements ClubControllerTestHelper {
 					pathParameters(List.of(
 						parameterWithName("club-id").description("아지트 고유 식별자"))),
 					ClubFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getAllClub() throws Exception {
+		// given
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("page", "1");
+		queryParams.add("size", "10");
+
+		given(clubService.findClubs(anyInt(), anyInt())).willReturn(clubPage);
+		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
+
+		// when
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl(), queryParams)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"get-all-clubs",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					requestParameters(
+						List.of(
+							parameterWithName("page").description("Page 번호"),
+							parameterWithName("size").description("Page 크기")
+						)
+					),
+					ClubFieldDescriptor.getMultiResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getClubByClubId() throws Exception {
+		// given
+		long clubId = 1L;
+		given(clubService.findClubById(Mockito.anyLong())).willReturn(club);
+		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
+
+		// when
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUri(), clubId)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"get-club-by-club-id",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+						parameterWithName("club-id").description("아지트 고유 식별자"))),
+					ClubFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getClubByCategoryId() throws Exception {
+		// given
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("page", "1");
+		queryParams.add("size", "10");
+		queryParams.add("cl", "1");
+
+		given(clubService.findClubsByCategoryLargeId(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
+			.willReturn(clubPage);
+		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
+
+		// when
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/category", queryParams)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"get-club-by-category-id",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					requestParameters(
+						List.of(
+							parameterWithName("page").description("Page 번호"),
+							parameterWithName("size").description("Page 크기"),
+							parameterWithName("cl").description("대분류 카테고리 고유 식별자")
+						)
+					),
+					ClubFieldDescriptor.getMultiResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getClubByDate() throws Exception {
+		// given
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("page", "1");
+		queryParams.add("size", "10");
+		queryParams.add("days", "1");
+
+		given(clubService.findClubsByClubMeetingDate(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt()))
+			.willReturn(clubPage);
+		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
+
+		// when
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/date", queryParams)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"get-club-by-meeting-date",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					requestParameters(
+						List.of(
+							parameterWithName("page").description("Page 번호"),
+							parameterWithName("size").description("Page 크기"),
+							parameterWithName("days").description("오늘(0) 기준으로 며칠 뒤의 날짜").attributes(key("constraints").value("0 ~ 5 사이의 정수"))
+						)
+					),
+					ClubFieldDescriptor.getMultiResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getClubByMemberRecommend() {
+
+		// TODO : implement
+
+	}
+
+	@Test
+	void getClubByMemberId() {
+
+		// TODO : implement
+
+	}
+
+	@Test
+	void search() throws Exception {
+		// given
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("page", "1");
+		queryParams.add("size", "10");
+		queryParams.add("keyword", "재밌는");
+
+		given(clubService.findClubsByKeywords(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()))
+			.willReturn(clubPage);
+		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
+
+		// when
+		ResultActions actions = mockMvc.perform(getRequestBuilder(getClubUrl() + "/search", queryParams)
+			.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"search-club",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					requestParameters(
+						List.of(
+							parameterWithName("page").description("Page 번호"),
+							parameterWithName("size").description("Page 크기"),
+							parameterWithName("keyword").description("검색어").attributes(key("constraints").value("빈 문자이면 전체 아지트를 리턴합니다."))
+						)
+					),
+					ClubFieldDescriptor.getMultiResponseSnippet()
 				)
 			);
 	}
