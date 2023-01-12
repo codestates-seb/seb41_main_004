@@ -56,9 +56,6 @@ include::{snippets}/get-all-clubs/curl-request.adoc[]
 .http-request
 include::{snippets}/get-all-clubs/http-request.adoc[]
 
-.request-headers
-include::{snippets}/get-all-clubs/request-headers.adoc[]
-
 .request-parameters
 include::{snippets}/get-all-clubs/request-parameters.adoc[]
 
@@ -79,9 +76,6 @@ include::{snippets}/get-club-by-club-id/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-club-by-club-id/path-parameters.adoc[]
 
-.request-headers
-include::{snippets}/get-club-by-club-id/request-headers.adoc[]
-
 .http-response
 include::{snippets}/get-club-by-club-id/http-response.adoc[]
 
@@ -95,9 +89,6 @@ include::{snippets}/get-club-by-category-id/curl-request.adoc[]
 
 .http-request
 include::{snippets}/get-club-by-category-id/http-request.adoc[]
-
-.request-headers
-include::{snippets}/get-club-by-category-id/request-headers.adoc[]
 
 .request-parameters
 include::{snippets}/get-club-by-category-id/request-parameters.adoc[]
@@ -115,9 +106,6 @@ include::{snippets}/get-club-by-meeting-date/curl-request.adoc[]
 
 .http-request
 include::{snippets}/get-club-by-meeting-date/http-request.adoc[]
-
-.request-headers
-include::{snippets}/get-club-by-meeting-date/request-headers.adoc[]
 
 .request-parameters
 include::{snippets}/get-club-by-meeting-date/request-parameters.adoc[]
@@ -201,9 +189,6 @@ include::{snippets}/search-club/curl-request.adoc[]
 
 .http-request
 include::{snippets}/search-club/http-request.adoc[]
-
-.request-headers
-include::{snippets}/search-club/request-headers.adoc[]
 
 .request-parameters
 include::{snippets}/search-club/request-parameters.adoc[]
