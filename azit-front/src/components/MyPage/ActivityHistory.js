@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
@@ -11,7 +12,7 @@ const Container = styled.div`
   div.selectWrapper > select {
     border: 0.1rem solid #d9d9d9;
     border-radius: 0.5rem;
-    padding:5px
+    padding: 5px;
   }
   .checkContainer {
     position: relative;
@@ -51,6 +52,14 @@ const Container = styled.div`
       }
     }
   }
+  div.ActivityDetail {
+    display: flex;
+    justify-content: space-between;
+  }
+  > div span {
+    color: var(--sub-font-color);
+    font-size: var(--caption-font);
+  }
 `;
 const ActivityHistory = () => {
   return (
@@ -71,12 +80,23 @@ const ActivityHistory = () => {
             </select>
           </div>
         </div>
+        {ClubData ? (
+          ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+        ) : (
+          <></>
+        )}
+
+        <div className="ActivityDetail">
+          <div className="ActivityView">
+            <span>활동내역 보이기</span>
+          </div>
+          <Link to="/review/Create">
+            <div className="ActivityReview">
+              <span>리뷰 작성하러 가기 〉 </span>
+            </div>
+          </Link>
+        </div>
       </Container>
-      {ClubData ? (
-        ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
-      ) : (
-        <></>
-      )}
     </>
   );
 };
