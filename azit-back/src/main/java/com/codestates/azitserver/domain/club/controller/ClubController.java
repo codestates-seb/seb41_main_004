@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -56,13 +57,27 @@ public class ClubController {
 
 	}
 
+	/**
+	 * 아지트 배너 이미지 변경
+	 * @param clubId 아지트 고유 식별자
+	 * @param bannerImage 바꾸려는 이미지 정보
+	 * @return 업데이트 된 아지트 정보를 리턴합니다.
+	 */
+	@PostMapping(value = "/{club-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> postClubImage(@Positive @PathVariable("club-id") Long clubId,
+		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		Club club = clubService.updateClubImage(clubId, bannerImage);
+		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+	}
+
 	@PatchMapping("/{club-id}")
 	public ResponseEntity<?> patchClub(@Positive @PathVariable("club-id") Long clubId,
-		@Valid @RequestPart(name = "data") ClubDto.Patch patch,
-		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		@Valid @RequestBody ClubDto.Patch patch) {
 		patch.setClubId(clubId);
 		Club toClub = mapper.clubDtoPatchToClubEntity(patch);
-		Club club = clubService.updateClub(toClub, bannerImage);
+		Club club = clubService.updateClub(toClub);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
