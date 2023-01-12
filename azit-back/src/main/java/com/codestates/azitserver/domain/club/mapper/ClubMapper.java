@@ -9,7 +9,7 @@ import com.codestates.azitserver.domain.category.mapper.CategoryMapper;
 import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 
-@Mapper(componentModel = "spring", uses = {ClubMapper.class, CategoryMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
 public interface ClubMapper {
 	@Mapping(target = "clubId", ignore = true)
 	@Mapping(target = "clubStatus", ignore = true)
@@ -19,6 +19,7 @@ public interface ClubMapper {
 	@Mapping(target = "joinMethod", ignore = true)
 	@Mapping(target = "joinQuestion", ignore = true)
 	@Mapping(target = "clubStatus", ignore = true)
+	@Mapping(target = "categorySmall", ignore = true)
 	Club clubDtoPatchToClubEntity(ClubDto.Patch patch);
 
 	ClubDto.Response clubToClubDtoResponse(Club club);
