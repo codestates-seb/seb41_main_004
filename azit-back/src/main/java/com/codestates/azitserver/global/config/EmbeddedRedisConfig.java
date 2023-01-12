@@ -1,8 +1,6 @@
 package com.codestates.azitserver.global.config;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
 @Slf4j
-@Profile("local")
+@Profile("test")
 @Configuration
 public class EmbeddedRedisConfig {
 	@Value("${redis.port}")
@@ -30,7 +28,12 @@ public class EmbeddedRedisConfig {
 			.port(port)
 			.setting("maxmemory 128M")
 			.build();
-		redisServer.start();
+
+		try {
+			redisServer.start();
+		} catch (Exception e) {
+			log.error("이미 Redis 실행 중. EmbeddedRedis는 실행되지 않습니다.", e);
+		}
 	}
 
 	@PreDestroy // 빈 제거하기 전에 마지막으로 해야하는 작업에 사용하는 어노테이션
