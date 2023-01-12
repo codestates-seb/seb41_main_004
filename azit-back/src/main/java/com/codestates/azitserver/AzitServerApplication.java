@@ -13,5 +13,4 @@ public class AzitServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AzitServerApplication.class, args);
 	}
-
 }
