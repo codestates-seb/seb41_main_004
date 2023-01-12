@@ -2,6 +2,7 @@ package com.codestates.azitserver.domain.member.entity;
 
 import com.codestates.azitserver.domain.common.Auditable;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,10 +10,8 @@ import java.util.List;
 
 @Entity
 @Setter
-@AllArgsConstructor
-@Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +68,28 @@ public class Member extends Auditable {
             this.memberStatus = memberStatus;
         }
     }
+    @Builder
+    public Member(Long memberId, Long avatar_image_id, String email, String nickname,
+                  String password, Gender gender, String birthYear, String aboutMe,
+                  Integer reputation, MemberStatus memberStatus) {
+        Assert.hasText(email, "email must not be empty");
+        Assert.hasText(nickname, "nickname must not be empty");
+        Assert.hasText(password, "password must not be empty");
+        Assert.notNull(gender, "gender must not be empty");
+        Assert.notNull(reputation, "reputation must not be empty");
+        Assert.notNull(memberStatus, "memberStatus must not be empty");
 
+        this.memberId = memberId;
+        this.avatar_image_id = avatar_image_id;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.gender = gender;
+        this.birthYear = birthYear;
+        this.aboutMe = aboutMe;
+        this.reputation = reputation;
+        this.memberStatus = memberStatus;
+    }
 
 
 }

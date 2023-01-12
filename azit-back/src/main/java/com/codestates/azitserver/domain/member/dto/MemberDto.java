@@ -3,6 +3,7 @@ package com.codestates.azitserver.domain.member.dto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,6 +14,9 @@ import javax.validation.constraints.Pattern;
 public class MemberDto {
 
     @Getter //인증 파트 테스트를 위해 회원 생성만 유효성 검증 적용
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Post {
         @NotBlank(message = "이메일을 입력해 주세요")
         @Email(message = "유효한 이메일 형식이 아닙니다")
