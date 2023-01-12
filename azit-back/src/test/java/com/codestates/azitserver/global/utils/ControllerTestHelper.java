@@ -35,9 +35,9 @@ public interface ControllerTestHelper {
 		return null;
 	}
 
-	// TODO : 작성 예정
 	default MockHttpServletRequestBuilder getRequestBuilder(String url) {
-		return null;
+		return get(url)
+			.accept(MediaType.APPLICATION_JSON);
 	}
 
 	// TODO : 작성 예정
