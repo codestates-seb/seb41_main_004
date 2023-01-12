@@ -47,31 +47,32 @@ const SignupForm = styled.div`
       }
       & > .tagContainer {
         display: flex;
+        height: 9rem;
         padding-top: 0.5rem;
         flex-wrap: wrap;
 
         & > .tag {
-          border: solid 0.1rem var(--border-color);
-          border-radius: 2rem;
-          padding: 0.7rem 1rem 0.7rem 1rem;
           margin-right: 1rem;
           text-align: center;
           margin-bottom: 1rem;
 
           > label {
-            width: 10rem;
+            border: solid 0.1rem var(--border-color);
+            border-radius: 2rem;
+            width: 12rem;
+            height: 100%;
+          }
+          > input[type="checkbox"]:checked + label {
+            background-color: var(--point-color);
+            border: solid 0.1rem var(--border-color);
+            border-radius: 2rem;
+            width: 12rem;
+            height: 100%;
+            color: var(--white-color);
           }
           > input {
+            display: none;
           }
-        }
-        & > .clicked {
-          border: solid 0.1rem var(--point-color);
-          border-radius: 2rem;
-          padding: 0.7rem 1rem 0.7rem 1rem;
-          margin-right: 1rem;
-          text-align: center;
-          color: var(--white-color);
-          background-color: var(--point-color);
         }
       }
     }
@@ -168,7 +169,6 @@ const SignupAdditional = () => {
                   {interest.tags.map((tag, idx) => {
                     return (
                       <span className="tag" key={idx}>
-                        <label htmlFor={tag}>{tag}</label>
                         <input
                           id={tag}
                           type="checkbox"
@@ -178,6 +178,7 @@ const SignupAdditional = () => {
                           checked={checkedInputs.includes(tag) ? true : false}
                           name={tag}
                         ></input>
+                        <label htmlFor={tag}>{tag}</label>
                       </span>
                     );
                   })}
