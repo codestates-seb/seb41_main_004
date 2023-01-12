@@ -16,7 +16,7 @@ const SendBtnWrap = styled.div`
     padding: 1.5rem 4.5rem 1.5rem 2rem;
   }
 `;
-const SendBtn = styled.button`
+const SendBtn = styled.button` 
   position: absolute;
   top: 2rem;
   right: 2rem;
