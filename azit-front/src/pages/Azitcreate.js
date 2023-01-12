@@ -13,7 +13,7 @@ const AzitaddWrap = styled.div`
   }
 `;
 
-const Azitcreate = () => {
+const AzitCreate = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const modalHandler = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
@@ -33,4 +33,4 @@ const Azitcreate = () => {
   );
 };
 
-export default Azitcreate;
+export default AzitCreate;
