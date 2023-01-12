@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import WaitingMember from "../components/AzitMember/WaitingMember";
 import styled from "styled-components";
+import Member from "../components/AzitMember/Member";
 
 const MemberWrap = styled.section`
     padding-top: 55px;
@@ -14,6 +15,7 @@ const AzitMember = () => {
       <Header title="아지트 멤버 관리" />
       <MemberWrap>
         <WaitingMember />
+        <Member />
       </MemberWrap>
     </>
   );

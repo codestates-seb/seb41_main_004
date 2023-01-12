@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { WaitingMemberData } from "../../dummyData/AzitMemberData";
+import MemberList from "./MemberList";
 
 const WaitingWrap = styled.article`
   > .title {
@@ -53,6 +55,12 @@ const WaitingWrap = styled.article`
   }
 `;
 
+const Null = styled.div`
+  text-align: center;
+  padding:2rem 0;
+  color:var(--sub-font-color);
+`;
+
 const WaitingMember = () => {
   const [view, setView] = useState(false);
   const viewHandler = () => {
@@ -62,7 +70,7 @@ const WaitingMember = () => {
     <WaitingWrap>
       <div className="title">
         <h3>가입 대기 멤버</h3>
-        <span className="count">0</span>
+        <span className="count">{WaitingMemberData.length}</span>
         <button
           className={view ? "viewBtn active" : "viewBtn"}
           onClick={() => {
@@ -73,10 +81,13 @@ const WaitingMember = () => {
         </button>
       </div>
       <ul className={view ? "watingList active" : "watingList"}>
-        <li>
-          <div className="profile"></div>
-          <input defalutValue="질문에 대한 답변" className="answer"></input>
-        </li>
+        {WaitingMemberData.length > 0 && WaitingMemberData ? (
+          WaitingMemberData?.map((data) => {
+            return <MemberList key={data.userId} data={data} state="wating" />;
+          })
+        ) : (
+          <Null>가입 대기 멤버가 없습니다.</Null>
+        )}
       </ul>
     </WaitingWrap>
   );
