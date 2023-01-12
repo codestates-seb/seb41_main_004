@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import AzitDetailHeader from "../components/AzitDetailHeader";
+import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
 import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
 import TestAvatarUrl from "../images/testProfileImg.png";
