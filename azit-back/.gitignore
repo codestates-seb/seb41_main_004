@@ -44,3 +44,6 @@ env.properties
 ### static files ###
 src/main/resources/static/docs/index.html
 images/
+
+### CommandLineRunner ###
+DemoCommandLineRunner.java
