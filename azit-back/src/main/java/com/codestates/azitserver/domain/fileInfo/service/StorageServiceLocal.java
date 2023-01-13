@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Profile("local")
+@Profile({"local","test", "default"})
 public class StorageServiceLocal implements StorageService {
 	@Override
 	public Map<String, String> upload(Path path, MultipartFile file) {
