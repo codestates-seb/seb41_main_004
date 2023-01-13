@@ -13,12 +13,10 @@ public interface MemberMapper {
 
     @Mapping(target = "memberId", ignore = true)
     @Mapping(target = "memberStatus", ignore = true)
-    @Mapping(target = "aboutMe", ignore = true)
     @Mapping(target = "avatar_image_id", ignore = true)
     @Mapping(target = "reputation", ignore = true)
     Member memberPostDtoToMember(MemberDto.Post memberPostDto);
 
-    @Mapping(target = "aboutMe", ignore = true)
     @Mapping(target = "avatar_image_id", ignore = true)
     @Mapping(target = "reputation", ignore = true)
     Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);

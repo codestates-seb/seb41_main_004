@@ -37,22 +37,19 @@ public class MemberController {
     public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
         // 'password 한번 더' 절차
-        if( !Objects.equals(memberPostDto.getPassword(), memberPostDto.getPasswordCheck())){
-            throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
-        }
+        memberService.passwordConfirmer(memberPostDto);
+
         Member createdMember = memberService.createMember(member);
-        member.setAboutMe(memberPostDto.getAboutMe()); // aboutMe 만 response body에 출력 안되서 이렇게함;
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);}
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);}
 
     //전체 회원 조회
     @GetMapping
     public ResponseEntity getMembers(@RequestParam(value = "page", defaultValue = "1") @Positive int page,
                                      @RequestParam(value = "size", defaultValue = "10") @Positive int size) {
         List<Member> members = memberService.getMembers(page, size).getContent();
-
 
         return new ResponseEntity<>(memberMapper.membersToMemberResponseDtos(members), HttpStatus.OK);}
 
@@ -70,7 +67,11 @@ public class MemberController {
     public ResponseEntity patchMember(@Positive @PathVariable("member-id") Long memberId,
                                       @RequestBody @Valid MemberDto.Patch memberPatchDto) {
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
+        member.setMemberId(memberId);
+        // 'password 한번 더' 절차
+        memberService.passwordConfirmer(memberPatchDto);
 
+        Member updatedMember = memberService.patchMember(member);
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);}

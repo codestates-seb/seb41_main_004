@@ -46,10 +46,14 @@ public class MemberDto {
     }
 
     @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patch {
-        @NotBlank(message = "이메일을 입력해 주세요")
-        @Email(message = "유효한 이메일 형식이 아닙니다")
-        private String email;
+        // 이메일 변경 불가
+//        @NotBlank(message = "이메일을 입력해 주세요")
+//        @Email(message = "유효한 이메일 형식이 아닙니다")
+//        private String email;
 
         @NotBlank(message = "별명을 입력해 주세요")
         @Length(min = 2, max = 16, message = "닉네임은 2글자 이상 16글자 이하여야 합니다")
