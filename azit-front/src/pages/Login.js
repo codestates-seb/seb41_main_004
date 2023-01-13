@@ -88,12 +88,6 @@ const Line = styled.hr`
 `;
 
 const Login = () => {
-  // eslint-disable-next-line no-unused-vars
-  const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  // eslint-disable-next-line no-unused-vars
-  const passwordRegExp =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}$/;
 
   return (
     <LoginContainer>
@@ -102,14 +96,10 @@ const Login = () => {
         <InputWrap>
           <label htmlFor="email">이메일</label>
           <input id="email" placeholder="이메일 입력" />
-          <div className="errorMessage">올바른 이메일을 입력해주세요.</div>
         </InputWrap>
         <InputWrap>
           <label htmlFor="password">비밀번호</label>
           <input id="password" placeholder="비밀번호 입력" />
-          <div className="errorMessage">
-            특수문자, 문자, 숫자 포함 8~16자로 작성해 주세요.
-          </div>
         </InputWrap>
         <Link to="/">
           <Button title="로그인" state="active">
