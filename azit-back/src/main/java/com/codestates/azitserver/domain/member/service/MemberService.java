@@ -59,7 +59,7 @@ public class MemberService {
         member.setPassword(encryptedPassword);
 
         return memberRepository.save(member);
-         //TODO
+
     }
 
     // 회원 삭제(탈퇴)

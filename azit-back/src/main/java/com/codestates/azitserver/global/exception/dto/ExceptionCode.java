@@ -11,12 +11,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionCode {
 
-	PASSWORD_VALIDATION_FAILED(404, "비밀번호가 서로 다릅니다"),
-	NICKNAME_EXIST(404,"존재하는 닉네임입니다"),
-	EMAIL_EXIST(404,"이미 가입된 이메일입니다"),
+
 	// 404
 	MEMBER_NOT_FOUND(40401, "Member not found"),
-	CLUB_NOT_FOUND(40402, "Club not found");
+	CLUB_NOT_FOUND(40402, "Club not found"),
+	PASSWORD_VALIDATION_FAILED(40403, "비밀번호가 서로 다릅니다"),
+	NICKNAME_EXIST(40404,"존재하는 닉네임입니다"),
+	EMAIL_EXIST(40405,"이미 가입된 이메일입니다");
 
 	// 500
 
