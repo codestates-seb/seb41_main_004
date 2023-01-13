@@ -46,7 +46,7 @@ public class CategoryController {
 	@GetMapping("/small")
 	public ResponseEntity<?> getSmallCategory() {
 		List<CategorySmall> categorySmallList = categoryService.getAllSmallCategory();
-		List<CategoryDto.SmallResponse> responses = mapper.categoryLargeToCategorySmallResponseDto(categorySmallList);
+		List<CategoryDto.SmallResponse> responses = mapper.categorySmallToCategorySmallResponseDto(categorySmallList);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
 	}

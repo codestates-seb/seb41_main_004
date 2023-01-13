@@ -2,10 +2,10 @@ package com.codestates.azitserver.global.utils;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.MultiValueMap;
 
 public interface ControllerTestHelper {
 	// TODO : MockMultipartFile을 가변인자로 받을 수 있는 방법 고민해보기
@@ -18,16 +18,11 @@ public interface ControllerTestHelper {
 	}
 
 	// form 형식의 요청은 GET, POST만 가능하다?! https://mangkyu.tistory.com/218
-	default MockHttpServletRequestBuilder patchMultipartRequestBuilder(String url, Long resourceId,
-		MockMultipartFile file1, MockMultipartFile file2) {
+	default MockHttpServletRequestBuilder postMultipartRequestBuilder(String url, Long resourceId,
+		MockMultipartFile file) {
 		return multipart(url, resourceId)
-			.file(file1)
-			.file(file2)
-			.accept(MediaType.APPLICATION_JSON)
-			.with(req -> {
-				req.setMethod(HttpMethod.PATCH.name());
-				return req;
-			});
+			.file(file)
+			.accept(MediaType.APPLICATION_JSON);
 	}
 
 	// TODO : 작성 예정
@@ -40,14 +35,22 @@ public interface ControllerTestHelper {
 			.accept(MediaType.APPLICATION_JSON);
 	}
 
-	// TODO : 작성 예정
-	default MockHttpServletRequestBuilder getRequestBuilder(String url, long resourceId) {
-		return null;
+	default MockHttpServletRequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams) {
+		return get(url)
+			.queryParams(queryParams)
+			.accept(MediaType.APPLICATION_JSON);
 	}
 
-	// TODO : 작성 예정
-	default MockHttpServletRequestBuilder patchRequestBuilder(String url, long resourceId) {
-		return null;
+	default MockHttpServletRequestBuilder getRequestBuilder(String url, long resourceId) {
+		return get(url, resourceId)
+			.accept(MediaType.APPLICATION_JSON);
+	}
+
+	default MockHttpServletRequestBuilder patchRequestBuilder(String url, long resourceId, String content) {
+		return patch(url, resourceId)
+			.accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(content);
 	}
 
 	default MockHttpServletRequestBuilder deleteRequestBuilder(String url, long resourceId) {

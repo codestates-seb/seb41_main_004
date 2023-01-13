@@ -15,6 +15,10 @@ spring:
       ddl-auto: create
     show-sql: true
 
+decorator.datasource.p6spy:
+  enable-logging: true
+  multiline: true
+
 logging:
   level:
     org:

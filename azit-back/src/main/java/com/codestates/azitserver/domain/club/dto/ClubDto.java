@@ -6,11 +6,13 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
+import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.global.validator.NotSpace;
 
@@ -66,10 +68,13 @@ public class ClubDto {
 		@Length(max = 24, message = "The join question must be less than 24 characters.")
 		private String joinQuestion;
 
+		@NotNull
+		@Positive
+		private Long categorySmallId;
+
 		// TODO : 연관관계 매핑
 
 		// private Long hostId;
-		// private List<Long> categories;
 		// private String bannerImageUrl;
 	}
 
@@ -137,5 +142,6 @@ public class ClubDto {
 		private String location;
 		private String joinQuestion;
 		private Club.ClubStatus clubStatus;
+		private CategoryDto.SmallResponse categorySmall;
 	}
 }
