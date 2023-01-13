@@ -4,11 +4,13 @@ import UserListIcon from "../../images/userListIcon.png";
 import { toDateFormatOfMonthDay } from "../../util/toDateFormatOfKR";
 
 const ListWrap = styled.article`
+  margin-bottom: 1rem;
+`;
+const DetailWrap = styled.div`
   padding: 1rem;
   border-radius: 5px;
   background-color: var(--white-color);
-  margin-bottom: 1rem;
-  >a {
+  > a {
     display: flex;
     flex-direction: row;
     > .infoCell {
@@ -93,6 +95,21 @@ const ImgWrap = styled.div`
 const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
+const EtcWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  display: none;
+  button, a {
+    cursor: pointer;
+    font-size: var(--caption-font);
+    color: var(--sub-font-color);
+    border:none;
+    background-color: transparent;
+    margin:0;
+    padding:0;
+  }
+`;
 
 const AzitList = ({ data }) => {
   let meetDate;
@@ -123,32 +140,43 @@ const AzitList = ({ data }) => {
   };
   return (
     <ListWrap>
-      <Link to="/azit/detail">
-        <ImgWrap clubImg={data.clubImg} />
-        <div className="infoCell">
-          <div className="tagWrap">
-            {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
-            <Tag className="category">{data.category}</Tag>
-            <Tag tagDisplay="">숨겨짐</Tag>
-          </div>
-          <h2 className="clubName">{data.clubName}</h2>
-          <div className="placeTime">
-            <span className="place">{data.location}∙</span>
-            <span className="time">{meetDate}</span>
-          </div>
-          <div className="etcCell">
-            <div className="profileAvatar">{repeatAvatar(data.user)}</div>
-            <div className="limitCell">
-              <img src={UserListIcon} alt="limitIcon" />
-              <div className="limitWrap">
-                <span className="current">{data.user.length} </span>/
-                <span className="limit"> {data.memberLimit}</span>명
-              </div>
+      <DetailWrap>
+        <Link to="/azit/detail">
+          <ImgWrap clubImg={data.clubImg} />
+          <div className="infoCell">
+            <div className="tagWrap">
+              {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
+              <Tag className="category">{data.category}</Tag>
+              <Tag tagDisplay="">숨겨짐</Tag>
             </div>
-            <span className="clubHost">{data.clubHost}</span>
+            <h2 className="clubName">{data.clubName}</h2>
+            <div className="placeTime">
+              <span className="place">{data.location}∙</span>
+              <span className="time">{meetDate}</span>
+            </div>
+            <div className="etcCell">
+              <div className="profileAvatar">{repeatAvatar(data.user)}</div>
+              <div className="limitCell">
+                <img src={UserListIcon} alt="limitIcon" />
+                <div className="limitWrap">
+                  <span className="current">{data.user.length} </span>/
+                  <span className="limit"> {data.memberLimit}</span>명
+                </div>
+              </div>
+              <span className="clubHost">{data.clubHost}</span>
+            </div>
           </div>
+        </Link>
+      </DetailWrap>
+      {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 */}
+      <EtcWrap>
+        <div className="ActivityView">
+          <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
         </div>
-      </Link>
+        <div className="ActivityReview">
+          <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
+        </div>
+      </EtcWrap>
     </ListWrap>
   );
 };

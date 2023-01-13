@@ -47,7 +47,6 @@ const SignupForm = styled.div`
       }
       & > .tagContainer {
         display: flex;
-        height: 9rem;
         padding-top: 0.5rem;
         flex-wrap: wrap;
 
@@ -59,15 +58,13 @@ const SignupForm = styled.div`
           > label {
             border: solid 0.1rem var(--border-color);
             border-radius: 2rem;
-            width: 12rem;
-            height: 100%;
+            padding:.5rem 1.5rem;
+            margin:0;
+            cursor: pointer;
           }
           > input[type="checkbox"]:checked + label {
             background-color: var(--point-color);
             border: solid 0.1rem var(--border-color);
-            border-radius: 2rem;
-            width: 12rem;
-            height: 100%;
             color: var(--white-color);
           }
           > input {
@@ -120,8 +117,6 @@ const SignupAdditional = () => {
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
   };
-
-  console.log(checkedInputs);
 
   return (
     <>

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
@@ -52,14 +51,6 @@ const Container = styled.div`
       }
     }
   }
-  div.ActivityDetail {
-    display: flex;
-    justify-content: space-between;
-  }
-  > div span {
-    color: var(--sub-font-color);
-    font-size: var(--caption-font);
-  }
 `;
 const ActivityHistory = () => {
   return (
@@ -86,16 +77,6 @@ const ActivityHistory = () => {
           <></>
         )}
 
-        <div className="ActivityDetail">
-          <div className="ActivityView">
-            <span>활동내역 보이기</span>
-          </div>
-          <Link to="/review/Create">
-            <div className="ActivityReview">
-              <span>리뷰 작성하러 가기 〉 </span>
-            </div>
-          </Link>
-        </div>
       </Container>
     </>
   );

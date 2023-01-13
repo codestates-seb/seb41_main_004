@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Logo from "../images/logo.png";
-import Kakao from "../images/kakaoLogo.png";
+import google from "../images/googleLogo.png";
 // eslint-disable-next-line no-unused-vars
 import { Link, useNavigate } from "react-router-dom";
 
@@ -63,17 +63,21 @@ const SnsLoginButton = styled.button`
   height: 5.5rem;
   border: none;
   border-radius: 5px;
-  background-color: #fee500;
+  /* 카카오 버튼 디자인 */
+  /* background-color: #fee500;
+  color: #181600; */
+  border:1px solid var(--border-color);
+  background-color: #fff;
   color: #181600;
   font-size: var(--big-font);
-  background-image: url(${Kakao});
+  background-image: url(${google});
   background-repeat: no-repeat;
   background-position: 2.5rem center;
-  background-size: 2.2rem;
+  background-size: 2.5rem;
   cursor: pointer;
-  transition:0.3s all;
+  transition: 0.3s all;
   :hover {
-    opacity:0.7;
+    opacity: 0.7;
   }
 `;
 
@@ -119,7 +123,8 @@ const Login = () => {
       </LoginFooter>
       <Line />
       <Link to="/" className="snsWrap">
-        <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton>
+        <SnsLoginButton>Sign in with Google</SnsLoginButton>
+        {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
       </Link>
     </LoginContainer>
   );
