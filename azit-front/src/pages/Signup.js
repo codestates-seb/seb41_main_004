@@ -3,37 +3,15 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { Link } from "react-router-dom";
 
-const SignupForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  margin-top: 5.5rem;
-  min-height: calc(100vh - 5.5rem);
-  justify-content: space-between;
-`
 
-const SignupInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const SignupInputWrap = styled.div`
-  margin-bottom: 2rem;
-  & > label {
-    color: var(--sub-font-color);
-  }
-  & > input {
-    ::placeholder{
-      color: var(--light-font-color);
-    }
-  }
-  & > .errorMessage {
-    font-size: var(--caption-font);
-    color: var(--point-color);
-  }
-`
 
 const Signup = () => {
+  // eslint-disable-next-line no-unused-vars
+    const emailRegExp =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  // eslint-disable-next-line no-unused-vars
+  const passwordRegExp =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}$/;
   return (
     <>
     <Header title="회원가입"/>
@@ -67,5 +45,35 @@ const Signup = () => {
     </>
   ) 
 };
+
+const SignupForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  margin-top: 5.5rem;
+  min-height: calc(100vh - 5.5rem);
+  justify-content: space-between;
+`
+
+const SignupInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const SignupInputWrap = styled.div`
+  margin-bottom: 2rem;
+  & > label {
+    color: var(--sub-font-color);
+  }
+  & > input {
+    ::placeholder{
+      color: var(--light-font-color);
+    }
+  }
+  & > .errorMessage {
+    font-size: var(--caption-font);
+    color: var(--point-color);
+  }
+`
 
 export default Signup;
