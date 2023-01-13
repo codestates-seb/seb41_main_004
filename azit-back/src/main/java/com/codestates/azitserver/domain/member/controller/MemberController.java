@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
 @RequestMapping(value = "/api/members", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class MemberController {
+    private final static String MEMBER_DEFAULT_URL = "/api/members";
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
@@ -38,10 +40,12 @@ public class MemberController {
         if( !Objects.equals(memberPostDto.getPassword(), memberPostDto.getPasswordCheck())){
             throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
         }
-        memberService.createMember(member);
+        Member createdMember = memberService.createMember(member);
+        member.setAboutMe(memberPostDto.getAboutMe()); // aboutMe 만 response body에 출력 안되서 이렇게함;
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);}
+        return new ResponseEntity<>(response, HttpStatus.CREATED);}
 
     //전체 회원 조회
     @GetMapping
@@ -54,7 +58,7 @@ public class MemberController {
 
     //개별 회원 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@Positive @PathVariable("member-id") Long memberId) {
+    public ResponseEntity getMember(@Positive @PathVariable("member-id") long memberId) {
 
         Member member = memberService.getMemberById(memberId);
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);

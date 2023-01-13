@@ -30,6 +30,8 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
         member.setReputation(10);
+        member.setMemberStatus(Member.MemberStatus.ACTIVE);
+
         return memberRepository.save(member);
     }
 
