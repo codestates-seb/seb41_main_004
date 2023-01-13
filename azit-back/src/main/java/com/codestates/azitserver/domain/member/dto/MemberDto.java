@@ -27,21 +27,16 @@ public class MemberDto {
         private String nickname;
 
         @NotBlank(message = "비밀번호를 입력해 주세요")
-        /* 비밀번호 유효성 일단 제외해놨습니다
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,20}$",
-                message = "비밀번호는 최소 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상어야 합니다.")
-         */
+
+        @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,16}$",
+                message = "비밀번호는 최소 1개의 특수문자, 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상, 16자 이하여야 합니다.")
         private String password;
 
         @NotBlank(message = "비밀번호를 한번 더 입력해 주세요")
         private String passwordCheck;
 
-
-        // 이부분 사용자가 직접 타이핑하는게 아니라 선택해서 저절로 입력되는거라
-        // 유효성 검증 적용 안해도 될까요?
         private Member.Gender gender;
 
-        @Length(min = 4, max = 4, message = "생년월일은 4자리 숫자여야 합니다")
         @Pattern(regexp = "\\d{4}", message = "생년월일은 4자리 숫자여야 합니다")
         private String birthYear;
 
@@ -61,10 +56,8 @@ public class MemberDto {
         private String nickname;
 
         @NotBlank(message = "비밀번호를 입력해 주세요")
-        /* 비밀번호 유효성 일단 제외해놨습니다
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,20}$",
-                message = "비밀번호는 최소 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상어야 합니다.")
-         */
+        @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,16}$",
+                message = "비밀번호는 최소 1개의 특수문자, 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상, 16자 이하여야 합니다.")
         private String password;
 
         @NotBlank(message = "비밀번호 확인")
