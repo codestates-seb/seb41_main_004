@@ -18,29 +18,29 @@ public class MemberDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Post {
-        @NotBlank(message = "이메일을 입력해 주세요")
-        @Email(message = "유효한 이메일 형식이 아닙니다")
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email address")
         private String email;
 
-        @NotBlank(message = "별명을 입력해 주세요")
-        @Length(min = 2, max = 8, message = "닉네임은 2글자 이상 8글자 이하여야 합니다")
+        @NotBlank(message = "Nickname is required")
+        @Length(min = 2, max = 8, message = "Nickname must be between 2 and 8 characters long")
         private String nickname;
 
-        @NotBlank(message = "비밀번호를 입력해 주세요")
+        @NotBlank(message = "Password is required")
 
         @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,16}$",
-                message = "비밀번호는 최소 1개의 특수문자, 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상, 16자 이하여야 합니다.")
+                message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol" )
         private String password;
 
-        @NotBlank(message = "비밀번호를 한번 더 입력해 주세요")
+        @NotBlank(message = "Reenter password")
         private String passwordCheck;
 
         private Member.Gender gender;
 
-        @Pattern(regexp = "\\d{4}", message = "생년월일은 4자리 숫자여야 합니다")
+        @Pattern(regexp = "\\d{4}", message = "Years of birth must be 4 digit number")
         private String birthYear;
 
-        @Length(max = 128, message = "자기소개는 128자 이하여야 합니다")
+        @Length(max = 128, message = "Introduction must be no longer than 128 characters")
         private String aboutMe;
 
     }
@@ -55,19 +55,19 @@ public class MemberDto {
 //        @Email(message = "유효한 이메일 형식이 아닙니다")
 //        private String email;
 
-        @NotBlank(message = "별명을 입력해 주세요")
-        @Length(min = 2, max = 16, message = "닉네임은 2글자 이상 16글자 이하여야 합니다")
+        @NotBlank(message = "")
+        @Length(min = 2, max = 16, message = "Nickname must be between 2 and 8 characters long")
         private String nickname;
 
-        @NotBlank(message = "비밀번호를 입력해 주세요")
+        @NotBlank(message = "Password is required")
         @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,16}$",
-                message = "비밀번호는 최소 1개의 특수문자, 1개의 문자와 1개의 숫자를 포함하여 최소 8자 이상, 16자 이하여야 합니다.")
+                message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol" )
         private String password;
 
-        @NotBlank(message = "비밀번호 확인")
+        @NotBlank(message = "Reenter password")
         private String passwordCheck;
 
-        @Length(max = 128, message = "자기소개는 128자 이하여야 합니다")
+        @Length(max = 128, message = "Introduction must be no longer than 128 characters")
         private String aboutMe;
 
     }
