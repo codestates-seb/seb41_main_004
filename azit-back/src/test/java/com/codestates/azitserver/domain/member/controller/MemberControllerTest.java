@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -34,14 +35,15 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@WebMvcTest(MemberController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(controllers = MemberController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 class MemberControllerTest {
@@ -88,22 +90,21 @@ class MemberControllerTest {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
+                                .header("Authorization", "Required JWT access token")
                 );
         // then
         postActions
+                .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", is(startsWith("/api/members/"))))
+                .andExpect(jsonPath("$.data.memberId").value(1))
                 .andDo(getDefaultDocument(
                         "post-member",
-                                requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
-                                requestParts(List.of(
-                                        partWithName("data").description("data"),
-                                        partWithName("image").description("image").optional())),
-                                MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
-                                MemberFieldDescriptor.getSingleResponseSnippet()
+                              requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+                              MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
+                              MemberFieldDescriptor.getSingleResponseSnippet()
                         )
-                )
-        ;
+                );
+
     }
 }
 //
