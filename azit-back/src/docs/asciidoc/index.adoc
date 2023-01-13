@@ -21,7 +21,21 @@ include::{snippets}/login/http-request.adoc[]
 include::{snippets}/login/http-response.adoc[]
 
 == 회원
-// 회원 부분의 api 작성
+.curl-request
+include::{snippets}/post-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-member/http-response.adoc[]
+
+.response-headers
+include::{snippets}/post-member/response-headers.adoc[]
+
 
 == 아지트(모임)
 

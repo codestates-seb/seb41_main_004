@@ -74,10 +74,9 @@ public class MemberDto {
 
     @Getter
     @Setter
-    @AllArgsConstructor
     public static class Response {
         private Long memberId;
-        private Long avatar_image_id;
+        private Long avatarImageId;
         private String email;
         private String nickname;
         private String password;

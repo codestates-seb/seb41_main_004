@@ -44,6 +44,9 @@ public class Member extends Auditable {
     @Column(name = "MEMBER_STATUS")
     private MemberStatus memberStatus;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     public enum Gender {
         MALE("남자"),
         FEMALE("여자");
@@ -55,8 +58,7 @@ public class Member extends Auditable {
         }
     }
 
-   @ElementCollection(fetch = FetchType.EAGER)
-   private List<String> roles = new ArrayList<>();
+
 
     public enum MemberStatus {
         ACTIVE("활성"),
