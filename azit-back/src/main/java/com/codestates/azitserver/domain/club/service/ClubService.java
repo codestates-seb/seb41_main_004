@@ -1,7 +1,5 @@
 package com.codestates.azitserver.domain.club.service;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -58,16 +56,8 @@ public class ClubService {
 		Club club = findClubById(clubId);
 
 		// banner image 저장
-		Path path = Paths.get("");
-		switch (System.getProperty("spring.profiles.active")) {
-			case "local":
-				path = Paths.get(System.getProperty("user.dir"), "images", "club_banner");
-				break;
-			case "server":
-				path = Paths.get("images", "club_banner");
-				break;
-		}
-		Map<String, String> map = storageService.upload(path, bannerImage);
+		String prefix ="images/club_banner";
+		Map<String, String> map = storageService.upload(prefix, bannerImage);
 
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(map.get("fileName"));

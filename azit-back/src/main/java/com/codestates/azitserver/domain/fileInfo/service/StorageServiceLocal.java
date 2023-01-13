@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @Profile({"local","test", "default"})
 public class StorageServiceLocal implements StorageService {
 	@Override
-	public Map<String, String> upload(Path path, MultipartFile file) {
+	public Map<String, String> upload(String prefix, MultipartFile file) {
+		Path path = Paths.get(System.getProperty("user.dir"), prefix);
 		// contents exist
 		if (file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");

@@ -1,7 +1,6 @@
 package com.codestates.azitserver.domain.fileInfo.service;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class StorageServiceAwsS3 implements StorageService {
 	private final AmazonS3 amazonS3;
 
 	@Override
-	public Map<String, String> upload(Path path, MultipartFile file) {
+	public Map<String, String> upload(String prefix, MultipartFile file) {
 		// contents exist
 		if (file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");
@@ -43,15 +42,15 @@ public class StorageServiceAwsS3 implements StorageService {
 			ObjectMetadata objMeta = new ObjectMetadata();
 			objMeta.setContentLength(file.getInputStream().available());
 
-			amazonS3.putObject(bucket + "/" + path, filename, file.getInputStream(), objMeta);
-			log.info("Banner image saved to AWS S3 {} : {}", bucket, path + "/" + filename);
+			amazonS3.putObject(bucket + "/" + prefix, filename, file.getInputStream(), objMeta);
+			log.info("Banner image saved to AWS S3 {} : {}", bucket, prefix + "/" + filename);
 		} catch (IOException exception) {
 			throw new StorageException("Failed to store file.", exception);
 		}
 
 		// fileUrl(파일 저장 경로)와 fileName(파일명)을 Key로 가지는 map을 리턴합니다.
 		Map<String, String> map = new HashMap<>();
-		map.put("fileUrl", bucket + "/" + path);
+		map.put("fileUrl", prefix);
 		map.put("fileName", filename);
 
 		return map;
