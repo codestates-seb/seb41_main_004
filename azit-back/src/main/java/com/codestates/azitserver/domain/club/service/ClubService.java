@@ -36,16 +36,21 @@ public class ClubService {
 	/**
 	 * - 수정 제한 항목(신청자 또는 참가자 있을시) : clubName, memberLimit, meetingDate, isOnline,location
 	 */
-	public Club updateClub(Club toClub, MultipartFile bannerImage) {
+	public Club updateClub(Club toClub) {
 		Club club = findClubById(toClub.getClubId());
 
 		// TODO : 수정제한 항목에 대한 조건 검사를 해야합니다.
 
-		// TODO : banner image에 대한 처리 로직이 필요합니다.
-
 		beanUtils.copyNonNullProperties(toClub, club);
 
 		return clubRepository.save(club);
+	}
+
+	public Club updateClubImage(Long clubId, MultipartFile bannerImage) {
+
+		// TODO : banner image에 대한 처리 로직이 필요합니다.
+
+		return null;
 	}
 
 	public Club cancelClub(Long clubId) {

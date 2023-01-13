@@ -4,6 +4,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.*;
 
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.RequestPartFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
@@ -30,8 +31,8 @@ public class ClubFieldDescriptor {
 		);
 	}
 
-	public static RequestPartFieldsSnippet getPatchRequestPartFieldsSnippet() {
-		return requestPartFields("data",
+	public static RequestFieldsSnippet getPatchRequestFieldsSnippet() {
+		return requestFields(
 			fieldWithPath("clubId").type(JsonFieldType.NUMBER).description("아지트 고유 식별자").optional(),
 			fieldWithPath("clubName").type(JsonFieldType.STRING).description("아지트 이름").optional(),
 			fieldWithPath("clubInfo").type(JsonFieldType.STRING).description("아지트 소개").optional(),
