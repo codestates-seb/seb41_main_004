@@ -72,6 +72,12 @@ public class ClubFieldDescriptor {
 			fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리 고유 식별자"),
 			fieldWithPath("categoryName").type(JsonFieldType.STRING).description("아지트 소분류 카테고리 이름").optional(),
 			fieldWithPath("categoryLargeId").type(JsonFieldType.NUMBER).description("아지트 대분류 카테고리 고유 식별자").optional()
+		).and(
+			fieldWithPath("data.bannerImage").type(JsonFieldType.OBJECT).description("아지트 배너 이미지")
+		).andWithPrefix("data.bannerImage.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("배너 이미지 고유 식별자"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("배너 이미지 파일 이름"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("배너 이미지 파일 저장 경로")
 		);
 	}
 
@@ -98,6 +104,12 @@ public class ClubFieldDescriptor {
 			fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리 고유 식별자"),
 			fieldWithPath("categoryName").type(JsonFieldType.STRING).description("아지트 소분류 카테고리 이름").optional(),
 			fieldWithPath("categoryLargeId").type(JsonFieldType.NUMBER).description("아지트 대분류 카테고리 고유 식별자").optional()
+		).and(
+			fieldWithPath("data[].bannerImage").type(JsonFieldType.OBJECT).description("아지트 배너 이미지")
+		).andWithPrefix("data[].bannerImage.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("배너 이미지 고유 식별자"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("배너 이미지 파일 이름"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("배너 이미지 파일 저장 경로")
 		).and(
 			fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보")
 		).andWithPrefix("pageInfo.",

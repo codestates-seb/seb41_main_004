@@ -33,6 +33,7 @@ public class ClubStubData {
 		club.setLocation("서울시 송파구");
 		club.setJoinQuestion("재밌는 아지트 맞을까요?");
 		club.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
+		club.setFileInfo(FileInfoStubData.getDefaultFileInfo());
 
 		return club;
 	}
@@ -92,6 +93,7 @@ public class ClubStubData {
 		response.setJoinQuestion("재밌는 아지트 맞을까요?");
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
 		response.setCategorySmall(getSmallResponse());
+		response.setBannerImage(FileInfoStubData.getDefaultFileInfo());
 
 		return response;
 	}
