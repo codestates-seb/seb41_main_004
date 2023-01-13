@@ -13,3 +13,12 @@ spring:
 logging:
   level:
     root: WARN
+
+# S3 Cloud
+aws:
+  credentials:
+    accessKey: ${AWS_ACCESS_KEY_SERVER}       # AWS IAM AccessKey
+    secretKey: ${AWS_SECRET_ACCESS_KEY_SERVER}   # AWS IAM SecretKey
+  s3:
+    bucket: azit-server-s3
+  region: ap-northeast-2
