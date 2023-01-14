@@ -1,52 +1,98 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useRef } from "react";
+import axios from "axios";
 
 
 
 const Signup = () => {
-  // eslint-disable-next-line no-unused-vars
-    const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  // eslint-disable-next-line no-unused-vars
-  const passwordRegExp =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}$/;
+
+  const nickNameRegExp = /^[A-Z가-힣_-]{2,8}$/i
+  const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  const passwordRegExp = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
+
+  const { register, watch, handleSubmit, formState: {errors} } = useForm();
+  const password = useRef();
+  password.current = watch('password');
+
+  const navigate = useNavigate();
+
+  const SignupButtonClick = async(data) => {
+    // eslint-disable-next-line
+    const { nickName, email, password, passwordConfirm } = data;  
+    // 서버로 data POST
+    console.log(data);
+    navigate('/signup/add');
+  }
+
   return (
     <>
     <Header title="회원가입"/>
-    <SignupForm>
+    <SignupForm onSubmit={handleSubmit(data => SignupButtonClick(data))}>
       <SignupInputContainer>
         <SignupInputWrap>
           <label>사용할 닉네임을 입력해 주세요.</label>
-          <input placeholder="영어,한글,-,_을 포함한 2~8글자로 작성해 주세요."></input>
-          <div className="errorMessage">영어,한글,-,_을 포함한 2~8글자로 작성해 주세요.</div>
+          <input 
+            type='text' 
+            id='nickName' 
+            placeholder="영어,한글,-,_을 포함한 2~8글자로 작성해 주세요."
+            {...register('nickName', {
+              required: true,
+              pattern: nickNameRegExp
+            })}></input>
+            {errors.nickName?.type === 'required' && <div className="errorMessage">닉네임을 입력해주세요.</div>}
+            {errors.nickName?.type === 'pattern' && <div className="errorMessage">영어,한글,-,_을 포함한 2~8글자로 작성해 주세요.</div>}
         </SignupInputWrap>
         <SignupInputWrap>
           <label>사용할 이메일을 입력해 주세요.</label>
-          <input placeholder="test@gmail.com"></input>
-          <div className="errorMessage">이메일 형식이 아닙니다.</div>
+          <input 
+            type='text' 
+            id='email'
+            placeholder="test@gmail.com" 
+            {...register('email', {
+              required: true,
+              pattern: emailRegExp
+            })}></input>
+            {errors.email?.type === 'required' && <div className="errorMessage">이메일을 입력해주세요.</div>}
+            {errors.email?.type === 'pattern' && <div className="errorMessage">이메일 형식이 아닙니다.</div>}
         </SignupInputWrap>
         <SignupInputWrap>
           <label>사용할 비밀번호를 입력해 주세요.</label>
-          <input placeholder="특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요."></input>
-          <div className="errorMessage">특수문자, 문자, 숫자를 포함 8~16자로 작성해 주세요.</div>
+          <input 
+            type='password' 
+            id='password' 
+            placeholder="특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요."
+            {...register('password', {
+              required: true,
+              pattern: passwordRegExp
+            })}></input>
+            {errors.password?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
+            {errors.password?.type === 'pattern' && <div className="errorMessage">특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요.</div>}
         </SignupInputWrap>
         <SignupInputWrap>
           <label>비밀번호를 확인해 주세요.</label>
-          <input placeholder="비밀번호를 확인해 주세요."></input>
-          <div className="errorMessage">비밀번호와 맞지 않습니다.</div>
+          <input 
+            type='password' 
+            id='passwordConfirm' 
+            placeholder="비밀번호를 확인해 주세요."
+            {...register('passwordConfirm', {
+              required: true,
+              validate: (value) => value === password.current
+            })}></input>
+          {errors.passwordConfirm?.type === 'required' && <div className="errorMessage">비밀번호를 확인해 주세요.</div>}
+          {errors.passwordConfirm?.type === 'validate' && <div className="errorMessage">비밀번호가 일치하지 않습니다.</div>}
         </SignupInputWrap>
       </SignupInputContainer>
-      <Link to="/signup/add">
-      <Button title="추가 정보 입력" state="active"></Button>
-      </Link>
+      <Button onClick={SignupButtonClick} type="submit" title="추가 정보 입력" state="active"></Button>
     </SignupForm>
     </>
   ) 
 };
 
-const SignupForm = styled.div`
+const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;

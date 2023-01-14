@@ -8,6 +8,99 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { interests } from "../dummyData/Category";
 
+
+
+const SignupAdditional = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [checkedInputs, setCheckedInputs] = useState([]);
+
+  const modalHandler = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  const changeHandler = (checked, id) => {
+    if (checked) {
+      setCheckedInputs([...checkedInputs, id]);
+    } else {
+      // 체크 해제
+      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    }
+  };
+
+  return (
+    <>
+      <Header title="회원가입" />
+      <SignupForm>
+        <ProfileImageWrap>
+          <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
+          <ImageAddIcon
+            onClick={() => modalHandler()}
+            src={ImgAddIcon}
+          ></ImageAddIcon>
+          {modalOpen && <ImgModal modalHandler={modalHandler} />}
+        </ProfileImageWrap>
+        <article>
+          <label>자기소개를 입력해주세요.</label>
+          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
+        </article>
+        <article className="genderAge">
+          <label>나이 및 성별</label>
+          <div className="selectWrap">
+            <div className="selectBox">
+              <select>
+                <option>2023</option>
+                {/*생년 구하는 함수 필요*/}
+              </select>
+              <span className="selectArrow" />
+            </div>
+            <div className="selectBox">
+              <select>
+                <option>남</option>
+                <option>여</option>
+                <option>제한 없음</option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          </div>
+        </article>
+        <article>
+          <div className="title">관심사</div>
+          {interests.map((interest) => {
+            return (
+              <div className="interestContainer" key={interest.id}>
+                <div className="subtitle">{interest.subtitle}</div>
+                <div className="tagContainer">
+                  {interest.tags.map((tag, idx) => {
+                    return (
+                      <span className="tag" key={idx}>
+                        <input
+                          id={tag}
+                          type="checkbox"
+                          onChange={(e) => {
+                            changeHandler(e.currentTarget.checked, tag);
+                          }}
+                          checked={checkedInputs.includes(tag) ? true : false}
+                          name={tag}
+                        ></input>
+                        <label htmlFor={tag}>{tag}</label>
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </article>
+        <div className="buttonWrap">
+          <Link to="/login">
+            <Button title="회원가입" state="active"></Button>
+          </Link>
+        </div>
+      </SignupForm>
+    </>
+  );
+};
+
 const SignupForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -100,96 +193,5 @@ const ImageAddIcon = styled.img`
   margin-top: -2.7rem;
   margin-left: 5rem;
 `;
-
-const SignupAdditional = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [checkedInputs, setCheckedInputs] = useState([]);
-
-  const modalHandler = () => {
-    setModalOpen(!modalOpen);
-  };
-
-  const changeHandler = (checked, id) => {
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else {
-      // 체크 해제
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-    }
-  };
-
-  return (
-    <>
-      <Header title="회원가입" />
-      <SignupForm>
-        <ProfileImageWrap>
-          <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon
-            onClick={() => modalHandler()}
-            src={ImgAddIcon}
-          ></ImageAddIcon>
-          {modalOpen && <ImgModal modalHandler={modalHandler} />}
-        </ProfileImageWrap>
-        <article>
-          <label>자기소개를 입력해주세요.</label>
-          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
-        </article>
-        <article className="genderAge">
-          <label>나이 및 성별</label>
-          <div className="selectWrap">
-            <div className="selectBox">
-              <select>
-                <option>2023</option>
-                {/*생년 구하는 함수 필요*/}
-              </select>
-              <span className="selectArrow" />
-            </div>
-            <div className="selectBox">
-              <select>
-                <option>남</option>
-                <option>여</option>
-                <option>제한 없음</option>
-              </select>
-              <span className="selectArrow" />
-            </div>
-          </div>
-        </article>
-        <article>
-          <div className="title">관심사</div>
-          {interests.map((interest) => {
-            return (
-              <div className="interestContainer" key={interest.id}>
-                <div className="subtitle">{interest.subtitle}</div>
-                <div className="tagContainer">
-                  {interest.tags.map((tag, idx) => {
-                    return (
-                      <span className="tag" key={idx}>
-                        <input
-                          id={tag}
-                          type="checkbox"
-                          onChange={(e) => {
-                            changeHandler(e.currentTarget.checked, tag);
-                          }}
-                          checked={checkedInputs.includes(tag) ? true : false}
-                          name={tag}
-                        ></input>
-                        <label htmlFor={tag}>{tag}</label>
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </article>
-        <div className="buttonWrap">
-          <Link to="/login">
-            <Button title="회원가입" state="active"></Button>
-          </Link>
-        </div>
-      </SignupForm>
-    </>
-  );
-};
 
 export default SignupAdditional;
