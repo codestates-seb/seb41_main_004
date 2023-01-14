@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,7 +30,7 @@ import lombok.SneakyThrows;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenizer jwtTokenizer;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisUtils redisUtils;
 
 	// 인증 시도하는 메서드
 	@SneakyThrows
@@ -57,12 +58,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String refreshToken = entry.getKey();
 		Long expiration = entry.getValue().getTime();
 
-		// redis에 refreshToken 저장 - 만료 시간지나면 자동 삭제되도록 하기 위함
-		redisTemplate.opsForValue().set(
-			authResult.getName(),
+		redisUtils.setData(
 			refreshToken,
-			expiration,
-			TimeUnit.MINUTES
+			member.getEmail(),
+			expiration
 		);
 
 		response.setHeader("Authorization", "Bearer " + accessToken);
