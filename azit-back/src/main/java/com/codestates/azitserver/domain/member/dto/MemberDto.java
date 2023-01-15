@@ -55,12 +55,16 @@ public class MemberDto {
 //        @Email(message = "유효한 이메일 형식이 아닙니다")
 //        private String email;
 
+
+        private Long memberId;
+
+
         @NotBlank(message = "")
         @Length(min = 2, max = 16, message = "Nickname must be between 2 and 8 characters long")
         private String nickname;
 
         @NotBlank(message = "Password is required")
-        @Pattern(regexp = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,16}$",
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
                 message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol" )
         private String password;
 
