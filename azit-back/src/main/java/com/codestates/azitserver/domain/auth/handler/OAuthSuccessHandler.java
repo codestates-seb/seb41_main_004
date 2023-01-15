@@ -19,12 +19,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,8 +82,18 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 			expiration
 		);
 
+		// 유저정보 만들기
+		LoginResponseDto responseDto = new LoginResponseDto();
+		responseDto.setEmail(member.getEmail());
+		responseDto.setNickname(member.getNickname());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String info = objectMapper.writeValueAsString(responseDto);
+
+		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
+		response.getWriter().write(info);
 
 		redirect(request, response, accessToken, refreshToken);
 	}

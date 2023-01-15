@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -69,9 +70,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			expiration
 		);
 
-		// response header에 토큰 담아서 전달
+		// 유저정보 만들기
+		LoginResponseDto responseDto = new LoginResponseDto();
+		responseDto.setEmail(member.getEmail());
+		responseDto.setNickname(member.getNickname());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String info = objectMapper.writeValueAsString(responseDto);
+
+		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
+		response.getWriter().write(info);
 	}
 
 	// AccessToken 생성
