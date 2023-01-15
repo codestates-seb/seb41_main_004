@@ -80,6 +80,39 @@ include::{snippets}/get-member-by-id/path-parameters.adoc[]
 .response-fields
 include::{snippets}/get-member-by-id/response-fields.adoc[]
 
+=== 회원 전체 조회
+
+.curl-request
+include::{snippets}/get-all-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-all-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-all-member/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-all-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-all-member/response-fields.adoc[]
+
+=== 회원 삭제(탈퇴)
+.curl-request
+include::{snippets}/delete-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/delete-member/http-response.adoc[]
+
+.path-parameters
+include::{snippets}/delete-member/path-parameters.adoc[]
+
+.response-fields
+include::{snippets}/delete-member/response-fields.adoc[]
+
 == 아지트(모임)
 
 === 아지트 생성
