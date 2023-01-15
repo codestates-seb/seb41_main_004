@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,22 +29,28 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
+
 import java.util.List;
 
 import static com.codestates.azitserver.global.utils.AsciiDocsUtils.*;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
+
+
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,10 +90,12 @@ class MemberControllerTest {
     @Test
     void postMemberTest() throws Exception {
         // given
+
         given(memberMapper.memberPostDtoToMember(any(MemberDto.Post.class)))
                 .willReturn(member);
         given(memberService.createMember(any(Member.class))).willReturn(member);
         given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
+
 
         String content = gson.toJson(post);
         // when
@@ -112,6 +121,7 @@ class MemberControllerTest {
                 );
 
     }
+
 
     @Test
     void patchMemberTest() throws Exception {
@@ -231,3 +241,4 @@ class MemberControllerTest {
                 ));
     }
 }
+

@@ -56,7 +56,9 @@ public class MemberDto {
 //        private String email;
 
 
+
         private Long memberId;
+
 
 
         @NotBlank(message = "")
@@ -64,7 +66,9 @@ public class MemberDto {
         private String nickname;
 
         @NotBlank(message = "Password is required")
+
         @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
+
                 message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol" )
         private String password;
 

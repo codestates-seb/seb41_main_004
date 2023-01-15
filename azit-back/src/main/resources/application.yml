@@ -7,7 +7,10 @@ spring:
     init:
       encoding: UTF-8  # 한글 깨짐 해결
       mode: always
-
+  servlet:
+    multipart:  # multipart 설정
+      max-file-size: 8MB
+      max-request-size: 8MB
 server:
   servlet:
     encoding:
