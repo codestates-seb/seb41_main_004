@@ -48,7 +48,6 @@ public class MemberController {
 
 		Member createdMember = memberService.createMember(member);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
-		URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}

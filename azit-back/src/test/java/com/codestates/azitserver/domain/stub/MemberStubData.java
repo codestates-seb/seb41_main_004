@@ -1,28 +1,29 @@
 package com.codestates.azitserver.domain.stub;
 
-import com.codestates.azitserver.domain.member.dto.MemberDto;
-import com.codestates.azitserver.domain.member.entity.Member;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
+import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.domain.member.entity.Member;
 
 public class MemberStubData {
 
     public static Member stubMember() {
         Member member = Member.builder()
-                .memberId(1L)
-                .avatar_image_id(1L)
-                .email("stubmember@naver.com")
-                .nickname("김스텁")
-                .password("123456@asdf")
-                .gender(Member.Gender.MALE)
-                .birthYear("2001")
-                .aboutMe("김스텁의 자기소개")
-                .reputation(10)
-                .memberStatus(Member.MemberStatus.ACTIVE)
-                .build();
+            .memberId(1L)
+            .avatar_image_id(1L)
+            .email("stubmember@naver.com")
+            .nickname("김스텁")
+            .password("123456@asdf")
+            .gender(Member.Gender.MALE)
+            .birthYear("2001")
+            .aboutMe("김스텁의 자기소개")
+            .reputation(10)
+            .memberStatus(Member.MemberStatus.ACTIVE)
+            .build();
         return member;
     }
 
@@ -69,6 +70,6 @@ public class MemberStubData {
     }
 
     public static Page<Member> stubMemberPage() {
-        return new PageImpl<>(List.of(stubMember()), PageRequest.of(0,10),1);
+        return new PageImpl<>(List.of(stubMember()), PageRequest.of(0, 10), 1);
     }
 }
