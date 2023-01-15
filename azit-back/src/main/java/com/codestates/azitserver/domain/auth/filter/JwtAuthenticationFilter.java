@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws ServletException, IOException {
-		Member member = (Member)authResult.getPrincipal();
+		MemberDetails memberDetails = (MemberDetails)authResult.getPrincipal();
+		Member member = memberDetails.getMember();
 
 		// accessToken 생성
 		String accessToken = delegateAccessToken(member);
