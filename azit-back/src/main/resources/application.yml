@@ -16,12 +16,11 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET} # 재설정 가능
+            client-id: ${GOOGLE_CLIENT_ID:449408918885-n2g7lrbc7sc43qhd6njnumavonk94g4o.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_CLIENT_SECRET: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} # 재설정 가능
             scope:
               - email
               - profile
-            redirect-uri: ${GOOGLE_REDIRECT_URI}
 server:
   servlet:
     encoding:

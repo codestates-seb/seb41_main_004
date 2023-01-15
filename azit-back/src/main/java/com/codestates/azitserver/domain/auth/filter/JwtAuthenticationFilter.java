@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,26 +42,32 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 			loginDto.getEmail(), loginDto.getPassword());
 
+		// authenticationManager한테 인증 처리 위임
 		return authenticationManager.authenticate(authenticationToken);
 	}
 
+	// 인증 되면 토큰 발급
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws ServletException, IOException {
 		Member member = (Member)authResult.getPrincipal();
 
+		// accessToken 생성
 		String accessToken = delegateAccessToken(member);
 
+		// refreshToken 생성
 		Map.Entry<String, Date> entry = delegateRefreshToken(member).entrySet().iterator().next();
 		String refreshToken = entry.getKey();
 		Long expiration = entry.getValue().getTime();
 
+		// redis에 refreshToken, 멤버정보, 만료시간 전달
 		redisUtils.setData(
 			refreshToken,
 			member.getEmail(),
 			expiration
 		);
 
+		// response header에 토큰 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
 	}

@@ -11,8 +11,7 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -20,13 +19,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.codestates.azitserver.domain.auth.filter.JwtAuthenticationFilter;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		var oAuth2User = (OAuth2User) authentication.getPrincipal();
+		var oAuth2User = (OAuth2User)authentication.getPrincipal();
 		String email = String.valueOf(oAuth2User.getAttributes().get("email"));
 		String nickname = String.valueOf(oAuth2User.getAttributes().get("name"));
 
@@ -79,10 +80,16 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 			expiration
 		);
 
+		log.info("response 시작");
+
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
 
+		log.info("response 종료");
+		log.info("redirect 시작");
+
 		redirect(request, response, accessToken, refreshToken);
+		log.info("redirect 종료");
 	}
 
 	private void redirect(HttpServletRequest request, HttpServletResponse response,
@@ -129,12 +136,14 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		queryParams.add("Authorization", "Bearer" + accessToken);
 		queryParams.add("Refresh", refreshToken);
 
+		log.info("uri builder 시작");
+
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("localhost") // TODO : 변경 필요
+			.host("localhost")
 			// .port(8080)
-			.path("/receive-token.html") // TODO : FE에서 토큰 받는 html 파일 이름 확인 후 수정하기
+			.path("/receive-token.html")
 			.queryParams(queryParams)
 			.build()
 			.toUri();
