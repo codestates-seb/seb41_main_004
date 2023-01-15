@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.global.validator.NotSpace;
 
 import lombok.Getter;
@@ -143,5 +144,6 @@ public class ClubDto {
 		private String joinQuestion;
 		private Club.ClubStatus clubStatus;
 		private CategoryDto.SmallResponse categorySmall;
+		private FileInfo bannerImage;
 	}
 }

@@ -2,6 +2,7 @@ package com.codestates.azitserver.domain.club.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToOne;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -73,6 +75,9 @@ public class Club extends Auditable {
 	@JoinColumn(name = "CATEGORY_SMALL_ID", updatable = false)
 	private CategorySmall categorySmall;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "FILE_INFO_ID")
+	private FileInfo fileInfo;
 
 	// TODO: banner_image, host_id, club_members
 
