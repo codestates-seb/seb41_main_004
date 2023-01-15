@@ -22,6 +22,9 @@ public interface ClubMapper {
 	@Mapping(target = "categorySmall", ignore = true)
 	Club clubDtoPatchToClubEntity(ClubDto.Patch patch);
 
+	@Mapping(source = "fileInfo", target = "bannerImage")
+	@Mapping(target = "bannerImage.createdAt", expression = "java(null)")
+	@Mapping(target = "bannerImage.lastModifiedAt", expression = "java(null)")
 	ClubDto.Response clubToClubDtoResponse(Club club);
 
 	List<ClubDto.Response> clubToClubDtoResponse(List<Club> clubList);
