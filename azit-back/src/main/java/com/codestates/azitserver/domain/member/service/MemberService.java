@@ -71,7 +71,6 @@ public class MemberService {
 		// password 암호화
 		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
 		updatedMember.setPassword(encryptedPassword);
-
 		return memberRepository.save(updatedMember);
 
 	}
