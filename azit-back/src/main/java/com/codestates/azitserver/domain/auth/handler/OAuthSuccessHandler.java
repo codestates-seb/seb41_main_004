@@ -80,16 +80,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 			expiration
 		);
 
-		log.info("response 시작");
-
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
 
-		log.info("response 종료");
-		log.info("redirect 시작");
-
 		redirect(request, response, accessToken, refreshToken);
-		log.info("redirect 종료");
 	}
 
 	private void redirect(HttpServletRequest request, HttpServletResponse response,
@@ -135,8 +129,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 		queryParams.add("Authorization", "Bearer" + accessToken);
 		queryParams.add("Refresh", refreshToken);
-
-		log.info("uri builder 시작");
 
 		return UriComponentsBuilder
 			.newInstance()
