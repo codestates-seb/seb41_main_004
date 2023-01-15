@@ -1,27 +1,27 @@
 package com.codestates.azitserver.domain.member.mapper;
 
-import com.codestates.azitserver.domain.member.dto.MemberDto;
-import com.codestates.azitserver.domain.member.entity.Member;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
+import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.domain.member.entity.Member;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
-    @Mapping(target = "memberId", ignore = true)
-    @Mapping(target = "memberStatus", ignore = true)
-    @Mapping(target = "avatar_image_id", ignore = true)
-    @Mapping(target = "reputation", ignore = true)
-    Member memberPostDtoToMember(MemberDto.Post memberPostDto);
+	@Mapping(target = "memberId", ignore = true)
+	@Mapping(target = "memberStatus", ignore = true)
+	@Mapping(target = "avatar_image_id", ignore = true)
+	@Mapping(target = "reputation", ignore = true)
+	Member memberPostDtoToMember(MemberDto.Post memberPostDto);
 
-    @Mapping(target = "avatar_image_id", ignore = true)
-    @Mapping(target = "reputation", ignore = true)
-    Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
+	@Mapping(target = "avatar_image_id", ignore = true)
+	@Mapping(target = "reputation", ignore = true)
+	Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
 
-    MemberDto.Response memberToMemberResponseDto(Member member);
+	MemberDto.Response memberToMemberResponseDto(Member member);
 
-    List<MemberDto.Response> membersToMemberResponseDtos(List<Member> members);
+	List<MemberDto.Response> membersToMemberResponseDtos(List<Member> members);
 }
