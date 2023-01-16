@@ -4,21 +4,22 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,7 +30,7 @@ import lombok.SneakyThrows;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenizer jwtTokenizer;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisUtils redisUtils;
 
 	// 인증 시도하는 메서드
 	@SneakyThrows
@@ -43,30 +44,46 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 			loginDto.getEmail(), loginDto.getPassword());
 
+		// authenticationManager한테 인증 처리 위임
 		return authenticationManager.authenticate(authenticationToken);
 	}
 
+	// 인증 되면 토큰 발급
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws ServletException, IOException {
-		Member member = (Member)authResult.getPrincipal();
+		MemberDetails memberDetails = (MemberDetails)authResult.getPrincipal();
+		Member member = memberDetails.getMember();
 
+		// accessToken 생성
 		String accessToken = delegateAccessToken(member);
 
+		// refreshToken 생성
 		Map.Entry<String, Date> entry = delegateRefreshToken(member).entrySet().iterator().next();
 		String refreshToken = entry.getKey();
 		Long expiration = entry.getValue().getTime();
 
-		// redis에 refreshToken 저장 - 만료 시간지나면 자동 삭제되도록 하기 위함
-		redisTemplate.opsForValue().set(
-			authResult.getName(),
+		// redis에 refreshToken, 멤버정보, 만료시간 전달
+		redisUtils.setData(
 			refreshToken,
-			expiration,
-			TimeUnit.MINUTES
+			member.getEmail(),
+			expiration
 		);
 
+		// 유저정보 만들기
+		LoginResponseDto responseDto = new LoginResponseDto();
+		responseDto.setEmail(member.getEmail());
+		responseDto.setNickname(member.getNickname());
+		// responseDto.setProfileUrl(member.getAvatar_image_id().....);
+
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String info = objectMapper.writeValueAsString(responseDto);
+
+		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
 		response.setHeader("Refresh", refreshToken);
+		response.getWriter().write(info);
 	}
 
 	// AccessToken 생성
