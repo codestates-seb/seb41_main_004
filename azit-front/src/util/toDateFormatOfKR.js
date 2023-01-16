@@ -5,7 +5,7 @@ export function toDateFormatOfKR(date) {
 export function toDateFormatOfMonthDay(data) {
   let month = data.slice(5, 7);
   let day = data.slice(8, 10);
-  let time = data.slice(-5);
+  let time = data.slice(11, -3);
   let date = `${month}월${day}일 ${time}`;
   return date
 }
