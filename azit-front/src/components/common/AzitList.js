@@ -113,8 +113,6 @@ const EtcWrap = styled.div`
 
 const AzitList = ({ data }) => {
   let meetDate;
-  console.log(data)
-
   if (data) {
     meetDate = toDateFormatOfMonthDay(data.meetingDate);
   }
@@ -143,7 +141,7 @@ const AzitList = ({ data }) => {
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
-          <ImgWrap clubImg={`${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`} />
+          <ImgWrap clubImg={`${data.bannerImage ?  `${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
