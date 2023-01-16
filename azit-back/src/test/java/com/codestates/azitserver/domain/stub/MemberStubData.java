@@ -61,7 +61,7 @@ public class MemberStubData {
         response.setFileInfo(FileInfoStubData.getDefaultFileInfo());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
-        response.setPassword("123456@asdf");
+        // response.setPassword("123456@asdf");
         response.setGender(Member.Gender.MALE);
         response.setBirthYear("2001");
         response.setAboutMe("김스텁의 자기소개");
