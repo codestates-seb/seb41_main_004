@@ -14,8 +14,15 @@ public class LoginDto {
 
 	@Getter
 	@Setter
-	public static class UpdatePassword {
+	public static class MatchPassword {
 		private String password;
+	}
+
+	@Getter
+	@Setter
+	public static class PatchPassword {
+		private String newPassword;
+		private String newPasswordCheck;
 	}
 
 	@Getter

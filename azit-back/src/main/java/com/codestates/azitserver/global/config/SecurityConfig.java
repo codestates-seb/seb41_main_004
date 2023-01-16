@@ -83,7 +83,7 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.DELETE, "api/members/**").authenticated() // 회원 탈퇴(삭제)
 
 				/*======auth======*/
-				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
+				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 
 				.anyRequest().authenticated())
 
