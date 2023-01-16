@@ -30,6 +30,6 @@ public class LoginDto {
 	public static class Response {
 		private String email;
 		private String nickname;
-		// private String profileUrl;
+		private String profileUrl;
 	}
 }

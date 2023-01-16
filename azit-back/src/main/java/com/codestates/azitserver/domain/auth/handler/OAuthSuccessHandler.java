@@ -66,7 +66,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		}
 	}
 
-	//토큰 발급 메서드 + 리다이랙트
+	//토큰 발급 메서드
 	private void delegateTokens(Member member, HttpServletRequest request, HttpServletResponse response) throws
 		IOException {
 		String accessToken = delegateAccessToken(member); // Access Token 생성
@@ -84,6 +84,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		LoginDto.Response responseDto = new LoginDto.Response();
 		responseDto.setEmail(member.getEmail());
 		responseDto.setNickname(member.getNickname());
+		responseDto.setProfileUrl(member.getFileInfo().getFileUrl());
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String info = objectMapper.writeValueAsString(responseDto);
