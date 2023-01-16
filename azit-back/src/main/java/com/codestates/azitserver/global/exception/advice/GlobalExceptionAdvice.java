@@ -53,8 +53,6 @@ public class GlobalExceptionAdvice {
 	@ExceptionHandler
 	public ErrorResponse handleBusinessLogicException(BusinessLogicException exception) {
 		log.debug("Business logic exception occurred: {}", exception.getMessage(), exception);
-		System.out.println(exception.getExceptionCode().getStatus());
-		System.out.println(exception.getMessage());
 		final ErrorResponse response = ErrorResponse.of(exception.getExceptionCode());
 
 		return response;

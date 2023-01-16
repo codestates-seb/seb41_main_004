@@ -120,4 +120,10 @@ public class ClubService {
 		return clubRepository.findAllClubsByNameOrInfoLikeKeywords(keyword.trim(),
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
 	}
+
+	public void verifyClubCanceled(Club club) {
+		if (club.getClubStatus() == Club.ClubStatus.CLUB_CANCEL) {
+			throw new BusinessLogicException(ExceptionCode.CLUB_CANCELED);
+		}
+	}
 }
