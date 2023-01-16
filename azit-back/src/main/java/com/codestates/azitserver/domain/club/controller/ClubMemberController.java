@@ -1,7 +1,10 @@
 package com.codestates.azitserver.domain.club.controller;
 
+import javax.validation.constraints.Positive;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
+@Validated
 @RestController
 @RequestMapping("/api/clubs/{club-id}")
 @RequiredArgsConstructor
@@ -34,7 +38,7 @@ public class ClubMemberController {
 	 * @return 참여 신청이 성공하면 참여 신청 정보를 http status화 함께 반환
 	 */
 	@PostMapping("/signups")
-	public ResponseEntity<?> postClubMember(@PathVariable("club-id") Long clubId,
+	public ResponseEntity<?> postClubMember(@Positive @PathVariable("club-id") Long clubId,
 		@RequestBody ClubMemberDto.Signup body,
 		@LoginMember Member member) {
 		clubMemberService.verifyMember(member, body.getMemberId());
@@ -45,9 +49,21 @@ public class ClubMemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
 
+	/**
+	 * 호스트가 신청한 사용자를 아지트에 수락하거나 거절합니다.
+	 * @param clubId 신청한 사용자가 있는 아지트 고유 식별자
+	 * @param memberId 아지트에 신청한 회원 고유 식별자
+	 * @param body 신청 상태를 담은 body
+	 * @param member 현재 요청을 보낸 로그인 유저
+	 * @return 변경 내용을 따로 담지 않고, accepted 됐다는 상태코드만 리턴합니다.
+	 */
 	@PatchMapping("/signups/{member-id}")
-	public ResponseEntity<?> patchClubMemembers() {
-		return null;
+	public ResponseEntity<?> patchClubMembers(@Positive @PathVariable("club-id") Long clubId,
+		@Positive @PathVariable("member-id") Long memberId, @RequestBody ClubMemberDto.Patch body,
+		@LoginMember Member member) {
+		clubMemberService.updateMemberStatus(member, clubId, memberId, body.getStatus());
+
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 	@PatchMapping("/kicks/{member-id}")

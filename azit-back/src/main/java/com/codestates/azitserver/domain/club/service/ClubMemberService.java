@@ -2,6 +2,7 @@ package com.codestates.azitserver.domain.club.service;
 
 import java.util.Optional;
 
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.club.entity.Club;
@@ -25,13 +26,43 @@ public class ClubMemberService {
 		clubService.verifyClubCanceled(club);
 
 		// 참여하려는 호스트이거나 회원이 이미 참여 신청을 했었는지 확인합니다.
-		verifyClubHost(club, member.getMemberId());
-		findMemberJoinClub(member.getMemberId(), clubId);
+		if (verifyMemberIfClubHost(club, member.getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.HOST_FAILED);
+		}
+		existsClubMemberByMemberIdAndClubId(member.getMemberId(), clubId);
 
 		ClubMember clubMember = new ClubMember(member, club, joinAnswer);
 		clubMemberRepository.save(clubMember);
 
 		return club.addClubMember(clubMember);
+	}
+
+	/**
+	 * 신청한 memberId의 상태를 바꿉니다.
+	 * @param member 현재 로그인한 사용자
+	 * @param clubId 신청한 회원이 존재하는 아지트의 고유 식별자
+	 * @param memberId 상태를 변경할 회원의 고유 식별자
+	 * @param status 변경할 상태값
+	 * @author cryoon
+	 */
+	public void updateMemberStatus(Member member, Long clubId, Long memberId, ClubMember.ClubMemberStatus status) {
+		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
+		Club club = clubService.findClubById(clubId);
+		clubService.verifyClubCanceled(club);
+
+		// 요청을 보낸 사용자가 호스트가 맞는지 확인합니다.
+		if (!verifyMemberIfClubHost(club, member.getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.HOST_FORBIDDEN);
+		}
+
+		// 상태를 변경하려는 사용자가 아지트에 신청한 회원이 맞고, 상태가 신청 대기가 맞는지 확인합니다.
+		ClubMember clubMember = findClubMemberByMemberIdAndClubId(memberId, clubId);
+		if (clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_WAITING) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+
+		clubMember.setClubMemberStatus(status);
+		clubMemberRepository.save(clubMember);
 	}
 
 	// *** verification ***
@@ -41,16 +72,19 @@ public class ClubMemberService {
 		}
 	}
 
-	public void findMemberJoinClub(Long memberId, Long clubId) {
+	public void existsClubMemberByMemberIdAndClubId(Long memberId, Long clubId) {
 		Optional<ClubMember> optionalClubMember = clubMemberRepository.findMemberJoinClub(memberId, clubId);
 		if (optionalClubMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.ALREADY_JOINED);
+			throw new BusinessLogicException(ExceptionCode.CLUB_MEMBER_EXISTS);
 		}
 	}
 
-	public void verifyClubHost(Club club, Long memberId) {
-		if (club.getHost().getMemberId().equals(memberId)) {
-			throw new BusinessLogicException(ExceptionCode.HOST_FAILED);
-		}
+	public ClubMember findClubMemberByMemberIdAndClubId(Long memberId, Long clubId) {
+		Optional<ClubMember> optionalClubMember = clubMemberRepository.findMemberJoinClub(memberId, clubId);
+		return optionalClubMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CLUB_MEMBER_NOT_FOUND));
+	}
+
+	public boolean verifyMemberIfClubHost(Club club, Long memberId) {
+		return club.getHost().getMemberId().equals(memberId);
 	}
 }
