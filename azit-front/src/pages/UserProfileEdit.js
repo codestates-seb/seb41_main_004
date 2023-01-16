@@ -1,13 +1,15 @@
+import axios from "axios";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImgModal } from "../components/common/Modal";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
+const URL = process.env.REACT_APP_BASE_URL;
 
 const ProfileEditForm = styled.div`
   display: flex;
@@ -90,19 +92,32 @@ const ImageAddIcon = styled.img`
 `;
 
 const UserProfileEdit = () => {
-  const userInfo = useSelector((state) => state.name);
-  console.log(userInfo);
-  let nickName, intro;
-
-  if (userInfo) {
-    nickName = userInfo.nickName;
-    intro = userInfo.intro;
-  }
-
   const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [nameValue, SetNameValue] = useState("");
+  const [defaultName, SetdefaultName] = useState("test");
+  const [intro, setIntro] = useState("유저 자기소개 불러와야함");
+
   console.log(nameValue);
+  let { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/api/members/${id}`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        SetdefaultName(res.nickname);
+        setIntro();
+      })
+      .catch((error) => {
+        console.log("error : ", error);
+        alert("중복된 아이디입니다. 다시 시도하세요.");
+      });
+  }, []);
 
   const modalHandler = () => {
     setModalOpen(!modalOpen);
@@ -135,11 +150,14 @@ const UserProfileEdit = () => {
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
-          <input onChange={handleEdit} defaultValue="김아무개"></input>
+          <input onChange={handleEdit} defaultValue={defaultName}></input>
         </article>
         <article>
           <label>자기소개를 입력해주세요.</label>
-          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
+          <textarea
+            placeholder="텍스트를 입력해 주세요."
+            defaultValue={intro}
+          ></textarea>
         </article>
         <article>
           <div className="title">관심사</div>
