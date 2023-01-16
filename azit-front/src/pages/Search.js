@@ -63,14 +63,15 @@ const Search = () => {
       setResultList(res.data);
     } catch (e) {
       setError(e);
+      console.log(error);
     }
     setLoading(false);
   }
+
   const searchControlHandler = (e) => {
     if (e.key === "Enter" && e.target.value.length > 0) {
       fetchList()
       setSearchControl(true);
-      console.log(resultList);
     } else if (e.key === "Enter" && e.target.value.length === 0) {
       setSearchControl(false);
     }
@@ -98,8 +99,9 @@ const Search = () => {
         </FxiedHeader>
         <article className="resultCell">
           {SearchControl ? (
-            resultList.length > 0 ? (
-              resultList.map((data) => <AzitList key={data.clubId} data={data} />)
+            loading ? null :
+            resultList.data.length > 0 ? (
+              resultList.data?.map((data) => <AzitList key={data.clubId} data={data} />)
             ) : (
               <div className="default">
                 <img alt="searchIcon" src={searchBackIcon} />
