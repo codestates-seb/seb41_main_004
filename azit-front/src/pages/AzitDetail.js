@@ -68,11 +68,11 @@ const AzitDetailForm = styled.div`
         color: var(--sub-font-color);
       }
       > div {
-        >a {
+        > a {
           position: relative;
           margin-right: 1rem;
-          >.hostIcon {
-            top:0;
+          > .hostIcon {
+            top: 0;
             right: 0;
             width: 1.8rem;
             height: 1.8rem;
@@ -80,7 +80,7 @@ const AzitDetailForm = styled.div`
           }
         }
         > div {
-          flex : 1;
+          flex: 1;
           label {
             font-size: var(--small-font);
           }
@@ -101,7 +101,7 @@ const AzitDetailForm = styled.div`
     }
     > .azitDescription {
       flex-basis: 100%;
-      margin-top:1rem;
+      margin-top: 1rem;
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
@@ -117,7 +117,8 @@ const AzitDetailForm = styled.div`
     font-size: var(--title-font);
     font-weight: var(--bold-weight);
     width: 100%;
-    height: 5.8rem;
+    min-height: 5.8rem;
+    margin-bottom: 1rem;
     word-break: keep-all;
   }
 
@@ -213,7 +214,7 @@ const AzitDetail = () => {
             <div>
               <Link to="/userpage">
                 <TestImg />
-                <img alt="HostIcon" src={HostIcon} className="hostIcon"/>
+                <img alt="HostIcon" src={HostIcon} className="hostIcon" />
               </Link>
               <div>
                 <label>호스트</label>
