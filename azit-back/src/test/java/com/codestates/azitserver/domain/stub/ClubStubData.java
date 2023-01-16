@@ -1,8 +1,10 @@
 package com.codestates.azitserver.domain.stub;
 
 import static com.codestates.azitserver.domain.stub.CategoryStubData.*;
+import static com.codestates.azitserver.domain.stub.MemberStubData.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -28,8 +30,9 @@ public class ClubStubData {
 		club.setBirthYearMin("1990");
 		club.setBirthYearMax("2000");
 		club.setGenderRestriction(Club.GenderRestriction.ALL);
-		club.setMeetingDate(LocalDateTime.now().plusDays(1));
-		club.setIsOnline(false);
+		club.setMeetingDate(LocalDate.now().plusDays(1));
+		club.setMeetingTime(LocalTime.now().plusHours(1));
+		club.setIsOnline("offline");
 		club.setLocation("서울시 송파구");
 		club.setJoinQuestion("재밌는 아지트 맞을까요?");
 		club.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
@@ -49,8 +52,9 @@ public class ClubStubData {
 		post.setBirthYearMin("1990");
 		post.setBirthYearMax("2000");
 		post.setGenderRestriction(Club.GenderRestriction.ALL);
-		post.setMeetingDate(LocalDateTime.now().plusDays(1));
-		post.setIsOnline(false);
+		post.setMeetingDate(LocalDate.now().plusDays(1));
+		post.setMeetingTime(LocalTime.now().plusHours(1));
+		post.setIsOnline("offline");
 		post.setLocation("서울시 송파구");
 		post.setJoinQuestion("재밌는 아지트 맞을까요?");
 		post.setCategorySmallId(1L);
@@ -68,8 +72,9 @@ public class ClubStubData {
 		patch.setBirthYearMin("1990");
 		patch.setBirthYearMax("2000");
 		patch.setGenderRestriction(Club.GenderRestriction.ALL);
-		patch.setMeetingDate(LocalDateTime.now().plusDays(1));
-		patch.setIsOnline(false);
+		patch.setMeetingDate(LocalDate.now().plusDays(1));
+		patch.setMeetingTime(LocalTime.now().plusHours(1));
+		patch.setIsOnline("offline");
 		patch.setLocation("서울시 송파구");
 
 		return patch;
@@ -87,11 +92,13 @@ public class ClubStubData {
 		response.setBirthYearMin("1990");
 		response.setBirthYearMax("2000");
 		response.setGenderRestriction(Club.GenderRestriction.ALL);
-		response.setMeetingDate(LocalDateTime.now().plusDays(1));
-		response.setIsOnline(false);
+		response.setMeetingDate(LocalDate.now().plusDays(1));
+		response.setMeetingTime(LocalTime.now().plusHours(1));
+		response.setIsOnline("offline");
 		response.setLocation("서울시 송파구");
 		response.setJoinQuestion("재밌는 아지트 맞을까요?");
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
+		response.setHost(stubMemberIdAndNickname());
 		response.setCategorySmall(getSmallResponse());
 		response.setBannerImage(FileInfoStubData.getDefaultFileInfo());
 

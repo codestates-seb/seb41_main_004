@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
+import DaumPostcode from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
   > .form {
     > .inputContainer {
+      > .selectBox {
+        margin-bottom: 1rem;
+      }
       margin-top: 2rem;
       > .ageSelect {
         display: flex;
@@ -68,16 +71,6 @@ const CreateFormWrap = styled.div`
       }
     }
     > .radioContainer {
-      > input {
-        height: 3.4rem;
-        margin-top: 0.9rem;
-        padding: 0;
-        font-size: var(--small-font);
-        color: var(--border-color);
-        border: none;
-        border-bottom: 1px solid var(--border-color);
-        border-radius: 0;
-      }
       margin-top: 2rem;
       > div {
         width: 100%;
@@ -89,7 +82,7 @@ const CreateFormWrap = styled.div`
       }
       > .selectPlace {
         font-size: var(--small-font);
-        color: var(--border-color);
+        color: var(--sub-font-color);
         margin-top: 1.5rem;
         padding-bottom: 1.2rem;
         border-bottom: 1px solid var(--border-color);
@@ -127,7 +120,7 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
-const AzitCreateForm = () => {
+const AzitCreateForm = ({ imgFile }) => {
   let minYear = [];
   let maxYear = [];
 
@@ -141,6 +134,7 @@ const AzitCreateForm = () => {
 
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
+  const [smallSelected, setSmallSeleted] = useState("1");
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -153,7 +147,8 @@ const AzitCreateForm = () => {
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [question, setQuestion] = useState("");
-  const [location, setLocation] = useState("");
+  const [writeInfo, setWriteInfo] = useState("");
+  const [visible, setVisible] = useState(false);
 
   const onChangeMemberLimit = (e) => {
     if (e.target.value >= 3) {
@@ -209,6 +204,7 @@ const AzitCreateForm = () => {
     setGenderSelected(e.target.value);
   };
 
+  // 제한없음 체크박스 클릭시 멤버 나이 Select 창 비활성화
   const nolimit = () => {
     setChecked(!checked);
 
@@ -223,24 +219,92 @@ const AzitCreateForm = () => {
     }
   };
 
-  let categoryLargeId = Number(selected);
-  let numberFee = Number(fee.split(",").join(""));
+  // daum 주소 찾기
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
 
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+    setWriteInfo(fullAddress);
+    setVisible(false);
+  };
+
+  // 이미지 base 64 를 image.file로 변환하는 함수
+  function dataURLtoFile(dataurl, filename) {
+    if (!dataurl) {
+      return;
+    } else {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+  }
+
+  let file = dataURLtoFile(imgFile, "sendImg");
+  let categorySmallId = Number(smallSelected);
+  let numberFee = Number(fee.split(",").join(""));
   let body = {
-    fee: numberFee,
-    categoryLargeId: categoryLargeId,
-    genderRestriction: genderSelected,
-    minYear: minYearSelected,
-    maxYear: maxYearSelected,
-    place: check,
+    bannerImg: file,
+    categorySmallId: categorySmallId,
+    clubName: clubName,
+    clubInfo,
+    memberLimit,
     meetingDate,
     meetingTime,
+    fee: numberFee,
+    genderRestriction: genderSelected,
+    birthYearMin: minYearSelected,
+    birthYearMax: maxYearSelected,
+    genderSelected,
+    isOnline: check,
+    location: writeInfo,
+    joinQustion: question,
   };
   console.log(body);
 
   const navigate = useNavigate();
 
-  const onClick = () => {};
+  const move = () => {
+    navigate(
+      "/azit/preview",
+
+      {
+        state: {
+          bannerImg: file,
+          categorySmallId: categorySmallId,
+          clubName: clubName,
+          clubInfo,
+          memberLimit,
+          meetingDate,
+          meetingTime,
+          fee: numberFee,
+          genderRestriction: genderSelected,
+          birthYearMin: minYearSelected,
+          birthYearMax: maxYearSelected,
+          isOnline: check,
+          location: writeInfo,
+          joinQustion: question,
+        },
+      }
+    );
+  };
 
   return (
     <CreateFormWrap>
@@ -273,6 +337,202 @@ const AzitCreateForm = () => {
             </select>
             <span className="selectArrow" />
           </div>
+          {selected === "1" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="1" key="1">
+                  전시
+                </option>
+                <option value="2" key="2">
+                  영화
+                </option>
+                <option value="3" key="3">
+                  뮤지컬
+                </option>
+                <option value="4" key="4">
+                  공연
+                </option>
+                <option value="5" key="5">
+                  디자인
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "2" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="6" key="6">
+                  클라이밍
+                </option>
+                <option value="7" key="7">
+                  등산
+                </option>
+                <option value="8" key="8">
+                  헬스
+                </option>
+                <option value="9" key="9">
+                  필라테스
+                </option>
+                <option value="10" key="10">
+                  골프
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "3" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="11" key="11">
+                  맛집투어
+                </option>
+                <option value="12" key="12">
+                  카페
+                </option>
+                <option value="13" key="13">
+                  와인
+                </option>
+                <option value="14" key="14">
+                  커피
+                </option>
+                <option value="15" key="15">
+                  디저트
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "4" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="16" key="16">
+                  보드게임
+                </option>
+                <option value="17" key="17">
+                  사진
+                </option>
+                <option value="18" key="18">
+                  방탈출
+                </option>
+                <option value="19" key="19">
+                  VR
+                </option>
+                <option value="20" key="20">
+                  음악감상
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "5" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="21" key="21">
+                  복합문화공간
+                </option>
+                <option value="22" key="22">
+                  테마파크
+                </option>
+                <option value="23" key="23">
+                  피크닉
+                </option>
+                <option value="24" key="24">
+                  드라이브
+                </option>
+                <option value="25" key="25">
+                  캠핑
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "6" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="26" key="26">
+                  글쓰기
+                </option>
+                <option value="27" key="27">
+                  드로잉
+                </option>
+                <option value="28" key="28">
+                  영상편집
+                </option>
+                <option value="29" key="29">
+                  공예
+                </option>
+                <option value="30" key="30">
+                  DIY
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "7" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="31" key="31">
+                  습관만들기
+                </option>
+                <option value="32" key="32">
+                  챌린지
+                </option>
+                <option value="33" key="33">
+                  독서
+                </option>
+                <option value="34" key="34">
+                  스터디
+                </option>
+                <option value="35" key="35">
+                  외국어
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="inputContainer">
           <label>아지트의 이름을 입력해주세요.</label>
@@ -322,10 +582,22 @@ const AzitCreateForm = () => {
             </Label2>
           </div>
           {check === "offline" ? (
-            <input
-              placeholder="장소를 입력해주세요."
-              defaultValue={location}
-            ></input>
+            <>
+              <div
+                className="selectPlace"
+                onClick={() => setVisible(true)}
+                placeholder="장소를 입력해주세요."
+              >
+                {writeInfo ? writeInfo : "장소를 입력해주세요."}
+              </div>
+              {visible ? (
+                <div>
+                  <DaumPostcode onComplete={handleComplete} height={700} />
+                </div>
+              ) : (
+                <></>
+              )}
+            </>
           ) : (
             <div className="selectPlace">온라인</div>
           )}
@@ -417,8 +689,8 @@ const AzitCreateForm = () => {
         </div>
       </form>
       <div className="buttonWrap">
-        {question && fee ? (
-          <Button state="active" title="모임 미리보기" />
+        {imgFile && question && fee ? (
+          <Button state="active" title="모임 미리보기" onClick={move} />
         ) : (
           <Button state="disabled" title="모임 미리보기" />
         )}

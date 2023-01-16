@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -14,7 +16,7 @@ public class MemberStubData {
     public static Member stubMember() {
         Member member = Member.builder()
             .memberId(1L)
-            .avatar_image_id(1L)
+            .fileInfo(FileInfoStubData.getDefaultFileInfo())
             .email("stubmember@naver.com")
             .nickname("김스텁")
             .password("123456@asdf")
@@ -56,10 +58,10 @@ public class MemberStubData {
         MemberDto.Response response = new MemberDto.Response();
 
         response.setMemberId(1L);
-        response.setAvatarImageId(1L);
+        response.setFileInfo(FileInfoStubData.getDefaultFileInfo());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
-        response.setPassword("123456@asdf");
+        // response.setPassword("123456@asdf");
         response.setGender(Member.Gender.MALE);
         response.setBirthYear("2001");
         response.setAboutMe("김스텁의 자기소개");
@@ -72,4 +74,28 @@ public class MemberStubData {
     public static Page<Member> stubMemberPage() {
         return new PageImpl<>(List.of(stubMember()), PageRequest.of(0, 10), 1);
     }
+
+
+    /**
+     * 회원 id와 nickname만 반환하는 stub data
+     * @return 회원 id와 nickname만 들어있는 MemberDto.Response
+     * @author cryoon
+     */
+    public static MemberDto.Response stubMemberIdAndNickname() {
+        MemberDto.Response response = new MemberDto.Response();
+
+        response.setMemberId(1L);
+        response.setNickname("cryoon");
+
+        return response;
+    }
+
+	public static MockMultipartFile getMultipartJsonData(String content) {
+        return new MockMultipartFile(
+            "data",
+            "",
+            MediaType.APPLICATION_JSON_VALUE,
+            content.getBytes()
+        );
+	}
 }
