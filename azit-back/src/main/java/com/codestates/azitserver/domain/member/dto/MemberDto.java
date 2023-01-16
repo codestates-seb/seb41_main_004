@@ -84,7 +84,7 @@ public class MemberDto {
 		private FileInfo fileInfo;
 		private String email;
 		private String nickname;
-		private String password;
+		// private String password;
 		private Member.Gender gender;
 		private String birthYear;
 		private String aboutMe;
