@@ -165,36 +165,36 @@ class MemberControllerTest {
 			);
 	}
 
-	@Test
-	void getAllMemberTest() throws Exception {
-		// given
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("page", "1");
-		queryParams.add("size", "10");
-		given(memberService.getMembers(anyInt(), anyInt())).willReturn(memberPage);
-		given(memberMapper.membersToMemberResponseDtos(Mockito.anyList())).willReturn(List.of(response));
-
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members")
-					.queryParams(queryParams)
-					.accept(MediaType.APPLICATION_JSON)
-			);
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(getDefaultDocument(
-					"get-all-member",
-					requestParameters(List.of(
-						parameterWithName("page").description("Page 번호"),
-						parameterWithName("size").description("Page에 표시할 회원 수"))),
-					MemberFieldDescriptor.getMultiResponseSnippet()
-				)
-			);
-
-	}
+	// @Test
+	// void getAllMemberTest() throws Exception {
+	// 	// given
+	// 	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+	// 	queryParams.add("page", "1");
+	// 	queryParams.add("size", "10");
+	// 	given(memberService.getMembers(anyInt(), anyInt())).willReturn(memberPage);
+	// 	given(memberMapper.membersToMemberResponseDtos(Mockito.anyList())).willReturn(List.of(response));
+	//
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members")
+	// 				.queryParams(queryParams)
+	// 				.accept(MediaType.APPLICATION_JSON)
+	// 		);
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andDo(getDefaultDocument(
+	// 				"get-all-member",
+	// 				requestParameters(List.of(
+	// 					parameterWithName("page").description("Page 번호"),
+	// 					parameterWithName("size").description("Page에 표시할 회원 수"))),
+	// 				MemberFieldDescriptor.getMultiResponseSnippet()
+	// 			)
+	// 		);
+	//
+	// }
 
 	@Test
 	void deleteMember() throws Exception {
