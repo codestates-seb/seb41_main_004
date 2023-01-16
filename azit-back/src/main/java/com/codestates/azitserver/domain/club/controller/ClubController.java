@@ -34,7 +34,6 @@ import com.codestates.azitserver.global.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 
 /**
- * TODO : PATCH 메서드 파일 업데이트 부분과, 데이터 업데이트 부분 분리.
  * TODO : Login 피트가 구현 되면 Member Principal을 받아와 요청의 주체와, 요청의 대상을 검증하는 로직 추가.
  * TODO : Member 파트가 구현 되면 관심 카테고리, 회원이 참여한 정보를 가져와 조회 api 완성.
  */
@@ -192,7 +191,6 @@ public class ClubController {
 	 * @param keyword 검색 키워드
 	 * @return 제목에 키워드가 포함된 아지트의 정보를 리턴합니다.
 	 */
-	// /search?keyword=지리산가요&page=1&size=10
 	@GetMapping("/search")
 	public ResponseEntity<?> search(@Positive @RequestParam(name = "page") int page,
 		@Positive @RequestParam(name = "size") int size, @NotNull @RequestParam(name = "keyword") String keyword) {

@@ -10,12 +10,19 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExceptionCode {
+
+
 	// 404
 	MEMBER_NOT_FOUND(40401, "Member not found"),
-	CLUB_NOT_FOUND(40402, "Club not found");
+	CLUB_NOT_FOUND(40402, "Club not found"),
+	PASSWORD_VALIDATION_FAILED(40403, "Password confirmation failed"),
+	NICKNAME_EXIST(40404,"Nickname is already in use"),
+	EMAIL_EXIST(40405,"Email is already registered");
 
 	// 500
 
-	final int status;
-	final String message;
+	private int status;
+	private String message;
+
+
 }

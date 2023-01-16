@@ -64,7 +64,7 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
 				.antMatchers(HttpMethod.GET, "api/clubs/**").permitAll()  // 그 외 아지트 조회
 
-				.anyRequest().permitAll()  // TODO : 개발하기 편하게 임시로 .permitAll() 설정 -> 나중에 .authenticated() 바꾸기
+				.anyRequest().authenticated()
 			);
 
 		return http.build();
