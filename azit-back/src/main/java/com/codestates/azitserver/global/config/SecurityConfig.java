@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +27,7 @@ import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailure
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.azitserver.domain.auth.handler.OAuthSuccessHandler;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
@@ -41,6 +41,7 @@ public class SecurityConfig {
 	private final CustomAuthorityUtils authorityUtils;
 	private final MemberRepository memberRepository;
 	private final RedisUtils redisUtils;
+	private final MemberDetailsService memberDetailsService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -59,6 +60,7 @@ public class SecurityConfig {
 			.and()
 			.apply(new CustomFilterConfigurer())
 			.and()
+			.userDetailsService(memberDetailsService)
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
 				.antMatchers("/h2/**").permitAll() // h2
@@ -66,10 +68,12 @@ public class SecurityConfig {
 				.antMatchers("/api/errors").permitAll() // error
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
+				/*======clubs======*/
 				.antMatchers(HttpMethod.GET, "/api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
 				.antMatchers(HttpMethod.GET, "/api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
+				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
 
 				.anyRequest().authenticated())
@@ -116,7 +120,7 @@ public class SecurityConfig {
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService);
 
 			builder.addFilter(jwtAuthenticationFilter)
 				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
