@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
 // import { useNavigate } from "react-router-dom";
-import FindAddr from "./FindAddr";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
