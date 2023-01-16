@@ -33,7 +33,7 @@ const Login = () => {
       'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': 'application/json',
     },
-    // url: `${}/auth/login`,
+    url: `http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
     data: {
       email,
       password,
