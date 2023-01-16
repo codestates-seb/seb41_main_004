@@ -6,7 +6,7 @@ import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImgModal } from "../components/common/Modal";
 //import { useSelector } from "react-redux";
 const URL = process.env.REACT_APP_BASE_URL;
@@ -77,9 +77,14 @@ const ProfileImageWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  > input {
+    display: none;
+  }
 `;
 
-const ProfileImage = styled.img`
+const ProfileImage = styled.div`
+  background-image: url(${(props) => props.imgSrc});
+  background-size: cover;
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
@@ -87,7 +92,7 @@ const ProfileImage = styled.img`
 
 const ImageAddIcon = styled.img`
   cursor: pointer;
-  margin-top: -2.7rem;
+  margin-top: -2rem;
   margin-left: 5rem;
 `;
 
@@ -97,6 +102,40 @@ const UserProfileEdit = () => {
   const [nameValue, SetNameValue] = useState("");
   const [defaultName, SetdefaultName] = useState("test");
   const [intro, setIntro] = useState("유저 자기소개 불러와야함");
+  const [profileImg, setprofileImg] = useState("");
+  const [imgFile, setImgFile] = useState("");
+  const imgRef = useRef();
+
+  const saveImgFile = () => {
+    const file = imgRef.current.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+    };
+  };
+
+  function dataURLtoFile(dataurl, filename) {
+    if (!dataurl) {
+      return;
+    } else {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+  }
+
+  let file = dataURLtoFile(imgFile, "sendImg");
+  console.log(file);
 
   console.log(nameValue);
   let { id } = useParams();
@@ -105,17 +144,17 @@ const UserProfileEdit = () => {
     axios
       .get(`${URL}/api/members/${id}`, {
         headers: {
-          "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "application/json;",
         },
       })
       .then((res) => {
         console.log(res);
         SetdefaultName(res.nickname);
-        setIntro();
+        setIntro(res.aboutMe);
       })
       .catch((error) => {
         console.log("error : ", error);
-        alert("중복된 아이디입니다. 다시 시도하세요.");
+        alert("중복된 닉네임입니다. 다시 시도하세요.");
       });
   }, []);
 
@@ -140,11 +179,23 @@ const UserProfileEdit = () => {
       <Header title="프로필 수정" />
       <ProfileEditForm>
         <ProfileImageWrap>
-          <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon
-            onClick={() => modalHandler()}
-            src={ImgAddIcon}
-          ></ImageAddIcon>
+          <input
+            type="file"
+            accept="jpg, jpeg, png"
+            id="profileImg"
+            onChange={saveImgFile}
+            ref={imgRef}
+          ></input>
+
+          <ProfileImage
+            imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
+          ></ProfileImage>
+          <label className="profileImgLabel" htmlFor="profileImg">
+            <ImageAddIcon
+              // onClick={() => modalHandler()}
+              src={ImgAddIcon}
+            ></ImageAddIcon>
+          </label>
           {modalOpen && <ImgModal modalHandler={modalHandler} />}
         </ProfileImageWrap>
         <article>

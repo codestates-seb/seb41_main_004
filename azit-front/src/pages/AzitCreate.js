@@ -47,27 +47,6 @@ const AzitCreate = () => {
     };
   };
 
-  function dataURLtoFile(dataurl, filename) {
-    if (!dataurl) {
-      return;
-    } else {
-      var arr = dataurl.split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-
-      return new File([u8arr], filename, { type: mime });
-    }
-  }
-
-  let file = dataURLtoFile(imgFile, "sendImg");
-  console.log(file);
-
   return (
     <AzitaddWrap>
       <Header title="아지트 생성" />
@@ -85,7 +64,7 @@ const AzitCreate = () => {
           배너 이미지 추가
         </label>
       </div>
-      <AzitCreateForm />
+      <AzitCreateForm imgFile={imgFile} />
     </AzitaddWrap>
   );
 };
