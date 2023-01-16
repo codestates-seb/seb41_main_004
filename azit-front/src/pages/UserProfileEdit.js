@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useState } from "react";
 import { ImgModal } from "../components/common/Modal";
+import { useSelector } from "react-redux";
 
 const ProfileEditForm = styled.div`
   display: flex;
@@ -89,8 +90,14 @@ const ImageAddIcon = styled.img`
 `;
 
 const UserProfileEdit = () => {
-  const Edit = null;
-  let name, intro;
+  const userInfo = useSelector((state) => state.name);
+  console.log(userInfo);
+  let nickName, intro;
+
+  if (userInfo) {
+    nickName = userInfo.nickName;
+    intro = userInfo.intro;
+  }
 
   const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
@@ -109,6 +116,10 @@ const UserProfileEdit = () => {
     }
   };
 
+  const handleEdit = (e) => {
+    SetNameValue(e.target.value);
+  };
+
   return (
     <>
       <Header title="프로필 수정" />
@@ -124,10 +135,7 @@ const UserProfileEdit = () => {
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
-          <input
-            onChange={(e) => SetNameValue(e.target.value)}
-            defaultValue="김아무개"
-          ></input>
+          <input onChange={handleEdit} defaultValue="김아무개"></input>
         </article>
         <article>
           <label>자기소개를 입력해주세요.</label>
