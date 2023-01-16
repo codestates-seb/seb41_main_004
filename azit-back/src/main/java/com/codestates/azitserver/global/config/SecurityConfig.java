@@ -65,9 +65,9 @@ public class SecurityConfig {
 				/*======h2, docs======*/
 				.antMatchers("/h2/**").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
-				.antMatchers("/api/errors").permitAll() // error
-				.antMatchers("/health-check").permitAll()  // health-check
-				.antMatchers("/opt/codedeploy-agent/**").permitAll()  // 개발서버 static 장소(System.getProperty("user.dir"))
+				.antMatchers(HttpMethod.GET, "/api/errors").permitAll() // error
+				.antMatchers(HttpMethod.GET, "/health-check").permitAll()  // health-check
+				.antMatchers(HttpMethod.GET, "/opt/codedeploy-agent/**").permitAll()  // 개발서버 static 장소(System.getProperty("user.dir"))
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
 				/*======clubs======*/
