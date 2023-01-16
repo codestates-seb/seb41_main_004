@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
 import DaumPostcode from "react-daum-postcode";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
@@ -277,33 +277,6 @@ const AzitCreateForm = ({ imgFile }) => {
     joinQustion: question,
   };
   console.log(body);
-
-  const navigate = useNavigate();
-
-  const move = () => {
-    navigate(
-      "/azit/preview",
-
-      {
-        state: {
-          bannerImg: file,
-          categorySmallId: categorySmallId,
-          clubName: clubName,
-          clubInfo,
-          memberLimit,
-          meetingDate,
-          meetingTime,
-          fee: numberFee,
-          genderRestriction: genderSelected,
-          birthYearMin: minYearSelected,
-          birthYearMax: maxYearSelected,
-          isOnline: check,
-          location: writeInfo,
-          joinQustion: question,
-        },
-      }
-    );
-  };
 
   return (
     <CreateFormWrap>
@@ -689,7 +662,9 @@ const AzitCreateForm = ({ imgFile }) => {
       </form>
       <div className="buttonWrap">
         {imgFile && question && fee ? (
-          <Button state="active" title="모임 미리보기" onClick={move} />
+          <Link to="/azit/preview">
+            <Button state="active" title="모임 미리보기" />
+          </Link>
         ) : (
           <Button state="disabled" title="모임 미리보기" />
         )}
