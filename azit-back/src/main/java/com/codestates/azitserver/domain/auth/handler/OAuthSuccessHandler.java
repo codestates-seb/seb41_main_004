@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,7 +19,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
-import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -40,9 +37,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	private final MemberRepository memberRepository;
 	private final RedisUtils redisUtils;
 
-	@Autowired
-	private ObjectMapper objectMapper;
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
@@ -60,12 +54,12 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		}
 		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
 		else {
-			LoginResponseDto responseDto = new LoginResponseDto();
+			LoginDto.Response responseDto = new LoginDto.Response();
 
 			responseDto.setEmail(email);
 			responseDto.setNickname(nickname);
 
-			// ObjectMapper objectMapper = new ObjectMapper();
+			ObjectMapper objectMapper = new ObjectMapper();
 			String info = objectMapper.writeValueAsString(responseDto);
 
 			response.getWriter().write(info);
@@ -87,11 +81,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		);
 
 		// 유저정보 만들기
-		LoginResponseDto responseDto = new LoginResponseDto();
+		LoginDto.Response responseDto = new LoginDto.Response();
 		responseDto.setEmail(member.getEmail());
 		responseDto.setNickname(member.getNickname());
 
-		// ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 		String info = objectMapper.writeValueAsString(responseDto);
 
 		// response header에 토큰, 유저정보 담아서 전달

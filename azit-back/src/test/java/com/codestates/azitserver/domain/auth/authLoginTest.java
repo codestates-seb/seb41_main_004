@@ -68,7 +68,7 @@ public class authLoginTest {
 	@Test
 	public void loginTest() throws Exception {
 		// given - LoginDto로 요청값 받으면 json 형식으로
-		LoginDto loginDto = new LoginDto();
+		LoginDto.Post loginDto = new LoginDto.Post();
 		loginDto.setEmail("usertemp@gmail.com");
 		loginDto.setPassword("qwerty1234!");
 
