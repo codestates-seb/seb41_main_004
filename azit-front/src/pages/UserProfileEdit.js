@@ -89,8 +89,14 @@ const ImageAddIcon = styled.img`
 `;
 
 const UserProfileEdit = () => {
+  const Edit = null;
+  let name, intro;
+
   const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
+  const [nameValue, SetNameValue] = useState("");
+  console.log(nameValue);
+
   const modalHandler = () => {
     setModalOpen(!modalOpen);
   };
@@ -118,7 +124,10 @@ const UserProfileEdit = () => {
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
-          <input defaultValue="김아무개"></input>
+          <input
+            onChange={(e) => SetNameValue(e.target.value)}
+            defaultValue="김아무개"
+          ></input>
         </article>
         <article>
           <label>자기소개를 입력해주세요.</label>
