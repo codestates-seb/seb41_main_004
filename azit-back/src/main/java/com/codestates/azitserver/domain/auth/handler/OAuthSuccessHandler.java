@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,6 +20,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.codestates.azitserver.domain.auth.dto.LoginDto;
 import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -38,6 +40,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	private final MemberRepository memberRepository;
 	private final RedisUtils redisUtils;
 
+	@Autowired
+	private ObjectMapper objectMapper;
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
@@ -53,18 +58,17 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 			delegateTokens(member, request, response);
 		}
-		// 존재하지 않는 회원이면 멤버 생성 후 토큰 발급
+		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
 		else {
-			Member member = new Member();
-			member.setEmail(email);
-			member.setNickname(nickname);
-			member.setRoles(List.of("USER"));
-			member.setMemberStatus(Member.MemberStatus.ACTIVE);
-			member.setReputation(10);
+			LoginResponseDto responseDto = new LoginResponseDto();
 
-			memberRepository.save(member);
+			responseDto.setEmail(email);
+			responseDto.setNickname(nickname);
 
-			delegateTokens(member, request, response);
+			// ObjectMapper objectMapper = new ObjectMapper();
+			String info = objectMapper.writeValueAsString(responseDto);
+
+			response.getWriter().write(info);
 		}
 	}
 
@@ -87,7 +91,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		responseDto.setEmail(member.getEmail());
 		responseDto.setNickname(member.getNickname());
 
-		ObjectMapper objectMapper = new ObjectMapper();
+		// ObjectMapper objectMapper = new ObjectMapper();
 		String info = objectMapper.writeValueAsString(responseDto);
 
 		// response header에 토큰, 유저정보 담아서 전달

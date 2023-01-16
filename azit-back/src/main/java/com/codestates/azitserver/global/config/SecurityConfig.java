@@ -61,14 +61,18 @@ public class SecurityConfig {
 			.and()
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
-				.antMatchers(HttpMethod.GET, "/h2/**").permitAll() // h2
+				.antMatchers("/h2/**").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
+				.antMatchers("/api/errors").permitAll() // error
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
-				.antMatchers(HttpMethod.GET, "api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/**").permitAll()  // 그 외 아지트 조회
-				.anyRequest().permitAll())  // TODO : 개발하기 편하게 임시로 .permitAll() 설정 -> 나중에 .authenticated() 바꾸기
+				.antMatchers(HttpMethod.GET, "/api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
+
+				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
+
+				.anyRequest().authenticated())
 
 			.oauth2Login(oauth2 -> oauth2
 				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));
