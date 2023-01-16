@@ -2,23 +2,59 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Logo from "../images/logo.png";
 import google from "../images/googleLogo.png";
-// eslint-disable-next-line no-unused-vars
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useForm } from 'react-hook-form';
+import { loginStatusSlice } from "../redux/loginSlice";
+import { userInfoSlice } from "../redux/userSlice";
+import axios from "axios";
+import { setCookie } from "../util/cookie/cookie";
+import jwt_decode from 'jwt-decode';
+import { useDispatch } from "react-redux";
 
 
 const Login = () => {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // useForm의 isSubmitting으로 로그인 로딩 구현
   const { register, handleSubmit } = useForm();
 
   const loginButtonClick = async (data) => {
   const { email, password } = data;
   console.log(data);
   if (!email || !password) {
-    alert('아이디와 비밀번호를 입력해주세요!');
+    alert('아이디와 비밀번호를 입력해주세요.');
     return;
   }
+  // 서버에 data POST
+  return await axios({
+    method: 'POST',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/json',
+    },
+    // url: `${}/auth/login`,
+    data: {
+      email,
+      password,
+    },
+    responseType: 'json',
+  })
+  .then(res => {
+    const accessToken = res.headers.get('Authorization');
+    setCookie('accessJwtToken', accessToken);
+    const decoded = jwt_decode(accessToken);
+    const loginUserId = decoded.memberId;
+    dispatch(userInfoSlice.actions.getUserInfo({"memberId": loginUserId}));
+    localStorage.setItem('loginUserInfo', JSON.stringify({"memberId": loginUserId}));
+    // localStorage에 nickname 추가
+    // localStorage.setItem('', )
+    navigate('/');
+    dispatch(loginStatusSlice.actions.login());
+  })
+  .catch(err => {
+    console.log(err)
+  })
   }
 
   return (
@@ -30,6 +66,7 @@ const Login = () => {
           <input 
             id="email" 
             type='text' 
+            autoComplete="off"
             placeholder="이메일 입력" 
             {...register("email")}
           />
@@ -39,6 +76,7 @@ const Login = () => {
           <input 
             id="password" 
             type='password' 
+            autoComplete="off"
             placeholder="비밀번호 입력"
             {...register("password")}
           />
