@@ -29,13 +29,17 @@ const Login = () => {
           `http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login`,
           data
         );
-        // console.log(res.data);
-        console.log(res.headers.authorization);
-        // console.log(res.data.email);
-        const token = res.headers.get('Authorization');
-        console.log(token);
-        // const accessToken = res.headers.authorization
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
+        const nickname = res.data.nickname;
+        const email = res.data.email;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('email', email);
+        localStorage.setItem('nickname', nickname);
+        navigate('/');
       } catch (e) {
+        // error handling 하기
         console.log(e);
       }
     };
