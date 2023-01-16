@@ -2,9 +2,12 @@ package com.codestates.azitserver.domain.stub;
 
 import java.util.List;
 
+import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -14,7 +17,7 @@ public class MemberStubData {
     public static Member stubMember() {
         Member member = Member.builder()
             .memberId(1L)
-            .avatar_image_id(1L)
+            .fileInfo(FileInfoStubData.getDefaultFileInfo())
             .email("stubmember@naver.com")
             .nickname("김스텁")
             .password("123456@asdf")
@@ -56,7 +59,7 @@ public class MemberStubData {
         MemberDto.Response response = new MemberDto.Response();
 
         response.setMemberId(1L);
-        response.setAvatarImageId(1L);
+        response.setFileInfo(FileInfoStubData.getDefaultFileInfo());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
         response.setPassword("123456@asdf");
@@ -72,4 +75,13 @@ public class MemberStubData {
     public static Page<Member> stubMemberPage() {
         return new PageImpl<>(List.of(stubMember()), PageRequest.of(0, 10), 1);
     }
+
+	public static MockMultipartFile getMultipartJsonData(String content) {
+        return new MockMultipartFile(
+            "data",
+            "",
+            MediaType.APPLICATION_JSON_VALUE,
+            content.getBytes()
+        );
+	}
 }

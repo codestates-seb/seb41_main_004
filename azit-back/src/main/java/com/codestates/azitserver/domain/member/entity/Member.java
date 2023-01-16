@@ -12,8 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import com.codestates.azitserver.domain.common.Auditable;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -29,8 +32,9 @@ public class Member extends Auditable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
 
-	@Column(name = "AVATAR_IMAGE_ID", unique = true) //TODO FK
-	private Long avatar_image_id;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "MEMBER_FILE_INFO")
+	private FileInfo fileInfo;
 
 	@Column(nullable = false, unique = true, length = 128)
 	private String email;
@@ -59,6 +63,8 @@ public class Member extends Auditable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
 
+
+
 	public enum Gender {
 		MALE("남자"),
 		FEMALE("여자");
@@ -82,7 +88,7 @@ public class Member extends Auditable {
 	}
 
 	@Builder
-	public Member(Long memberId, Long avatar_image_id, String email, String nickname,
+	public Member(Long memberId, FileInfo fileInfo, String email, String nickname,
 		String password, Gender gender, String birthYear, String aboutMe,
 		Integer reputation, MemberStatus memberStatus) {
 		//        Assert.hasText(email, "email must not be empty");
@@ -93,7 +99,7 @@ public class Member extends Auditable {
 		//        Assert.notNull(memberStatus, "memberStatus must not be empty");
 
 		this.memberId = memberId;
-		this.avatar_image_id = avatar_image_id;
+		this.fileInfo = fileInfo;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;

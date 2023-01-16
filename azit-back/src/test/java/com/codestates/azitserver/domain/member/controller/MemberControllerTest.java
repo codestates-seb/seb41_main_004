@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,6 +37,7 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.domain.stub.MemberStubData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -43,6 +47,9 @@ import com.google.gson.Gson;
 class MemberControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@MockBean
 	private MemberService memberService;
@@ -58,6 +65,8 @@ class MemberControllerTest {
 	MemberDto.Response response;
 	Page<Member> memberPage;
 
+	MockMultipartFile image;
+
 	@BeforeEach
 	void beforeEach() {
 		member = MemberStubData.stubMember();
@@ -65,6 +74,12 @@ class MemberControllerTest {
 		patch = MemberStubData.stubMemberDtoPatch();
 		response = MemberStubData.stubMemberDtoResponse();
 		memberPage = MemberStubData.stubMemberPage();
+		image = new MockMultipartFile(
+			"image",
+			"kimstubsProfileImage.png",
+			MediaType.MULTIPART_FORM_DATA_VALUE,
+			"".getBytes()
+		);
 	}
 
 	@Test
@@ -72,18 +87,20 @@ class MemberControllerTest {
 		// given
 		given(memberMapper.memberPostDtoToMember(any(MemberDto.Post.class)))
 			.willReturn(member);
-		given(memberService.createMember(any(Member.class))).willReturn(member);
+		given(memberService.createMember(any(Member.class), any())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
 
-		String content = gson.toJson(post);
+		String content = objectMapper.writeValueAsString(post);
+		MockMultipartFile data = MemberStubData.getMultipartJsonData(content);
 		// when
 		ResultActions postActions =
 			mockMvc.perform(
-				post("/api/members")
+				multipart("/api/members")
+					.file(image)
+					.file(data)
 					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
 					.header("Authorization", "Required JWT access token")
+					.characterEncoding(StandardCharsets.UTF_8)
 			);
 		// then
 		postActions
@@ -93,6 +110,10 @@ class MemberControllerTest {
 			.andDo(getDefaultDocument(
 					"post-member",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					requestParts(List.of(
+						partWithName("data").description("이미지를 제외한 데이터"),
+						partWithName("image").description("이미지").optional()
+					)),
 					MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
