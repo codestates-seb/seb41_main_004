@@ -114,7 +114,6 @@ const EtcWrap = styled.div`
 
 const AzitList = ({ data }) => {
   let meetDate;
-
   if (data) {
     meetDate = toDateFormatOfMonthDay(data.meetingDate);
   }
@@ -142,12 +141,12 @@ const AzitList = ({ data }) => {
   return (
     <ListWrap>
       <DetailWrap>
-        <Link to="/azit/detail">
-          <ImgWrap clubImg={data.clubImg} />
+        <Link to={`/azit/detail/${data.clubId}`}>
+          <ImgWrap clubImg={`${data.bannerImage ?  `${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
-              <Tag className="category">{data.category}</Tag>
+              <Tag className="category">{data.categorySmall.categoryName}</Tag>
               <Tag tagDisplay="">숨겨짐</Tag>
             </div>
             <h2 className="clubName">{data.clubName}</h2>
@@ -156,11 +155,11 @@ const AzitList = ({ data }) => {
               <span className="time">{meetDate}</span>
             </div>
             <div className="etcCell">
-              <div className="profileAvatar">{repeatAvatar(data.user)}</div>
+              <div className="profileAvatar">{data.user ? repeatAvatar(data.user) : null}</div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{data.user.length} </span>/
+                  <span className="current">{data.user ? data.user.length : 0} </span>/
                   <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
