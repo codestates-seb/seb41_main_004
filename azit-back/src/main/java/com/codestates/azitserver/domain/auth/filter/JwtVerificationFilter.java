@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.global.exception.dto.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtVerificationFilter extends OncePerRequestFilter {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
+	private final MemberDetailsService memberDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
@@ -36,7 +39,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 		try {
 			Map<String, Object> claims = verifyJws(request);
-			setAuthenticationToContext(claims);
+			setAuthenticationToContext(claims, request);
 		} catch (SignatureException se) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.setContentType("application/json");
@@ -76,11 +79,19 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		return claims;
 	}
 
-	private void setAuthenticationToContext(Map<String, Object> claims) {
+	private void setAuthenticationToContext(Map<String, Object> claims, HttpServletRequest request) {
 		// authentication 객체를 securityContext에 저장
 		String email = (String)claims.get("email");
+
+		MemberDetails memberDetails = (MemberDetails)memberDetailsService.loadUserByUsername(email);
 		List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberDetails,
+			null, authorities);
+
+		// request에 MemberDetails를 담아서 컨트롤러에게 전달합니다.
+		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 }
