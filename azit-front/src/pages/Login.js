@@ -2,8 +2,102 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Logo from "../images/logo.png";
 import google from "../images/googleLogo.png";
-// eslint-disable-next-line no-unused-vars
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from 'react-hook-form';
+import { loginStatusSlice } from "../redux/loginSlice";
+import { userInfoSlice } from "../redux/userSlice";
+import axios from "axios";
+import { setCookie } from "../util/cookie/cookie";
+import jwt_decode from 'jwt-decode';
+import { useDispatch } from "react-redux";
+
+
+const Login = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // useForm의 isSubmitting으로 로그인 로딩 구현
+  const { register, handleSubmit } = useForm();
+
+  const loginButtonClick = async (data) => {
+  const { email, password } = data;
+  console.log(data);
+  if (!email || !password) {
+    alert('아이디와 비밀번호를 입력해주세요.');
+    return;
+  }
+  // 서버에 data POST
+  return await axios({
+    method: 'POST',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/json',
+    },
+    // url: `${}/auth/login`,
+    data: {
+      email,
+      password,
+    },
+    responseType: 'json',
+  })
+  .then(res => {
+    const accessToken = res.headers.get('Authorization');
+    setCookie('accessJwtToken', accessToken);
+    const decoded = jwt_decode(accessToken);
+    const loginUserId = decoded.memberId;
+    dispatch(userInfoSlice.actions.getUserInfo({"memberId": loginUserId}));
+    localStorage.setItem('loginUserInfo', JSON.stringify({"memberId": loginUserId}));
+    // localStorage에 nickname 추가
+    // localStorage.setItem('', )
+    navigate('/');
+    dispatch(loginStatusSlice.actions.login());
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  }
+
+  return (
+    <LoginContainer>
+      <LoginFormWrap onSubmit={handleSubmit(data => loginButtonClick(data))}>
+        <LogoImage alt="LogoImg" src={Logo} />
+        <InputWrap>
+          <label htmlFor="email">이메일</label>
+          <input 
+            id="email" 
+            type='text' 
+            autoComplete="off"
+            placeholder="이메일 입력" 
+            {...register("email")}
+          />
+        </InputWrap>
+        <InputWrap>
+          <label htmlFor="password">비밀번호</label>
+          <input 
+            id="password" 
+            type='password' 
+            autoComplete="off"
+            placeholder="비밀번호 입력"
+            {...register("password")}
+          />
+        </InputWrap>
+        {/* <Link to="/"> */}
+          <Button type="submit" title="로그인" state="active"></Button>
+        {/* </Link> */}
+      </LoginFormWrap>
+      <LoginFooter>
+        <Link to="/findpw">비밀번호를 잊으셨나요?</Link>
+        <Link to="/signup">회원가입하기</Link>
+      </LoginFooter>
+      <Line />
+      <Link to="/" className="snsWrap">
+        <SnsLoginButton>Sign in with Google</SnsLoginButton>
+        {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
+      </Link>
+    </LoginContainer>
+  );
+};
+
 
 const LoginContainer = styled.div`
   display: flex;
@@ -16,7 +110,7 @@ const LoginContainer = styled.div`
   }
 `;
 
-const LoginFormWrap = styled.div`
+const LoginFormWrap = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -86,48 +180,5 @@ const Line = styled.hr`
   margin: 2rem 0rem 2rem 0rem;
   border: solid 0.05rem var(--border-color);
 `;
-
-const Login = () => {
-  // eslint-disable-next-line no-unused-vars
-  const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  // eslint-disable-next-line no-unused-vars
-  const passwordRegExp =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}$/;
-
-  return (
-    <LoginContainer>
-      <LoginFormWrap>
-        <LogoImage alt="LogoImg" src={Logo} />
-        <InputWrap>
-          <label htmlFor="email">이메일</label>
-          <input id="email" placeholder="이메일 입력" />
-          <div className="errorMessage">올바른 이메일을 입력해주세요.</div>
-        </InputWrap>
-        <InputWrap>
-          <label htmlFor="password">비밀번호</label>
-          <input id="password" placeholder="비밀번호 입력" />
-          <div className="errorMessage">
-            특수문자, 문자, 숫자 포함 8~16자로 작성해 주세요.
-          </div>
-        </InputWrap>
-        <Link to="/">
-          <Button title="로그인" state="active">
-            로그인
-          </Button>
-        </Link>
-      </LoginFormWrap>
-      <LoginFooter>
-        <Link to="/findpw">비밀번호를 잊으셨나요?</Link>
-        <Link to="/signup">회원가입하기</Link>
-      </LoginFooter>
-      <Line />
-      <Link to="/" className="snsWrap">
-        <SnsLoginButton>Sign in with Google</SnsLoginButton>
-        {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
-      </Link>
-    </LoginContainer>
-  );
-};
 
 export default Login;
