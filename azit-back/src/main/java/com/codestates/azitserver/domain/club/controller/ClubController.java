@@ -28,6 +28,8 @@ import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.service.ClubService;
+import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.global.annotation.LoginMember;
 import com.codestates.azitserver.global.dto.MultiResponseDto;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
@@ -47,8 +49,11 @@ public class ClubController {
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> postClub(@Valid @RequestPart(name = "data") ClubDto.Post post,
-		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		@RequestPart(name = "image", required = false) MultipartFile bannerImage,
+		@LoginMember Member member) {
 		Club toClub = mapper.clubDtoPostToClubEntity(post);
+		toClub.setHost(member);
+
 		Club club = clubService.createClub(toClub, bannerImage);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 

@@ -29,8 +29,17 @@ public class ClubService {
 	private final StorageService storageService;
 
 	public Club createClub(Club toClub, MultipartFile bannerImage) {
-		// 온라인 여부에 따른 null 또는 주소값 저장
-		toClub.setLocation(toClub.getIsOnline() ? null : toClub.getLocation());
+		// online offline 외 문자열이 들어올 경우 예외처리
+		switch (toClub.getIsOnline()) {
+			case "offline":
+				toClub.setLocation(toClub.getLocation());
+				break;
+			case "online":
+				toClub.setLocation(null);
+				break;
+			default:
+				throw new BusinessLogicException(ExceptionCode.INVALID_MEETING_METHOD);
+		}
 
 		// 데이터 저장
 		Club club = clubRepository.save(toClub);

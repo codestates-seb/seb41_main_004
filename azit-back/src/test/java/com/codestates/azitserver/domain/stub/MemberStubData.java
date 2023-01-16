@@ -72,4 +72,18 @@ public class MemberStubData {
     public static Page<Member> stubMemberPage() {
         return new PageImpl<>(List.of(stubMember()), PageRequest.of(0, 10), 1);
     }
+
+    /**
+     * 회원 id와 nickname만 반환하는 stub data
+     * @return 회원 id와 nickname만 들어있는 MemberDto.Response
+     * @author cryoon
+     */
+    public static MemberDto.Response stubMemberIdAndNickname() {
+        MemberDto.Response response = new MemberDto.Response();
+
+        response.setMemberId(1L);
+        response.setNickname("cryoon");
+
+        return response;
+    }
 }
