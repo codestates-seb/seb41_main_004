@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -25,8 +26,11 @@ import com.codestates.azitserver.domain.auth.handler.MemberAccessDeniedHandler;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
+import com.codestates.azitserver.domain.auth.handler.OAuthSuccessHandler;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
+import com.codestates.azitserver.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final MemberRepository memberRepository;
+	private final RedisUtils redisUtils;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -56,16 +61,21 @@ public class SecurityConfig {
 			.and()
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
-				.antMatchers(HttpMethod.GET, "/h2/**").permitAll() // h2
+				.antMatchers("/h2/**").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
+				.antMatchers("/api/errors").permitAll() // error
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
-				.antMatchers(HttpMethod.GET, "api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/**").permitAll()  // 그 외 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
-				.anyRequest().authenticated()
-			);
+				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
+
+				.anyRequest().authenticated())
+
+			.oauth2Login(oauth2 -> oauth2
+				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));
 
 		return http.build();
 	}
@@ -99,9 +109,9 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,
-				jwtTokenizer, redisTemplate);
+				jwtTokenizer, redisUtils);
 
-			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
+			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login"); // TODO : 컨트롤러에 login 함수 만들고 삭제하기
 
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
@@ -109,7 +119,8 @@ public class SecurityConfig {
 			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
 			builder.addFilter(jwtAuthenticationFilter)
-				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
+				.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
 		}
 	}
 }
