@@ -27,10 +27,10 @@ import com.codestates.azitserver.config.CustomExceptionCodeSnippet;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(value = ExceptionRestController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(value = ExceptionRestController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class ExceptionRestControllerTest {
 	@Autowired
 	MockMvc mockMvc;

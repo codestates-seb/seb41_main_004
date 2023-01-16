@@ -90,6 +90,8 @@ public class authLoginTest {
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
 			.andExpect(header().exists("Refresh"))
+			.andExpect(jsonPath("$.email").value("usertemp@gmail.com"))
+			.andExpect(jsonPath("$.nickname").value("tempUser"))
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),
@@ -102,6 +104,13 @@ public class authLoginTest {
 				responseHeaders(
 					headerWithName("Authorization").description("액세스 토큰"),
 					headerWithName("Refresh").description("리프레시 토큰")
-				)));
+				),
+				responseFields(
+					List.of(
+						fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+						fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+					)
+				)
+			));
 	}
 }
