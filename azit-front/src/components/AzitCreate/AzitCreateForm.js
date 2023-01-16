@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+import FindAddr from "./FindAddr";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
   > .form {
     > .inputContainer {
+      > .selectBox {
+        margin-bottom: 1rem;
+      }
       margin-top: 2rem;
       > .ageSelect {
         display: flex;
@@ -141,6 +144,7 @@ const AzitCreateForm = () => {
 
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
+  const [smallSelected, setSmallSeleted] = useState("1");
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -153,7 +157,6 @@ const AzitCreateForm = () => {
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [question, setQuestion] = useState("");
-  const [location, setLocation] = useState("");
 
   const onChangeMemberLimit = (e) => {
     if (e.target.value >= 3) {
@@ -223,12 +226,12 @@ const AzitCreateForm = () => {
     }
   };
 
-  let categoryLargeId = Number(selected);
+  let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
 
   let body = {
     fee: numberFee,
-    categoryLargeId: categoryLargeId,
+    categorySmallId,
     genderRestriction: genderSelected,
     minYear: minYearSelected,
     maxYear: maxYearSelected,
@@ -237,10 +240,6 @@ const AzitCreateForm = () => {
     meetingTime,
   };
   console.log(body);
-
-  const navigate = useNavigate();
-
-  const onClick = () => {};
 
   return (
     <CreateFormWrap>
@@ -273,6 +272,202 @@ const AzitCreateForm = () => {
             </select>
             <span className="selectArrow" />
           </div>
+          {selected === "1" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="1" key="1">
+                  전시
+                </option>
+                <option value="2" key="2">
+                  영화
+                </option>
+                <option value="3" key="3">
+                  뮤지컬
+                </option>
+                <option value="4" key="4">
+                  공연
+                </option>
+                <option value="5" key="5">
+                  디자인
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "2" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="6" key="6">
+                  클라이밍
+                </option>
+                <option value="7" key="7">
+                  등산
+                </option>
+                <option value="8" key="8">
+                  헬스
+                </option>
+                <option value="9" key="9">
+                  필라테스
+                </option>
+                <option value="10" key="10">
+                  골프
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "3" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="11" key="11">
+                  맛집투어
+                </option>
+                <option value="12" key="12">
+                  카페
+                </option>
+                <option value="13" key="13">
+                  와인
+                </option>
+                <option value="14" key="14">
+                  커피
+                </option>
+                <option value="15" key="15">
+                  디저트
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "4" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="16" key="16">
+                  보드게임
+                </option>
+                <option value="17" key="17">
+                  사진
+                </option>
+                <option value="18" key="18">
+                  방탈출
+                </option>
+                <option value="19" key="19">
+                  VR
+                </option>
+                <option value="20" key="20">
+                  음악감상
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "5" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="21" key="21">
+                  복합문화공간
+                </option>
+                <option value="22" key="22">
+                  테마파크
+                </option>
+                <option value="23" key="23">
+                  피크닉
+                </option>
+                <option value="24" key="24">
+                  드라이브
+                </option>
+                <option value="25" key="25">
+                  캠핑
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "6" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="26" key="26">
+                  글쓰기
+                </option>
+                <option value="27" key="27">
+                  드로잉
+                </option>
+                <option value="28" key="28">
+                  영상편집
+                </option>
+                <option value="29" key="29">
+                  공예
+                </option>
+                <option value="30" key="30">
+                  DIY
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {selected === "7" ? (
+            <div className="selectBox">
+              <select
+                onChange={(e) => setSmallSeleted(e.target.value)}
+                value={smallSelected}
+              >
+                <option>소분류를 선택해주세요.</option>
+                <option value="31" key="31">
+                  습관만들기
+                </option>
+                <option value="32" key="32">
+                  챌린지
+                </option>
+                <option value="33" key="33">
+                  독서
+                </option>
+                <option value="34" key="34">
+                  스터디
+                </option>
+                <option value="35" key="35">
+                  외국어
+                </option>
+              </select>
+              <span className="selectArrow" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="inputContainer">
           <label>아지트의 이름을 입력해주세요.</label>
@@ -324,7 +519,7 @@ const AzitCreateForm = () => {
           {check === "offline" ? (
             <input
               placeholder="장소를 입력해주세요."
-              defaultValue={location}
+              // defaultValue={location}
             ></input>
           ) : (
             <div className="selectPlace">온라인</div>
