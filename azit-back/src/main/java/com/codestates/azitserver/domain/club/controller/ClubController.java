@@ -28,13 +28,14 @@ import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.service.ClubService;
+import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.global.annotation.LoginMember;
 import com.codestates.azitserver.global.dto.MultiResponseDto;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * TODO : PATCH 메서드 파일 업데이트 부분과, 데이터 업데이트 부분 분리.
  * TODO : Login 피트가 구현 되면 Member Principal을 받아와 요청의 주체와, 요청의 대상을 검증하는 로직 추가.
  * TODO : Member 파트가 구현 되면 관심 카테고리, 회원이 참여한 정보를 가져와 조회 api 완성.
  */
@@ -48,8 +49,11 @@ public class ClubController {
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> postClub(@Valid @RequestPart(name = "data") ClubDto.Post post,
-		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		@RequestPart(name = "image", required = false) MultipartFile bannerImage,
+		@LoginMember Member member) {
 		Club toClub = mapper.clubDtoPostToClubEntity(post);
+		toClub.setHost(member);
+
 		Club club = clubService.createClub(toClub, bannerImage);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
@@ -192,7 +196,6 @@ public class ClubController {
 	 * @param keyword 검색 키워드
 	 * @return 제목에 키워드가 포함된 아지트의 정보를 리턴합니다.
 	 */
-	// /search?keyword=지리산가요&page=1&size=10
 	@GetMapping("/search")
 	public ResponseEntity<?> search(@Positive @RequestParam(name = "page") int page,
 		@Positive @RequestParam(name = "size") int size, @NotNull @RequestParam(name = "keyword") String keyword) {

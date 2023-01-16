@@ -2,6 +2,7 @@ package com.codestates.azitserver.domain.club.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.codestates.azitserver.domain.fileInfo.service.StorageService;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -23,14 +26,26 @@ import lombok.RequiredArgsConstructor;
 public class ClubService {
 	private final ClubRepository clubRepository;
 	private final CustomBeanUtils<Club> beanUtils;
+	private final StorageService storageService;
 
 	public Club createClub(Club toClub, MultipartFile bannerImage) {
-		// 온라인 여부에 따른 null 또는 주소값 저장
-		toClub.setLocation(toClub.getIsOnline() ? null : toClub.getLocation());
+		// online offline 외 문자열이 들어올 경우 예외처리
+		switch (toClub.getIsOnline()) {
+			case "offline":
+				toClub.setLocation(toClub.getLocation());
+				break;
+			case "online":
+				toClub.setLocation(null);
+				break;
+			default:
+				throw new BusinessLogicException(ExceptionCode.INVALID_MEETING_METHOD);
+		}
 
-		// TODO : banner image에 대한 처리 로직이 필요합니다.
+		// 데이터 저장
+		Club club = clubRepository.save(toClub);
 
-		return clubRepository.save(toClub);
+		// banner image 저장 후 리턴
+		return updateClubImage(club.getClubId(), bannerImage);
 	}
 
 	/**
@@ -47,10 +62,19 @@ public class ClubService {
 	}
 
 	public Club updateClubImage(Long clubId, MultipartFile bannerImage) {
+		Club club = findClubById(clubId);
 
-		// TODO : banner image에 대한 처리 로직이 필요합니다.
+		// banner image 저장
+		String prefix ="images/club_banner";
+		Map<String, String> map = storageService.upload(prefix, bannerImage);
 
-		return null;
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setFileName(map.get("fileName"));
+		fileInfo.setFileUrl(map.get("fileUrl"));
+
+		club.setFileInfo(fileInfo);
+
+		return clubRepository.save(club);
 	}
 
 	public Club cancelClub(Long clubId) {
@@ -68,7 +92,6 @@ public class ClubService {
 	public Club findClubById(Long clubId) {
 		Optional<Club> optionalClub = clubRepository.findById(clubId);
 		Club club = optionalClub.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CLUB_NOT_FOUND));
-
 		return club;
 	}
 

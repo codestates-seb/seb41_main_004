@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -25,8 +25,12 @@ import com.codestates.azitserver.domain.auth.handler.MemberAccessDeniedHandler;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
+import com.codestates.azitserver.domain.auth.handler.OAuthSuccessHandler;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
+import com.codestates.azitserver.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +39,9 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final MemberRepository memberRepository;
+	private final RedisUtils redisUtils;
+	private final MemberDetailsService memberDetailsService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,18 +60,35 @@ public class SecurityConfig {
 			.and()
 			.apply(new CustomFilterConfigurer())
 			.and()
+			.userDetailsService(memberDetailsService)
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
-				.antMatchers(HttpMethod.GET, "/h2/**").permitAll() // h2
+				.antMatchers("/h2/**").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
+				.antMatchers(HttpMethod.GET, "/api/errors").permitAll() // error
+				.antMatchers(HttpMethod.GET, "/health-check").permitAll()  // health-check
+				.antMatchers(HttpMethod.GET, "/opt/codedeploy-agent/**").permitAll()  // 개발서버 static 장소(System.getProperty("user.dir"))
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
-				.antMatchers(HttpMethod.GET, "api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
-				.antMatchers(HttpMethod.GET, "api/clubs/**").permitAll()  // 그 외 아지트 조회
+				/*======clubs======*/
+				.antMatchers(HttpMethod.GET, "/api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
+				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
-				.anyRequest().permitAll()  // TODO : 개발하기 편하게 임시로 .permitAll() 설정 -> 나중에 .authenticated() 바꾸기
-			);
+				/*==========member==========*/
+				.antMatchers(HttpMethod.POST, "api/members").permitAll() //회원 생성
+				.antMatchers(HttpMethod.GET, "api/members/**").authenticated() //특정 회원 조회
+				.antMatchers(HttpMethod.GET, "api/members/").authenticated() // 전체 회원 조회 //TODO (미구현(error))
+				.antMatchers(HttpMethod.PATCH, "api/members/**").authenticated() // 회원 정보 수정
+				.antMatchers(HttpMethod.DELETE, "api/members/**").authenticated() // 회원 탈퇴(삭제)
+
+				/*======auth======*/
+				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
+
+				.anyRequest().authenticated())
+
+			.oauth2Login(oauth2 -> oauth2
+				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));
 
 		return http.build();
 	}
@@ -99,17 +122,18 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
 			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,
-				jwtTokenizer, redisTemplate);
+				jwtTokenizer, redisUtils);
 
-			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
+			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login"); // TODO : 컨트롤러에 login 함수 만들고 삭제하기
 
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService);
 
 			builder.addFilter(jwtAuthenticationFilter)
-				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
+				.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
 		}
 	}
 }

@@ -1,7 +1,11 @@
 package com.codestates.azitserver.domain.club.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,10 +15,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.domain.member.entity.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,10 +62,13 @@ public class Club extends Auditable {
 	private GenderRestriction genderRestriction;
 
 	@Column(name = "MEETING_DATE", nullable = false)
-	private LocalDateTime meetingDate;
+	private LocalDate meetingDate;
+
+	@Column(name = "MEETING_TIME", nullable = false)
+	private LocalTime meetingTime;
 
 	@Column(name = "IS_ONLINE", nullable = false)
-	private Boolean isOnline;
+	private String isOnline;
 
 	@Column(name = "LOCATION", length = 24)
 	private String location;
@@ -73,6 +84,25 @@ public class Club extends Auditable {
 	@JoinColumn(name = "CATEGORY_SMALL_ID", updatable = false)
 	private CategorySmall categorySmall;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "FILE_INFO_ID")
+	private FileInfo fileInfo;
+
+	@OneToOne
+	@JoinColumn(name = "HOST_ID", updatable = false)
+	private Member host;
+
+	@OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ClubMember> clubMembers = new ArrayList<>();
+
+	public ClubMember addClubMember(ClubMember clubMember) {
+		this.clubMembers.add(clubMember);
+		if (clubMember.getClub() != this) {
+			clubMember.setClub(this);
+		}
+
+		return clubMember;
+	}
 
 	// TODO: banner_image, host_id, club_members
 
@@ -111,5 +141,20 @@ public class Club extends Auditable {
 		ClubStatus(String status) {
 			this.status = status;
 		}
+	}
+
+	//  *** mapper ***
+	/**
+	 * Club에서 host 정보에 담을 Member 객체 생성
+	 * @return memberId와 nickname만 담은 Member 객체
+	 * @author cryoon
+	 */
+	public MemberDto.Response getIdAndNickname() {
+		MemberDto.Response response = new MemberDto.Response();
+
+		response.setMemberId(this.host.getMemberId());
+		response.setNickname(this.host.getNickname());
+
+		return response;
 	}
 }

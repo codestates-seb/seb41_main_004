@@ -5,7 +5,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-/src/main/resources/static/docs/index.html
 
 ### STS ###
 .apt_generated
@@ -42,5 +41,10 @@ out/
 env.yml
 env.properties
 
-### restdocs ###
+### static files ###
 src/main/resources/static/docs/index.html
+images/
+
+### CommandLineRunner ###
+DemoCommandLineRunner.java
+

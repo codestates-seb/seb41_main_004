@@ -4,8 +4,9 @@ import Header from "../components/common/HeaderTypeGnb";
 import searchIcon from "../images/searchIcon.png";
 import searchBackIcon from "../images/searchBackIcon.png";
 import AzitList from "../components/common/AzitList";
-import { ClubData } from "../dummyData/ClubData";
 import { useState } from "react";
+import axios from "axios";
+
 const SearchWrap = styled.section`
   > .resultCell {
     min-height: 100vh;
@@ -48,13 +49,38 @@ const FxiedHeader = styled.div`
 
 const Search = () => {
   const [SearchControl, setSearchControl] = useState(false);
+  const [value, setValue] = useState('');
+  const [resultList, setResultList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchList = async () => {
+    try {
+      setError(null);
+      setResultList([]);
+      setLoading(true);
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}api/clubs/search?page=1&size=10&keyword=${value}`);
+      setResultList(res.data);
+    } catch (e) {
+      setError(e);
+      console.log(error);
+    }
+    setLoading(false);
+  }
+
   const searchControlHandler = (e) => {
     if (e.key === "Enter" && e.target.value.length > 0) {
+      fetchList()
       setSearchControl(true);
     } else if (e.key === "Enter" && e.target.value.length === 0) {
       setSearchControl(false);
     }
   };
+  const changeValue = (e) => {
+    setValue(e.target.value);
+  }
+  
+
   return (
     <>
       <Gnb />
@@ -67,13 +93,15 @@ const Search = () => {
               onKeyUp={(e) => {
                 searchControlHandler(e);
               }}
+              onChange={(e) => {changeValue(e)}}
             ></input>
           </article>
         </FxiedHeader>
         <article className="resultCell">
           {SearchControl ? (
-            ClubData ? (
-              ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+            loading ? null :
+            resultList.data.length > 0 ? (
+              resultList.data?.map((data) => <AzitList key={data.clubId} data={data} />)
             ) : (
               <div className="default">
                 <img alt="searchIcon" src={searchBackIcon} />

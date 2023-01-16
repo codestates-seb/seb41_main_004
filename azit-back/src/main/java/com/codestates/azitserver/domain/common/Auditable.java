@@ -1,6 +1,7 @@
 package com.codestates.azitserver.domain.common;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
+@Setter
 public abstract class Auditable {
     @CreatedDate
     @ColumnDefault("CURRENT_TIMESTAMP()")

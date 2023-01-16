@@ -47,12 +47,12 @@ function App() {
           <Route path="/azit/edit" element={<AzitEdit />}></Route>
           <Route path="/azit/join" element={<AzitJoin />}></Route>
           <Route path="/azit/report" element={<AzitReport />}></Route>
-          <Route path="/azit/detail" element={<AzitDetail />}></Route>
+          <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
           <Route path="/azit/member" element={<AzitMember />}></Route>
           <Route path="/azit/preview" element={<AzitPreview />}></Route>
 
           {/* 리뷰 */}
-          <Route path="/review/Create" element={<ReviewCreate />}></Route>
+          <Route path="/review/create" element={<ReviewCreate />}></Route>
 
           {/* 로그인 관련 */}
           <Route path="/login" element={<Login />}></Route>

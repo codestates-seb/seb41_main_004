@@ -8,6 +8,7 @@ import static org.springframework.restdocs.snippet.Attributes.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +88,7 @@ class ClubControllerTest implements ClubControllerTestHelper {
 
 		// when
 		ResultActions actions = mockMvc.perform(postMultipartRequestBuilder(getClubUrl(), image, data)
-			.header("Authorization", "Required JWT access token"));
+			.header("Authorization", "Required JWT access token").characterEncoding(StandardCharsets.UTF_8));
 
 		// then
 		actions.andDo(print())

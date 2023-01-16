@@ -36,11 +36,14 @@ dependencies {
 	// sql 쿼리 파라미터에 실제 입력 값을 보여주기 위한 패키지
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
+	// aws s3 file upload
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.382'
+
 	// 인증
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation'it.ozimov:embedded-redis:0.7.2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'

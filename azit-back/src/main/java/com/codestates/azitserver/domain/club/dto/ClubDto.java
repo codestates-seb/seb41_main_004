@@ -1,6 +1,8 @@
 package com.codestates.azitserver.domain.club.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +16,8 @@ import org.hibernate.validator.constraints.Range;
 
 import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.global.validator.NotSpace;
 
 import lombok.Getter;
@@ -57,10 +61,13 @@ public class ClubDto {
 
 		@NotNull
 		@FutureOrPresent(message = "Appointment date cannot be in the past." )
-		private LocalDateTime meetingDate;
+		private LocalDate meetingDate;
 
 		@NotNull
-		private Boolean isOnline;
+		private LocalTime meetingTime;
+
+		@NotNull
+		private String isOnline;
 
 		private String location;
 
@@ -116,9 +123,11 @@ public class ClubDto {
 		private Club.GenderRestriction genderRestriction;
 
 		@FutureOrPresent(message = "Appointment date cannot be in the past." )
-		private LocalDateTime meetingDate;
+		private LocalDate meetingDate;
 
-		private Boolean isOnline;
+		private LocalTime meetingTime;
+
+		private String isOnline;
 
 		private String location;
 
@@ -137,11 +146,16 @@ public class ClubDto {
 		private String birthYearMin;
 		private String birthYearMax;
 		private Club.GenderRestriction genderRestriction;
-		private LocalDateTime meetingDate;
-		private Boolean isOnline;
+		private LocalDate meetingDate;
+		private LocalTime meetingTime;
+		private String isOnline;
 		private String location;
 		private String joinQuestion;
 		private Club.ClubStatus clubStatus;
+		private MemberDto.Response host;
 		private CategoryDto.SmallResponse categorySmall;
+		private FileInfo bannerImage;
+		private List<ClubMemberDto.Response> clubMembers;
 	}
 }
+
