@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
+import DaumPostcode from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 
 const CreateFormWrap = styled.div`
@@ -590,7 +591,7 @@ const AzitCreateForm = ({ imgFile }) => {
               </div>
               {visible ? (
                 <div>
-                  <DaumPost onComplete={handleComplete} height={700} />
+                  <DaumPostcode onComplete={handleComplete} height={700} />
                 </div>
               ) : (
                 <></>

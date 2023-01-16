@@ -100,9 +100,10 @@ const UserProfileEdit = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [nameValue, SetNameValue] = useState("");
-  const [defaultName, SetdefaultName] = useState("test");
-  const [intro, setIntro] = useState("유저 자기소개 불러와야함");
-  const [profileImg, setprofileImg] = useState("");
+  const [introValue, setIntroValue] = useState("");
+  const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
+  const [intro, setIntro] = useState("유저 자기소개 불러와야함"); //소개 get으로 받아오는것
+  const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
   const [imgFile, setImgFile] = useState("");
   const imgRef = useRef();
 
@@ -135,14 +136,13 @@ const UserProfileEdit = () => {
   }
 
   let file = dataURLtoFile(imgFile, "sendImg");
-  console.log(file);
+  // console.log(file);
 
-  console.log(nameValue);
-  let { id } = useParams();
+  // let { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`${URL}/api/members/${id}`, {
+      .get(`${URL}/api/members/1`, {
         headers: {
           "Content-Type": "application/json;",
         },
@@ -151,7 +151,7 @@ const UserProfileEdit = () => {
         console.log(res);
         SetdefaultName(res.nickname);
         setIntro(res.aboutMe);
-        setprofileImg(res.data.fileName);
+        setprofileImg(res.data.fileInfo.fileName);
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -171,8 +171,13 @@ const UserProfileEdit = () => {
     }
   };
 
-  const handleEdit = (e) => {
-    SetNameValue(e.target.value);
+  const handleEdit = () => {
+    let body = {
+      nickname: nameValue,
+      aboutMe: introValue,
+      fileName: imgFile,
+    };
+    console.log(body);
   };
 
   return (
@@ -202,11 +207,21 @@ const UserProfileEdit = () => {
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
-          <input onChange={handleEdit} defaultValue={defaultName}></input>
+          <input
+            onChange={(e) => {
+              SetNameValue(e.target.value);
+              console.log(nameValue);
+            }}
+            defaultValue={defaultName}
+          ></input>
         </article>
         <article>
           <label>자기소개를 입력해주세요.</label>
           <textarea
+            onChange={(e) => {
+              setIntroValue(e.target.value);
+              console.log(introValue);
+            }}
             placeholder="텍스트를 입력해 주세요."
             defaultValue={intro}
           ></textarea>
@@ -229,6 +244,7 @@ const UserProfileEdit = () => {
                           }}
                           checked={checkedInputs.includes(tag) ? true : false}
                           name={tag}
+                          onClick={handleEdit} //button에다가 onClick 줘야함
                         ></input>
                         <label htmlFor={tag}>{tag}</label>
                       </span>
@@ -241,9 +257,9 @@ const UserProfileEdit = () => {
         </article>
         {/*Link -> useNavigate 로 변환 필요 / */}
         <div className="buttonWrap"></div>
-        <Link to="/">
-          <Button title="수정 완료" state="active"></Button>
-        </Link>
+        {/* <Link to="/"> */}
+        <Button title="수정 완료" state="active"></Button>
+        {/* </Link> */}
       </ProfileEditForm>
     </>
   );
