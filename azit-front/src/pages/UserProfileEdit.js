@@ -151,6 +151,7 @@ const UserProfileEdit = () => {
         console.log(res);
         SetdefaultName(res.nickname);
         setIntro(res.aboutMe);
+        setprofileImg(res.data.fileName);
       })
       .catch((error) => {
         console.log("error : ", error);

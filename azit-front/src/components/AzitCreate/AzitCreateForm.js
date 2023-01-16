@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
-// import { useNavigate } from "react-router-dom";
-import FindAddr from "./FindAddr";
+import { useNavigate } from "react-router-dom";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
@@ -591,7 +590,7 @@ const AzitCreateForm = ({ imgFile }) => {
               </div>
               {visible ? (
                 <div>
-                  <DaumPostcode onComplete={handleComplete} height={700} />
+                  <DaumPost onComplete={handleComplete} height={700} />
                 </div>
               ) : (
                 <></>
