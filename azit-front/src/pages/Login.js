@@ -9,10 +9,13 @@ import { userInfoSlice } from "../redux/userSlice";
 import axios from "axios";
 import { setCookie } from "../util/cookie/cookie";
 import jwt_decode from 'jwt-decode';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 const Login = () => {
+  
+  const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,42 +23,22 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
 
   const loginButtonClick = async (data) => {
-  const { email, password } = data;
-  console.log(data);
-  if (!email || !password) {
-    alert('아이디와 비밀번호를 입력해주세요.');
-    return;
-  }
-  // 서버에 data POST
-  return await axios({
-    method: 'POST',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json',
-    },
-    url: `http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
-    data: {
-      email,
-      password,
-    },
-    responseType: 'json',
-  })
-  .then(res => {
-    const accessToken = res.headers.get('Authorization');
-    setCookie('accessJwtToken', accessToken);
-    const decoded = jwt_decode(accessToken);
-    const loginUserId = decoded.memberId;
-    dispatch(userInfoSlice.actions.getUserInfo({"memberId": loginUserId}));
-    localStorage.setItem('loginUserInfo', JSON.stringify({"memberId": loginUserId}));
-    // localStorage에 nickname 추가
-    // localStorage.setItem('', )
-    navigate('/');
-    dispatch(loginStatusSlice.actions.login());
-  })
-  .catch(err => {
-    console.log(err)
-  })
-  }
+    const { email, password } = data;
+      try {
+        const res = await axios.post(
+          `http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login`,
+          data
+        );
+        // console.log(res.data);
+        console.log(res.headers.authorization);
+        // console.log(res.data.email);
+        const token = res.headers.get('Authorization');
+        console.log(token);
+        // const accessToken = res.headers.authorization
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
   return (
     <LoginContainer>
