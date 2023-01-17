@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Button from "../common/Button";
-<<<<<<< HEAD
-// import { useNavigate } from "react-router-dom";
-=======
 import DaumPostcode from "react-daum-postcode";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { azitInfo } from "../../redux/azitSlice";
->>>>>>> 9be89e5f16ec76d2852ad17b07a94e90cedd9e47
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;

@@ -114,7 +114,6 @@ const EtcWrap = styled.div`
 
 const AzitList = ({ data }) => {
   let meetDate;
-  console.log(data)
   if (data) {
     meetDate = toDateFormatOfMonthDay(data.meetingDate, data.meetingTime);
   }

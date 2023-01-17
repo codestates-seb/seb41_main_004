@@ -5,7 +5,8 @@ import searchIcon from "../images/searchIcon.png";
 import searchBackIcon from "../images/searchBackIcon.png";
 import AzitList from "../components/common/AzitList";
 import { useState } from "react";
-import axios from "axios";
+import { useQuery } from "react-query";
+import { axiosInstance } from "../util/axios";
 
 const SearchWrap = styled.section`
   > .resultCell {
@@ -52,40 +53,29 @@ const Search = () => {
   const [value, setValue] = useState("");
   const [resultList, setResultList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [beError, setError] = useState(null);
 
   const fetchList = async () => {
     try {
-      setError(null);
-      setResultList([]);
-      setLoading(true);
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}api/clubs/search?page=1&size=10&keyword=${value}`
+      // setError(null);
+      // setResultList([]);
+      // setLoading(true);
+      const res = await axiosInstance.get(
+        `/api/clubs/search?page=1&size=10&keyword=${value}`
       );
-      setResultList(res.data);
+      return res.data;
+      // setResultList(res.data);
     } catch (e) {
-      setError(e);
-      console.log(error);
+      // setError(e);
+      console.log(e.response.data);
     }
     setLoading(false);
   };
-  const login = async () => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}api/auth/login`,
-        {
-          email: "admin_test@hello.com",
-          password: "1234",
-        }
-      );
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // eslint-disable-next-line no-undef
+  const {isLoading, isError, data, error} = useQuery('search', fetchList)
+  console.log(data)
   const searchControlHandler = (e) => {
     if (e.key === "Enter" && e.target.value.length > 0) {
-      login();
       fetchList();
       setSearchControl(true);
     } else if (e.key === "Enter" && e.target.value.length === 0) {
