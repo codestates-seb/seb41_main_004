@@ -24,19 +24,12 @@ public class AuthService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	// 비밀번호 인증(password 변경 페이지로 가기 전, matchPassword)
 	public LoginDto.ResponseMatcher passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
-		boolean matchingResult = false;
-
 		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
 		Member findMember = findVerifiedMember(memberId);
 
 		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
-		if (passwordEncoder.matches(request.getPassword(), findMember.getPassword())) {
-			matchingResult = true; // 일치
-		} else {
-			matchingResult = false; // 불일치
-		}
+		boolean matchingResult = passwordEncoder.matches(request.getPassword(), findMember.getPassword());
 
 		LoginDto.ResponseMatcher responseDto = new LoginDto.ResponseMatcher();
 		responseDto.setMatchingResult(matchingResult);
