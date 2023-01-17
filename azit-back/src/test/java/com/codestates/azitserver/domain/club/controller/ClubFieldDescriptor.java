@@ -24,7 +24,7 @@ public class ClubFieldDescriptor {
 			fieldWithPath("meetingDate").type(JsonFieldType.STRING).description("약속 날짜"),
 			fieldWithPath("meetingTime").type(JsonFieldType.STRING).description("약속 시간"),
 			fieldWithPath("isOnline").type(JsonFieldType.STRING)
-				.description("만남 타입").attributes(key("constraints").value("true : 온라인 | false : 오프라인")),
+				.description("만남 타입").attributes(key("constraints").value("online : 온라인 | offline : 오프라인")),
 			fieldWithPath("location").type(JsonFieldType.STRING).description("오프라인 만남 장소")
 				.attributes(key("constraints").value("오프라인 만남인 경우에만 입력")).optional(),
 			fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리"),
@@ -46,7 +46,7 @@ public class ClubFieldDescriptor {
 			fieldWithPath("meetingDate").type(JsonFieldType.STRING).description("약속 날짜").optional(),
 			fieldWithPath("meetingTime").type(JsonFieldType.STRING).description("약속 시간").optional(),
 			fieldWithPath("isOnline").type(JsonFieldType.STRING)
-				.description("만남 타입").attributes(key("constraints").value("true : 온라인 | false : 오프라인")).optional(),
+				.description("만남 타입").attributes(key("constraints").value("online : 온라인 | offline : 오프라인")).optional(),
 			fieldWithPath("location").type(JsonFieldType.STRING).description("오프라인 만남 장소").optional()
 		);
 	}
