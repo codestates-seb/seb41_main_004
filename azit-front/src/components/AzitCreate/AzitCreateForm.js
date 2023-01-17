@@ -3,6 +3,8 @@ import { useState } from "react";
 import Button from "../common/Button";
 import DaumPostcode from "react-daum-postcode";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { azitInfo } from "../../redux/azitSlice";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
@@ -55,6 +57,7 @@ const CreateFormWrap = styled.div`
           margin-right: 1.5rem;
         }
       }
+
       > .gender {
         width: 30%;
         > select {
@@ -256,6 +259,8 @@ const AzitCreateForm = ({ imgFile }) => {
     }
   }
 
+  const dispatch = useDispatch();
+
   let file = dataURLtoFile(imgFile, "sendImg");
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
@@ -277,6 +282,28 @@ const AzitCreateForm = ({ imgFile }) => {
     joinQustion: question,
   };
   console.log(body);
+
+  const handleSubmit = () => {
+    dispatch(
+      azitInfo({
+        bannerImg: file,
+        categorySmallId: categorySmallId,
+        clubName: clubName,
+        clubInfo,
+        memberLimit,
+        meetingDate,
+        meetingTime,
+        fee: numberFee,
+        genderRestriction: genderSelected,
+        birthYearMin: minYearSelected,
+        birthYearMax: maxYearSelected,
+        genderSelected,
+        isOnline: check,
+        location: writeInfo,
+        joinQustion: question,
+      })
+    );
+  };
 
   return (
     <CreateFormWrap>
@@ -663,7 +690,11 @@ const AzitCreateForm = ({ imgFile }) => {
       <div className="buttonWrap">
         {imgFile && question && fee ? (
           <Link to="/azit/preview">
-            <Button state="active" title="모임 미리보기" />
+            <Button
+              state="active"
+              title="모임 미리보기"
+              onClick={handleSubmit}
+            />
           </Link>
         ) : (
           <Button state="disabled" title="모임 미리보기" />
