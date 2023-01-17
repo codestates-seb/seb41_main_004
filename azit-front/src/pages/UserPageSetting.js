@@ -33,8 +33,8 @@ const UserPageSetting = () => {
         </Link>
       </SettingBar>
       <SettingBar>
-        <div>
-          <span className="logout" onClick={modalHandler}>로그아웃</span>
+        <div onClick={modalHandler}>
+          <span className="logout">로그아웃</span>
           <div>
             <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
           </div>
