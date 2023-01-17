@@ -244,7 +244,9 @@ const UserProfileEdit = () => {
                           }}
                           checked={checkedInputs.includes(tag) ? true : false}
                           name={tag}
-                          onClick={handleEdit} //button에다가 onClick 줘야함
+                          onClick={() => {
+                            handleEdit();
+                          }} //button에다가 onClick 줘야함
                         ></input>
                         <label htmlFor={tag}>{tag}</label>
                       </span>
