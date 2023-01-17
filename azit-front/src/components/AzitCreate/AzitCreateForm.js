@@ -55,7 +55,6 @@ const CreateFormWrap = styled.div`
           margin-right: 1.5rem;
         }
       }
-
       > .gender {
         width: 30%;
         > select {
