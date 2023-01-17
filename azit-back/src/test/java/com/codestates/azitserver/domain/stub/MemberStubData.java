@@ -64,7 +64,7 @@ public class MemberStubData {
         post.setGender(Member.Gender.MALE);
         post.setBirthYear("2001");
         post.setAboutMe("김스텁의 자기소개");
-        post.setCategorySmall(List.of("헬스", "와인"));
+        post.setCategorySmallId(List.of(8L,13L));
         return post;
     }
 
@@ -75,7 +75,7 @@ public class MemberStubData {
         patch.setPassword("654321@asdf");
         patch.setPasswordCheck("654321@asdf");
         patch.setAboutMe("김스텁의 자기소개");
-        patch.setCategorySmall(List.of("등산", "와인"));
+        patch.setCategorySmallId(List.of(7L,13L));
 
         return patch;
     }
