@@ -12,7 +12,7 @@ const Box = styled.div`
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   :last-child {
-    margin:0;
+    margin: 0;
   }
 `;
 const TitleBox = styled.div`
@@ -55,7 +55,7 @@ const Reviews = () => {
     <Container>
       <Box>
         <TitleBox>
-          <Title>일이삼사오육칠팔구십일이삼사오육칠팔구십</Title>
+          <Title>모임이름모임이름모임이름모임이름모임이름</Title>
           <Time>{` ${toDateFormatOfKR(new Date())}`}</Time>
         </TitleBox>
         <ReviewBox>
