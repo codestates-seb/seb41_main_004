@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserListIcon from "../../images/userListIcon.png";
@@ -7,6 +8,7 @@ const ListWrap = styled.article`
   margin-bottom: 1rem;
 `;
 const DetailWrap = styled.div`
+position:relative;
   padding: 1rem;
   border-radius: 5px;
   background-color: var(--white-color);
@@ -96,7 +98,7 @@ const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
 const EtcWrap = styled.div`
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-top: 0.5rem;
   display: none;
@@ -111,12 +113,30 @@ const EtcWrap = styled.div`
     padding: 0;
   }
 `;
-
-const AzitList = ({ data }) => {
-  let meetDate;
-  if (data) {
-    meetDate = toDateFormatOfMonthDay(data.meetingDate, data.meetingTime);
+const Status = styled.div`
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* display: flex; */
+  height: 2.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 7.2rem;
+  background-color: ${(props) => props.status === "참여중" ? 'var(--point-color)' : props.status === "신청중" ? "var(--green-color)" : "var(--light-font-color)"};
+  color:var(--white-color);
+  border-radius: 0 5px 0 10px;
+  >span {
+    font-size:var(--caption-font);
   }
+`
+const AzitList = ({ data }) => {
+  const [meetDate, setMeetDate] = useState("00월 00일 00:00")
+
+  useEffect(() => {
+    setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
+  },[data.meetingDate, data.meetingTime])
+
   const repeatAvatar = (data) => {
     let result = [];
     if (data.length >= 5) {
@@ -143,12 +163,14 @@ const AzitList = ({ data }) => {
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
+          {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
+          <Status status={"종료됨"}><span>참여중</span></Status>
           <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_BASE_URL}${data.bannerImage.fileUrl.slice(1)}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
               <Tag className="category">{data.categorySmall.categoryName}</Tag>
-              <Tag tagDisplay="">숨겨짐</Tag>
+              <Tag tagDisplay="none">숨겨짐</Tag>
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
@@ -169,7 +191,7 @@ const AzitList = ({ data }) => {
           </div>
         </Link>
       </DetailWrap>
-      {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 */}
+      {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 display none 상태 */}
       <EtcWrap>
         <div className="ActivityView">
           <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
