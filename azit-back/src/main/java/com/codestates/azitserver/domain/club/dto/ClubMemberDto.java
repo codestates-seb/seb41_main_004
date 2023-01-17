@@ -38,7 +38,7 @@ public class ClubMemberDto {
 	@NoArgsConstructor
 	public static class Response {
 		private Long clubMemberId;
-		private MemberDto.Response member;
+		private MemberDto.ClubMemberMemberResponse member;
 		private String joinAnswer;
 		private ClubMember.ClubMemberStatus clubMemberStatus;
 	}

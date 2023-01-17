@@ -45,7 +45,7 @@ public class ClubMemberStubData {
 		ClubMemberDto.Response response = new ClubMemberDto.Response();
 
 		response.setClubMemberId(1L);
-		response.setMember(MemberStubData.stubMemberDtoResponse());
+		response.setMember(MemberStubData.getClubMemberMemberResponse());
 		response.setJoinAnswer("저도 참가할래요!");
 		response.setClubMemberStatus(ClubMember.ClubMemberStatus.CLUB_WAITING);
 
