@@ -2,16 +2,17 @@ import styled from "styled-components";
 import Gnb from "../components/common/Gnb";
 import Header from "../components/common/HeaderTypeGnb";
 import searchIcon from "../images/searchIcon.png";
-import searchBackIcon from "../images/searchBackIcon.png";
 import AzitList from "../components/common/AzitList";
-import { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 import { axiosInstance } from "../util/axios";
 import Loading from "../components/common/Loading";
+import { useInView } from "react-intersection-observer";
+import Default from "../components/Search/Defalut";
 
 const SearchWrap = styled.section`
   > .resultCell {
-    min-height: 100vh;
+    min-height: 101vh;
     background-color: var(--background-color);
     padding: 15rem 2rem 10rem;
     > .default {
@@ -50,34 +51,46 @@ const FxiedHeader = styled.div`
 `;
 
 const Search = () => {
-  const [value, setValue] = useState("");
-
-  const fetchList = async (keyword) => {
-    try {
-      const res = await axiosInstance.get(
-        `/api/clubs/search?page=1&size=10&keyword=${keyword}`
-      );
-      return res.data;
-    } catch (error) {
-      console.log(error.response.data);
+  const [value, setValue] = useState(null);
+  const changeValue = (e) => {
+    if (e.target.value.length === 0) {
+      setValue(null);
+    } else {
+      setValue(e.target.value);
     }
   };
-  
-  const {
-    isLoading,
-    isError,
-    data: searchList,
-    error,
-  } = useQuery(["search", value], () => fetchList(value), {
-    // input에 검색어가 입력되지 않으면 query가 호출되지 않는다.
-    enabled: !!value,
-    staleTime: 6 * 10 * 1000,
-    cacheTime: 6 * 10 * 1000,
-  });
-  console.log(searchList)
-  const changeValue = (e) => {
-    setValue(e.target.value);
+  const fetchInfiniteList = async (pageParam, keyword) => {
+    const res = await axiosInstance.get(
+      `/api/clubs/search?page=${pageParam}&size=10&keyword=${keyword}`
+    );
+    return {
+      // 실제 데이터
+      board_page: res.data.data,
+      nextPage: pageParam + 1,
+      // 페이지가 마지막인지 알려주는 서버에서 넘겨준 true/false 값
+      isLast:
+        res.data.data.length > 0
+          ? res.data.pageInfo.page === res.data.pageInfo.totalPages
+          : true,
+    };
   };
+  const { ref, inView } = useInView();
+  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ["get", value],
+    ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
+    {
+      enabled: !!value,
+      staleTime: 6 * 10 * 1000,
+      cacheTime: 6 * 10 * 1000,
+      getNextPageParam: (lastPage) =>
+        !lastPage.isLast ? lastPage.nextPage : undefined,
+    }
+  );
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
   return (
     <>
@@ -95,19 +108,20 @@ const Search = () => {
           </article>
         </FxiedHeader>
         <article className="resultCell">
-          {isLoading && <Loading /> }
-          {isError && <p>Error: {error.message}</p>}
-          {searchList?.data?.length > 0 ? (
-            searchList.data.map((data) => (
-              <AzitList key={data.clubId} data={data} />
-            ))
-          ) : (
-            <div className="default">
-              <img alt="searchIcon" src={searchBackIcon} />
-              <p>{value.length > 0 ? '검색결과가 없습니다.' : "검색어를 입력해 주세요."}</p>
-            </div>
-          )}
+          {status === "loading" && <Loading />}
+          {status === "idle" && <Default text="검색어를 입력해 주세요." />}
+          {status === "error" && <p>Not Defined Error</p>}
+          {data?.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              {page.board_page.length > 0
+                ? page.board_page.map((searchData) => (
+                    <AzitList key={searchData.clubId} data={searchData} />
+                  ))
+                : <Default text="검색 결과가 없습니다." />}
+            </React.Fragment>
+          ))}
         </article>
+        {isFetchingNextPage ? <Loading /> : <div ref={ref} />}
       </SearchWrap>
     </>
   );
