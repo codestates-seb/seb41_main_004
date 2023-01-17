@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
-import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
+// import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 // import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
@@ -10,6 +10,8 @@ import { useEffect, useRef, useState } from "react";
 import { ImgModal } from "../components/common/Modal";
 //import { useSelector } from "react-redux";
 const URL = process.env.REACT_APP_BASE_URL;
+const accessToken = localStorage.getItem("accessToken");
+//console.log(accessToken);
 
 const ProfileEditForm = styled.div`
   display: flex;
@@ -103,9 +105,10 @@ const UserProfileEdit = () => {
   const [nameValue, SetNameValue] = useState("");
   const [introValue, setIntroValue] = useState("");
   const [imgFile, setImgFile] = useState("");
-  const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
-  const [intro, setIntro] = useState("유저 자기소개 불러와야함"); //소개 get으로 받아오는것
+  const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
+  const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
+  const [category, setCategory] = useState(""); //관심사 get으로 받아오는것
 
   const imgRef = useRef();
 
@@ -123,8 +126,9 @@ const UserProfileEdit = () => {
 
     axios
       .post(`${URL}api/members/1`, formData, {
-        Headers: {
-          "content-type": "multipart/form-data",
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
@@ -160,14 +164,15 @@ const UserProfileEdit = () => {
     axios
       .get(`${URL}api/members/1`, {
         headers: {
-          "Content-Type": "application/json;",
+          Authorization: accessToken,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
         console.log(res);
-        SetdefaultName(res.nickname);
-        setIntro(res.aboutMe);
-        setprofileImg(res.data.fileInfo.fileName);
+        SetdefaultName(res.data.data.nickname);
+        setIntro(res.data.data.email);
+        // setprofileImg(res.data.fileInfo.fileName);
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -180,12 +185,14 @@ const UserProfileEdit = () => {
     setModalOpen(!modalOpen);
   };
   const changeHandler = (checked, id) => {
+    //console.log(checked, id); //true , '전시'
     if (checked) {
       setCheckedInputs([...checkedInputs, id]);
     } else {
       // 체크 해제
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
+    console.log(checkedInputs);
   };
 
   const handleEdit = (e) => {
@@ -217,7 +224,7 @@ const UserProfileEdit = () => {
               src={ImgAddIcon}
             ></ImageAddIcon>
           </label>
-          {modalOpen && <ImgModal modalHandler={modalHandler} />}
+          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
         <article>
           <label>닉네임</label>
@@ -225,7 +232,6 @@ const UserProfileEdit = () => {
           <input
             onChange={(e) => {
               SetNameValue(e.target.value);
-              // console.log(nameValue);
             }}
             defaultValue={defaultName}
           ></input>
@@ -235,7 +241,6 @@ const UserProfileEdit = () => {
           <textarea
             onChange={(e) => {
               setIntroValue(e.target.value);
-              // console.log(introValue);
             }}
             placeholder="텍스트를 입력해 주세요."
             defaultValue={intro}
@@ -249,12 +254,15 @@ const UserProfileEdit = () => {
                 <div className="subtitle">{interest.subtitle}</div>
                 <div className="tagContainer">
                   {interest.tags.map((tag, idx) => {
+                    //console.log(tag, idx);
+                    //전시,영화,뮤지컬,공연,디자인 등등,  0,1,2,3,4,5
                     return (
                       <span className="tag" key={idx}>
                         <input
                           id={tag}
                           type="checkbox"
                           onChange={(e) => {
+                            console.log(e);
                             changeHandler(e.currentTarget.checked, tag);
                           }}
                           checked={checkedInputs.includes(tag) ? true : false}
