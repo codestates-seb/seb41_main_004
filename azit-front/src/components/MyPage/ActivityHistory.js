@@ -51,6 +51,14 @@ const Container = styled.div`
       }
     }
   }
+  div.ActivityDetail {
+    display: flex;
+    justify-content: space-between;
+  }
+  > div span {
+    color: var(--sub-font-color);
+    font-size: var(--caption-font);
+  }
 `;
 const ActivityHistory = () => {
   return (
@@ -76,7 +84,6 @@ const ActivityHistory = () => {
         ) : (
           <></>
         )}
-
       </Container>
     </>
   );

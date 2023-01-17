@@ -6,5 +6,5 @@ export const store = configureStore({
   reducer: {
     loginStatus: loginStatusSlice.reducer,
     userInfo: userInfoSlice.reducer,
-}
-})
+  },
+});
