@@ -115,7 +115,7 @@ const EtcWrap = styled.div`
 const AzitList = ({ data }) => {
   let meetDate;
   if (data) {
-    meetDate = toDateFormatOfMonthDay(data.meetingDate);
+    meetDate = toDateFormatOfMonthDay(data.meetingDate, data.meetingTime);
   }
   const repeatAvatar = (data) => {
     let result = [];
@@ -138,11 +138,12 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
+
   return (
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
-          <ImgWrap clubImg={`${data.bannerImage ?  `${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
+          <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_BASE_URL}${data.bannerImage.fileUrl.slice(1)}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
@@ -151,19 +152,19 @@ const AzitList = ({ data }) => {
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
-              <span className="place">{data.location}∙</span>
+              <span className="place">{data.isOnline === "online" ? "온라인" : data.location}∙</span>
               <span className="time">{meetDate}</span>
             </div>
             <div className="etcCell">
-              <div className="profileAvatar">{data.user ? repeatAvatar(data.user) : null}</div>
+              <div className="profileAvatar">{data.clubMembers ? repeatAvatar(data.clubMembers) : null}</div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{data.user ? data.user.length : 0} </span>/
+                  <span className="current">{data.clubMembers.length} </span>/
                   <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
-              <span className="clubHost">{data.clubHost}</span>
+              <span className="clubHost">{data.host.nickname}</span>
             </div>
           </div>
         </Link>
