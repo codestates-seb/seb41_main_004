@@ -89,7 +89,8 @@ public class SecurityConfig {
 
 
 				/*======auth======*/
-				.antMatchers(HttpMethod.POST, "/api/auth/**").permitAll() // 로그인
+				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
+				.antMatchers(HttpMethod.POST, "/api/auth/*/passwords").permitAll() // 비밀번호 찾기
 
 				.anyRequest().authenticated())
 
@@ -130,7 +131,7 @@ public class SecurityConfig {
 			JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,
 				jwtTokenizer, redisUtils);
 
-			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login"); // TODO : 컨트롤러에 login 함수 만들고 삭제하기
+			jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());

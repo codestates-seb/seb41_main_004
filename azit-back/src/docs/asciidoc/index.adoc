@@ -19,8 +19,57 @@ include::{snippets}/login/curl-request.adoc[]
 .http-request
 include::{snippets}/login/http-request.adoc[]
 
+.request-fields
+include::{snippets}/login/request-fields.adoc[]
+
 .http-response
 include::{snippets}/login/http-response.adoc[]
+
+.response-fields
+include::{snippets}/login/response-fields.adoc[]
+
+=== 비밀번호 인증
+
+.curl-request
+include::{snippets}/match-password/curl-request.adoc[]
+
+.http-request
+include::{snippets}/match-password/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/match-password/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/match-password/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/match-password/request-fields.adoc[]
+
+.http-response
+include::{snippets}/match-password/http-response.adoc[]
+
+.response-fields
+include::{snippets}/match-password/response-fields.adoc[]
+
+=== 비밀번호 변경
+
+.curl-request
+include::{snippets}/patch-password/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-password/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-password/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-password/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-password/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-password/http-response.adoc[]
 
 == 회원
 
