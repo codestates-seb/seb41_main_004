@@ -55,7 +55,6 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 	@MockBean
 	ClubMemberMapper mapper;
 
-	Map<String, Long> resources = new HashMap<>();
 	ClubMember clubMember;
 	ClubMemberDto.Signup signup;
 	ClubMemberDto.Patch patch;
@@ -65,7 +64,6 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 	@BeforeEach
 	void beforeEach() {
 		// Make stub data
-		resources.put("club-id", 1L);
 		clubMember = ClubMemberStubData.getDefaultClubMember();
 		signup = ClubMemberStubData.getClubMemberSignup();
 		patch = ClubMemberStubData.getClubMemberPatch();

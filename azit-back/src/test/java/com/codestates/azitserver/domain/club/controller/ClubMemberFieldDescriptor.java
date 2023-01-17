@@ -35,7 +35,6 @@ public class ClubMemberFieldDescriptor {
 			fieldWithPath("avatarImageId").type(JsonFieldType.NUMBER).description("프로필 사진 파일 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
 			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-			fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").ignored(),
 			fieldWithPath("gender").type(JsonFieldType.STRING).description("성별")
 				.attributes(key("constraints").value("MALE | FEMALE")),
 			fieldWithPath("birthYear").type(JsonFieldType.STRING).description("출생년도"),
@@ -61,7 +60,6 @@ public class ClubMemberFieldDescriptor {
 			fieldWithPath("avatarImageId").type(JsonFieldType.NUMBER).description("프로필 사진 파일 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
 			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-			fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").ignored(),
 			fieldWithPath("gender").type(JsonFieldType.STRING).description("성별")
 				.attributes(key("constraints").value("MALE | FEMALE")),
 			fieldWithPath("birthYear").type(JsonFieldType.STRING).description("출생년도"),
