@@ -16,6 +16,8 @@ import {
   timeConvert,
 } from "../util/azitPreviewDateConvert";
 import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
+import { axiosInstance } from "../util/axios";
 
 const AzitPreviewWrap = styled.div`
   width: 100%;
@@ -224,37 +226,48 @@ const ImgWrap = styled.div`
 
 const AzitPreview = () => {
   const { state } = useLocation();
+  console.log(state);
 
-  const bannerImg = state.bannerImg;
+  const banner = state.bannerImg;
+  const birthYearMax = state.birthYearMax;
+  const birthYearMin = state.birthYearMin;
+  const categorySmallId = state.categorySmallId;
+  const clubInfo = state.clubInfo;
+  const clubName = state.clubName;
+  const fee = state.fee;
+  const genderRestiriction = state.genderRestiriction;
+  const isOnline = state.isOnline;
+  const joinQustion = state.joinQustion;
+  const location = state.location;
+  const meetingDate = state.meetingDate;
   const meetingTime = state.meetingTime;
+  const memberLimit = state.memberLimit;
 
-  const [imgFile, setImgFile] = useState(bannerImg);
+  console.log(banner);
+  //const openAzit = async()
+
+  // 배너 이미지 보여주기
+  const [imgFile, setImgFile] = useState(state.bannerImg);
 
   useEffect(() => {
-    const file = bannerImg;
+    const file = state.bannerImg;
     const reader = new FileReader();
 
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImgFile(reader.result);
     };
-  }, [bannerImg]);
-
-  console.log(bannerImg);
-  console.log(state);
-
-  // const bannerImg = location.state.bannerImg;
-  // console.log(bannerImg);
+  }, [state.bannerImg]);
 
   return (
     <AzitPreviewWrap>
       <Header />
       <ImgWrap alt="exampleImg" imgSrc={imgFile}></ImgWrap>
       <AzitPreviewForm>
-        <div className="azitTitle">{state.clubName}</div>
+        <div className="azitTitle">{clubName}</div>
         <div className="desc">
-          <span>{categoryConvert(state.categorySmallId)}</span>
-          <p>1/{state.memberLimit}명</p>
+          <span>{categoryConvert(categorySmallId)}</span>
+          <p>1/{memberLimit}명</p>
         </div>
         <div className="azitInfo">
           <div className="hostInfo">
@@ -273,18 +286,18 @@ const AzitPreview = () => {
           <div className="azitDetailInfo">
             <div>
               <label>참가방식</label>
-              <span>{isOnlineConvert(state.isOnline, state.location)}</span>
+              <span>{isOnlineConvert(isOnline, location)}</span>
             </div>
             <div>
-              <label>날짜</label>
+              <label>날짜 및 시간</label>
               <span>
-                {state.meetingDate} {timeConvert(meetingTime)}
+                {meetingDate} {timeConvert(meetingTime)}
               </span>
             </div>
           </div>
           <div className="azitDescription">
             <label>아지트 설명</label>
-            <div>{state.clubInfo}</div>
+            <div>{clubInfo}</div>
           </div>
         </div>
         <div className="memberList">
@@ -299,16 +312,14 @@ const AzitPreview = () => {
         <div className="detailInfo">
           <h3>상세 안내</h3>
           <ul>
-            <li>참가비 : {PriceFormat(String(state.fee))}원</li>
+            <li>참가비 : {PriceFormat(String(fee))}원</li>
             <li>
-              나이,성별 제한 : {MaxAgeConvert(state.birthYearMax)}
-              {MinAgeConvert(state.birthYearMin)},{" "}
-              {genderConvert(state.genderRestiriction)}
+              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}
+              {MinAgeConvert(birthYearMin)},{genderConvert(genderRestiriction)}
             </li>
           </ul>
         </div>
         <Button state="active" title="아지트 열기" />
-        {/* <Button state="disabled" title= "아지트 열기" /> */}
       </AzitPreviewForm>
     </AzitPreviewWrap>
   );
