@@ -14,6 +14,11 @@ import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 public interface ClubMapper {
 	@Mapping(target = "clubId", ignore = true)
 	@Mapping(target = "clubStatus", ignore = true)
+	@Mapping(target = "host", ignore = true)
+	@Mapping(target = "fileInfo", ignore = true)
+	@Mapping(target = "clubMembers", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "lastModifiedAt", ignore = true)
 	@Mapping(source = "categorySmallId", target = "categorySmall.categorySmallId")
 	Club clubDtoPostToClubEntity(ClubDto.Post post);
 
@@ -21,6 +26,11 @@ public interface ClubMapper {
 	@Mapping(target = "joinQuestion", ignore = true)
 	@Mapping(target = "clubStatus", ignore = true)
 	@Mapping(target = "categorySmall", ignore = true)
+	@Mapping(target = "host", ignore = true)
+	@Mapping(target = "fileInfo", ignore = true)
+	@Mapping(target = "clubMembers", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "lastModifiedAt", ignore = true)
 	Club clubDtoPatchToClubEntity(ClubDto.Patch patch);
 
 	@Mapping(source = "fileInfo", target = "bannerImage")
