@@ -1,26 +1,37 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
-import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
 import TestAvatarUrl from "../images/testProfileImg.png";
 import Button from "../components/common/Button";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
+import { useLocation } from "react-router-dom";
+import {
+  PriceFormat,
+  genderConvert,
+  isOnlineConvert,
+  categoryConvert,
+  MaxAgeConvert,
+  MinAgeConvert,
+  timeConvert,
+} from "../util/azitPreviewDateConvert";
+import { useEffect, useState } from "react";
 
 const AzitPreviewWrap = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  > img {
-    width: 100%;
-    margin-top: 5.5rem;
-  }
 `;
 
 const AzitPreviewForm = styled.div`
   padding: 2rem;
+  min-height: calc(100vh - 25.5rem);
+  display: flex;
+  flex-direction: column;
+  > button {
+    margin-top: auto;
+  }
   > .desc {
     margin-bottom: 2rem;
     display: flex;
@@ -68,12 +79,12 @@ const AzitPreviewForm = styled.div`
         color: var(--sub-font-color);
       }
       > div {
-        >a {
+        > a {
           position: relative;
           margin-right: 1rem;
           pointer-events: none;
-          >.hostIcon {
-            top:0;
+          > .hostIcon {
+            top: 0;
             right: 0;
             width: 1.8rem;
             height: 1.8rem;
@@ -81,7 +92,7 @@ const AzitPreviewForm = styled.div`
           }
         }
         > div {
-          flex : 1;
+          flex: 1;
           label {
             font-size: var(--small-font);
           }
@@ -102,7 +113,7 @@ const AzitPreviewForm = styled.div`
     }
     > .azitDescription {
       flex-basis: 100%;
-      margin-top:1rem;
+      margin-top: 1rem;
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
@@ -118,6 +129,7 @@ const AzitPreviewForm = styled.div`
     font-size: var(--title-font);
     font-weight: var(--bold-weight);
     width: 100%;
+    margin-bottom: 1rem;
     height: 5.8rem;
     word-break: keep-all;
   }
@@ -144,7 +156,7 @@ const AzitPreviewForm = styled.div`
       > li {
         margin-right: 1rem;
         text-align: center;
-        >a {
+        > a {
           pointer-events: none;
         }
         p {
@@ -200,22 +212,49 @@ const UserImgWrap = styled.div`
   background-size: cover;
 `;
 
+const ImgWrap = styled.div`
+  width: 100%;
+  height: 20rem;
+  margin-top: 5.5rem;
+  background-image: url(${(props) => props.imgSrc});
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+`;
+
 const AzitPreview = () => {
-  const profileList = [
-    {
-      userName: "유저1",
-      userUrl: TestAvatarUrl,
-    },
-  ];
+  const { state } = useLocation();
+
+  const bannerImg = state.bannerImg;
+  const meetingTime = state.meetingTime;
+
+  const [imgFile, setImgFile] = useState(bannerImg);
+
+  useEffect(() => {
+    const file = bannerImg;
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+    };
+  }, [bannerImg]);
+
+  console.log(bannerImg);
+  console.log(state);
+
+  // const bannerImg = location.state.bannerImg;
+  // console.log(bannerImg);
+
   return (
     <AzitPreviewWrap>
       <Header />
-      <img alt="exampleImg" src={ExampleImg}></img>
+      <ImgWrap alt="exampleImg" imgSrc={imgFile}></ImgWrap>
       <AzitPreviewForm>
-        <div className="azitTitle">큰 제목</div>
+        <div className="azitTitle">{state.clubName}</div>
         <div className="desc">
-          <span>카테고리</span>
-          <p>nn/nn명</p>
+          <span>{categoryConvert(state.categorySmallId)}</span>
+          <p>1/{state.memberLimit}명</p>
         </div>
         <div className="azitInfo">
           <div className="hostInfo">
@@ -223,51 +262,53 @@ const AzitPreview = () => {
             <div>
               <Link to="/userpage">
                 <TestImg />
-                <img alt="HostIcon" src={HostIcon} className="hostIcon"/>
+                <img alt="HostIcon" src={HostIcon} className="hostIcon" />
               </Link>
               <div>
                 <label>호스트</label>
-                <span>여덟자의닉네임</span>
+                <span>{localStorage.getItem("nickname")}</span>
               </div>
             </div>
           </div>
           <div className="azitDetailInfo">
             <div>
               <label>참가방식</label>
-              <span>온라인</span>
+              <span>{isOnlineConvert(state.isOnline, state.location)}</span>
             </div>
             <div>
               <label>날짜</label>
-              <span>0000-00-00 00:00</span>
+              <span>
+                {state.meetingDate} {timeConvert(meetingTime)}
+              </span>
             </div>
           </div>
           <div className="azitDescription">
             <label>아지트 설명</label>
-            <div>가나다라마바사</div>
+            <div>{state.clubInfo}</div>
           </div>
         </div>
         <div className="memberList">
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
-            {profileList.map((profile, idx) => (
-              <li key={idx}>
-                <Link to="/userpage">
-                  <UserImgWrap userUrl={profile.userUrl} />
-                  <p>유저 네임</p>
-                </Link>
-              </li>
-            ))}
+            <li>
+              <UserImgWrap userUrl={TestAvatarUrl} />
+              <p>{localStorage.getItem("nickname")}</p>
+            </li>
           </ul>
         </div>
         <div className="detailInfo">
           <h3>상세 안내</h3>
           <ul>
-            <li>참가비 : 10000원</li>
-            <li>나이,성별 제한 : 1997년 이상, 남자</li>
+            <li>참가비 : {PriceFormat(String(state.fee))}원</li>
+            <li>
+              나이,성별 제한 : {MaxAgeConvert(state.birthYearMax)}
+              {MinAgeConvert(state.birthYearMin)},{" "}
+              {genderConvert(state.genderRestiriction)}
+            </li>
           </ul>
         </div>
-        <Button state="active" title="아지트 가입하기" />
-        {/* <Button state="disabled" title= "이미 종료된 아지트입니다" /> */}
+        <Button state="active" title="아지트 열기" />
+        {/* <Button state="disabled" title= "아지트 열기" /> */}
       </AzitPreviewForm>
     </AzitPreviewWrap>
   );

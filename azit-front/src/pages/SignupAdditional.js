@@ -5,18 +5,27 @@ import { ImgModal } from "../components/common/Modal";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { interests } from "../dummyData/Category";
 
 
 
 const SignupAdditional = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [checkedInputs, setCheckedInputs] = useState([]);
 
-  const modalHandler = () => {
-    setModalOpen(!modalOpen);
+  const [checkedInputs, setCheckedInputs] = useState([]);
+  const [imgFile, setImgFile] = useState("");
+  const imgRef = useRef();
+
+  const saveImgFile = () => {
+    const file = imgRef.current.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+    };
   };
+
 
   const changeHandler = (checked, id) => {
     if (checked) {
@@ -33,11 +42,16 @@ const SignupAdditional = () => {
       <SignupForm>
         <ProfileImageWrap>
           <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon
-            onClick={() => modalHandler()}
-            src={ImgAddIcon}
-          ></ImageAddIcon>
-          {modalOpen && <ImgModal modalHandler={modalHandler} />}
+          <ImageAddIcon src={ImgAddIcon}>
+            <input
+            type="file"
+            accept="jpg, jpeg, png"
+            id="bannerImg"
+            onChange={saveImgFile}
+            ref={imgRef}
+            />
+          </ImageAddIcon>
+          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
         <article>
           <label>자기소개를 입력해주세요.</label>

@@ -100,21 +100,22 @@ const EtcWrap = styled.div`
   justify-content: space-between;
   margin-top: 0.5rem;
   display: none;
-  button, a {
+  button,
+  a {
     cursor: pointer;
     font-size: var(--caption-font);
     color: var(--sub-font-color);
-    border:none;
+    border: none;
     background-color: transparent;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
   }
 `;
 
 const AzitList = ({ data }) => {
   let meetDate;
   if (data) {
-    meetDate = toDateFormatOfMonthDay(data.meetingDate);
+    meetDate = toDateFormatOfMonthDay(data.meetingDate, data.meetingTime);
   }
   const repeatAvatar = (data) => {
     let result = [];
@@ -137,11 +138,12 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
+
   return (
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
-          <ImgWrap clubImg={`${data.bannerImage ?  `${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
+          <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_BASE_URL}${data.bannerImage.fileUrl.slice(1)}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
@@ -150,19 +152,19 @@ const AzitList = ({ data }) => {
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
-              <span className="place">{data.location}∙</span>
+              <span className="place">{data.isOnline === "online" ? "온라인" : data.location}∙</span>
               <span className="time">{meetDate}</span>
             </div>
             <div className="etcCell">
-              <div className="profileAvatar">{data.user ? repeatAvatar(data.user) : null}</div>
+              <div className="profileAvatar">{data.clubMembers ? repeatAvatar(data.clubMembers) : null}</div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{data.user ? data.user.length : 0} </span>/
+                  <span className="current">{data.clubMembers.length} </span>/
                   <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
-              <span className="clubHost">{data.clubHost}</span>
+              <span className="clubHost">{data.host.nickname}</span>
             </div>
           </div>
         </Link>
@@ -172,6 +174,7 @@ const AzitList = ({ data }) => {
         <div className="ActivityView">
           <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
         </div>
+        {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
           <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
         </div>

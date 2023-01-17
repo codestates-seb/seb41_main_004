@@ -5,57 +5,51 @@ import google from "../images/googleLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginStatusSlice } from "../redux/loginSlice";
-import { userInfoSlice } from "../redux/userSlice";
 import axios from "axios";
 import { setCookie } from "../util/cookie/cookie";
 import jwt_decode from 'jwt-decode';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance } from "../util/axios";
+
 
 
 const Login = () => {
+  
+  const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // useForm의 isSubmitting으로 로그인 로딩 구현
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({mode: "onchange"});
 
   const loginButtonClick = async (data) => {
-  const { email, password } = data;
-  console.log(data);
-  if (!email || !password) {
-    alert('아이디와 비밀번호를 입력해주세요.');
-    return;
-  }
-  // 서버에 data POST
-  return await axios({
-    method: 'POST',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json',
-    },
-    // url: `${}/auth/login`,
-    data: {
-      email,
-      password,
-    },
-    responseType: 'json',
-  })
-  .then(res => {
-    const accessToken = res.headers.get('Authorization');
-    setCookie('accessJwtToken', accessToken);
-    const decoded = jwt_decode(accessToken);
-    const loginUserId = decoded.memberId;
-    dispatch(userInfoSlice.actions.getUserInfo({"memberId": loginUserId}));
-    localStorage.setItem('loginUserInfo', JSON.stringify({"memberId": loginUserId}));
-    // localStorage에 nickname 추가
-    // localStorage.setItem('', )
-    navigate('/');
-    dispatch(loginStatusSlice.actions.login());
-  })
-  .catch(err => {
-    console.log(err)
-  })
-  }
+    const { email, password } = data;
+      try {
+        const res = await axiosInstance.post(
+          `/api/auth/login`,
+          data
+        );
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
+        const nickname = res.data.nickname;
+        const email = res.data.email;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('email', email);
+        localStorage.setItem('nickname', nickname);
+        setCookie('accessToken', accessToken);
+        navigate('/');
+        dispatch(loginStatusSlice.actions.login());
+      } catch (e) {
+        // error handling 하기
+        console.log(e.response.status);
+        if (e.response.status === 401) {
+          alert("유효하지 않은 유저 정보입니다.");
+        } else if(e.response.status === 500) {
+          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+        }
+      }
+    };
 
   return (
     <LoginContainer>
@@ -68,8 +62,11 @@ const Login = () => {
             type='text' 
             autoComplete="off"
             placeholder="이메일 입력" 
-            {...register("email")}
+            {...register("email", {
+              required: true,
+            })}
           />
+          {errors.email?.type === 'required' && <div className="errorMessage">이메일을 입력해주세요.</div>}
         </InputWrap>
         <InputWrap>
           <label htmlFor="password">비밀번호</label>
@@ -78,8 +75,11 @@ const Login = () => {
             type='password' 
             autoComplete="off"
             placeholder="비밀번호 입력"
-            {...register("password")}
+            {...register("password", {
+              required: true,
+            })}
           />
+          {errors.password?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
         </InputWrap>
         {/* <Link to="/"> */}
           <Button type="submit" title="로그인" state="active"></Button>
@@ -132,7 +132,6 @@ const InputWrap = styled.div`
     }
   }
   & > .errorMessage {
-    font-size: var(--caption-font);
     color: var(--point-color);
   }
 `;

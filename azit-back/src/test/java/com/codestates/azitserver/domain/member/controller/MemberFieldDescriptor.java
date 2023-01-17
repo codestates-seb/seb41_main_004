@@ -19,8 +19,14 @@ public class MemberFieldDescriptor {
 				fieldWithPath("gender").type(JsonFieldType.STRING).description("성별")
 					.attributes(key("constraints").value("MALE | FEMALE")),
 				fieldWithPath("birthYear").type(JsonFieldType.STRING).description("출생년도"),
-				fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional()
+				fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional(),
+				fieldWithPath("categorySmallId").type(JsonFieldType.ARRAY).description("memberCategory 고유 식별자")
+
 		);
+
+
+
+
 	}
 
 	public static RequestFieldsSnippet getPatchRequestFieldsSnippet() {
@@ -29,7 +35,8 @@ public class MemberFieldDescriptor {
 			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
 			fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
 			fieldWithPath("passwordCheck").type(JsonFieldType.STRING).description("비밀번호 확인"),
-			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional()
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional(),
+			fieldWithPath("categorySmallId").type(JsonFieldType.ARRAY).description("관심 카테고리(소)")
 		);
 	}
 
@@ -48,7 +55,11 @@ public class MemberFieldDescriptor {
 			fieldWithPath("reputation").type(JsonFieldType.NUMBER).description("평판 점수")
 				.attributes(key("constraints").value("기본값 10")),
 			fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태")
-				.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴")))
+				.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴")),
+			subsectionWithPath("memberCategoryList").type(JsonFieldType.ARRAY)
+				.description("연관테이블"),
+			fieldWithPath("memberCategoryList[].memberCategoryId").type(JsonFieldType.NUMBER)
+				.description("회원-카테고리 연관 테이블 고유 식별자"))
 			.and(fieldWithPath("data.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
 		).andWithPrefix("data.fileInfo.",
 			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("프로필 사진 고유 식별자"),
@@ -72,7 +83,8 @@ public class MemberFieldDescriptor {
 			fieldWithPath("reputation").type(JsonFieldType.STRING).description("평판 점수")
 			.attributes(key("constraints").value("기본값 10")),
 			fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태")
-			.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴"))
+			.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴")),
+			fieldWithPath("memberCategory").type(JsonFieldType.ARRAY).description("회원-카테고리 연관테이블")
 			).and(
 			fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보")
 			).andWithPrefix("pageInfo.",

@@ -14,6 +14,7 @@ const AzitDetailWrap = styled.div`
   justify-content: center;
 
   > img {
+    height: 20rem;
     width: 100%;
     margin-top: 5.5rem;
   }
@@ -21,6 +22,12 @@ const AzitDetailWrap = styled.div`
 
 const AzitDetailForm = styled.div`
   padding: 2rem;
+  min-height: calc(100vh - 25.5rem);
+  display: flex;
+  flex-direction: column;
+  > button {
+    margin-top: auto;
+  }
   > .desc {
     margin-bottom: 2rem;
     display: flex;
