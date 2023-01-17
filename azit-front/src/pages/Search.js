@@ -7,6 +7,7 @@ import AzitList from "../components/common/AzitList";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { axiosInstance } from "../util/axios";
+import Loading from "../components/common/Loading";
 
 const SearchWrap = styled.section`
   > .resultCell {
@@ -49,39 +50,31 @@ const FxiedHeader = styled.div`
 `;
 
 const Search = () => {
-  const [SearchControl, setSearchControl] = useState(false);
   const [value, setValue] = useState("");
-  const [resultList, setResultList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [beError, setError] = useState(null);
 
-  const fetchList = async () => {
+  const fetchList = async (keyword) => {
     try {
-      // setError(null);
-      // setResultList([]);
-      // setLoading(true);
       const res = await axiosInstance.get(
-        `/api/clubs/search?page=1&size=10&keyword=${value}`
+        `/api/clubs/search?page=1&size=10&keyword=${keyword}`
       );
       return res.data;
-      // setResultList(res.data);
-    } catch (e) {
-      // setError(e);
-      console.log(e.response.data);
-    }
-    setLoading(false);
-  };
-  // eslint-disable-next-line no-undef
-  const {isLoading, isError, data, error} = useQuery('search', fetchList)
-  console.log(data)
-  const searchControlHandler = (e) => {
-    if (e.key === "Enter" && e.target.value.length > 0) {
-      fetchList();
-      setSearchControl(true);
-    } else if (e.key === "Enter" && e.target.value.length === 0) {
-      setSearchControl(false);
+    } catch (error) {
+      console.log(error.response.data);
     }
   };
+  
+  const {
+    isLoading,
+    isError,
+    data: searchList,
+    error,
+  } = useQuery(["search", value], () => fetchList(value), {
+    // input에 검색어가 입력되지 않으면 query가 호출되지 않는다.
+    enabled: !!value,
+    staleTime: 6 * 10 * 1000,
+    cacheTime: 6 * 10 * 1000,
+  });
+  console.log(searchList)
   const changeValue = (e) => {
     setValue(e.target.value);
   };
@@ -95,9 +88,6 @@ const Search = () => {
           <article className="searchCell">
             <input
               placeholder="아지트를 검색해주세요."
-              onKeyUp={(e) => {
-                searchControlHandler(e);
-              }}
               onChange={(e) => {
                 changeValue(e);
               }}
@@ -105,21 +95,16 @@ const Search = () => {
           </article>
         </FxiedHeader>
         <article className="resultCell">
-          {SearchControl ? (
-            loading ? null : resultList.data.length > 0 ? (
-              resultList.data?.map((data) => (
-                <AzitList key={data.clubId} data={data} />
-              ))
-            ) : (
-              <div className="default">
-                <img alt="searchIcon" src={searchBackIcon} />
-                <p>검색결과가 없습니다.</p>
-              </div>
-            )
+          {isLoading && <Loading /> }
+          {isError && <p>Error: {error.message}</p>}
+          {searchList?.data?.length > 0 ? (
+            searchList.data.map((data) => (
+              <AzitList key={data.clubId} data={data} />
+            ))
           ) : (
             <div className="default">
               <img alt="searchIcon" src={searchBackIcon} />
-              <p>아지트 이름을 검색해보세요.</p>
+              <p>{value.length > 0 ? '검색결과가 없습니다.' : "검색어를 입력해 주세요."}</p>
             </div>
           )}
         </article>
