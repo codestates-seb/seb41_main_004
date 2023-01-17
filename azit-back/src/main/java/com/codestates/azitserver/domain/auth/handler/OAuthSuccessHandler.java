@@ -54,13 +54,13 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		}
 		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
 		else {
-			LoginDto.Response responseDto = new LoginDto.Response();
+			LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
 
-			responseDto.setEmail(email);
-			responseDto.setNickname(nickname);
+			responseWithProfileDto.setEmail(email);
+			responseWithProfileDto.setNickname(nickname);
 
 			ObjectMapper objectMapper = new ObjectMapper();
-			String info = objectMapper.writeValueAsString(responseDto);
+			String info = objectMapper.writeValueAsString(responseWithProfileDto);
 
 			response.getWriter().write(info);
 		}
@@ -81,13 +81,13 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		);
 
 		// 유저정보 만들기
-		LoginDto.Response responseDto = new LoginDto.Response();
-		responseDto.setEmail(member.getEmail());
-		responseDto.setNickname(member.getNickname());
-		responseDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+		responseWithProfileDto.setEmail(member.getEmail());
+		responseWithProfileDto.setNickname(member.getNickname());
+		responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		String info = objectMapper.writeValueAsString(responseDto);
+		String info = objectMapper.writeValueAsString(responseWithProfileDto);
 
 		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);

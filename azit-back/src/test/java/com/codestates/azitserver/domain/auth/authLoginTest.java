@@ -106,23 +106,16 @@ public class authLoginTest {
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),
-				requestFields(
-					List.of(
-						fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-						fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
-					)
-				),
+				requestFields(List.of(
+					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"))),
 				responseHeaders(
 					headerWithName("Authorization").description("액세스 토큰"),
-					headerWithName("Refresh").description("리프레시 토큰")
-				),
-				responseFields(
-					List.of(
-						fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-						fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-						fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필주소")
-					)
-				)
+					headerWithName("Refresh").description("리프레시 토큰")),
+				responseFields(List.of(
+					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+					fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+					fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필주소")))
 			));
 	}
 }

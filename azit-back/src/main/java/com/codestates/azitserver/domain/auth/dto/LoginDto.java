@@ -27,9 +27,15 @@ public class LoginDto {
 
 	@Getter
 	@Setter
-	public static class Response {
+	public static class ResponseWithProfile {
 		private String email;
 		private String nickname;
 		private String profileUrl;
+	}
+
+	@Getter
+	@Setter
+	public static class ResponseMatcher {
+		Boolean matchingResult;
 	}
 }

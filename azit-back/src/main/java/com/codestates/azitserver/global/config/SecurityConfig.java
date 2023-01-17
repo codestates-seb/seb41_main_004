@@ -87,6 +87,7 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.POST, "/api/auth/*/passwords").permitAll() // 비밀번호 찾기
 
 				.anyRequest().authenticated())
+				// .anyRequest().permitAll())
 
 			.oauth2Login(oauth2 -> oauth2
 				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));

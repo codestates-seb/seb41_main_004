@@ -70,13 +70,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		);
 
 		// 유저정보 만들기
-		LoginDto.Response responseDto = new LoginDto.Response();
-		responseDto.setEmail(member.getEmail());
-		responseDto.setNickname(member.getNickname());
-		responseDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+		responseWithProfileDto.setEmail(member.getEmail());
+		responseWithProfileDto.setNickname(member.getNickname());
+		responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		String info = objectMapper.writeValueAsString(responseDto);
+		String info = objectMapper.writeValueAsString(responseWithProfileDto);
 
 		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
