@@ -81,6 +81,33 @@ public class ClubMemberService {
 		clubMemberRepository.save(clubMember);
 	}
 
+	/**
+	 * 아지트에 참여한 memberId의 상태를 강퇴 상태로 변경합니다.
+	 * @param member 현재 로그인한 사용자
+	 * @param clubId 신청한 회원이 존재하는 아지트의 고유 식별자
+	 * @param memberId 상태를 변경할 회원의 고유 식별자
+	 * @author cryoon
+	 */
+	public void kickMember(Member member, Long clubId, Long memberId) {
+		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
+		Club club = clubService.findClubById(clubId);
+		clubService.verifyClubCanceled(club);
+
+		// 요청을 보낸 사용자가 호스트가 맞는지 확인합니다.
+		if (!verifyMemberIfClubHost(club, member.getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.HOST_FORBIDDEN);
+		}
+
+		// 상태를 변경하려는 사용자가 아지트에 신청한 회원이 맞고, 상태가 신청 대기가 맞는지 확인합니다.
+		ClubMember clubMember = findClubMemberByMemberIdAndClubId(memberId, clubId);
+		if (clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_JOINED) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+
+		clubMember.setClubMemberStatus(ClubMember.ClubMemberStatus.CLUB_KICKED);
+		clubMemberRepository.save(clubMember);
+	}
+
 	// *** verification ***
 	public void verifyMember(Member member, Long memberId) {
 		if (!member.getMemberId().equals(memberId)) {

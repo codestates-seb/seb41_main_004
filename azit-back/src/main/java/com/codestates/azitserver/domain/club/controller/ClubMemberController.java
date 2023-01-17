@@ -90,8 +90,12 @@ public class ClubMemberController {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
-	@PatchMapping("/kicks/{member-id}")
-	public ResponseEntity<?> kickClubMemembers() {
-		return null;
+	@PatchMapping("/kicks/{member-id:[0-9]+}")
+	public ResponseEntity<?> kickClubMembers(@Positive @PathVariable("club-id") Long clubId,
+		@Positive @PathVariable("member-id") Long memberId,
+		@LoginMember Member member) {
+		clubMemberService.kickMember(member, clubId, memberId);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
