@@ -6,6 +6,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
 
 import lombok.AllArgsConstructor;
@@ -80,10 +81,10 @@ public class MemberDto {
 	@Setter
 	public static class Response {
 		private Long memberId;
-		private Long avatarImageId;
+		private FileInfo fileInfo;
 		private String email;
 		private String nickname;
-		private String password;
+		// private String password;
 		private Member.Gender gender;
 		private String birthYear;
 		private String aboutMe;

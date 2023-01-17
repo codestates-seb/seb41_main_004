@@ -9,10 +9,13 @@ import { userInfoSlice } from "../redux/userSlice";
 import axios from "axios";
 import { setCookie } from "../util/cookie/cookie";
 import jwt_decode from 'jwt-decode';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 const Login = () => {
+  
+  const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,42 +23,30 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
 
   const loginButtonClick = async (data) => {
-  const { email, password } = data;
-  console.log(data);
-  if (!email || !password) {
-    alert('아이디와 비밀번호를 입력해주세요.');
-    return;
-  }
-  // 서버에 data POST
-  return await axios({
-    method: 'POST',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json',
-    },
-    // url: `${}/auth/login`,
-    data: {
-      email,
-      password,
-    },
-    responseType: 'json',
-  })
-  .then(res => {
-    const accessToken = res.headers.get('Authorization');
-    setCookie('accessJwtToken', accessToken);
-    const decoded = jwt_decode(accessToken);
-    const loginUserId = decoded.memberId;
-    dispatch(userInfoSlice.actions.getUserInfo({"memberId": loginUserId}));
-    localStorage.setItem('loginUserInfo', JSON.stringify({"memberId": loginUserId}));
-    // localStorage에 nickname 추가
-    // localStorage.setItem('', )
-    navigate('/');
-    dispatch(loginStatusSlice.actions.login());
-  })
-  .catch(err => {
-    console.log(err)
-  })
-  }
+    const { email, password } = data;
+      try {
+        const res = await axios.post(
+          `http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login`,
+          data
+        );
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
+        const nickname = res.data.nickname;
+        const email = res.data.email;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('email', email);
+        localStorage.setItem('nickname', nickname);
+        navigate('/');
+        dispatch(loginStatusSlice.actions.login());
+      } catch (e) {
+        // error handling 하기
+        console.log(e.response.status);
+        if(e.response.status === 401) {
+          alert("유효하지 않은 유저 정보입니다.");
+        }
+      }
+    };
 
   return (
     <LoginContainer>

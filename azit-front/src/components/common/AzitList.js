@@ -100,14 +100,15 @@ const EtcWrap = styled.div`
   justify-content: space-between;
   margin-top: 0.5rem;
   display: none;
-  button, a {
+  button,
+  a {
     cursor: pointer;
     font-size: var(--caption-font);
     color: var(--sub-font-color);
-    border:none;
+    border: none;
     background-color: transparent;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
   }
 `;
 
@@ -173,6 +174,7 @@ const AzitList = ({ data }) => {
         <div className="ActivityView">
           <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
         </div>
+        {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
           <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
         </div>
