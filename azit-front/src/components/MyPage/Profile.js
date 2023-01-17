@@ -1,4 +1,5 @@
 // import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import testProfile from "../../images/testProfileImg.png";
@@ -103,6 +104,7 @@ const MannerTemp = styled.div`
 
 const Profile = () => {
   // const [temp, setTemp] = useState(0);
+  const [myPage, setMyPage] = useState(true);
 
   return (
     <ProfileWrapper>
@@ -116,9 +118,7 @@ const Profile = () => {
         <span className="tempNum">60°</span>
       </TempWrap>
       <InfoWrapper>
-        <ButtonWrapper>
-          <Button>팔로우</Button>
-        </ButtonWrapper>
+        <ButtonWrapper>{myPage ? "" : <Button>팔로우</Button>}</ButtonWrapper>
 
         <Name>닉네임</Name>
         <Text>매일 반복되는 일상을 특별하게 만들고 싶다. ㅁㄴㅇㄹㅁㄴㅇㄹ</Text>

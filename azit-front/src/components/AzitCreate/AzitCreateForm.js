@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
-import Button from "../common/Button";
-// import { useNavigate } from "react-router-dom";
-import FindAddr from "./FindAddr";
+import DaumPostcode from "react-daum-postcode";
+import { useNavigate } from "react-router-dom";
+import { PriceFormat } from "../../util/azitPreviewDateConvert";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
@@ -71,16 +71,6 @@ const CreateFormWrap = styled.div`
       }
     }
     > .radioContainer {
-      > input {
-        height: 3.4rem;
-        margin-top: 0.9rem;
-        padding: 0;
-        font-size: var(--small-font);
-        color: var(--border-color);
-        border: none;
-        border-bottom: 1px solid var(--border-color);
-        border-radius: 0;
-      }
       margin-top: 2rem;
       > div {
         width: 100%;
@@ -92,7 +82,7 @@ const CreateFormWrap = styled.div`
       }
       > .selectPlace {
         font-size: var(--small-font);
-        color: var(--border-color);
+        color: var(--sub-font-color);
         margin-top: 1.5rem;
         padding-bottom: 1.2rem;
         border-bottom: 1px solid var(--border-color);
@@ -102,6 +92,36 @@ const CreateFormWrap = styled.div`
   > .buttonWrap {
     margin-bottom: 2rem;
     margin-top: 3rem;
+    > .nextBtn {
+      width: 100%;
+      height: 55px;
+      font-size: var(--big-font);
+      border-radius: 5px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      transition: 0.5s all;
+      background-color: var(--point-color);
+      color: var(--white-color);
+      :hover {
+        background-color: var(--hover-color);
+      }
+    }
+    > .disabled {
+      width: 100%;
+      height: 55px;
+      font-size: var(--big-font);
+      border-radius: 5px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      transition: 0.5s all;
+      background-color: var(--border-color);
+      color: var(--light-font-color);
+      pointer-events: none;
+    }
   }
 `;
 
@@ -130,7 +150,7 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
-const AzitCreateForm = () => {
+const AzitCreateForm = ({ imgFile }) => {
   let minYear = [];
   let maxYear = [];
 
@@ -157,6 +177,8 @@ const AzitCreateForm = () => {
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [question, setQuestion] = useState("");
+  const [writeInfo, setWriteInfo] = useState("");
+  const [visible, setVisible] = useState(false);
 
   const onChangeMemberLimit = (e) => {
     if (e.target.value >= 3) {
@@ -164,18 +186,6 @@ const AzitCreateForm = () => {
     } else {
       return;
     }
-  };
-
-  const inputPriceFormat = (str) => {
-    const comma = (str) => {
-      str = String(str);
-      return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
-    };
-    const uncomma = (str) => {
-      str = String(str);
-      return str.replace(/[^\d]+/g, "");
-    };
-    return comma(uncomma(str));
   };
 
   const onChangeDate = (e) => {
@@ -212,6 +222,7 @@ const AzitCreateForm = () => {
     setGenderSelected(e.target.value);
   };
 
+  // 제한없음 체크박스 클릭시 멤버 나이 Select 창 비활성화
   const nolimit = () => {
     setChecked(!checked);
 
@@ -226,21 +237,71 @@ const AzitCreateForm = () => {
     }
   };
 
+  // daum 주소 찾기
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+    setWriteInfo(fullAddress);
+    setVisible(false);
+  };
+
+  // 이미지 base 64 를 image.file로 변환하는 함수
+  function dataURLtoFile(dataurl, filename) {
+    if (!dataurl) {
+      return;
+    } else {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+  }
+  const navigate = useNavigate();
+
+  let file = dataURLtoFile(imgFile, "sendImg");
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
+  let numberMemberLimit = Number(memberLimit);
 
   let body = {
-    fee: numberFee,
-    categorySmallId,
-    genderRestriction: genderSelected,
-    minYear: minYearSelected,
-    maxYear: maxYearSelected,
-    place: check,
+    bannerImg: file,
+    categorySmallId: categorySmallId,
+    clubName: clubName,
+    clubInfo,
+    memberLimit: numberMemberLimit,
     meetingDate,
     meetingTime,
+    fee: numberFee,
+    genderRestriction: genderSelected,
+    birthYearMin: minYearSelected,
+    birthYearMax: maxYearSelected,
+    isOnline: check,
+    location: writeInfo,
+    joinQustion: question,
   };
   console.log(body);
 
+  const move = () => {
+    navigate("/azit/preview", { state: body });
+  };
   return (
     <CreateFormWrap>
       <form className="form">
@@ -517,10 +578,22 @@ const AzitCreateForm = () => {
             </Label2>
           </div>
           {check === "offline" ? (
-            <input
-              placeholder="장소를 입력해주세요."
-              // defaultValue={location}
-            ></input>
+            <>
+              <div
+                className="selectPlace"
+                onClick={() => setVisible(true)}
+                placeholder="장소를 입력해주세요."
+              >
+                {writeInfo ? writeInfo : "장소를 입력해주세요."}
+              </div>
+              {visible ? (
+                <div>
+                  <DaumPostcode onComplete={handleComplete} height={700} />
+                </div>
+              ) : (
+                <></>
+              )}
+            </>
           ) : (
             <div className="selectPlace">온라인</div>
           )}
@@ -598,7 +671,7 @@ const AzitCreateForm = () => {
           <input
             type="text"
             value={fee}
-            onChange={(e) => setFee(inputPriceFormat(e.target.value))}
+            onChange={(e) => setFee(PriceFormat(e.target.value))}
           ></input>
         </div>
         <div className="inputContainer">
@@ -612,11 +685,12 @@ const AzitCreateForm = () => {
         </div>
       </form>
       <div className="buttonWrap">
-        {question && fee ? (
-          <Button state="active" title="모임 미리보기" />
-        ) : (
-          <Button state="disabled" title="모임 미리보기" />
-        )}
+        <button
+          className={imgFile && question && fee ? "nextBtn" : "disabled"}
+          onClick={move}
+        >
+          모임 미리보기
+        </button>
       </div>
     </CreateFormWrap>
   );

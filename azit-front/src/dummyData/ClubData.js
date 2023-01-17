@@ -6,24 +6,27 @@ export const ClubData = [
     clubId: 1,
     clubName: "재밌는 아지트",
     clubInfo: "재밌는 아지트입니다.",
+    meetingDate: "2023-01-20",
+    meetingTime: "23:59:00",
     clubImg: TestAzitImg,
     memberLimit: 20,
-    meetingDate: "2023-03-05T15:30",
-    location: "서울시 강남구",
     categorySmall: {
       categoryLargeId: 1,
       categoryName: "전시",
       categorySmallId: 1,
     },
-    clubHost: "여덟글자의호스트",
+    host: {
+      memberId:1,
+      nickname: "여덟글자의호스트"
+    },
     fee: 10000,
     joinMethod: "APPROVAL",
     birthYearMin: "1990",
     birthYearMax: "2000",
     genderRestriction: "ALL",
-    isOnline: false,
+    isOnline: "online",
     joinQuestion: "재밌게 즐기실거죠?",
-    user: [
+    clubMembers: [
       {
         userId: 1,
         userName: "테스트네임",
@@ -122,14 +125,18 @@ export const ClubData = [
     clubInfo: "재밌는 아지트입니다.",
     clubImg: TestAzitImg,
     memberLimit: 20,
-    meetingDate: "2023-03-05T15:30",
+    meetingDate: "2023-01-20",
+    meetingTime: "23:59:00",
     location: "서울시 강남구",
     categorySmall: {
       categoryLargeId: 1,
       categoryName: "전시",
       categorySmallId: 1,
     },
-    clubHost: "여덟글자의호스트",
+    host: {
+      memberId:1,
+      nickname: "여덟글자의호스트"
+    },
     fee: 10000,
     joinMethod: "APPROVAL",
     birthYearMin: "1990",
@@ -137,7 +144,7 @@ export const ClubData = [
     genderRestriction: "ALL",
     isOnline: false,
     joinQuestion: "재밌게 즐기실거죠?",
-    user: [
+    clubMembers: [
       {
         userId: 1,
         userName: "테스트네임",
@@ -161,14 +168,18 @@ export const ClubData = [
     clubInfo: "재밌는 아지트입니다.",
     clubImg: TestAzitImg,
     memberLimit: 20,
-    meetingDate: "2023-03-05T15:30",
+    meetingDate: "2023-01-20",
+    meetingTime: "23:59:00",
     location: "서울시 강남구",
     categorySmall: {
       categoryLargeId: 1,
       categoryName: "전시",
       categorySmallId: 1,
     },
-    clubHost: "여덟글자의호스트",
+    host: {
+      memberId:1,
+      nickname: "여덟글자의호스트"
+    },
     fee: 10000,
     joinMethod: "APPROVAL",
     birthYearMin: "1990",
@@ -176,7 +187,7 @@ export const ClubData = [
     genderRestriction: "ALL",
     isOnline: false,
     joinQuestion: "재밌게 즐기실거죠?",
-    user: [
+    clubMembers: [
       {
         userId: 1,
         userName: "테스트네임",

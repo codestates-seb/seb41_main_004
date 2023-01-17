@@ -3,6 +3,7 @@ package com.codestates.azitserver.domain.member.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -12,8 +13,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -27,10 +34,12 @@ import lombok.Setter;
 public class Member extends Auditable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MEMBER_ID")
 	private Long memberId;
 
-	@Column(name = "AVATAR_IMAGE_ID", unique = true) //TODO FK
-	private Long avatar_image_id;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "MEMBER_FILE_INFO")
+	private FileInfo fileInfo;
 
 	@Column(nullable = false, unique = true, length = 128)
 	private String email;
@@ -59,6 +68,12 @@ public class Member extends Auditable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
 
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<MemberCategory> memberCategoryList = new ArrayList<>();
+
+
+
 	public enum Gender {
 		MALE("남자"),
 		FEMALE("여자");
@@ -82,9 +97,9 @@ public class Member extends Auditable {
 	}
 
 	@Builder
-	public Member(Long memberId, Long avatar_image_id, String email, String nickname,
+	public Member(Long memberId, FileInfo fileInfo, String email, String nickname,
 		String password, Gender gender, String birthYear, String aboutMe,
-		Integer reputation, MemberStatus memberStatus) {
+		Integer reputation, MemberStatus memberStatus, List<MemberCategory> memberCategoryList) {
 		//        Assert.hasText(email, "email must not be empty");
 		//        Assert.hasText(nickname, "nickname must not be empty");
 		//        Assert.hasText(password, "password must not be empty");
@@ -93,7 +108,7 @@ public class Member extends Auditable {
 		//        Assert.notNull(memberStatus, "memberStatus must not be empty");
 
 		this.memberId = memberId;
-		this.avatar_image_id = avatar_image_id;
+		this.fileInfo = fileInfo;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;
@@ -102,6 +117,11 @@ public class Member extends Auditable {
 		this.aboutMe = aboutMe;
 		this.reputation = reputation;
 		this.memberStatus = memberStatus;
+		this.memberCategoryList = memberCategoryList;
+	}
+
+	public void addMemberCategorySmallList(List<MemberCategory> memberCategoryList ) {
+		this.memberCategoryList = memberCategoryList;
 	}
 
 }

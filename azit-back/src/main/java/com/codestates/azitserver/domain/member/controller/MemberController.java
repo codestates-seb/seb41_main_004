@@ -1,6 +1,5 @@
 package com.codestates.azitserver.domain.member.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -40,16 +41,32 @@ public class MemberController {
 	}
 
 	//회원 생성
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post memberPostDto) {
-		Member member = memberMapper.memberPostDtoToMember(memberPostDto);
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> postMember(@RequestPart(name = "data") @Valid MemberDto.Post memberPostDto,
+		@RequestPart(name = "image", required = false) MultipartFile profileImage) {
+
+		Member tempMember = memberMapper.memberPostDtoToMember(memberPostDto);
+		List<Long> categorySmallIdList = memberPostDto.getCategorySmallId();
+
 		// 'password 한번 더' 절차
 		memberService.passwordConfirmer(memberPostDto);
 
-		Member createdMember = memberService.createMember(member);
-		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+		Member createdMember = memberService.createMember(tempMember, profileImage, categorySmallIdList);
+		MemberDto.Response response = memberMapper.memberToMemberResponseDto(createdMember);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+	}
+
+	// 회원 프로필 이미지 수정
+	@PostMapping(value = "/{member-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> postMemberImage(@Positive @PathVariable("member-id") Long memberId,
+		@RequestPart(name = "image", required = false) MultipartFile profileImage) {
+
+		Member member = memberService.profileImageCombiner(memberId, profileImage);
+
+		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
 	//전체 회원 조회

@@ -59,7 +59,7 @@ function App() {
           <Route path="/findpw" element={<FindPassword />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signup/add" element={<SignupAdditional />}></Route>
-          
+
           {/* 유저페이지 */}
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
@@ -70,7 +70,6 @@ function App() {
             path="/userpage/resetpw"
             element={<UserResetPassword />}
           ></Route>
-
         </Routes>
       </BrowserRouter>
     </>
