@@ -137,6 +137,7 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
+
   return (
     <ListWrap>
       <DetailWrap>
