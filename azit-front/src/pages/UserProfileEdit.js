@@ -4,7 +4,7 @@ import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
-import { Link, useParams } from "react-router-dom";
+// import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
 import { ImgModal } from "../components/common/Modal";
@@ -78,6 +78,7 @@ const ProfileImageWrap = styled.div`
   flex-direction: column;
   align-items: center;
   > input {
+    // 프로필이미지의 이미지첨부 input창 숨김
     display: none;
   }
 `;
@@ -101,13 +102,14 @@ const UserProfileEdit = () => {
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [nameValue, SetNameValue] = useState("");
   const [introValue, setIntroValue] = useState("");
+  const [imgFile, setImgFile] = useState("");
   const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
   const [intro, setIntro] = useState("유저 자기소개 불러와야함"); //소개 get으로 받아오는것
   const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
-  const [imgFile, setImgFile] = useState("");
+
   const imgRef = useRef();
 
-  const saveImgFile = () => {
+  const saveImgFile = async (e) => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
 
@@ -115,6 +117,22 @@ const UserProfileEdit = () => {
     reader.onloadend = () => {
       setImgFile(reader.result);
     };
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    axios
+      .post(`${URL}api/members/1`, formData, {
+        Headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   function dataURLtoFile(dataurl, filename) {
@@ -138,11 +156,9 @@ const UserProfileEdit = () => {
   let file = dataURLtoFile(imgFile, "sendImg");
   // console.log(file);
 
-  // let { id } = useParams();
-
   useEffect(() => {
     axios
-      .get(`${URL}/api/members/1`, {
+      .get(`${URL}api/members/1`, {
         headers: {
           "Content-Type": "application/json;",
         },
@@ -155,7 +171,8 @@ const UserProfileEdit = () => {
       })
       .catch((error) => {
         console.log("error : ", error);
-        alert("중복된 닉네임입니다. 다시 시도하세요.");
+        // alert("중복된 닉네임입니다. 다시 시도하세요.");
+        //alert창은 axios patch에서 에러뜨면 해야됨
       });
   }, []);
 
@@ -192,7 +209,6 @@ const UserProfileEdit = () => {
             onChange={saveImgFile}
             ref={imgRef}
           ></input>
-
           <ProfileImage
             imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
           ></ProfileImage>
