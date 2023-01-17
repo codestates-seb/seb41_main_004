@@ -2,7 +2,9 @@ package com.codestates.azitserver.domain.club.service;
 
 import java.util.Optional;
 
-import org.springframework.expression.ExpressionException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.club.entity.Club;
@@ -35,6 +37,20 @@ public class ClubMemberService {
 		clubMemberRepository.save(clubMember);
 
 		return club.addClubMember(clubMember);
+	}
+
+	/**
+	 * 특정 아지트에 참여신청을 보낸 사용자를 전체 조회합니다.
+	 * @param clubId 조회할 아지트 고유 식별자
+	 * @param page 페이지 번호
+	 * @param size 페이지에 들어갈 크기
+	 * @return 해당 아지트에 참여 신청을 보낸 사용자를 담은 pagenation 배열을 반환합니다.
+	 * @author cryoon
+	 */
+	public Page<ClubMember> getAllClubMemberByClubId(Long clubId, int page, int size) {
+		Club club = clubService.findClubById(clubId);
+		return clubMemberRepository.findClubMembersByClub(club,
+			PageRequest.of(page, size, Sort.by("clubMemberId").descending()));
 	}
 
 	/**

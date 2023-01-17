@@ -3,7 +3,6 @@ package com.codestates.azitserver.domain.club.repository;
 import java.time.LocalDate;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,9 +16,9 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 
 	// SELECT * FROM CLUB WHERE MEETING_DATE = {날짜}
 	@Query("select c from Club c where c.meetingDate = :targetDate")
-	Page<Club> findAllClubsByClubMeetingDate(LocalDate targetDate, PageRequest createdAt);
+	Page<Club> findAllClubsByClubMeetingDate(LocalDate targetDate, Pageable pageable);
 
 	// SELECT * FROM CLUB WHERE CLUB_NAME LIKE '%{keyword}%' OR CLUB_INFO LIKE '%{keyword}%';
 	@Query("select c from Club c where c.clubName like concat('%', :keyword, '%') or c.clubInfo like concat('%', :keyword, '%')")
-	Page<Club> findAllClubsByNameOrInfoLikeKeywords(String keyword, PageRequest createdAt);
+	Page<Club> findAllClubsByNameOrInfoLikeKeywords(String keyword, Pageable pageable);
 }
