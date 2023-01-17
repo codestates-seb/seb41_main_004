@@ -38,9 +38,13 @@ const Login = () => {
         localStorage.setItem('email', email);
         localStorage.setItem('nickname', nickname);
         navigate('/');
+        dispatch(loginStatusSlice.actions.login());
       } catch (e) {
         // error handling 하기
-        console.log(e);
+        console.log(e.response.status);
+        if(e.response.status === 401) {
+          alert("유효하지 않은 유저 정보입니다.");
+        }
       }
     };
 
