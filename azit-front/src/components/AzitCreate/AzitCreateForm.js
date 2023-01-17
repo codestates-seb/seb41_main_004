@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
-import Button from "../common/Button";
 import DaumPostcode from "react-daum-postcode";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { azitInfo } from "../../redux/azitSlice";
+import { useNavigate } from "react-router-dom";
+import { PriceFormat } from "../../util/azitPreviewDateConvert";
 
 const CreateFormWrap = styled.div`
   padding: 2rem 2rem 0;
@@ -94,6 +92,36 @@ const CreateFormWrap = styled.div`
   > .buttonWrap {
     margin-bottom: 2rem;
     margin-top: 3rem;
+    > .nextBtn {
+      width: 100%;
+      height: 55px;
+      font-size: var(--big-font);
+      border-radius: 5px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      transition: 0.5s all;
+      background-color: var(--point-color);
+      color: var(--white-color);
+      :hover {
+        background-color: var(--hover-color);
+      }
+    }
+    > .disabled {
+      width: 100%;
+      height: 55px;
+      font-size: var(--big-font);
+      border-radius: 5px;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      transition: 0.5s all;
+      background-color: var(--border-color);
+      color: var(--light-font-color);
+      pointer-events: none;
+    }
   }
 `;
 
@@ -158,18 +186,6 @@ const AzitCreateForm = ({ imgFile }) => {
     } else {
       return;
     }
-  };
-
-  const inputPriceFormat = (str) => {
-    const comma = (str) => {
-      str = String(str);
-      return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
-    };
-    const uncomma = (str) => {
-      str = String(str);
-      return str.replace(/[^\d]+/g, "");
-    };
-    return comma(uncomma(str));
   };
 
   const onChangeDate = (e) => {
@@ -258,53 +274,34 @@ const AzitCreateForm = ({ imgFile }) => {
       return new File([u8arr], filename, { type: mime });
     }
   }
-
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let file = dataURLtoFile(imgFile, "sendImg");
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
+  let numberMemberLimit = Number(memberLimit);
+
   let body = {
     bannerImg: file,
     categorySmallId: categorySmallId,
     clubName: clubName,
     clubInfo,
-    memberLimit,
+    memberLimit: numberMemberLimit,
     meetingDate,
     meetingTime,
     fee: numberFee,
     genderRestriction: genderSelected,
     birthYearMin: minYearSelected,
     birthYearMax: maxYearSelected,
-    genderSelected,
     isOnline: check,
     location: writeInfo,
     joinQustion: question,
   };
   console.log(body);
 
-  const handleSubmit = () => {
-    dispatch(
-      azitInfo({
-        bannerImg: file,
-        categorySmallId: categorySmallId,
-        clubName: clubName,
-        clubInfo,
-        memberLimit,
-        meetingDate,
-        meetingTime,
-        fee: numberFee,
-        genderRestriction: genderSelected,
-        birthYearMin: minYearSelected,
-        birthYearMax: maxYearSelected,
-        genderSelected,
-        isOnline: check,
-        location: writeInfo,
-        joinQustion: question,
-      })
-    );
+  const move = () => {
+    navigate("/azit/preview", { state: body });
   };
-
   return (
     <CreateFormWrap>
       <form className="form">
@@ -674,7 +671,7 @@ const AzitCreateForm = ({ imgFile }) => {
           <input
             type="text"
             value={fee}
-            onChange={(e) => setFee(inputPriceFormat(e.target.value))}
+            onChange={(e) => setFee(PriceFormat(e.target.value))}
           ></input>
         </div>
         <div className="inputContainer">
@@ -688,17 +685,12 @@ const AzitCreateForm = ({ imgFile }) => {
         </div>
       </form>
       <div className="buttonWrap">
-        {imgFile && question && fee ? (
-          <Link to="/azit/preview">
-            <Button
-              state="active"
-              title="모임 미리보기"
-              onClick={handleSubmit}
-            />
-          </Link>
-        ) : (
-          <Button state="disabled" title="모임 미리보기" />
-        )}
+        <button
+          className={imgFile && question && fee ? "nextBtn" : "disabled"}
+          onClick={move}
+        >
+          모임 미리보기
+        </button>
       </div>
     </CreateFormWrap>
   );
