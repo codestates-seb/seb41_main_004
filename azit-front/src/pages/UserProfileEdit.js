@@ -188,7 +188,8 @@ const UserProfileEdit = () => {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.preventDefault();
     let body = {
       nickname: nameValue,
       aboutMe: introValue,
@@ -209,9 +210,7 @@ const UserProfileEdit = () => {
             onChange={saveImgFile}
             ref={imgRef}
           ></input>
-          <ProfileImage
-            imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
-          ></ProfileImage>
+          <ProfileImage imgSrc={imgFile ? imgFile : profileImg}></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
             <ImageAddIcon
               // onClick={() => modalHandler()}
@@ -226,7 +225,7 @@ const UserProfileEdit = () => {
           <input
             onChange={(e) => {
               SetNameValue(e.target.value);
-              console.log(nameValue);
+              // console.log(nameValue);
             }}
             defaultValue={defaultName}
           ></input>
@@ -236,7 +235,7 @@ const UserProfileEdit = () => {
           <textarea
             onChange={(e) => {
               setIntroValue(e.target.value);
-              console.log(introValue);
+              // console.log(introValue);
             }}
             placeholder="텍스트를 입력해 주세요."
             defaultValue={intro}
@@ -260,9 +259,6 @@ const UserProfileEdit = () => {
                           }}
                           checked={checkedInputs.includes(tag) ? true : false}
                           name={tag}
-                          onClick={() => {
-                            handleEdit();
-                          }} //button에다가 onClick 줘야함
                         ></input>
                         <label htmlFor={tag}>{tag}</label>
                       </span>
@@ -276,7 +272,16 @@ const UserProfileEdit = () => {
         {/*Link -> useNavigate 로 변환 필요 / */}
         <div className="buttonWrap"></div>
         {/* <Link to="/"> */}
-        <Button title="수정 완료" state="active"></Button>
+        <form onSubmit={handleEdit}>
+          <Button
+            type="submit"
+            title="수정 완료"
+            state="active"
+            // onClick={() => {
+            //   handleEdit();
+            // }}
+          ></Button>
+        </form>
         {/* </Link> */}
       </ProfileEditForm>
     </>
