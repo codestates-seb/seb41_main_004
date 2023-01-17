@@ -11,11 +11,7 @@ const AzitaddWrap = styled.div`
     > input {
       display: none;
     }
-    > img {
-      width: 100%;
-      height: 19.23rem;
-      margin-top: 5.5rem;
-    }
+
     > label {
       color: var(--point-color);
       text-align: center;
@@ -59,7 +55,6 @@ const AzitCreate = () => {
           ref={imgRef}
         ></input>
         <ImgWrap imgSrc={imgFile ? imgFile : BannerImg}></ImgWrap>
-        {/* <img alt="banner-img" src={imgFile ? imgFile : BannerImg}></img> */}
         <label className="bannerImgLabel" htmlFor="bannerImg">
           배너 이미지 추가
         </label>
