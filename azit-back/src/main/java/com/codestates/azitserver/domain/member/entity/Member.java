@@ -3,6 +3,7 @@ package com.codestates.azitserver.domain.member.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -13,10 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -30,9 +34,10 @@ import lombok.Setter;
 public class Member extends Auditable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MEMBER_ID")
 	private Long memberId;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "MEMBER_FILE_INFO")
 	private FileInfo fileInfo;
 
@@ -63,6 +68,10 @@ public class Member extends Auditable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles = new ArrayList<>();
 
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<MemberCategory> memberCategoryList = new ArrayList<>();
+
 
 
 	public enum Gender {
@@ -90,7 +99,7 @@ public class Member extends Auditable {
 	@Builder
 	public Member(Long memberId, FileInfo fileInfo, String email, String nickname,
 		String password, Gender gender, String birthYear, String aboutMe,
-		Integer reputation, MemberStatus memberStatus) {
+		Integer reputation, MemberStatus memberStatus, List<MemberCategory> memberCategoryList) {
 		//        Assert.hasText(email, "email must not be empty");
 		//        Assert.hasText(nickname, "nickname must not be empty");
 		//        Assert.hasText(password, "password must not be empty");
@@ -108,6 +117,11 @@ public class Member extends Auditable {
 		this.aboutMe = aboutMe;
 		this.reputation = reputation;
 		this.memberStatus = memberStatus;
+		this.memberCategoryList = memberCategoryList;
+	}
+
+	public void addMemberCategorySmallList(List<MemberCategory> memberCategoryList ) {
+		this.memberCategoryList = memberCategoryList;
 	}
 
 }

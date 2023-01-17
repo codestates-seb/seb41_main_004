@@ -1,13 +1,18 @@
 package com.codestates.azitserver.domain.member.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.entity.MemberCategory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +51,9 @@ public class MemberDto {
 		@Length(max = 128, message = "Introduction must be no longer than 128 characters")
 		private String aboutMe;
 
+		@NotNull(message = "Choose at least one category")
+		private List<Long> categorySmallId;
+
 	}
 
 	@Getter
@@ -75,6 +83,9 @@ public class MemberDto {
 		@Length(max = 128, message = "Introduction must be no longer than 128 characters")
 		private String aboutMe;
 
+		@NotNull(message = "Choose at least one category")
+		private List<Long> categorySmallId;
+
 	}
 
 	@Getter
@@ -90,5 +101,6 @@ public class MemberDto {
 		private String aboutMe;
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
+		private List<MemberCategory> memberCategoryList;
 	}
 }

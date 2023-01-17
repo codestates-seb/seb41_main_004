@@ -46,10 +46,12 @@ public class MemberController {
 		@RequestPart(name = "image", required = false) MultipartFile profileImage) {
 
 		Member tempMember = memberMapper.memberPostDtoToMember(memberPostDto);
+		List<Long> categorySmallIdList = memberPostDto.getCategorySmallId();
+
 		// 'password 한번 더' 절차
 		memberService.passwordConfirmer(memberPostDto);
 
-		Member createdMember = memberService.createMember(tempMember, profileImage);
+		Member createdMember = memberService.createMember(tempMember, profileImage, categorySmallIdList);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(createdMember);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
