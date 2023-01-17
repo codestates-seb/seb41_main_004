@@ -29,8 +29,8 @@ const SearchWrap = styled.section`
 const FxiedHeader = styled.div`
   position: fixed;
   z-index: 99;
-  top:0;
-  left:50%;
+  top: 0;
+  left: 50%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 50rem;
@@ -45,11 +45,11 @@ const FxiedHeader = styled.div`
       padding: 1.5rem 1.5rem 1.5rem 4rem;
     }
   }
-`
+`;
 
 const Search = () => {
   const [SearchControl, setSearchControl] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [resultList, setResultList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -59,18 +59,34 @@ const Search = () => {
       setError(null);
       setResultList([]);
       setLoading(true);
-      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}api/clubs/search?page=1&size=10&keyword=${value}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}api/clubs/search?page=1&size=10&keyword=${value}`
+      );
       setResultList(res.data);
     } catch (e) {
       setError(e);
       console.log(error);
     }
     setLoading(false);
-  }
-
+  };
+  const login = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}api/auth/login`,
+        {
+          email: "admin_test@hello.com",
+          password: "1234",
+        }
+      );
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const searchControlHandler = (e) => {
     if (e.key === "Enter" && e.target.value.length > 0) {
-      fetchList()
+      login();
+      fetchList();
       setSearchControl(true);
     } else if (e.key === "Enter" && e.target.value.length === 0) {
       setSearchControl(false);
@@ -78,8 +94,7 @@ const Search = () => {
   };
   const changeValue = (e) => {
     setValue(e.target.value);
-  }
-  
+  };
 
   return (
     <>
@@ -93,15 +108,18 @@ const Search = () => {
               onKeyUp={(e) => {
                 searchControlHandler(e);
               }}
-              onChange={(e) => {changeValue(e)}}
+              onChange={(e) => {
+                changeValue(e);
+              }}
             ></input>
           </article>
         </FxiedHeader>
         <article className="resultCell">
           {SearchControl ? (
-            loading ? null :
-            resultList.data.length > 0 ? (
-              resultList.data?.map((data) => <AzitList key={data.clubId} data={data} />)
+            loading ? null : resultList.data.length > 0 ? (
+              resultList.data?.map((data) => (
+                <AzitList key={data.clubId} data={data} />
+              ))
             ) : (
               <div className="default">
                 <img alt="searchIcon" src={searchBackIcon} />
