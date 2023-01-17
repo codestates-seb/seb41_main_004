@@ -8,13 +8,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.entity.MemberCategory;
 
 public class MemberStubData {
 
+   /*등산 7 헬스 8 와인 13*/
     public static Member stubMember() {
-        Member member = Member.builder()
+        Member member = tempStubMember();
+        member.setMemberCategoryList(
+            List.of(tempMemberCategory(1L, tempStubMember(),7L),
+            tempMemberCategory(1L, tempStubMember(),13L)));
+        return member;
+    }
+    public static Member tempStubMember() {
+        Member tempStubMember = Member.builder()
             .memberId(1L)
             .fileInfo(FileInfoStubData.getDefaultFileInfo())
             .email("stubmember@naver.com")
@@ -26,7 +36,22 @@ public class MemberStubData {
             .reputation(10)
             .memberStatus(Member.MemberStatus.ACTIVE)
             .build();
-        return member;
+
+        return tempStubMember;
+    }
+    public static CategorySmall tempCategorySmall(Long categorySmallId) {
+        CategorySmall categorySmall = new CategorySmall();
+        categorySmall.setCategorySmallId(categorySmallId);
+        return categorySmall;
+    }
+    public static MemberCategory tempMemberCategory(Long memberCategoryId, Member member, Long categorySmallId) {
+        MemberCategory memberCategory =
+             MemberCategory.builder()
+            .memberCategoryId(memberCategoryId)
+            .member(tempStubMember())
+            .categorySmall(tempCategorySmall(categorySmallId))
+            .build();
+        return memberCategory;
     }
 
     public static MemberDto.Post stubMemberDtoPost() {
@@ -39,7 +64,7 @@ public class MemberStubData {
         post.setGender(Member.Gender.MALE);
         post.setBirthYear("2001");
         post.setAboutMe("김스텁의 자기소개");
-
+        post.setCategorySmall(List.of("헬스", "와인"));
         return post;
     }
 
@@ -50,11 +75,13 @@ public class MemberStubData {
         patch.setPassword("654321@asdf");
         patch.setPasswordCheck("654321@asdf");
         patch.setAboutMe("김스텁의 자기소개");
+        patch.setCategorySmall(List.of("등산", "와인"));
 
         return patch;
     }
 
     public static MemberDto.Response stubMemberDtoResponse() {
+        Member member = tempStubMember();
         MemberDto.Response response = new MemberDto.Response();
 
         response.setMemberId(1L);
@@ -67,6 +94,11 @@ public class MemberStubData {
         response.setAboutMe("김스텁의 자기소개");
         response.setReputation(10);
         response.setMemberStatus(Member.MemberStatus.ACTIVE);
+        response.setMemberCategoryList(
+            List.of(
+                tempMemberCategory(1L, tempStubMember(),7L),
+                    tempMemberCategory(1L, tempStubMember(),13L))
+        );
 
         return response;
     }
