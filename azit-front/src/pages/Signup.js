@@ -22,7 +22,7 @@ const Signup = () => {
 
   const SignupButtonClick = async(data) => {
     // eslint-disable-next-line
-    const { nickName, email, password, passwordConfirm } = data;  
+    const { nickName, email, password, passwordCheck } = data;  
     // 서버로 data POST
     console.log(data);
     navigate('/signup/add');
@@ -76,18 +76,18 @@ const Signup = () => {
             {errors.password?.type === 'pattern' && <div className="errorMessage">특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요.</div>}
         </SignupInputWrap>
         <SignupInputWrap>
-          <label htmlFor="passwordConfirm">비밀번호를 확인해 주세요.</label>
+          <label htmlFor="passwordCheck">비밀번호를 확인해 주세요.</label>
           <input 
             type='password' 
-            id='passwordConfirm' 
+            id='passwordCheck' 
             autoComplete="off"
             placeholder="비밀번호를 확인해 주세요."
-            {...register('passwordConfirm', {
+            {...register('passwordCheck', {
               required: true,
               validate: (value) => value === password.current
             })}></input>
-          {errors.passwordConfirm?.type === 'required' && <div className="errorMessage">비밀번호를 확인해 주세요.</div>}
-          {errors.passwordConfirm?.type === 'validate' && <div className="errorMessage">비밀번호가 일치하지 않습니다.</div>}
+          {errors.passwordCheck?.type === 'required' && <div className="errorMessage">비밀번호를 확인해 주세요.</div>}
+          {errors.passwordCheck?.type === 'validate' && <div className="errorMessage">비밀번호가 일치하지 않습니다.</div>}
         </SignupInputWrap>
       </SignupInputContainer>
       <Button 
