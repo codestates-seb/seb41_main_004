@@ -165,12 +165,15 @@ const UserProfileEdit = () => {
         console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
-        // setImgFile(res.data.data.fileInfo.fileName);
+        console.log(res.data.data.fileInfo.fileName);
+        setImgFile(res.data.data.fileInfo.fileUrl);
+
         let categoryList = [];
-        res.data.data.memberCategoryList.map((category) => {
-          return categoryList.push(category.memberCategoryId);
+        res.data.data.categorySmallIdList.map((category) => {
+          return categoryList.push(category);
         });
         setCheckedInputs(categoryList);
+        console.log(checkedInputs);
       })
       .catch((error) => {
         console.log("error : ", error);
