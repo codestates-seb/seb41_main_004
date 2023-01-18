@@ -6,6 +6,18 @@ import Button from "../components/common/Button";
 import { ProfileList } from "../dummyData/ProfileList";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../util/axios";
+import { useQuery } from "react-query";
+// import {
+//   PriceFormat,
+//   genderConvert,
+//   isOnlineConvert,
+//   categoryConvert,
+//   MaxAgeConvert,
+//   MinAgeConvert,
+//   timeConvert,
+// } from "../util/azitPreviewDateConvert";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -36,7 +48,7 @@ const AzitDetailForm = styled.div`
       text-align: center;
       padding: 0.2rem 0;
       width: 6rem;
-      height: 2rem;
+      line-height: 2rem;
       background-color: var(--point-color);
       color: var(--white-color);
       border-radius: 5rem;
@@ -55,7 +67,7 @@ const AzitDetailForm = styled.div`
     justify-content: space-between;
     > div {
       padding: 1.2rem;
-      height: 12rem;
+      min-height: 12rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-color);
@@ -70,6 +82,7 @@ const AzitDetailForm = styled.div`
       }
     }
     > .hostInfo {
+      height: 14rem;
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
@@ -98,11 +111,15 @@ const AzitDetailForm = styled.div`
       }
     }
     > .azitDetailInfo {
+      height: 14rem;
       justify-content: space-between;
       > div {
         flex-direction: column;
         > label {
           margin-bottom: 0.2rem;
+        }
+        > span {
+          font-size: var(--caption-font);
         }
       }
     }
@@ -114,7 +131,6 @@ const AzitDetailForm = styled.div`
         color: var(--sub-font-color);
       }
       > div {
-        height: 10rem;
         padding: 0;
         border: none;
       }
@@ -205,6 +221,18 @@ const UserImgWrap = styled.div`
 `;
 
 const AzitDetail = () => {
+  const { id } = useParams();
+
+  // const azitLookup = () => {
+  //   return axiosInstance.get(`/api/clubs/${id}`)
+  // }
+
+  // const { isError, data, error} = useQuery("azitDetail", azitLookup);
+
+  //  if(isError){
+  //   return <div>Error: {error.message}</div>
+  //  }
+
   return (
     <AzitDetailWrap>
       <AzitDetailHeader />
