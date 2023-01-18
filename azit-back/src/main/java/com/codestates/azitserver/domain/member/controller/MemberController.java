@@ -72,9 +72,14 @@ public class MemberController {
 	public ResponseEntity<?> postMemberImage(@Positive @PathVariable("member-id") Long memberId,
 		@RequestPart(name = "image", required = false) MultipartFile profileImage) {
 
-		Member member = memberService.profileImageCombiner(memberId, profileImage);
+		Member member = memberService.updateMemberImage(memberId, profileImage);
 
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+
+		List<Long> foundCategorySmallIdList = memberCategoryService
+			.memberCategoryListToCategorySmallIdListByMemberId(memberId);
+
+		response.setCategorySmallIdList(foundCategorySmallIdList);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
@@ -120,9 +125,6 @@ public class MemberController {
 		Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
 		List<Long> categorySmallIdList = memberPatchDto.getCategorySmallId();
 		member.setMemberId(memberId);
-
-		// 'password 한번 더' 절차
-		memberService.passwordConfirmer(memberPatchDto);
 
 		Member updatedMember = memberService.patchMember(member, categorySmallIdList);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);

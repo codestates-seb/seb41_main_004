@@ -160,6 +160,42 @@ class MemberControllerTest {
 	}
 
 	@Test
+	void updateProfileImageTest() throws Exception {
+		// given
+		given(memberMapper.memberPostDtoToMember(any(MemberDto.Post.class)))
+			.willReturn(member);
+		given(memberService.updateMemberImage(Mockito.anyLong(), any())).willReturn(member);
+		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
+
+		// when
+		ResultActions postActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.multipart("/api/members/{member-id}", 1L)
+					.file(image)
+					.accept(MediaType.APPLICATION_JSON)
+					.header("Authorization", "Required JWT access token")
+					.characterEncoding(StandardCharsets.UTF_8)
+			);
+		// then
+		postActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.memberId").value(1))
+			.andDo(getDefaultDocument(
+					"patch-member-image",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+					parameterWithName("member-id").description("회원 고유 식별자"))),
+					requestParts(List.of(
+						partWithName("image").description("이미지").optional()
+					)),
+					MemberFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+
+	}
+
+	@Test
 	void getMemberByIdTest() throws Exception {
 		// given
 		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
