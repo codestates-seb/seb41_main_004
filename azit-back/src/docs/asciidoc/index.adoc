@@ -228,6 +228,29 @@ include::{snippets}/get-club-by-club-id/http-response.adoc[]
 .response-fields
 include::{snippets}/get-club-by-club-id/response-fields.adoc[]
 
+=== 추천 아지트 조회
+
+.curl-request
+include::{snippets}/get-club-by-member-recommend/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-club-by-member-recommend/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-club-by-member-recommend/path-parameters.adoc[]
+
+.path-parameters
+include::{snippets}/get-club-by-member-recommend/request-parameters.adoc[]
+
+.request-headers
+include::{snippets}/get-club-by-member-recommend/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-club-by-member-recommend/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-club-by-member-recommend/response-fields.adoc[]
+
 === 카테고리별 아지트 조회
 
 .curl-request
