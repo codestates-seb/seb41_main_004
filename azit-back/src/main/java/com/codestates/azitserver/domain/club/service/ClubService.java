@@ -1,7 +1,6 @@
 package com.codestates.azitserver.domain.club.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,6 +15,7 @@ import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
+import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -65,7 +65,7 @@ public class ClubService {
 		Club club = findClubById(clubId);
 
 		// banner image 저장
-		String prefix ="images/club_banner";
+		String prefix = "images/club_banner";
 		Map<String, String> map = storageService.upload(prefix, bannerImage);
 
 		FileInfo fileInfo = new FileInfo();
@@ -102,11 +102,9 @@ public class ClubService {
 
 	public Page<Club> findClubsByClubMeetingDate(int days, int page, int size) {
 		// 2023-01-12T00:00:00 ~ 2023-01-13T00:00:00 사이의 모든 아지트를 조회합니다.
-		// hibernate jpa는 날짜 계산시 LocalDateTime을 인자로 받습니다.
-		LocalDateTime targetDateBefore = LocalDate.now().plusDays(days).atStartOfDay();
-		LocalDateTime targetDate = LocalDate.now().plusDays(days + 1).atStartOfDay();
+		LocalDate targetDate = LocalDate.now().plusDays(days);
 
-		return clubRepository.findAllClubsByClubMeetingDate(targetDateBefore, targetDate,
+		return clubRepository.findAllClubsByClubMeetingDate(targetDate,
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
 	}
 
@@ -122,5 +120,19 @@ public class ClubService {
 	public Page<Club> findClubsByKeywords(String keyword, int page, int size) {
 		return clubRepository.findAllClubsByNameOrInfoLikeKeywords(keyword.trim(),
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+	}
+
+	public void verifyMemberIsClubHost(Member member, Long clubId) {
+		Club club = findClubById(clubId);
+
+		if (!member.getMemberId().equals(club.getHost().getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.HOST_FORBIDDEN);
+		}
+	}
+
+	public void verifyClubCanceled(Club club) {
+		if (club.getClubStatus() == Club.ClubStatus.CLUB_CANCEL) {
+			throw new BusinessLogicException(ExceptionCode.CLUB_CANCELED);
+		}
 	}
 }

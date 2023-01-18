@@ -51,10 +51,10 @@ public class Club extends Auditable {
 	@Column(name = "JOIN_METHOD", nullable = false, updatable = false, length = 24)
 	private JoinMethod joinMethod = JoinMethod.APPROVAL;
 
-	@Column(name = "BIRTH_YEAR_MIN", nullable = false, length = 4)
+	@Column(name = "BIRTH_YEAR_MIN", length = 4)
 	private String birthYearMin;
 
-	@Column(name = "BIRTH_YEAR_MAX", nullable = false, length = 4)
+	@Column(name = "BIRTH_YEAR_MAX", length = 4)
 	private String birthYearMax;
 
 	@Enumerated(value = EnumType.STRING)

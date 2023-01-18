@@ -33,6 +33,7 @@ import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.service.ClubService;
+import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.stub.ClubStubData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -111,6 +112,7 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		// given
 		long clubId = 1L;
 
+		doNothing().when(clubService).verifyMemberIsClubHost(Mockito.any(Member.class), Mockito.anyLong());
 		given(clubService.updateClubImage(Mockito.anyLong(), Mockito.any())).willReturn(club);
 		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
 
@@ -140,12 +142,13 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		patch.setClubId(clubId);
 		String content = objectMapper.writeValueAsString(patch);
 
+		doNothing().when(clubService).verifyMemberIsClubHost(Mockito.any(Member.class), Mockito.anyLong());
 		given(mapper.clubDtoPatchToClubEntity(Mockito.any(ClubDto.Patch.class))).willReturn(club);
 		given(clubService.updateClub(Mockito.any(Club.class))).willReturn(club);
 		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
 
 		// when
-		ResultActions actions = mockMvc.perform(patchRequestBuilder(getClubUri(), clubId, content)
+		ResultActions actions = mockMvc.perform(patchRequestBuilder(getClubUri(), content, clubId)
 			.header("Authorization", "Required JWT access token"));
 
 		// then
@@ -168,6 +171,8 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		// given
 		long clubId = 1L;
 		response.setClubStatus(Club.ClubStatus.CLUB_CANCEL);
+
+		doNothing().when(clubService).verifyMemberIsClubHost(Mockito.any(Member.class), Mockito.anyLong());
 		given(clubService.cancelClub(Mockito.anyLong())).willReturn(club);
 		given(mapper.clubToClubDtoResponse(any(Club.class))).willReturn(response);
 

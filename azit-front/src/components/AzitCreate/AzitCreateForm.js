@@ -170,7 +170,7 @@ const AzitCreateForm = ({ imgFile }) => {
   const [meetingDate, setMeetingDate] = useState("");
   const [meetingTime, setMeetingTime] = useState("");
   const [check, setCheck] = useState("offline");
-  const [genderSelected, setGenderSelected] = useState("MALE-ONLY");
+  const [genderSelected, setGenderSelected] = useState("MALE_ONLY");
   const [minYearSelected, setMinYearSelected] = useState("");
   const [maxYearSelected, setMaxYearSelected] = useState("");
   const [memberLimit, SetMemberLimit] = useState(null);
@@ -295,9 +295,8 @@ const AzitCreateForm = ({ imgFile }) => {
     birthYearMax: maxYearSelected,
     isOnline: check,
     location: writeInfo,
-    joinQustion: question,
+    joinQuestion: question,
   };
-  console.log(body);
 
   const move = () => {
     navigate("/azit/preview", { state: body });
@@ -624,6 +623,7 @@ const AzitCreateForm = ({ imgFile }) => {
                 value={minYearSelected}
                 id="minAge"
               >
+                <option>이하</option>
                 {minYearList.map((item) => (
                   <option value={item} key={item}>
                     {item}
@@ -639,6 +639,7 @@ const AzitCreateForm = ({ imgFile }) => {
                 value={maxYearSelected}
                 id="maxAge"
               >
+                <option>이상</option>
                 {maxYearList.map((item) => (
                   <option value={item} key={item}>
                     {item}
