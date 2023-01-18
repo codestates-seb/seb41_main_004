@@ -370,8 +370,8 @@ const AzitPreview = () => {
           <ul>
             <li>참가비 : {PriceFormat(String(fee))}원</li>
             <li>
-              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}
-              {MinAgeConvert(birthYearMin)},{genderConvert(genderRestriction)}
+              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}{" "}
+              {MinAgeConvert(birthYearMin)}, {genderConvert(genderRestriction)}
             </li>
           </ul>
         </div>

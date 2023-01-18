@@ -2,22 +2,20 @@ import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
 import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
-import Button from "../components/common/Button";
-import { ProfileList } from "../dummyData/ProfileList";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
 import { useQuery } from "react-query";
-// import {
-//   PriceFormat,
-//   genderConvert,
-//   isOnlineConvert,
-//   categoryConvert,
-//   MaxAgeConvert,
-//   MinAgeConvert,
-//   timeConvert,
-// } from "../util/azitPreviewDateConvert";
+import {
+  PriceFormat,
+  genderConvert,
+  isOnlineConvert,
+  MaxAgeConvert,
+  MinAgeConvert,
+  timeConvert,
+} from "../util/azitPreviewDateConvert";
+import { useEffect, useState } from "react";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -33,6 +31,36 @@ const AzitDetailWrap = styled.div`
 `;
 
 const AzitDetailForm = styled.div`
+  > .active {
+    width: 100%;
+    height: 55px;
+    font-size: var(--big-font);
+    border-radius: 5px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.5s all;
+    background-color: var(--point-color);
+    color: var(--white-color);
+    :hover {
+      background-color: var(--hover-color);
+    }
+  }
+  > .disabled {
+    width: 100%;
+    height: 55px;
+    font-size: var(--big-font);
+    border-radius: 5px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.5s all;
+    background-color: var(--border-color);
+    color: var(--light-font-color);
+    pointer-events: none;
+  }
   padding: 2rem;
   min-height: calc(100vh - 25.5rem);
   display: flex;
@@ -220,28 +248,42 @@ const UserImgWrap = styled.div`
   background-size: cover;
 `;
 
+const ImgWrap = styled.div`
+  width: 100%;
+  height: 20rem;
+  margin-top: 5.5rem;
+  background-image: url(${(props) => props.imgSrc});
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+`;
+
 const AzitDetail = () => {
   const { id } = useParams();
 
-  // const azitLookup = () => {
-  //   return axiosInstance.get(`/api/clubs/${id}`)
-  // }
+  const azitLookup = () => {
+    return axiosInstance.get(`/api/clubs/${id}`);
+  };
 
-  // const { isError, data, error} = useQuery("azitDetail", azitLookup);
+  const { isError, data, error } = useQuery("azitDetail", azitLookup);
 
-  //  if(isError){
-  //   return <div>Error: {error.message}</div>
-  //  }
+  const clubData = data.data.data;
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <AzitDetailWrap>
-      <AzitDetailHeader />
-      <img alt="exampleImg" src={ExampleImg}></img>
+      <AzitDetailHeader clubData={clubData} />
+      <ImgWrap alt="exampleImg" src={ExampleImg}></ImgWrap>
       <AzitDetailForm>
-        <div className="azitTitle">큰 제목</div>
+        <div className="azitTitle">{clubData.clubName}</div>
         <div className="desc">
-          <span>카테고리</span>
-          <p>nn/nn명</p>
+          <span>{clubData.categorySmall.categoryName}</span>
+          <p>
+            {clubData.clubMembers.length}/{clubData.memberLimit}명
+          </p>
         </div>
         <div className="azitInfo">
           <div className="hostInfo">
@@ -253,29 +295,33 @@ const AzitDetail = () => {
               </Link>
               <div>
                 <label>호스트</label>
-                <span>여덟자의닉네임</span>
+                <span>{clubData.host.nickname}</span>
               </div>
             </div>
           </div>
           <div className="azitDetailInfo">
             <div>
               <label>참가방식</label>
-              <span>온라인</span>
+              <span>
+                {isOnlineConvert(clubData.isOnline, clubData.location)}
+              </span>
             </div>
             <div>
               <label>날짜</label>
-              <span>0000-00-00 00:00</span>
+              <span>
+                {clubData.meetingDate} {timeConvert(clubData.meetingTime)}
+              </span>
             </div>
           </div>
           <div className="azitDescription">
             <label>아지트 설명</label>
-            <div>가나다라마바사</div>
+            <div>{clubData.clubInfo}</div>
           </div>
         </div>
         <div className="memberList">
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
-            {ProfileList.map((profile, idx) => (
+            {clubData.clubMembers.map((profile, idx) => (
               <li key={idx}>
                 <Link to="/userpage">
                   <UserImgWrap userUrl={profile.userUrl} />
@@ -288,12 +334,19 @@ const AzitDetail = () => {
         <div className="detailInfo">
           <h3>상세 안내</h3>
           <ul>
-            <li>참가비 : 10000원</li>
-            <li>나이,성별 제한 : 1997년 이상, 남자</li>
+            <li>참가비 : {PriceFormat(String(clubData.fee))}원</li>
+            <li>
+              나이,성별 제한 : {MaxAgeConvert(clubData.birthYearMax)}{" "}
+              {MinAgeConvert(clubData.birthYearMin)},
+              {genderConvert(clubData.genderRestriction)}
+            </li>
           </ul>
         </div>
-        <Button state="active" title="아지트 가입하기" />
-        {/* <Button state="disabled" title= "이미 종료된 아지트입니다" /> */}
+        {clubData.clubStatus === "CLUB_ACTIVE" ? (
+          <button className="active">아지트 가입하기</button>
+        ) : (
+          <button className="disabled">이미 종료된 아지트입니다</button>
+        )}
       </AzitDetailForm>
     </AzitDetailWrap>
   );
