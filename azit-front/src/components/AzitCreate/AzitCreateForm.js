@@ -171,8 +171,8 @@ const AzitCreateForm = ({ imgFile }) => {
   const [meetingTime, setMeetingTime] = useState("");
   const [check, setCheck] = useState("offline");
   const [genderSelected, setGenderSelected] = useState("MALE_ONLY");
-  const [minYearSelected, setMinYearSelected] = useState("");
-  const [maxYearSelected, setMaxYearSelected] = useState("");
+  const [minYearSelected, setMinYearSelected] = useState(null);
+  const [maxYearSelected, setMaxYearSelected] = useState(null);
   const [memberLimit, SetMemberLimit] = useState(null);
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
@@ -229,8 +229,8 @@ const AzitCreateForm = ({ imgFile }) => {
     if (!checked) {
       document.getElementById("minAge").disabled = true;
       document.getElementById("maxAge").disabled = true;
-      setMinYearSelected("");
-      setMaxYearSelected("");
+      setMinYearSelected(null);
+      setMaxYearSelected(null);
     } else {
       document.getElementById("minAge").disabled = false;
       document.getElementById("maxAge").disabled = false;
@@ -681,6 +681,7 @@ const AzitCreateForm = ({ imgFile }) => {
             type="text"
             placeholder="ex) 커피를 좋아하세요?"
             value={question}
+            maxLength={24}
             onChange={(e) => setQuestion(e.target.value)}
           ></input>
         </div>

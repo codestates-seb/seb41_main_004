@@ -88,6 +88,7 @@ const AzitPreviewForm = styled.div`
       }
     }
     > .hostInfo {
+      height: 14rem;
       > label {
         font-size: var(--caption-font);
         color: var(--sub-font-color);
@@ -117,11 +118,15 @@ const AzitPreviewForm = styled.div`
       }
     }
     > .azitDetailInfo {
+      height: 14rem;
       justify-content: space-between;
       > div {
         flex-direction: column;
         > label {
           margin-bottom: 0.2rem;
+        }
+        > span {
+          font-size: var(--caption-font);
         }
       }
     }

@@ -15,6 +15,7 @@ import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
+import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -119,6 +120,14 @@ public class ClubService {
 	public Page<Club> findClubsByKeywords(String keyword, int page, int size) {
 		return clubRepository.findAllClubsByNameOrInfoLikeKeywords(keyword.trim(),
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+	}
+
+	public void verifyMemberIsClubHost(Member member, Long clubId) {
+		Club club = findClubById(clubId);
+
+		if (!member.getMemberId().equals(club.getHost().getMemberId())) {
+			throw new BusinessLogicException(ExceptionCode.HOST_FORBIDDEN);
+		}
 	}
 
 	public void verifyClubCanceled(Club club) {
