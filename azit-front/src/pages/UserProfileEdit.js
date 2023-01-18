@@ -102,7 +102,7 @@ const UserProfileEdit = () => {
   const [nameValue, SetNameValue] = useState("");
   const [introValue, setIntroValue] = useState("");
   const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
-  const [intro, setIntro] = useState("유저 자기소개 불러와야함"); //소개 get으로 받아오는것
+  const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
   const [imgFile, setImgFile] = useState("");
   const imgRef = useRef();
