@@ -25,7 +25,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -172,7 +171,7 @@ public class authControllerTest {
 			.andExpect(status().isOk())
 			.andDo(document("token-reIssue",
 				requestHeaders(
-						headerWithName("Authorization").description("Jwt Access Token"),
-						headerWithName("Refresh").description("Jwt Refresh Token"))));
+					headerWithName("Authorization").description("Jwt Access Token"),
+					headerWithName("Refresh").description("Jwt Refresh Token"))));
 	}
 }
