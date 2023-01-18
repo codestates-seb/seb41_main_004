@@ -148,8 +148,8 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("localhost")
-			// .port(8080)
+			.host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
+			.port(8080)
 			.path("/receive-token.html")
 			.queryParams(queryParams)
 			.build()
