@@ -67,7 +67,7 @@ const AzitDetailForm = styled.div`
     justify-content: space-between;
     > div {
       padding: 1.2rem;
-      height: 12rem;
+      min-height: 12rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-color);
@@ -131,7 +131,6 @@ const AzitDetailForm = styled.div`
         color: var(--sub-font-color);
       }
       > div {
-        height: 10rem;
         padding: 0;
         border: none;
       }
