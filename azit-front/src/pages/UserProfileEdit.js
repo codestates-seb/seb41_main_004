@@ -191,7 +191,6 @@ const UserProfileEdit = () => {
       // 체크 해제
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
-    console.log(checkedInputs);
   };
 
   const handleEdit = (e) => {
