@@ -24,7 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
@@ -73,7 +75,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
 		responseWithProfileDto.setEmail(member.getEmail());
 		responseWithProfileDto.setNickname(member.getNickname());
-		responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		try {
+			responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		} catch (NullPointerException e) {
+			log.warn("Profile image is null:{}", e.getLocalizedMessage());
+		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String info = objectMapper.writeValueAsString(responseWithProfileDto);
