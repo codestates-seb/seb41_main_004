@@ -12,7 +12,7 @@ import Default from "../components/Search/Defalut";
 
 const SearchWrap = styled.section`
   > .resultCell {
-    min-height: 101vh;
+    min-height: 100vh;
     background-color: var(--background-color);
     padding: 15rem 2rem 10rem;
     > .default {
@@ -113,7 +113,7 @@ const Search = () => {
         <article className="resultCell">
           {status === "loading" && <Loading />}
           {status === "idle" && <Default text="검색어를 입력해 주세요." />}
-          {status === "error" && <p>Not Defined Error</p>}
+          {status === "error" && <Default text="Not Defined Error" status="error"/>}
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.board_page.length > 0

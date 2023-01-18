@@ -1,12 +1,8 @@
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
+import Null from "./Null";
 
-const Null = styled.article`
-  padding: 8rem 0 0;
-  text-align: center;
-  color: var(--sub-font-color);
-`;
 const MoreBtn = styled.button`
   width: 100%;
   height: 4rem;
@@ -28,7 +24,7 @@ const RecommendTab = () => {
       {ClubData ? (
         ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
       ) : (
-        <Null>추천 아지트가 없습니다.</Null>
+        <Null text="추천 아지트가 없습니다." />
       )}
       {ClubData && <MoreBtn>더보기 +</MoreBtn>}
     </>
