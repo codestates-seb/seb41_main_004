@@ -8,11 +8,17 @@ const AzitaddWrap = styled.div`
   display: flex;
   flex-direction: column;
   > div {
+    position: relative;
     > input {
       display: none;
     }
 
     > label {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
       color: var(--point-color);
       text-align: center;
     }
@@ -55,9 +61,7 @@ const AzitCreate = () => {
           ref={imgRef}
         ></input>
         <ImgWrap imgSrc={imgFile ? imgFile : BannerImg}></ImgWrap>
-        <label className="bannerImgLabel" htmlFor="bannerImg">
-          배너 이미지 추가
-        </label>
+        <label className="bannerImgLabel" htmlFor="bannerImg"></label>
       </div>
       <AzitCreateForm imgFile={imgFile} />
     </AzitaddWrap>
