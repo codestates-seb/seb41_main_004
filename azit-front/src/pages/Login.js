@@ -8,12 +8,13 @@ import { loginStatusSlice } from "../redux/loginSlice";
 import { setCookie } from "../util/cookie/cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../util/axios";
+// eslint-disable-next-line
 import { useEffect } from "react";
 
 
 
 const Login = () => {
-  
+  // eslint-disable-next-line
   const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const Login = () => {
   }
 
   const loginButtonClick = async (data) => {
+    // eslint-disable-next-line
     const { email, password } = data;
       try {
         const res = await axiosInstance.post(
