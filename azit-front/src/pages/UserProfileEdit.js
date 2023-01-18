@@ -11,7 +11,6 @@ import { ImgModal } from "../components/common/Modal";
 //import { useSelector } from "react-redux";
 const URL = process.env.REACT_APP_BASE_URL;
 const accessToken = localStorage.getItem("accessToken");
-//console.log(accessToken);
 
 const ProfileEditForm = styled.div`
   display: flex;
