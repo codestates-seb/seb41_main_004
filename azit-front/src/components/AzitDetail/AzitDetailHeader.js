@@ -48,18 +48,26 @@ const EditIcon = styled.img.attrs({ src: `${editIcon}` })`
   position: absolute;
   right: 2rem;
   width: 2.4rem;
-  display: none;
 `;
 
-const AzitDetailHeader = () => {
+const AzitDetailHeader = ({ clubData }) => {
   const navigate = useNavigate();
+  const nowUser = localStorage.getItem("nickname");
+
   return (
     <HeaderWrap>
       <button onClick={() => navigate(-1)}>
         <span />
       </button>
-      <ReportIcon></ReportIcon>
-      <EditIcon></EditIcon>
+      {clubData ? (
+        nowUser === clubData.host.nickname ? (
+          <EditIcon></EditIcon>
+        ) : (
+          <ReportIcon></ReportIcon>
+        )
+      ) : (
+        <></>
+      )}
     </HeaderWrap>
   );
 };

@@ -36,7 +36,7 @@ public class StorageServiceAwsS3 implements StorageService {
 
 		// set unique file name
 		String name = UUID.randomUUID().toString();
-		String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+		String ext = getFileExt(file);
 		String filename = name + "." + ext;
 		try {
 			ObjectMetadata objMeta = new ObjectMetadata();
