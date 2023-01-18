@@ -28,6 +28,9 @@ include::{snippets}/login/http-response.adoc[]
 .response-fields
 include::{snippets}/login/response-fields.adoc[]
 
+.response-headers
+include::{snippets}/login/response-headers.adoc[]
+
 === 비밀번호 인증
 
 .curl-request
@@ -70,6 +73,23 @@ include::{snippets}/patch-password/request-fields.adoc[]
 
 .http-response
 include::{snippets}/patch-password/http-response.adoc[]
+
+=== 토큰 재발급
+
+.curl-request
+include::{snippets}/token-reIssue/curl-request.adoc[]
+
+.http-request
+include::{snippets}/token-reIssue/http-request.adoc[]
+
+.request-headers
+include::{snippets}/token-reIssue/request-headers.adoc[]
+
+.response-headers
+include::{snippets}/token-reIssue/response-headers.adoc[]
+
+.http-response
+include::{snippets}/token-reIssue/http-response.adoc[]
 
 == 회원
 
