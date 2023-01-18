@@ -36,8 +36,8 @@ public class MemberFieldDescriptor {
 		return requestFields(
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자").optional(),
 			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-			fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-			fieldWithPath("passwordCheck").type(JsonFieldType.STRING).description("비밀번호 확인"),
+			// fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+			// fieldWithPath("passwordCheck").type(JsonFieldType.STRING).description("비밀번호 확인"),
 			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional(),
 			fieldWithPath("categorySmallId").type(JsonFieldType.ARRAY).description("관심 카테고리(소)")
 		);

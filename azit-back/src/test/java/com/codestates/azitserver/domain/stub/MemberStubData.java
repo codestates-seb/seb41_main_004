@@ -72,8 +72,8 @@ public class MemberStubData {
         MemberDto.Patch patch = new MemberDto.Patch();
 
         patch.setNickname("스텁김");
-        patch.setPassword("654321@asdf");
-        patch.setPasswordCheck("654321@asdf");
+        // patch.setPassword("654321@asdf");
+        // patch.setPasswordCheck("654321@asdf");
         patch.setAboutMe("김스텁의 자기소개");
         patch.setCategorySmallId(List.of(7L,13L));
 

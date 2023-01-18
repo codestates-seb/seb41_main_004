@@ -70,7 +70,7 @@ public class Club extends Auditable {
 	@Column(name = "IS_ONLINE", nullable = false)
 	private String isOnline;
 
-	@Column(name = "LOCATION", length = 24)
+	@Column(name = "LOCATION")
 	private String location;
 
 	@Column(name = "JOIN_QUESTION", nullable = false, updatable = false, length = 24)
