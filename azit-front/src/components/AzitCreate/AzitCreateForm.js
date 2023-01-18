@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 import { PriceFormat } from "../../util/azitPreviewDateConvert";
@@ -168,20 +168,36 @@ const AzitCreateForm = ({ imgFile }) => {
   const [question, setQuestion] = useState("");
   const [writeInfo, setWriteInfo] = useState("");
   const [visible, setVisible] = useState(false);
+  const [year, setYear] = useState({ minYear: [], maxYear: [] });
 
-  let minYear = [];
-  let maxYear = [];
+  useEffect(() => {
+    // 이하가 먼저 선택 됐을 때 > 이상은 이하 밑으론 내려가면 안된다.
+    let resetMaxYear = [];
+    for (let i = minYearSelected; i <= 2023; i++) {
+      resetMaxYear.push(`${String(i)}`);
+    }
+    setYear((originYear) => ({ ...originYear, maxYear: resetMaxYear }));
+  }, [minYearSelected]);
+  
+  useEffect(() => {
+    let resetMinYear = [];
+    for (let i = 1950; i <= maxYearSelected; i++) {
+      resetMinYear.push(String(i));
+    }
+    // console.log(resetMinYear);
+    setYear((originYear) => ({ ...originYear, minYear: resetMinYear }));
+  }, [maxYearSelected]);
 
-  for (let i = 2023; i >= 1950; i--) {
-    minYear.push(String(i));
-  }
-
-  for (let i = minYearSelected; i <= 2023; i++) {
-    maxYear.push(String(i));
-  }
-
-  const minYearList = minYear;
-  const maxYearList = maxYear;
+  useEffect(() => {
+    let year = { minYear: [], maxYear: [] };
+    for (let i = 2023; i >= 1950; i--) {
+      year.minYear.push(String(i));
+    }
+    for (let i = 1950; i <= 2023; i++) {
+      year.maxYear.push(String(i));
+    }
+    setYear(year);
+  }, [checked]);
 
   const onChangeMemberLimit = (e) => {
     if (e.target.value >= 3) {
@@ -302,7 +318,7 @@ const AzitCreateForm = ({ imgFile }) => {
   };
 
   const move = () => {
-    navigate("/azit/preview", { state: body });
+    navigate("/azit/preview", { state: body, replace: true });
   };
   return (
     <CreateFormWrap>
@@ -626,8 +642,8 @@ const AzitCreateForm = ({ imgFile }) => {
                 value={minYearSelected}
                 id="minAge"
               >
-                <option>이하</option>
-                {minYearList.map((item) => (
+                <option>부터</option>
+                {year.minYear.map((item) => (
                   <option value={item} key={item}>
                     {item}
                   </option>
@@ -642,8 +658,8 @@ const AzitCreateForm = ({ imgFile }) => {
                 value={maxYearSelected}
                 id="maxAge"
               >
-                <option>이상</option>
-                {maxYearList.map((item) => (
+                <option>까지</option>
+                {year.maxYear.map((item) => (
                   <option value={item} key={item}>
                     {item}
                   </option>

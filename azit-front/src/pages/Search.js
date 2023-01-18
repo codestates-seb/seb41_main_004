@@ -12,7 +12,7 @@ import Default from "../components/Search/Defalut";
 
 const SearchWrap = styled.section`
   > .resultCell {
-    min-height: 101vh;
+    min-height: 100vh;
     background-color: var(--background-color);
     padding: 15rem 2rem 10rem;
     > .default {
@@ -77,18 +77,19 @@ const Search = () => {
           : true,
     };
   };
-  
-  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["get", value],
-    ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
-    {
-      enabled: !!value,
-      staleTime: 6 * 10 * 1000,
-      cacheTime: 6 * 10 * 1000,
-      getNextPageParam: (lastPage) =>
-        !lastPage.isLast ? lastPage.nextPage : undefined,
-    }
-  );
+
+  const { data, status, fetchNextPage, isFetchingNextPage, error } =
+    useInfiniteQuery(
+      ["get", value],
+      ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
+      {
+        enabled: !!value,
+        staleTime: 6 * 10 * 1000,
+        cacheTime: 6 * 10 * 1000,
+        getNextPageParam: (lastPage) =>
+          !lastPage.isLast ? lastPage.nextPage : undefined,
+      }
+    );
 
   useEffect(() => {
     if (inView) fetchNextPage();
@@ -113,18 +114,30 @@ const Search = () => {
         <article className="resultCell">
           {status === "loading" && <Loading />}
           {status === "idle" && <Default text="검색어를 입력해 주세요." />}
-          {status === "error" && <p>Not Defined Error</p>}
+          {status === "error" && (
+            <Default text={error.message} status="error" />
+          )}
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
-              {page.board_page.length > 0
-                ? page.board_page.map((searchData) => (
-                    <AzitList key={searchData.clubId} data={searchData} />
-                  ))
-                : <Default text="검색 결과가 없습니다." />}
+              {page.board_page.length > 0 ? (
+                page.board_page.map((searchData) => (
+                  <AzitList key={searchData.clubId} data={searchData} />
+                ))
+              ) : (
+                <Default text="검색 결과가 없습니다." />
+              )}
             </React.Fragment>
           ))}
         </article>
-        {isFetchingNextPage ? <Loading /> : <div ref={ref} />}
+        {status !== "error" && status === "success" ? (
+          isFetchingNextPage ? (
+            <Loading />
+          ) : (
+            <div ref={ref} />
+          )
+        ) : (
+          <></>
+        )}
       </SearchWrap>
     </>
   );
