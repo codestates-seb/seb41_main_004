@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,13 @@ public class AuthController {
 		@RequestBody LoginDto.PatchPassword request,
 		@LoginMember Member member) {
 		authService.updatePassword(memberId, request, member);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/reIssue")
+	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
+		authService.reIssueToken(request, response);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
