@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import testProfileImg from "../images/testProfileImg.png";
 import TestAvatarUrl from "../images/testProfileImg.png";
-import Button from "../components/common/Button";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useLocation } from "react-router-dom";
@@ -16,8 +15,8 @@ import {
   timeConvert,
 } from "../util/azitPreviewDateConvert";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
 import { axiosInstance } from "../util/axios";
+import { useNavigate } from "react-router-dom";
 
 const AzitPreviewWrap = styled.div`
   width: 100%;
@@ -27,6 +26,19 @@ const AzitPreviewWrap = styled.div`
 `;
 
 const AzitPreviewForm = styled.div`
+  > button {
+    width: 100%;
+    height: 55px;
+    font-size: var(--big-font);
+    border-radius: 5px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.5s all;
+    background-color: var(--point-color);
+    color: var(--white-color);
+  }
   padding: 2rem;
   min-height: calc(100vh - 25.5rem);
   display: flex;
@@ -42,7 +54,7 @@ const AzitPreviewForm = styled.div`
       text-align: center;
       padding: 0.2rem 0;
       width: 6rem;
-      height: 2rem;
+      line-height: 2rem;
       background-color: var(--point-color);
       color: var(--white-color);
       border-radius: 5rem;
@@ -226,25 +238,65 @@ const ImgWrap = styled.div`
 
 const AzitPreview = () => {
   const { state } = useLocation();
-  console.log(state);
+  const navigate = useNavigate();
 
-  const banner = state.bannerImg;
+  const bannerImg = state.bannerImg;
   const birthYearMax = state.birthYearMax;
   const birthYearMin = state.birthYearMin;
   const categorySmallId = state.categorySmallId;
   const clubInfo = state.clubInfo;
   const clubName = state.clubName;
   const fee = state.fee;
-  const genderRestiriction = state.genderRestiriction;
+  const genderRestriction = state.genderRestriction;
   const isOnline = state.isOnline;
-  const joinQustion = state.joinQustion;
+  const joinQuestion = state.joinQuestion;
   const location = state.location;
   const meetingDate = state.meetingDate;
   const meetingTime = state.meetingTime;
   const memberLimit = state.memberLimit;
 
-  console.log(banner);
-  //const openAzit = async()
+  const accessToken = localStorage.getItem("accessToken");
+
+  const openAzit = async () => {
+    const formData = new FormData();
+
+    formData.append("image", bannerImg);
+
+    let data = {
+      birthYearMax,
+      birthYearMin,
+      categorySmallId,
+      clubInfo,
+      clubName,
+      fee,
+      genderRestriction,
+      isOnline,
+      joinQuestion,
+      location,
+      meetingDate,
+      meetingTime,
+      memberLimit,
+      joinMethod: "APPROVAL",
+    };
+    // console.log(data);
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+
+    try {
+      const res = await axiosInstance.post(`/api/clubs`, formData, {
+        headers: { Authorization: accessToken },
+        "Content-Type": "multipart/form-data",
+      });
+
+      console.log(res);
+      alert("아지트가 생성되었습니다.");
+      navigate("/azit/detail/res.data.clubId", { replace: true });
+    } catch (e) {
+      console.log("아지트 생성 실패");
+    }
+  };
 
   // 배너 이미지 보여주기
   const [imgFile, setImgFile] = useState(state.bannerImg);
@@ -315,11 +367,13 @@ const AzitPreview = () => {
             <li>참가비 : {PriceFormat(String(fee))}원</li>
             <li>
               나이,성별 제한 : {MaxAgeConvert(birthYearMax)}
-              {MinAgeConvert(birthYearMin)},{genderConvert(genderRestiriction)}
+              {MinAgeConvert(birthYearMin)},{genderConvert(genderRestriction)}
             </li>
           </ul>
         </div>
-        <Button state="active" title="아지트 열기" />
+        <button state="active" onClick={openAzit}>
+          아지트 열기
+        </button>
       </AzitPreviewForm>
     </AzitPreviewWrap>
   );
