@@ -109,7 +109,7 @@ public class MemberService {
 	}
 
 	//회원 수정
-	public Member patchMember(Member member) {
+	public Member patchMember(Member member, List<Long> categorySmallIdList) {
 
 		// 기존멤버 찾아
 		Member existingMember = findExistingMember(member.getMemberId());
@@ -122,10 +122,27 @@ public class MemberService {
 
 		// 업데이트 해
 		Member updatedMember = beanUtils.copyNonNullProperties(member, existingMember);
+		updatedMember.setMemberCategoryList(null);
 
 		// password 암호화
 		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
 		updatedMember.setPassword(encryptedPassword);
+
+		// 카테고리 넣기
+		List<MemberCategory> memberCategoryList = new ArrayList<>();
+
+		if (categorySmallIdList != null) {
+			List<CategorySmall> collectedCategorySmalls = categorySmallIdList.stream()
+				.map(categoryService::findCategorySmallById).collect(Collectors.toList());
+
+			for (CategorySmall categorySmall : collectedCategorySmalls) {
+				memberCategoryList.add(MemberCategory.builder()
+					.categorySmall(categorySmall)
+					.member(updatedMember)
+					.build());
+			}
+			updatedMember.addMemberCategorySmallList(memberCategoryList);
+		}
 		return memberRepository.save(updatedMember);
 
 	}

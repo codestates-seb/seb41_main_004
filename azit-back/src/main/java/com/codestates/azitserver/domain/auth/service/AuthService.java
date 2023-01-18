@@ -1,14 +1,21 @@
 package com.codestates.azitserver.domain.auth.service;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
@@ -23,18 +30,17 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final RedisUtils redisUtils;
+	private final JwtTokenizer jwtTokenizer;
 
-	public LoginDto.ResponseMatcher passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
+	public boolean passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
 		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
 		Member findMember = findVerifiedMember(memberId);
 
 		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
 		boolean matchingResult = passwordEncoder.matches(request.getPassword(), findMember.getPassword());
 
-		LoginDto.ResponseMatcher responseDto = new LoginDto.ResponseMatcher();
-		responseDto.setMatchingResult(matchingResult);
-
-		return responseDto;
+		return matchingResult;
 	}
 
 	//비밀번호 변경(patchPassword)
@@ -60,9 +66,62 @@ public class AuthService {
 		}
 	}
 
+	/**
+	 * 토큰 재발급
+	 * @param request : refreshToken, 만료 accessToken
+	 * @param response : 재발급 토큰 보낼 response
+	 */
+	public void reIssueToken(HttpServletRequest request, HttpServletResponse response) {
+		String accessToken = request.getHeader("Authorization");
+		String refreshToken = request.getHeader("Refresh");
+
+		if (redisUtils.getExpiration(refreshToken) > 0) {
+			String Email = redisUtils.getEmail(refreshToken); //**
+			Member findMember = findVerifiedMemberByEmail(Email);
+			// accessToken = delegateAccessToken(findVerifiedMember(memberId));
+			accessToken = delegateAccessToken(findMember);
+
+			response.setHeader("Authorization", "Bearer " + accessToken);
+			response.setHeader("Refresh", refreshToken);
+		} else {
+			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
+		}
+	}
+
+	private String delegateAccessToken(Member member) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("username", member.getEmail());
+		claims.put("roles", member.getRoles());
+
+		String subject = member.getEmail();
+		Date expiration = jwtTokenizer.getTokenExpiration(
+			jwtTokenizer.getAccessTokenExpirationMinutes());
+
+		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(
+			jwtTokenizer.getSecretKey());
+
+		String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration,
+			base64EncodedSecretKey);
+
+		return accessToken;
+	}
+
 	// memberId로 Repository에서 해당하는 멤버 찾아서 정보 반환
 	private Member findVerifiedMember(Long memberId) {
 		Optional<Member> optionalMember = memberRepository.findById(memberId);
+		Member findMember = optionalMember.orElseThrow(
+			() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+		return findMember;
+	}
+
+	/**
+	 * Email로 Member 찾아서 반환
+	 * @param Email : 회원 unique email
+	 * @return : Member
+	 */
+	private Member findVerifiedMemberByEmail(String Email) {
+		Optional<Member> optionalMember = memberRepository.findByEmail(Email);
 		Member findMember = optionalMember.orElseThrow(
 			() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 

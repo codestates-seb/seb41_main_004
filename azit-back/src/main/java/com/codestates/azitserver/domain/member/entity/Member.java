@@ -38,7 +38,7 @@ public class Member extends Auditable {
 	private Long memberId;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "MEMBER_FILE_INFO")
+	@JoinColumn(name = "FILE_INFO_ID")
 	private FileInfo fileInfo;
 
 	@Column(nullable = false, unique = true, length = 128)
@@ -47,8 +47,8 @@ public class Member extends Auditable {
 	@Column(nullable = false, unique = true, length = 16)
 	private String nickname;
 
-    @Column
-    private String password;
+	@Column
+	private String password;
 
 	@Enumerated(value = EnumType.STRING)
 	private Gender gender;

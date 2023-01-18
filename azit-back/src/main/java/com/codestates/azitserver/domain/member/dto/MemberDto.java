@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
@@ -100,7 +101,7 @@ public class MemberDto {
 		private String aboutMe;
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
-		private List<MemberCategory> memberCategoryList;
+		private List<Long> categorySmallIdList;
 	}
 
 	@Getter

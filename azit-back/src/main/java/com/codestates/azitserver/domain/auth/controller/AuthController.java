@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
@@ -31,9 +33,14 @@ public class AuthController {
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
 	public ResponseEntity matchPassword(@Positive @PathVariable("member-id") Long memberId,
 		@RequestBody LoginDto.MatchPassword request) {
-		LoginDto.ResponseMatcher result = authService.passwordMatcher(memberId, request);
+		boolean result = authService.passwordMatcher(memberId, request);
 
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		if (result) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
 	}
 
 	//비밀번호 변경
@@ -42,6 +49,13 @@ public class AuthController {
 		@RequestBody LoginDto.PatchPassword request,
 		@LoginMember Member member) {
 		authService.updatePassword(memberId, request, member);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/reIssue")
+	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
+		authService.reIssueToken(request, response);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
