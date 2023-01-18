@@ -31,7 +31,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
+import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.domain.stub.MemberStubData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,11 +54,15 @@ class MemberControllerTest {
 	private MemberService memberService;
 
 	@MockBean
+	private MemberCategoryService memberCategoryService;
+	@MockBean
 	private MemberMapper memberMapper;
 	@Autowired
 	private Gson gson;
 
 	Member member;
+
+	MemberCategory memberCategory;
 	MemberDto.Post post;
 	MemberDto.Patch patch;
 	MemberDto.Response response;
@@ -111,7 +117,7 @@ class MemberControllerTest {
 						partWithName("data").description("이미지를 제외한 데이터"),
 						partWithName("image").description("이미지").optional()
 					)),
-					MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
+					MemberFieldDescriptor.getPostRequestPartFieldsSnippet()	,
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
@@ -124,7 +130,7 @@ class MemberControllerTest {
 		patch.setMemberId(1L);
 		given(memberMapper.memberPatchDtoToMember(any(MemberDto.Patch.class)))
 			.willReturn(member);
-		given(memberService.patchMember(any(Member.class))).willReturn(member);
+		given(memberService.patchMember(any(Member.class), anyList())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
 
 		String content = gson.toJson(patch);
@@ -151,6 +157,42 @@ class MemberControllerTest {
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
+	}
+
+	@Test
+	void updateProfileImageTest() throws Exception {
+		// given
+		given(memberMapper.memberPostDtoToMember(any(MemberDto.Post.class)))
+			.willReturn(member);
+		given(memberService.updateMemberImage(Mockito.anyLong(), any())).willReturn(member);
+		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
+
+		// when
+		ResultActions postActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.multipart("/api/members/{member-id}", 1L)
+					.file(image)
+					.accept(MediaType.APPLICATION_JSON)
+					.header("Authorization", "Required JWT access token")
+					.characterEncoding(StandardCharsets.UTF_8)
+			);
+		// then
+		postActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.memberId").value(1))
+			.andDo(getDefaultDocument(
+					"patch-member-image",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+					parameterWithName("member-id").description("회원 고유 식별자"))),
+					requestParts(List.of(
+						partWithName("image").description("이미지").optional()
+					)),
+					MemberFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+
 	}
 
 	@Test

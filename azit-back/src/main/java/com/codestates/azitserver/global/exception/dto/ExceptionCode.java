@@ -25,6 +25,7 @@ public enum ExceptionCode {
 	NICKNAME_EXIST(40404, "Nickname is already in use"),
 	EMAIL_EXIST(40405, "Email is already registered"),
 	CLUB_MEMBER_NOT_FOUND(40406, "Join member not found"),
+	TOKEN_NOT_FOUND(40407, "Token not found"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
@@ -34,9 +35,8 @@ public enum ExceptionCode {
 	CLUB_REPORT_EXIST(40905, "Member already report the club");
 
 	// 500
+	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
 
 	private int status;
 	private String message;
-
-
 }

@@ -52,6 +52,8 @@ const FxiedHeader = styled.div`
 
 const Search = () => {
   const [value, setValue] = useState(null);
+  const { ref, inView } = useInView();
+
   const changeValue = (e) => {
     if (e.target.value.length === 0) {
       setValue(null);
@@ -59,6 +61,7 @@ const Search = () => {
       setValue(e.target.value);
     }
   };
+
   const fetchInfiniteList = async (pageParam, keyword) => {
     const res = await axiosInstance.get(
       `/api/clubs/search?page=${pageParam}&size=10&keyword=${keyword}`
@@ -74,7 +77,7 @@ const Search = () => {
           : true,
     };
   };
-  const { ref, inView } = useInView();
+  
   const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ["get", value],
     ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
