@@ -15,12 +15,12 @@ import com.codestates.azitserver.domain.member.entity.MemberCategory;
 
 public class MemberStubData {
 
-   /*등산 7 헬스 8 와인 13*/
+    /*등산 7 헬스 8 와인 13*/
     public static Member stubMember() {
         Member member = tempStubMember();
         member.setMemberCategoryList(
             List.of(tempMemberCategory(1L, tempStubMember(),7L),
-            tempMemberCategory(1L, tempStubMember(),13L)));
+                tempMemberCategory(1L, tempStubMember(),13L)));
         return member;
     }
     public static Member tempStubMember() {
@@ -46,11 +46,11 @@ public class MemberStubData {
     }
     public static MemberCategory tempMemberCategory(Long memberCategoryId, Member member, Long categorySmallId) {
         MemberCategory memberCategory =
-             MemberCategory.builder()
-            .memberCategoryId(memberCategoryId)
-            .member(tempStubMember())
-            .categorySmall(tempCategorySmall(categorySmallId))
-            .build();
+            MemberCategory.builder()
+                .memberCategoryId(memberCategoryId)
+                .member(tempStubMember())
+                .categorySmall(tempCategorySmall(categorySmallId))
+                .build();
         return memberCategory;
     }
 
@@ -94,10 +94,8 @@ public class MemberStubData {
         response.setAboutMe("김스텁의 자기소개");
         response.setReputation(10);
         response.setMemberStatus(Member.MemberStatus.ACTIVE);
-        response.setMemberCategoryList(
-            List.of(
-                tempMemberCategory(1L, tempStubMember(),7L),
-                    tempMemberCategory(1L, tempStubMember(),13L))
+        response.setCategorySmallIdList(
+            List.of(8L, 13L)
         );
 
         return response;
@@ -122,14 +120,14 @@ public class MemberStubData {
         return response;
     }
 
-	public static MockMultipartFile getMultipartJsonData(String content) {
+    public static MockMultipartFile getMultipartJsonData(String content) {
         return new MockMultipartFile(
             "data",
             "",
             MediaType.APPLICATION_JSON_VALUE,
             content.getBytes()
         );
-	}
+    }
 
     public static MemberDto.ClubMemberMemberResponse getClubMemberMemberResponse() {
         MemberDto.ClubMemberMemberResponse response = new MemberDto.ClubMemberMemberResponse();

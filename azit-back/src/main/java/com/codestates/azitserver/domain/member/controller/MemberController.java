@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.member.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,9 +22,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
+import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
@@ -34,10 +38,13 @@ public class MemberController {
 	private static final String MEMBER_DEFAULT_URL = "/api/members";
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
+	private final MemberCategoryService memberCategoryService;
 
-	public MemberController(MemberService memberService, MemberMapper memberMapper) {
+	public MemberController(MemberService memberService, MemberMapper memberMapper,
+		MemberCategoryService memberCategoryService) {
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
+		this.memberCategoryService = memberCategoryService;
 	}
 
 	//회원 생성
@@ -53,6 +60,9 @@ public class MemberController {
 
 		Member createdMember = memberService.createMember(tempMember, profileImage, categorySmallIdList);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(createdMember);
+
+		// patch와 post는 requestBody에 categorySmallId를 받으므로 memberCategory에서 찾을 필요가 없다
+		response.setCategorySmallIdList(categorySmallIdList);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
@@ -73,9 +83,18 @@ public class MemberController {
 	@GetMapping
 	public ResponseEntity getMembers(@RequestParam(value = "page", defaultValue = "1") @Positive int page,
 		@RequestParam(value = "size", defaultValue = "10") @Positive int size) {
+
 		List<Member> members = memberService.getMembers(page, size).getContent();
 
-		return new ResponseEntity<>(memberMapper.membersToMemberResponseDtos(members), HttpStatus.OK);
+		List<MemberDto.Response> memberDtoList = memberMapper.membersToMemberResponseDtos(members);
+
+		for (MemberDto.Response response : memberDtoList) {
+			List<Long> foundCategorySmallIdList = memberCategoryService
+				.memberCategoryListToCategorySmallIdListByMemberId(response.getMemberId());
+			response.setCategorySmallIdList(foundCategorySmallIdList);
+		}
+
+		return new ResponseEntity<>(memberDtoList, HttpStatus.OK);
 	}
 
 	//개별 회원 조회
@@ -85,6 +104,12 @@ public class MemberController {
 		Member member = memberService.getMemberById(memberId);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
 
+		// 카테고리 찾기
+		List<Long> foundCategorySmallIdList = memberCategoryService
+			.memberCategoryListToCategorySmallIdListByMemberId(memberId);
+
+		response.setCategorySmallIdList(foundCategorySmallIdList);
+
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
@@ -93,12 +118,17 @@ public class MemberController {
 	public ResponseEntity patchMember(@Positive @PathVariable("member-id") Long memberId,
 		@RequestBody @Valid MemberDto.Patch memberPatchDto) {
 		Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
+		List<Long> categorySmallIdList = memberPatchDto.getCategorySmallId();
 		member.setMemberId(memberId);
+
 		// 'password 한번 더' 절차
 		memberService.passwordConfirmer(memberPatchDto);
 
-		Member updatedMember = memberService.patchMember(member);
+		Member updatedMember = memberService.patchMember(member, categorySmallIdList);
 		MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+
+		// patch와 post는 requestBody에 categorySmallId를 받으므로 memberCategory에서 찾을 필요가 없다
+		response.setCategorySmallIdList(categorySmallIdList);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
