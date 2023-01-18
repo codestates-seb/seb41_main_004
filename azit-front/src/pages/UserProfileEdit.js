@@ -118,7 +118,7 @@ const UserProfileEdit = () => {
     formData.append("file", file);
 
     axios
-      .post(`${URL}api/members/1`, formData, {
+      .post(`${URL}api/members/`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
@@ -165,7 +165,7 @@ const UserProfileEdit = () => {
         console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
-        // setImgFile(res.data.fileInfo.fileName);
+        // setImgFile(res.data.data.fileInfo.fileName);
         let categoryList = [];
         res.data.data.memberCategoryList.map((category) => {
           return categoryList.push(category.memberCategoryId);
@@ -192,7 +192,7 @@ const UserProfileEdit = () => {
     let body = {
       nickname: defaultName,
       aboutMe: intro,
-      //fileName: imgFile,
+      // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
     console.log(body);
