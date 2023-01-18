@@ -4,7 +4,7 @@ export const genderConvert = (data) => {
   } else if (data === "FEMALE_ONLY ") {
     return "여자";
   } else {
-    return "제한없음";
+    return "성별 제한없음";
   }
 };
 
@@ -92,15 +92,15 @@ export const categoryConvert = (data) => {
 
 export const MaxAgeConvert = (data) => {
   if (data) {
-    return data + "이상";
+    return data + "년생";
   } else {
-    return "제한없음";
+    return "나이 제한없음";
   }
 };
 
 export const MinAgeConvert = (data) => {
   if (data) {
-    return data + "이하";
+    return data + "년생";
   } else {
     return;
   }
