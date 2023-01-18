@@ -297,7 +297,7 @@ const AzitCreateForm = ({ imgFile }) => {
     location: writeInfo,
     joinQuestion: question,
   };
-
+  console.log(body)
   const move = () => {
     navigate("/azit/preview", { state: body });
   };

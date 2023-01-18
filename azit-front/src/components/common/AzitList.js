@@ -165,7 +165,7 @@ const AzitList = ({ data }) => {
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
           <Status status={"종료됨"}><span>참여중</span></Status>
-          <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_BASE_URL}${data.bannerImage.fileUrl.slice(1)}/${data.bannerImage.fileName}` : null}`} />
+          <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
