@@ -1,0 +1,27 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:mem:azit-server;MODE=MYSQL"
+    username: admin
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+decorator.datasource.p6spy:
+  enable-logging: true
+  multiline: true
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
