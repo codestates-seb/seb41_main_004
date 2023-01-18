@@ -84,7 +84,7 @@ class MemberControllerTest {
 		// given
 		given(memberMapper.memberPostDtoToMember(any(MemberDto.Post.class)))
 			.willReturn(member);
-		given(memberService.createMember(any(Member.class), any())).willReturn(member);
+		given(memberService.createMember(any(Member.class), any(), anyList())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
 
 		String content = objectMapper.writeValueAsString(post);
