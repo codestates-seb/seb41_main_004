@@ -145,7 +145,7 @@ class ClubControllerTest implements ClubControllerTestHelper {
 		given(mapper.clubToClubDtoResponse(Mockito.any(Club.class))).willReturn(response);
 
 		// when
-		ResultActions actions = mockMvc.perform(patchRequestBuilder(getClubUri(), clubId, content)
+		ResultActions actions = mockMvc.perform(patchRequestBuilder(getClubUri(), content, clubId)
 			.header("Authorization", "Required JWT access token"));
 
 		// then

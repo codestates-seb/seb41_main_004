@@ -130,4 +130,15 @@ public class MemberStubData {
             content.getBytes()
         );
 	}
+
+    public static MemberDto.ClubMemberMemberResponse getClubMemberMemberResponse() {
+        MemberDto.ClubMemberMemberResponse response = new MemberDto.ClubMemberMemberResponse();
+
+        response.setMemberId(1L);
+        response.setFileInfo(FileInfoStubData.getDefaultFileInfo());
+        response.setEmail("stubmember@naver.com");
+        response.setNickname("김스텁");
+
+        return response;
+    }
 }
