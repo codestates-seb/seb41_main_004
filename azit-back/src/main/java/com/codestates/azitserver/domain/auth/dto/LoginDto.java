@@ -3,9 +3,39 @@ package com.codestates.azitserver.domain.auth.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 public class LoginDto {
-	private String email;
-	private String password;
+
+	@Getter
+	@Setter
+	public static class Post {
+		private String email;
+		private String password;
+	}
+
+	@Getter
+	@Setter
+	public static class MatchPassword {
+		private String password;
+	}
+
+	@Getter
+	@Setter
+	public static class PatchPassword {
+		private String newPassword;
+		private String newPasswordCheck;
+	}
+
+	@Getter
+	@Setter
+	public static class ResponseWithProfile {
+		private String email;
+		private String nickname;
+		private String profileUrl;
+	}
+
+	@Getter
+	@Setter
+	public static class ResponseMatcher {
+		Boolean matchingResult;
+	}
 }

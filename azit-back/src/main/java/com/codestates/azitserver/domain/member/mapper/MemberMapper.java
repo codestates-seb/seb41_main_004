@@ -24,4 +24,6 @@ public interface MemberMapper {
 	MemberDto.Response memberToMemberResponseDto(Member member);
 
 	List<MemberDto.Response> membersToMemberResponseDtos(List<Member> members);
+	
+	MemberDto.ClubMemberMemberResponse memberToClubMemberMemberResponse(Member member);
 }
