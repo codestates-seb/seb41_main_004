@@ -69,7 +69,8 @@ public class ClubController {
 	 */
 	@PostMapping(value = "/{club-id:[0-9]+}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> postClubImage(@Positive @PathVariable("club-id") Long clubId,
-		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		@RequestPart(name = "image", required = false) MultipartFile bannerImage, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		Club club = clubService.updateClubImage(clubId, bannerImage);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
@@ -78,7 +79,8 @@ public class ClubController {
 
 	@PatchMapping("/{club-id:[0-9]+}")
 	public ResponseEntity<?> patchClub(@Positive @PathVariable("club-id") Long clubId,
-		@Valid @RequestBody ClubDto.Patch patch) {
+		@Valid @RequestBody ClubDto.Patch patch, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		patch.setClubId(clubId);
 		Club toClub = mapper.clubDtoPatchToClubEntity(patch);
 		Club club = clubService.updateClub(toClub);
@@ -88,7 +90,8 @@ public class ClubController {
 	}
 
 	@DeleteMapping("/{club-id:[0-9]+}")
-	public ResponseEntity<?> deleteClub(@Positive @PathVariable("club-id") Long clubId) {
+	public ResponseEntity<?> deleteClub(@Positive @PathVariable("club-id") Long clubId, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		Club club = clubService.cancelClub(clubId);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
