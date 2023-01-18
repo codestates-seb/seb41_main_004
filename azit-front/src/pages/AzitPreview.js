@@ -245,8 +245,10 @@ const AzitPreview = () => {
   const navigate = useNavigate();
 
   const bannerImg = state.bannerImg;
-  const birthYearMax = state.birthYearMax;
-  const birthYearMin = state.birthYearMin;
+  const birthYearMax =
+    state.birthYearMax.length > 0 ? state.birthYearMax : null;
+  const birthYearMin =
+    state.birthYearMin.length > 0 ? state.birthYearMin : null;
   const categorySmallId = state.categorySmallId;
   const clubInfo = state.clubInfo;
   const clubName = state.clubName;
@@ -296,7 +298,7 @@ const AzitPreview = () => {
 
       console.log(res);
       alert("아지트가 생성되었습니다.");
-      navigate("/azit/detail/res.data.clubId", { replace: true });
+      navigate(`/azit/detail/${res.data.data.clubId}`, { replace: true });
     } catch (e) {
       console.log("아지트 생성 실패");
     }

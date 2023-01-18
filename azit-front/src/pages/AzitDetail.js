@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
-import ExampleImg from "../images/AzitExampleImg.png";
 import testProfileImg from "../images/testProfileImg.png";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
@@ -15,7 +14,7 @@ import {
   MinAgeConvert,
   timeConvert,
 } from "../util/azitPreviewDateConvert";
-import { useEffect, useState } from "react";
+import Loading from "../components/common/Loading";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -258,96 +257,115 @@ const ImgWrap = styled.div`
   background-repeat: no-repeat;
 `;
 
+const EtcWrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 const AzitDetail = () => {
   const { id } = useParams();
 
-  const azitLookup = () => {
-    return axiosInstance.get(`/api/clubs/${id}`);
+  const azitLookup = async () => {
+    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    return res.data.data;
   };
 
-  const { isError, data, error } = useQuery("azitDetail", azitLookup);
+  const { isError, isLoading, data, error } = useQuery(
+    "azitDetail",
+    azitLookup
+  );
 
-  const clubData = data.data.data;
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
+  console.log(data);
 
   return (
     <AzitDetailWrap>
-      <AzitDetailHeader clubData={clubData} />
-      <ImgWrap alt="exampleImg" src={ExampleImg}></ImgWrap>
-      <AzitDetailForm>
-        <div className="azitTitle">{clubData.clubName}</div>
-        <div className="desc">
-          <span>{clubData.categorySmall.categoryName}</span>
-          <p>
-            {clubData.clubMembers.length}/{clubData.memberLimit}명
-          </p>
-        </div>
-        <div className="azitInfo">
-          <div className="hostInfo">
-            <label>아지트 정보</label>
-            <div>
-              <Link to="/userpage">
-                <TestImg />
-                <img alt="HostIcon" src={HostIcon} className="hostIcon" />
-              </Link>
-              <div>
-                <label>호스트</label>
-                <span>{clubData.host.nickname}</span>
+      <AzitDetailHeader clubData={data} />
+      {isError && <EtcWrap>{error.message}</EtcWrap>}
+      {isLoading && (
+        <EtcWrap>
+          <Loading />
+        </EtcWrap>
+      )}
+      {data && (
+        <>
+          <ImgWrap
+            alt="exampleImg"
+            imgSrc={`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`}
+          ></ImgWrap>
+          <AzitDetailForm>
+            <div className="azitTitle">{data.clubName}</div>
+            <div className="desc">
+              <span>{data.categorySmall.categoryName}</span>
+              <p>
+                {data.clubMembers.length}/{data.memberLimit}명
+              </p>
+            </div>
+            <div className="azitInfo">
+              <div className="hostInfo">
+                <label>아지트 정보</label>
+                <div>
+                  <Link to="/userpage">
+                    <TestImg />
+                    <img alt="HostIcon" src={HostIcon} className="hostIcon" />
+                  </Link>
+                  <div>
+                    <label>호스트</label>
+                    <span>{data.host.nickname}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="azitDetailInfo">
+                <div>
+                  <label>참가방식</label>
+                  <span>{isOnlineConvert(data.isOnline, data.location)}</span>
+                </div>
+                <div>
+                  <label>날짜</label>
+                  <span>
+                    {data.meetingDate} {timeConvert(data.meetingTime)}
+                  </span>
+                </div>
+              </div>
+              <div className="azitDescription">
+                <label>아지트 설명</label>
+                <div>{data.clubInfo}</div>
               </div>
             </div>
-          </div>
-          <div className="azitDetailInfo">
-            <div>
-              <label>참가방식</label>
-              <span>
-                {isOnlineConvert(clubData.isOnline, clubData.location)}
-              </span>
+            <div className="memberList">
+              <h3>참여 멤버</h3>
+              <ul className="selectWrap">
+                {data.clubMembers.map((profile, idx) => (
+                  <li key={idx}>
+                    <Link to="/userpage">
+                      <UserImgWrap userUrl={profile.userUrl} />
+                      <p>유저 네임</p>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div>
-              <label>날짜</label>
-              <span>
-                {clubData.meetingDate} {timeConvert(clubData.meetingTime)}
-              </span>
+            <div className="detailInfo">
+              <h3>상세 안내</h3>
+              <ul>
+                <li>참가비 : {PriceFormat(String(data.fee))}원</li>
+                <li>
+                  나이,성별 제한 : {MaxAgeConvert(data.birthYearMax)}{" "}
+                  {MinAgeConvert(data.birthYearMin)},
+                  {genderConvert(data.genderRestriction)}
+                </li>
+              </ul>
             </div>
-          </div>
-          <div className="azitDescription">
-            <label>아지트 설명</label>
-            <div>{clubData.clubInfo}</div>
-          </div>
-        </div>
-        <div className="memberList">
-          <h3>참여 멤버</h3>
-          <ul className="selectWrap">
-            {clubData.clubMembers.map((profile, idx) => (
-              <li key={idx}>
-                <Link to="/userpage">
-                  <UserImgWrap userUrl={profile.userUrl} />
-                  <p>유저 네임</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="detailInfo">
-          <h3>상세 안내</h3>
-          <ul>
-            <li>참가비 : {PriceFormat(String(clubData.fee))}원</li>
-            <li>
-              나이,성별 제한 : {MaxAgeConvert(clubData.birthYearMax)}{" "}
-              {MinAgeConvert(clubData.birthYearMin)},
-              {genderConvert(clubData.genderRestriction)}
-            </li>
-          </ul>
-        </div>
-        {clubData.clubStatus === "CLUB_ACTIVE" ? (
-          <button className="active">아지트 가입하기</button>
-        ) : (
-          <button className="disabled">이미 종료된 아지트입니다</button>
-        )}
-      </AzitDetailForm>
+            {data.clubStatus === "CLUB_ACTIVE" ? (
+              <button className="active">아지트 가입하기</button>
+            ) : (
+              <button className="disabled">이미 종료된 아지트입니다</button>
+            )}
+          </AzitDetailForm>
+        </>
+      )}
     </AzitDetailWrap>
   );
 };

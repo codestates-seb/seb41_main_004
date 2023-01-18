@@ -53,14 +53,21 @@ const EditIcon = styled.img.attrs({ src: `${editIcon}` })`
 const AzitDetailHeader = ({ clubData }) => {
   const navigate = useNavigate();
   const nowUser = localStorage.getItem("nickname");
-  const hostId = clubData.host.nickname;
 
   return (
     <HeaderWrap>
       <button onClick={() => navigate(-1)}>
         <span />
       </button>
-      {nowUser === hostId ? <EditIcon></EditIcon> : <ReportIcon></ReportIcon>}
+      {clubData ? (
+        nowUser === clubData.host.nickname ? (
+          <EditIcon></EditIcon>
+        ) : (
+          <ReportIcon></ReportIcon>
+        )
+      ) : (
+        <></>
+      )}
     </HeaderWrap>
   );
 };
