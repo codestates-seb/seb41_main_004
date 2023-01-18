@@ -22,3 +22,7 @@ aws:
   s3:
     bucket: azit-server-s3
   region: ap-northeast-2
+
+# AWS parameter store
+awsParameterStorePropertySource:
+  enabled: true
