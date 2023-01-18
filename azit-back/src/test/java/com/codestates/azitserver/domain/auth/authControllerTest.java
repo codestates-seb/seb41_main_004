@@ -24,6 +24,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -143,5 +145,34 @@ public class authControllerTest {
 					fieldWithPath("newPassword").type(JsonFieldType.STRING).description("새 비밀번호"),
 					fieldWithPath("newPasswordCheck").type(JsonFieldType.STRING).description("새 비밀번호 확인")))
 			));
+	}
+
+	@Test
+	@DisplayName("reIssueToken")
+	public void reIssueTokenTest() throws Exception {
+		// given
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.addHeader("Authorization", "Required JWT access token");
+		request.addHeader("Refresh", "Required JWT refresh token");
+
+		doNothing().when(authService).reIssueToken(Mockito.any(), Mockito.any());
+
+		// when
+		ResultActions actions =
+			mockMvc.perform(
+				post("/api/auth/reIssue")
+					.header("Authorization", "Required JWT access token")
+					.header("Refresh", "Required JWT refresh token")
+					.with(csrf())
+			);
+
+		// then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("token-reIssue",
+				requestHeaders(
+						headerWithName("Authorization").description("Jwt Access Token"),
+						headerWithName("Refresh").description("Jwt Refresh Token"))));
 	}
 }
