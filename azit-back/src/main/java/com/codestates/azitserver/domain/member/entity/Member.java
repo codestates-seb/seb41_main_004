@@ -70,6 +70,7 @@ public class Member extends Auditable {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	@JsonManagedReference
+	@Column(name = "MEMBER_CATEGORY_LIST")
 	private List<MemberCategory> memberCategoryList = new ArrayList<>();
 
 

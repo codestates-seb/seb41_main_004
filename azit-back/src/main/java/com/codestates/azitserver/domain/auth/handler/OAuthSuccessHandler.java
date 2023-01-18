@@ -84,7 +84,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
 		responseWithProfileDto.setEmail(member.getEmail());
 		responseWithProfileDto.setNickname(member.getNickname());
-		responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		try {
+			responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		} catch (NullPointerException e) {
+			log.warn("Profile image is null:{}", e.getLocalizedMessage());
+		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String info = objectMapper.writeValueAsString(responseWithProfileDto);
