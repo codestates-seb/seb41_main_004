@@ -70,11 +70,8 @@ public class authControllerTest {
 
 		String content = gson.toJson(matchDto);
 
-		LoginDto.ResponseMatcher responseMatcher = new LoginDto.ResponseMatcher();
-		responseMatcher.setMatchingResult(true);
-
-		given(authService.passwordMatcher(Mockito.anyLong(), Mockito.any(LoginDto.MatchPassword.class)))
-			.willReturn(responseMatcher);
+		doNothing().when(authService)
+			.passwordMatcher(Mockito.anyLong(), Mockito.any(LoginDto.MatchPassword.class));
 
 		// when
 		ResultActions actions =
@@ -92,15 +89,12 @@ public class authControllerTest {
 		actions
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.matchingResult").value("true"))
 			.andDo(document("match-password",
 				requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 				pathParameters(List.of(
 					parameterWithName("member-id").description("회원 고유 식별자"))),
 				requestFields(List.of(
-					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"))),
-				responseFields(
-					fieldWithPath("matchingResult").type(JsonFieldType.BOOLEAN).description("일치 여부"))
+					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")))
 			));
 	}
 

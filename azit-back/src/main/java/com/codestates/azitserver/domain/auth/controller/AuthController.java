@@ -33,9 +33,9 @@ public class AuthController {
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
 	public ResponseEntity matchPassword(@Positive @PathVariable("member-id") Long memberId,
 		@RequestBody LoginDto.MatchPassword request) {
-		LoginDto.ResponseMatcher result = authService.passwordMatcher(memberId, request);
+		authService.passwordMatcher(memberId, request);
 
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//비밀번호 변경

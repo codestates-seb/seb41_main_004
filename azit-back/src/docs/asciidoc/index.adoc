@@ -51,9 +51,6 @@ include::{snippets}/match-password/request-fields.adoc[]
 .http-response
 include::{snippets}/match-password/http-response.adoc[]
 
-.response-fields
-include::{snippets}/match-password/response-fields.adoc[]
-
 === 비밀번호 변경
 
 .curl-request
