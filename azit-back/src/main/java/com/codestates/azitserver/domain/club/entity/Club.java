@@ -21,7 +21,6 @@ import javax.persistence.OneToOne;
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
-import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 
 import lombok.Getter;
@@ -141,20 +140,5 @@ public class Club extends Auditable {
 		ClubStatus(String status) {
 			this.status = status;
 		}
-	}
-
-	//  *** mapper ***
-	/**
-	 * Club에서 host 정보에 담을 Member 객체 생성
-	 * @return memberId와 nickname만 담은 Member 객체
-	 * @author cryoon
-	 */
-	public MemberDto.Response getIdAndNickname() {
-		MemberDto.Response response = new MemberDto.Response();
-
-		response.setMemberId(this.host.getMemberId());
-		response.setNickname(this.host.getNickname());
-
-		return response;
 	}
 }
