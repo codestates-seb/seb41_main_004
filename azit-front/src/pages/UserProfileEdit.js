@@ -107,8 +107,6 @@ const UserProfileEdit = () => {
   const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
-  const [category, setCategory] = useState(""); //관심사 get으로 받아오는것
-
   const imgRef = useRef();
 
   const saveImgFile = async (e) => {
@@ -161,17 +159,21 @@ const UserProfileEdit = () => {
 
   useEffect(() => {
     axios
-      .get(`${URL}api/members/1`, {
+      .get(`${URL}api/members/3`, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-        console.log(res);
         SetdefaultName(res.data.data.nickname);
-        setIntro(res.data.data.email);
+        setIntro(res.data.data.aboutMe);
         // setprofileImg(res.data.fileInfo.fileName);
+        let categoryList = [];
+        res.data.data.memberCategoryList.map((category) => {
+          return categoryList.push(category.memberCategoryId);
+        });
+        setCheckedInputs(categoryList);
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -251,22 +253,23 @@ const UserProfileEdit = () => {
               <div className="interestContainer" key={interest.id}>
                 <div className="subtitle">{interest.subtitle}</div>
                 <div className="tagContainer">
-                  {interest.tags.map((tag, idx) => {
+                  {interest.tags.map((tag) => {
                     //console.log(tag, idx);
                     //전시,영화,뮤지컬,공연,디자인 등등,  0,1,2,3,4,5
                     return (
-                      <span className="tag" key={idx}>
+                      <span className="tag" key={tag.tagId}>
                         <input
-                          id={tag}
+                          id={tag.tagId}
                           type="checkbox"
                           onChange={(e) => {
-                            console.log(e);
-                            changeHandler(e.currentTarget.checked, tag);
+                            changeHandler(e.currentTarget.checked, tag.tagId);
                           }}
-                          checked={checkedInputs.includes(tag) ? true : false}
-                          name={tag}
+                          checked={
+                            checkedInputs.includes(tag.tagId) ? true : false
+                          }
+                          name={tag.tagName}
                         ></input>
-                        <label htmlFor={tag}>{tag}</label>
+                        <label htmlFor={tag.tagId}>{tag.tagName}</label>
                       </span>
                     );
                   })}
