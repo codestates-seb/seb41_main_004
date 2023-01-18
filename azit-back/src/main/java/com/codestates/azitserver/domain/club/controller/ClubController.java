@@ -67,18 +67,20 @@ public class ClubController {
 	 * @param bannerImage 바꾸려는 이미지 정보
 	 * @return 업데이트 된 아지트 정보를 리턴합니다.
 	 */
-	@PostMapping(value = "/{club-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(value = "/{club-id:[0-9]+}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> postClubImage(@Positive @PathVariable("club-id") Long clubId,
-		@RequestPart(name = "image", required = false) MultipartFile bannerImage) {
+		@RequestPart(name = "image", required = false) MultipartFile bannerImage, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		Club club = clubService.updateClubImage(clubId, bannerImage);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
-	@PatchMapping("/{club-id}")
+	@PatchMapping("/{club-id:[0-9]+}")
 	public ResponseEntity<?> patchClub(@Positive @PathVariable("club-id") Long clubId,
-		@Valid @RequestBody ClubDto.Patch patch) {
+		@Valid @RequestBody ClubDto.Patch patch, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		patch.setClubId(clubId);
 		Club toClub = mapper.clubDtoPatchToClubEntity(patch);
 		Club club = clubService.updateClub(toClub);
@@ -87,8 +89,9 @@ public class ClubController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{club-id}")
-	public ResponseEntity<?> deleteClub(@Positive @PathVariable("club-id") Long clubId) {
+	@DeleteMapping("/{club-id:[0-9]+}")
+	public ResponseEntity<?> deleteClub(@Positive @PathVariable("club-id") Long clubId, @LoginMember Member member) {
+		clubService.verifyMemberIsClubHost(member, clubId);
 		Club club = clubService.cancelClub(clubId);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
 
@@ -110,7 +113,7 @@ public class ClubController {
 	 * @param clubId 아지트 고유 식별자
 	 * @return clubId로 조회한 아지트에 정보를 리턴합니다.
 	 */
-	@GetMapping("/{club-id}")
+	@GetMapping("/{club-id:[0-9]+}")
 	public ResponseEntity<?> getClubByClubId(@Positive @PathVariable("club-id") Long clubId) {
 		Club club = clubService.findClubById(clubId);
 		ClubDto.Response response = mapper.clubToClubDtoResponse(club);
@@ -159,7 +162,7 @@ public class ClubController {
 	 * @param memberId 회원 고유 식별자
 	 * @return memberId에서 가져온 회원의 관심 카테고리를 기준으로 조회한 아지트의 정보를 리턴합니다.
 	 */
-	@GetMapping("/recommend/{member-id}")
+	@GetMapping("/recommend/{member-id:[0-9]+}")
 	public ResponseEntity<?> getClubByMemberRecommend(@Positive @RequestParam(name = "page") int page,
 		@Positive @RequestParam(name = "size") int size, @Positive @PathVariable("member-id") Long memberId) {
 
@@ -180,7 +183,7 @@ public class ClubController {
 	 * @return ClubMember에서 memberId가 있는 아지트의 정보를 리턴합니다.
 	 */
 	// /members/{member-id}?page=1&size=10
-	@GetMapping("/members/{member-id}")
+	@GetMapping("/members/{member-id:[0-9]+}")
 	public ResponseEntity<?> getClubByMemberId(@Positive @RequestParam(name = "page") int page,
 		@Positive @RequestParam(name = "size") int size, @Positive @PathVariable("member-id") Long memberId) {
 

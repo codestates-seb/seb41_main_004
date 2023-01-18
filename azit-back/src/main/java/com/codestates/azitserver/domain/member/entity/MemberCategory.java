@@ -17,7 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "MEMBER_CATEGORY")
 @Getter
 @Builder
 @NoArgsConstructor

@@ -19,8 +19,57 @@ include::{snippets}/login/curl-request.adoc[]
 .http-request
 include::{snippets}/login/http-request.adoc[]
 
+.request-fields
+include::{snippets}/login/request-fields.adoc[]
+
 .http-response
 include::{snippets}/login/http-response.adoc[]
+
+.response-fields
+include::{snippets}/login/response-fields.adoc[]
+
+=== 비밀번호 인증
+
+.curl-request
+include::{snippets}/match-password/curl-request.adoc[]
+
+.http-request
+include::{snippets}/match-password/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/match-password/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/match-password/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/match-password/request-fields.adoc[]
+
+.http-response
+include::{snippets}/match-password/http-response.adoc[]
+
+.response-fields
+include::{snippets}/match-password/response-fields.adoc[]
+
+=== 비밀번호 변경
+
+.curl-request
+include::{snippets}/patch-password/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-password/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-password/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-password/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-password/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-password/http-response.adoc[]
 
 == 회원
 
@@ -296,6 +345,91 @@ include::{snippets}/search-club/http-response.adoc[]
 .response-fields
 include::{snippets}/search-club/response-fields.adoc[]
 
+== 아지트 참여
+
+=== 참여 신청
+
+.curl-request
+include::{snippets}/post-clubMember/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-clubMember/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-clubMember/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/post-clubMember/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-clubMember/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-clubMember/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-clubMember/response-fields.adoc[]
+
+=== 신청자/참여자 전체 조회
+
+.curl-request
+include::{snippets}/get-club-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-club-member/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-club-member/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/get-club-member/request-parameters.adoc[]
+
+.request-headers
+include::{snippets}/get-club-member/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-club-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-club-member/response-fields.adoc[]
+
+=== 아지트 참여 승인/거부
+
+.curl-request
+include::{snippets}/patch-club-members/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-club-members/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-club-members/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-club-members/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-club-members/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-club-members/http-response.adoc[]
+
+=== 아지트 참여 회원 강퇴
+
+.curl-request
+include::{snippets}/kick-club-members/curl-request.adoc[]
+
+.http-request
+include::{snippets}/kick-club-members/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/kick-club-members/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/kick-club-members/request-headers.adoc[]
+
+.http-response
+include::{snippets}/kick-club-members/http-response.adoc[]
+
 == 카테고리
 
 === 전체 카테고리 조회
@@ -349,8 +483,6 @@ include::{snippets}/get-all-small-categories/http-response.adoc[]
 .response-fields
 include::{snippets}/get-all-small-categories/response-fields.adoc[]
 
-
-// TODO: 맨 뒤로 배치 예정
 == 에러 코드
 
 === 커스텀 에러 코드 조회

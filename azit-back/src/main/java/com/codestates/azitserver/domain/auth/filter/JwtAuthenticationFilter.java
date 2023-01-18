@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.codestates.azitserver.domain.auth.dto.LoginDto;
-import com.codestates.azitserver.domain.auth.dto.LoginResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -25,7 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
@@ -38,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		// 클라이언트에서 받은 email, password 값을 LoginDto로 역직렬화
-		LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+		LoginDto.Post loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.Post.class);
 
 		// email, password 값을 포함한 토큰 생성
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -71,14 +72,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		);
 
 		// 유저정보 만들기
-		LoginResponseDto responseDto = new LoginResponseDto();
-		responseDto.setEmail(member.getEmail());
-		responseDto.setNickname(member.getNickname());
-		// responseDto.setProfileUrl(member.getAvatar_image_id().....);
-
+		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+		responseWithProfileDto.setEmail(member.getEmail());
+		responseWithProfileDto.setNickname(member.getNickname());
+		try {
+			responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+		} catch (NullPointerException e) {
+			log.warn("Profile image is null:{}", e.getLocalizedMessage());
+		}
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		String info = objectMapper.writeValueAsString(responseDto);
+		String info = objectMapper.writeValueAsString(responseWithProfileDto);
 
 		// response header에 토큰, 유저정보 담아서 전달
 		response.setHeader("Authorization", "Bearer " + accessToken);
