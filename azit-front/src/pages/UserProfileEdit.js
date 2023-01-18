@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
-// import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
+import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 // import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
@@ -99,14 +99,10 @@ const ImageAddIcon = styled.img`
 `;
 
 const UserProfileEdit = () => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
-  const [nameValue, SetNameValue] = useState("");
-  const [introValue, setIntroValue] = useState("");
-  const [imgFile, setImgFile] = useState("");
+  const [imgFile, setImgFile] = useState(""); //이미지 get으로 받아오는것
   const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
-  const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
   const imgRef = useRef();
 
   const saveImgFile = async (e) => {
@@ -166,9 +162,10 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
-        // setprofileImg(res.data.fileInfo.fileName);
+        // setImgFile(res.data.fileInfo.fileName);
         let categoryList = [];
         res.data.data.memberCategoryList.map((category) => {
           return categoryList.push(category.memberCategoryId);
@@ -177,14 +174,9 @@ const UserProfileEdit = () => {
       })
       .catch((error) => {
         console.log("error : ", error);
-        // alert("중복된 닉네임입니다. 다시 시도하세요.");
-        //alert창은 axios patch에서 에러뜨면 해야됨
       });
   }, []);
 
-  const modalHandler = () => {
-    setModalOpen(!modalOpen);
-  };
   const changeHandler = (checked, id) => {
     //console.log(checked, id); //true , '전시'
     if (checked) {
@@ -198,11 +190,28 @@ const UserProfileEdit = () => {
   const handleEdit = (e) => {
     e.preventDefault();
     let body = {
-      nickname: nameValue,
-      aboutMe: introValue,
-      fileName: imgFile,
+      nickname: defaultName,
+      aboutMe: intro,
+      //fileName: imgFile,
+      categorySmallId: checkedInputs,
     };
     console.log(body);
+
+    axios
+      .patch(`${URL}api/members/1`, body, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+        //alert("중복된 닉네임입니다. 다시 시도하세요.");
+        //alert창은 axios patch에서 에러뜨면 해야됨
+      });
   };
 
   return (
@@ -217,7 +226,9 @@ const UserProfileEdit = () => {
             onChange={saveImgFile}
             ref={imgRef}
           ></input>
-          <ProfileImage imgSrc={imgFile ? imgFile : profileImg}></ProfileImage>
+          <ProfileImage
+            imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
+          ></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
             <ImageAddIcon
               // onClick={() => modalHandler()}
@@ -231,7 +242,7 @@ const UserProfileEdit = () => {
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
           <input
             onChange={(e) => {
-              SetNameValue(e.target.value);
+              SetdefaultName(e.target.value);
             }}
             defaultValue={defaultName}
           ></input>
@@ -240,7 +251,7 @@ const UserProfileEdit = () => {
           <label>자기소개를 입력해주세요.</label>
           <textarea
             onChange={(e) => {
-              setIntroValue(e.target.value);
+              setIntro(e.target.value);
             }}
             placeholder="텍스트를 입력해 주세요."
             defaultValue={intro}
@@ -282,14 +293,7 @@ const UserProfileEdit = () => {
         <div className="buttonWrap"></div>
         {/* <Link to="/"> */}
         <form onSubmit={handleEdit}>
-          <Button
-            type="submit"
-            title="수정 완료"
-            state="active"
-            // onClick={() => {
-            //   handleEdit();
-            // }}
-          ></Button>
+          <Button type="submit" title="수정 완료" state="active"></Button>
         </form>
         {/* </Link> */}
       </ProfileEditForm>
