@@ -28,22 +28,23 @@ const CategoryTab = () => {
     };
   };
 
-  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["get", selectCategory],
-    ({ pageParam = 1 }) => fetchInfiniteList(pageParam, selectCategory),
-    {
-      staleTime: 6 * 10 * 1000,
-      cacheTime: 6 * 10 * 1000,
-      getNextPageParam: (lastPage) =>
-        !lastPage.isLast ? lastPage.nextPage : undefined,
-    }
-  );
+  const { data, status, fetchNextPage, isFetchingNextPage, error } =
+    useInfiniteQuery(
+      ["get", selectCategory],
+      ({ pageParam = 1 }) => fetchInfiniteList(pageParam, selectCategory),
+      {
+        staleTime: 6 * 10 * 1000,
+        cacheTime: 6 * 10 * 1000,
+        getNextPageParam: (lastPage) =>
+          !lastPage.isLast ? lastPage.nextPage : undefined,
+      }
+    );
 
   useEffect(() => {
     if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-  
+
   return (
     <>
       <CategoryPicker
@@ -52,7 +53,7 @@ const CategoryTab = () => {
       />
       <article className="resultCell">
         {status === "loading" && <Loading />}
-        {status === "error" && <Null text="Not Defined Error" />}
+        {status === "error" && <Null text={error.message} />}
         {data?.pages.map((page, index) => (
           <React.Fragment key={index}>
             {page.board_page.length > 0 ? (
@@ -65,7 +66,15 @@ const CategoryTab = () => {
           </React.Fragment>
         ))}
       </article>
-      {isFetchingNextPage ? <Loading /> : <div ref={ref} />}
+      {status !== "error" && status === "success" ? (
+        isFetchingNextPage ? (
+          <Loading />
+        ) : (
+          <div ref={ref} />
+        )
+      ) : (
+        <></>
+      )}
     </>
   );
 };
