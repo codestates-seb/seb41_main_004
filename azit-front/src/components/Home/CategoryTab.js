@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
 import React, { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
