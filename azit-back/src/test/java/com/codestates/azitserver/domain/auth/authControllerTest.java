@@ -70,8 +70,10 @@ public class authControllerTest {
 
 		String content = gson.toJson(matchDto);
 
-		doNothing().when(authService)
-			.passwordMatcher(Mockito.anyLong(), Mockito.any(LoginDto.MatchPassword.class));
+		boolean matchingResult = true;
+
+		given(authService.passwordMatcher(Mockito.anyLong(), Mockito.any(LoginDto.MatchPassword.class)))
+			.willReturn(matchingResult);
 
 		// when
 		ResultActions actions =

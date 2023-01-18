@@ -33,13 +33,14 @@ public class AuthService {
 	private final RedisUtils redisUtils;
 	private final JwtTokenizer jwtTokenizer;
 
-	public void passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
+	public boolean passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
 		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
 		Member findMember = findVerifiedMember(memberId);
 
-		if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword())) {
-			throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
-		}
+		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
+		boolean matchingResult = passwordEncoder.matches(request.getPassword(), findMember.getPassword());
+
+		return matchingResult;
 	}
 
 	//비밀번호 변경(patchPassword)
