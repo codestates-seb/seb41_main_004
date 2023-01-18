@@ -151,17 +151,6 @@ const Label2 = styled.label`
 `;
 
 const AzitCreateForm = ({ imgFile }) => {
-  let minYear = [];
-  let maxYear = [];
-
-  for (let i = 2023; i >= 1950; i--) {
-    minYear.push(String(i));
-    maxYear.push(String(i));
-  }
-
-  const minYearList = minYear;
-  const maxYearList = maxYear;
-
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
   const [smallSelected, setSmallSeleted] = useState("1");
@@ -170,7 +159,7 @@ const AzitCreateForm = ({ imgFile }) => {
   const [meetingDate, setMeetingDate] = useState("");
   const [meetingTime, setMeetingTime] = useState("");
   const [check, setCheck] = useState("offline");
-  const [genderSelected, setGenderSelected] = useState("MALE_ONLY");
+  const [genderSelected, setGenderSelected] = useState("ALL");
   const [minYearSelected, setMinYearSelected] = useState(null);
   const [maxYearSelected, setMaxYearSelected] = useState(null);
   const [memberLimit, SetMemberLimit] = useState(null);
@@ -179,6 +168,20 @@ const AzitCreateForm = ({ imgFile }) => {
   const [question, setQuestion] = useState("");
   const [writeInfo, setWriteInfo] = useState("");
   const [visible, setVisible] = useState(false);
+
+  let minYear = [];
+  let maxYear = [];
+
+  for (let i = 2023; i >= 1950; i--) {
+    minYear.push(String(i));
+  }
+
+  for (let i = minYearSelected; i <= 2023; i++) {
+    maxYear.push(String(i));
+  }
+
+  const minYearList = minYear;
+  const maxYearList = maxYear;
 
   const onChangeMemberLimit = (e) => {
     if (e.target.value >= 3) {
@@ -297,7 +300,7 @@ const AzitCreateForm = ({ imgFile }) => {
     location: writeInfo,
     joinQuestion: question,
   };
-
+  console.log(body)
   const move = () => {
     navigate("/azit/preview", { state: body });
   };
@@ -601,14 +604,14 @@ const AzitCreateForm = ({ imgFile }) => {
           <label>멤버의 성별을 알려주세요.</label>
           <div className="selectBox gender">
             <select onChange={GenderhandleSelect} value={genderSelected}>
+              <option value="ALL" key="ALL">
+                제한없음
+              </option>
               <option value="MALE_ONLY" key="MALE_ONLY">
                 남
               </option>
               <option value="FEMALE_ONLY" key="FEMALE_ONLY">
                 여
-              </option>
-              <option value="ALL" key="ALL">
-                제한없음
               </option>
             </select>
             <span className="selectArrow" />
