@@ -88,7 +88,7 @@ const ChatListWrap = ({ data }) => {
         data.map((chat) => {
           let lastMsgDate;
           if (data) {
-            lastMsgDate = toDateFormatOfMonthDay(chat.lastMsgDate);
+            lastMsgDate = toDateFormatOfMonthDay(chat.lastMsgDate, chat.lastMsgTime);
           }
           return (
             <Chat key={chat.chatId}>
