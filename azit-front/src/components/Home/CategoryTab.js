@@ -44,7 +44,7 @@ const CategoryTab = () => {
     if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-  console.log(data);
+
   return (
     <>
       <CategoryPicker
