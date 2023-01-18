@@ -9,3 +9,21 @@ export function toDateFormatOfMonthDay(date, time) {
   let result = `${month}월${day}일 ${timeSlice}`;
   return result
 }
+
+export function numToDayOfTheWeek(num) {
+  if(num === 0) {
+    return "일"
+  } else if (num === 1){
+    return "월"
+  } else if (num === 2){
+    return "화"
+  } else if (num === 3){
+    return "수"
+  } else if (num === 4){
+    return "목"
+  } else if (num === 5){
+    return "금"
+  } else if (num === 6){
+    return "토"
+  }
+}
