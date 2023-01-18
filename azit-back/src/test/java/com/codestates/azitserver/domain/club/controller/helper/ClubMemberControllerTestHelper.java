@@ -1,4 +1,4 @@
-package com.codestates.azitserver.domain.club.controller;
+package com.codestates.azitserver.domain.club.controller.helper;
 
 import com.codestates.azitserver.global.utils.ControllerTestHelper;
 

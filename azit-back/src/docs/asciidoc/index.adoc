@@ -368,6 +368,29 @@ include::{snippets}/search-club/http-response.adoc[]
 .response-fields
 include::{snippets}/search-club/response-fields.adoc[]
 
+=== 아지트 신고
+
+.curl-request
+include::{snippets}/post-club-report/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-club-report/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-club-report/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/post-club-report/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-club-report/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-club-report/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-club-report/response-fields.adoc[]
+
 == 아지트 참여
 
 === 참여 신청

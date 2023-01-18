@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.codestates.azitserver.domain.club.controller.descriptor.ClubFieldDescriptor;
+import com.codestates.azitserver.domain.club.controller.helper.ClubControllerTestHelper;
 import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
