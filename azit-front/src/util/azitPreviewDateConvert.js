@@ -123,9 +123,15 @@ export const timeConvert = (data) => {
   let time = Number(data.split(":")[0]); // 11
   let min = data.split(":")[1]; // "30"
 
-  if (time <= 12) {
+  if (time <= 9) {
+    return " 오전 0" + String(time) + " : " + min;
+  } else if (time < 12) {
     return "오전 " + String(time) + " : " + min;
-  } else if (time >= 12) {
+  } else if (time === 12) {
+    return "오후 " + String(time) + " : " + min;
+  } else if (time <= 21) {
+    return "오후 0" + String(time - 12) + " : " + min;
+  } else if (time >= 22) {
     return "오후 " + String(time - 12) + " : " + min;
   }
 };
