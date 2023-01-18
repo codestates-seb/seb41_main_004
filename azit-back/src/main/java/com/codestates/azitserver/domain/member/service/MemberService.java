@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.category.service.CategoryService;
+import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
@@ -109,7 +110,7 @@ public class MemberService {
 	}
 
 	//회원 수정
-	public Member patchMember(Member member) {
+	public Member patchMember(Member member, List<Long> categorySmallIdList) {
 
 		// 기존멤버 찾아
 		Member existingMember = findExistingMember(member.getMemberId());
@@ -122,12 +123,53 @@ public class MemberService {
 
 		// 업데이트 해
 		Member updatedMember = beanUtils.copyNonNullProperties(member, existingMember);
+		updatedMember.setMemberCategoryList(null);
 
 		// password 암호화
 		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
 		updatedMember.setPassword(encryptedPassword);
+
+		// 카테고리 넣기
+		List<MemberCategory> memberCategoryList = new ArrayList<>();
+
+		if (categorySmallIdList != null) {
+			List<CategorySmall> collectedCategorySmalls = categorySmallIdList.stream()
+				.map(categoryService::findCategorySmallById).collect(Collectors.toList());
+
+			for (CategorySmall categorySmall : collectedCategorySmalls) {
+				memberCategoryList.add(MemberCategory.builder()
+					.categorySmall(categorySmall)
+					.member(updatedMember)
+					.build());
+			}
+			updatedMember.addMemberCategorySmallList(memberCategoryList);
+		}
 		return memberRepository.save(updatedMember);
 
+	}
+
+	//프로필 사진 수정
+	public Member updateMemberImage(Long memberId, MultipartFile profileImage) {
+		Member member = getMemberById(memberId);
+
+		// banner image 저장
+		String prefix = "images/member_profileImg";
+		if (!profileImage.isEmpty()) {
+			Map<String, String> map = storageService.upload(prefix, profileImage);
+
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setFileName(map.get("fileName"));
+			fileInfo.setFileUrl(map.get("fileUrl"));
+
+			member.setFileInfo(fileInfo);
+		} else {
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setFileName("defaultProfileImageName");
+			fileInfo.setFileUrl("defaultProfileImageUrl");
+
+			member.setFileInfo(fileInfo);
+		}
+		return memberRepository.save(member);
 	}
 
 	// 회원 삭제(탈퇴)
@@ -175,11 +217,11 @@ public class MemberService {
 	}
 
 	// 'password 한번 더' 절차(patch)
-	public void passwordConfirmer(MemberDto.Patch memberPatchDto) {
-		if (!Objects.equals(memberPatchDto.getPassword(), memberPatchDto.getPasswordCheck())) {
-			throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
-		}
-	}
+	// public void passwordConfirmer(MemberDto.Patch memberPatchDto) {
+	// 	if (!Objects.equals(memberPatchDto.getPassword(), memberPatchDto.getPasswordCheck())) {
+	// 		throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
+	// 	}
+	// }
 
 	public Member findExistingMember(Long memberId) {
 		return memberRepository.findById(memberId)

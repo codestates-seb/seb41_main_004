@@ -160,8 +160,8 @@ const AzitCreateForm = ({ imgFile }) => {
   const [meetingTime, setMeetingTime] = useState("");
   const [check, setCheck] = useState("offline");
   const [genderSelected, setGenderSelected] = useState("ALL");
-  const [minYearSelected, setMinYearSelected] = useState(null);
-  const [maxYearSelected, setMaxYearSelected] = useState(null);
+  const [minYearSelected, setMinYearSelected] = useState("");
+  const [maxYearSelected, setMaxYearSelected] = useState("");
   const [memberLimit, SetMemberLimit] = useState(null);
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
@@ -232,8 +232,8 @@ const AzitCreateForm = ({ imgFile }) => {
     if (!checked) {
       document.getElementById("minAge").disabled = true;
       document.getElementById("maxAge").disabled = true;
-      setMinYearSelected(null);
-      setMaxYearSelected(null);
+      setMinYearSelected("");
+      setMaxYearSelected("");
     } else {
       document.getElementById("minAge").disabled = false;
       document.getElementById("maxAge").disabled = false;
@@ -300,7 +300,7 @@ const AzitCreateForm = ({ imgFile }) => {
     location: writeInfo,
     joinQuestion: question,
   };
-  console.log(body)
+
   const move = () => {
     navigate("/azit/preview", { state: body });
   };
