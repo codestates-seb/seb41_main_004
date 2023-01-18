@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
@@ -71,13 +72,14 @@ public class MemberDto {
 		@Length(min = 2, max = 16, message = "Nickname must be between 2 and 8 characters long")
 		private String nickname;
 
-		@NotBlank(message = "Password is required")
-		@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
-			message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
-		private String password;
-
-		@NotBlank(message = "Reenter password")
-		private String passwordCheck;
+		// 비밀번호 변경은 인증쪽에서 별도로
+		// @NotBlank(message = "Password is required")
+		// @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
+		// 	message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
+		// private String password;
+		//
+		// @NotBlank(message = "Reenter password")
+		// private String passwordCheck;
 
 		@Length(max = 128, message = "Introduction must be no longer than 128 characters")
 		private String aboutMe;
@@ -100,7 +102,7 @@ public class MemberDto {
 		private String aboutMe;
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
-		private List<MemberCategory> memberCategoryList;
+		private List<Long> categorySmallIdList;
 	}
 
 	@Getter

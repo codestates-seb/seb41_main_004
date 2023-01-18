@@ -73,7 +73,7 @@ const AzitPreviewForm = styled.div`
     justify-content: space-between;
     > div {
       padding: 1.2rem;
-      height: 12rem;
+      min-height: 12rem;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-color);
@@ -138,7 +138,6 @@ const AzitPreviewForm = styled.div`
         color: var(--sub-font-color);
       }
       > div {
-        height: 10rem;
         padding: 0;
         border: none;
       }
@@ -246,8 +245,10 @@ const AzitPreview = () => {
   const navigate = useNavigate();
 
   const bannerImg = state.bannerImg;
-  const birthYearMax = state.birthYearMax;
-  const birthYearMin = state.birthYearMin;
+  const birthYearMax =
+    state.birthYearMax.length > 0 ? state.birthYearMax : null;
+  const birthYearMin =
+    state.birthYearMin.length > 0 ? state.birthYearMin : null;
   const categorySmallId = state.categorySmallId;
   const clubInfo = state.clubInfo;
   const clubName = state.clubName;
@@ -297,7 +298,7 @@ const AzitPreview = () => {
 
       console.log(res);
       alert("아지트가 생성되었습니다.");
-      navigate("/azit/detail/res.data.clubId", { replace: true });
+      navigate(`/azit/detail/${res.data.data.clubId}`, { replace: true });
     } catch (e) {
       console.log("아지트 생성 실패");
     }
@@ -371,8 +372,8 @@ const AzitPreview = () => {
           <ul>
             <li>참가비 : {PriceFormat(String(fee))}원</li>
             <li>
-              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}
-              {MinAgeConvert(birthYearMin)},{genderConvert(genderRestriction)}
+              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}{" "}
+              {MinAgeConvert(birthYearMin)}, {genderConvert(genderRestriction)}
             </li>
           </ul>
         </div>
