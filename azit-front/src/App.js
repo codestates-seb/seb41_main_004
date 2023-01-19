@@ -44,7 +44,7 @@ function App() {
 
           {/* 아지트 */}
           <Route path="/azit/create" element={<AzitCreate />}></Route>
-          <Route path="/azit/setting" element={<AzitSetting />}></Route>
+          <Route path="/azit/setting/:id" element={<AzitSetting />}></Route>
           <Route path="/azit/edit/:id" element={<AzitEdit />}></Route>
           <Route path="/azit/join" element={<AzitJoin />}></Route>
           <Route path="/azit/report/:id" element={<AzitReport />}></Route>
