@@ -39,7 +39,7 @@ const UserVerifyPassword = () => {
     console.log(data);
     try {
       const res = await axiosInstance.post(
-        `/api/auth/1/passwords/matchers?`,
+        `/api/auth/${memberId}/passwords/matchers`,
         data,
         {
           headers: { Authorization: accessToken }
@@ -51,7 +51,11 @@ const UserVerifyPassword = () => {
       }
     } catch (e) {
       console.log(e)
-      alert("비밀번호 정보가 없습니다.")
+      if (e.response.status === 500) {
+        alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.");
+      } else {
+        alert("사용자 정보가 일치하지 않습니다.")
+      }
     }
   };
 

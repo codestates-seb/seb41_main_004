@@ -38,6 +38,6 @@ public enum ExceptionCode {
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
 
-	private int status;
-	private String message;
+	private final int status;
+	private final String message;
 }

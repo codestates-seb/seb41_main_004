@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
+import { axiosInstance } from "../util/axios";
 import { useRef } from "react";
 import { useForm } from 'react-hook-form'; 
 import { useNavigate } from "react-router-dom";
@@ -9,56 +10,71 @@ import { useNavigate } from "react-router-dom";
 
 const UserResetPassword = () => {
 
-  const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
-
+  const newPasswordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
+  // eslint-disable-next-line
   const { register, watch, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
-  const password = useRef();
-  password.current = watch('password');
+  const newPassword = useRef();
+  newPassword.current = watch('newPassword');
 
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem("accessToken");
+  const memberId = localStorage.getItem("memberId");
+
   const ResetButtonClick = async(data) => {
     // eslint-disable-next-line
-    const { nickname, email, password, passwordCheck } = data;  
+    const { newPassword, newPasswordCheck } = data;  
     console.log(data);
-    navigate('/');
+    try {
+      const res = await axiosInstance.patch(
+        `/api/auth/${memberId}/passwords`,
+        data,
+        {
+          headers: { Authorization: accessToken }
+        }
+      );
+      console.log(res);
+      navigate("/login", { replace: true });
+    } catch (e) {
+      console.log(e);
+    }
   }
   return (
     <>
       <Header title="비밀번호 재설정"></Header>
-      <ResetForm>
+      <ResetForm onSubmit={handleSubmit(data => ResetButtonClick(data))}>
         <ResetInputContainer>
           <ResetInputWrap>
-            <label htmlFor="password">사용할 비밀번호를 입력해 주세요.</label>
+            <label htmlFor="newPassword">사용할 비밀번호를 입력해 주세요.</label>
             <input 
               type='password' 
-              id='password' 
+              id='newPassword' 
               autoComplete="off"
               placeholder="특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요."
-              {...register('password', {
+              {...register('newPassword', {
                 required: true,
-                pattern: passwordRegExp
+                pattern: newPasswordRegExp
               })}></input>
-              {errors.password?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
-              {errors.password?.type === 'pattern' && <div className="errorMessage">특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요.</div>}
+              {errors.newPassword?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
+              {errors.newPassword?.type === 'pattern' && <div className="errorMessage">특수문자, 문자, 숫자를 포함한 8~16자로 작성해 주세요.</div>}
           </ResetInputWrap>
           <ResetInputWrap>
-            <label htmlFor="passwordCheck">비밀번호를 확인해 주세요.</label>
+            <label htmlFor="newPasswordCheck">비밀번호를 확인해 주세요.</label>
             <input 
               type='password' 
-              id='passwordCheck' 
+              id='newPasswordCheck' 
               autoComplete="off"
               placeholder="비밀번호를 확인해 주세요."
-              {...register('passwordCheck', {
+              {...register('newPasswordCheck', {
                 required: true,
-                validate: (value) => value === password.current
+                validate: (value) => value === newPassword.current
               })}></input>
-            {errors.passwordCheck?.type === 'required' && <div className="errorMessage">비밀번호를 확인해 주세요.</div>}
-            {errors.passwordCheck?.type === 'validate' && <div className="errorMessage">비밀번호가 일치하지 않습니다.</div>}
+            {errors.newPasswordCheck?.type === 'required' && <div className="errorMessage">비밀번호를 확인해 주세요.</div>}
+            {errors.newPasswordCheck?.type === 'validate' && <div className="errorMessage">비밀번호가 일치하지 않습니다.</div>}
           </ResetInputWrap>
         </ResetInputContainer>
         <Button 
-        onClick={ResetButtonClick} 
+        onClick={() => ResetButtonClick()} 
         type="submit" 
         title="비밀번호 재설정" 
         state={ !isValid ? "disabled" : "active"}></Button>
@@ -67,7 +83,7 @@ const UserResetPassword = () => {
   )
 };
 
-const ResetForm = styled.div`
+const ResetForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;

@@ -30,7 +30,7 @@ public class StorageServiceAwsS3 implements StorageService {
 	@Override
 	public Map<String, String> upload(String prefix, MultipartFile file) {
 		// contents exist
-		if (file.isEmpty()) {
+		if (file == null || file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");
 		}
 
