@@ -139,10 +139,10 @@ const UserProfileEdit = () => {
   useDidMountEffect(() => {
     let file = dataURLtoFile(imgFile, "sendImg");
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("image", file); //명세서보고 "image"는 고치기
     const postFile = async () => {
       try {
-        const res = await axiosInstance.post("api/members/", formData, {
+        const res = await axiosInstance.post("api/members/3", formData, {
           headers: { Authorization: accessToken },
           "Content-Type": "multipart/form-data",
         });
@@ -165,10 +165,11 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
         setGetImgFile(
-          `${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
+          `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
         );
 
         let categoryList = [];
@@ -201,7 +202,7 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-
+    console.log(body);
     axiosInstance
       .patch("api/members/3", body, {
         headers: {
@@ -235,9 +236,7 @@ const UserProfileEdit = () => {
             ref={imgRef}
           ></input>
           <ProfileImage
-            imgSrc={
-              imgFile ? imgFile : `${process.env.REACT_APP_S3_URL}${getImgFile}`
-            }
+            imgSrc={imgFile ? imgFile : `${getImgFile}`}
           ></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
             <img alt="imgEditBtn" src={ImgAddIcon} />

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { interests } from "../../dummyData/Category";
 
 const Container = styled.div`
   display: flex;
@@ -59,9 +60,10 @@ const Category = () => {
 
   return (
     <Container>
-      {interests.map((el, idx) => (
-        <Categorys key={idx}>{el.tags[0]}</Categorys>
-      ))}
+      {interests.tags &&
+        interests.tags.map((tag, idx) => (
+          <Categorys key={idx}>{tag}</Categorys>
+        ))}
     </Container>
   );
 };
