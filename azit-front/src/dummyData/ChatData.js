@@ -8,7 +8,8 @@ export const ChatData = [
     lastMsg:"마지막 메시지",
     lastView: true,
     chatPeople:20,
-    lastMsgDate: "2023-03-05T15:30",
+    lastMsgDate: "2023-01-20",
+    lastMsgTime: "23:59:00",
   },
   {
     chatId:2,
@@ -17,7 +18,8 @@ export const ChatData = [
     lastMsg:"마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지 마지막 메시지",
     lastView: true,
     chatPeople:15,
-    lastMsgDate: "2023-03-05T15:30",
+    lastMsgDate: "2023-01-20",
+    lastMsgTime: "23:59:00",
   },
   {
     chatId:3,
@@ -26,7 +28,8 @@ export const ChatData = [
     lastMsg:"마지막 메시지",
     lastView: true,
     chatPeople:18,
-    lastMsgDate: "2023-03-05T15:30",
+    lastMsgDate: "2023-01-20",
+    lastMsgTime: "23:59:00",
   },
   {
     chatId:4,
@@ -35,7 +38,8 @@ export const ChatData = [
     lastMsg:"마지막 메시지",
     lastView: false,
     chatPeople:12,
-    lastMsgDate: "2023-03-05T15:30",
+    lastMsgDate: "2023-01-20",
+    lastMsgTime: "23:59:00",
   },
   {
     chatId:5,
@@ -44,5 +48,6 @@ export const ChatData = [
     lastMsg:"마지막 메시지",
     lastView: false,
     chatPeople:5,
-    lastMsgDate: "2023-03-05T15:30",
+    lastMsgDate: "2023-01-20",
+    lastMsgTime: "23:59:00",
   },]
