@@ -36,7 +36,6 @@ public interface ClubMapper {
 	@Mapping(source = "fileInfo", target = "bannerImage")
 	@Mapping(target = "bannerImage.createdAt", expression = "java(null)")
 	@Mapping(target = "bannerImage.lastModifiedAt", expression = "java(null)")
-	@Mapping(target = "host", expression = "java(club.getIdAndNickname())")
 	ClubDto.Response clubToClubDtoResponse(Club club);
 
 	List<ClubDto.Response> clubToClubDtoResponse(List<Club> clubList);

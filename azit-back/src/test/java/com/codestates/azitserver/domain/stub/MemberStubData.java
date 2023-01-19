@@ -105,16 +105,16 @@ public class MemberStubData {
         return new PageImpl<>(List.of(stubMember()), PageRequest.of(0, 10), 1);
     }
 
-
     /**
      * 회원 id와 nickname만 반환하는 stub data
      * @return 회원 id와 nickname만 들어있는 MemberDto.Response
      * @author cryoon
      */
-    public static MemberDto.Response stubMemberIdAndNickname() {
-        MemberDto.Response response = new MemberDto.Response();
+    public static MemberDto.ResponseEmailAndNickname stubMemberIdAndNickname() {
+        MemberDto.ResponseEmailAndNickname response = new MemberDto.ResponseEmailAndNickname();
 
         response.setMemberId(1L);
+        response.setEmail("hello@hello.com");
         response.setNickname("cryoon");
 
         return response;
