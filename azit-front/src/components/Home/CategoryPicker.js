@@ -11,6 +11,9 @@ const CategoryPickerWrap = styled.ul`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
 `;
 const Category = styled.li`
   display: flex;
@@ -21,8 +24,10 @@ const Category = styled.li`
   height: 8rem;
   border-radius: 10px;
   transition: 0.3s all;
-  margin-bottom: 2rem;
   cursor: pointer;
+  :nth-child(-n + 4) {
+    margin-bottom: 2rem;
+  }
   > img {
     width: 4.2rem;
   }
