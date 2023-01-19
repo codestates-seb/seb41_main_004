@@ -100,6 +100,7 @@ public class authLoginTest {
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
 			.andExpect(header().exists("Refresh"))
+			.andExpect(jsonPath("$.memberId").value(1L))
 			.andExpect(jsonPath("$.email").value("stubmember@naver.com"))
 			.andExpect(jsonPath("$.nickname").value("김스텁"))
 			.andExpect(jsonPath("$.profileUrl").exists())
@@ -113,6 +114,7 @@ public class authLoginTest {
 					headerWithName("Authorization").description("액세스 토큰"),
 					headerWithName("Refresh").description("리프레시 토큰")),
 				responseFields(List.of(
+					fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버아이디"),
 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
 					fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
 					fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필주소")))
