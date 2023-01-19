@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -33,7 +33,7 @@ public class AuthService {
 	private final RedisUtils redisUtils;
 	private final JwtTokenizer jwtTokenizer;
 
-	public boolean passwordMatcher(Long memberId, LoginDto.MatchPassword request) {
+	public boolean passwordMatcher(Long memberId, AuthDto.MatchPassword request) {
 		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
 		Member findMember = findVerifiedMember(memberId);
 
@@ -44,14 +44,15 @@ public class AuthService {
 	}
 
 	//비밀번호 변경(patchPassword)
-	public void updatePassword(Long memberId, LoginDto.PatchPassword request, Member member) {
+	//TODO : 200 OK안에 응답값으로 status 404, 409가는거 변경. 200말고 404로 가도록..
+	public void updatePassword(Long memberId, AuthDto.PatchPassword request, Member member) {
 		// 요청주체의 memberId가 api memberId와 일치하는지 확인 -> 일치하지 않으면 예외 발생
 		if (!member.getMemberId().equals(memberId)) {
-			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED); //409
 		}
 
 		// password와 passwordCheck가 같은지 확인해서 같지 않으면 exception 보냄
-		passwordConfirmer(request);
+		passwordConfirmer(request); // 404
 
 		// member 찾고, 새 비밀번호를 암호화해서 넣고 저장 (소셜은 비밀번호가 없으니 비밀번호가 있는 경우에만 수정)
 		Member findMember = findVerifiedMember(memberId);
@@ -129,7 +130,7 @@ public class AuthService {
 	}
 
 	// 입력 password 확인
-	public void passwordConfirmer(LoginDto.PatchPassword request) {
+	public void passwordConfirmer(AuthDto.PatchPassword request) {
 		if (!Objects.equals(request.getNewPassword(), request.getNewPasswordCheck())) {
 			throw new BusinessLogicException(ExceptionCode.PASSWORD_VALIDATION_FAILED);
 		}

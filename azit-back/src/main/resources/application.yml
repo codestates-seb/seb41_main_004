@@ -43,7 +43,7 @@ jwt:
   refresh-token-expiration-minutes: 420
 mail:
   address:
-    admin: admin@gmail.com # dummy
+    admin: ${ADMIN_EMAIL:Anonymous} # dummy
 redis:
   port: 6379
   host: localhost

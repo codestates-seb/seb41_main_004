@@ -17,7 +17,7 @@ const Header = styled.header`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    text-indent: -999px;
+    text-indent: -9999px;
   }
 `;
 const SlideCell = styled.div`
