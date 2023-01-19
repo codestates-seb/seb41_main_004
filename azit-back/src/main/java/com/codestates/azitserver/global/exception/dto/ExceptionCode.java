@@ -26,6 +26,7 @@ public enum ExceptionCode {
 	EMAIL_EXIST(40405, "Email is already registered"),
 	CLUB_MEMBER_NOT_FOUND(40406, "Join member not found"),
 	TOKEN_NOT_FOUND(40407, "Token not found"),
+	STRING_VALIDATION_FAILED(40408, "String confirmation failed"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),

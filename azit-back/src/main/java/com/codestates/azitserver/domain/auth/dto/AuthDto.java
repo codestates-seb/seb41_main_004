@@ -5,6 +5,9 @@ import lombok.Setter;
 
 public class AuthDto {
 
+	/**
+	 * 로그인
+	 */
 	@Getter
 	@Setter
 	public static class Post {
@@ -12,12 +15,18 @@ public class AuthDto {
 		private String password;
 	}
 
+	/**
+	 * 비밀번호 인증
+	 */
 	@Getter
 	@Setter
 	public static class MatchPassword {
 		private String password;
 	}
 
+	/**
+	 * 비밀번호 변경
+	 */
 	@Getter
 	@Setter
 	public static class PatchPassword {
@@ -25,25 +34,23 @@ public class AuthDto {
 		private String newPasswordCheck;
 	}
 
-	// @Getter
-	// @Setter
-	// public static class sendEmail {
-	// 	private String email;
-	// }
-	//
-	// @Getter
-	// @Setter
-	// public static class sendPassword {
-	// 	private String email;
-	// 	private String authNumber;
-	// }
-
+	/**
+	 * 인증번호 이메일 발송
+	 */
 	@Getter
 	@Setter
-	public static class ResponseWithProfile {
-		private Long memberId;
+	public static class SendEmail {
 		private String email;
-		private String nickname;
-		private String profileUrl;
+	}
+
+	/**
+	 * 임시 비번 이메일 발송
+	 */
+	@Getter
+	@Setter
+	public static class SendPWEmail {
+		private String email;
+		private String memberNumber; // 회원이 입력한 인증번호
+		private String serverNumber; // 서버가 발급해준 인증번호
 	}
 }
