@@ -116,6 +116,7 @@ public class MemberStubData {
         response.setMemberId(1L);
         response.setEmail("hello@hello.com");
         response.setNickname("cryoon");
+        response.setFileInfo(FileInfoStubData.getFileInfoDtoResponse());
 
         return response;
     }
@@ -133,7 +134,7 @@ public class MemberStubData {
         MemberDto.ClubMemberMemberResponse response = new MemberDto.ClubMemberMemberResponse();
 
         response.setMemberId(1L);
-        response.setFileInfo(FileInfoStubData.getDefaultFileInfo());
+        response.setFileInfo(FileInfoStubData.getFileInfoDtoResponse());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
 
