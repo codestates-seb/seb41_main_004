@@ -25,7 +25,7 @@ const UserPageSetting = () => {
     <AzitSettingWrap>
       <Header title="설정" />
       <SettingBar>
-        <Link to="/userpage/resetpw">
+        <Link to="/userpage/verifypw">
           <span className="resetPw">비밀번호 재설정</span>
           <div>
             <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />

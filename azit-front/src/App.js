@@ -24,6 +24,7 @@ import Chat from "./components/ChatList/Chat";
 import AzitDetail from "./pages/AzitDetail";
 import AzitMember from "./pages/AzitMember.js";
 import AzitPreview from "./pages/AzitPreview";
+import UserVerifyPassword from "./pages/UserVerifyPassword";
 
 function App() {
   return (
@@ -63,13 +64,11 @@ function App() {
           {/* 유저페이지 */}
           <Route path="/userpage" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
+          <Route path="/userpage/verifypw" element={<UserVerifyPassword />}></Route>
+          <Route path="/userpage/resetpw" element={<UserResetPassword />}></Route>
           <Route path="/userpage/report" element={<UserReport />}></Route>
           <Route path="/userpage/followcheck" element={<FollowCheck />}></Route>
           <Route path="/userpage/edit" element={<UserProfileEdit />}></Route>
-          <Route
-            path="/userpage/resetpw"
-            element={<UserResetPassword />}
-          ></Route>
         </Routes>
       </BrowserRouter>
     </>
