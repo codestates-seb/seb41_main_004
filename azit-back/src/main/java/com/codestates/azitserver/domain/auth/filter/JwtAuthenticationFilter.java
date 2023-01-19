@@ -15,7 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		// 클라이언트에서 받은 email, password 값을 LoginDto로 역직렬화
-		LoginDto.Post loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.Post.class);
+		AuthDto.Post loginDto = objectMapper.readValue(request.getInputStream(), AuthDto.Post.class);
 
 		// email, password 값을 포함한 토큰 생성
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -72,7 +72,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		);
 
 		// 유저정보 만들기
-		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+		AuthDto.ResponseWithProfile responseWithProfileDto = new AuthDto.ResponseWithProfile();
+		responseWithProfileDto.setMemberId(member.getMemberId());
 		responseWithProfileDto.setEmail(member.getEmail());
 		responseWithProfileDto.setNickname(member.getNickname());
 		try {

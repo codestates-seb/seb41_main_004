@@ -18,7 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -54,7 +54,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		}
 		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
 		else {
-			LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+			AuthDto.ResponseWithProfile responseWithProfileDto = new AuthDto.ResponseWithProfile();
 
 			responseWithProfileDto.setEmail(email);
 			responseWithProfileDto.setNickname(nickname);
@@ -81,7 +81,8 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		);
 
 		// 유저정보 만들기
-		LoginDto.ResponseWithProfile responseWithProfileDto = new LoginDto.ResponseWithProfile();
+		AuthDto.ResponseWithProfile responseWithProfileDto = new AuthDto.ResponseWithProfile();
+		responseWithProfileDto.setMemberId(member.getMemberId());
 		responseWithProfileDto.setEmail(member.getEmail());
 		responseWithProfileDto.setNickname(member.getNickname());
 		try {

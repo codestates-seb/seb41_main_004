@@ -119,7 +119,6 @@ const Profile = () => {
       </TempWrap>
       <InfoWrapper>
         <ButtonWrapper>{myPage ? "" : <Button>팔로우</Button>}</ButtonWrapper>
-
         <Name>닉네임</Name>
         <Text>매일 반복되는 일상을 특별하게 만들고 싶다. ㅁㄴㅇㄹㅁㄴㅇㄹ</Text>
         <Link to="/userpage/followcheck" className="followCheck">
