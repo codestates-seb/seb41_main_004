@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { PriceFormat } from "../../util/azitPreviewDateConvert";
 import DaumPostcode from "react-daum-postcode";
 import { axiosInstance } from "../../util/axios";
 import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
+import Loading from "../common/Loading";
+import { PriceFormat } from "../../util/azitPreviewDateConvert";
+import Button from "../common/Button";
+import { useNavigate } from "react-router-dom";
 
 const EditFormWrap = styled.div`
   flex: 1;
@@ -91,6 +94,10 @@ const EditFormWrap = styled.div`
         border-bottom: 1px solid var(--border-color);
       }
     }
+    > .buttonWrap {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
   }
 `;
 
@@ -119,23 +126,32 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
+const EtcWrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const AzitEditForm = () => {
   const { id } = useParams();
-
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
   const [meetingTime, setMeetingTime] = useState("");
   const [genderSelected, setGenderSelected] = useState("ALL");
-  const [check, setCheck] = useState("offline");
+  const [check, setCheck] = useState("");
   const [writeInfo, setWriteInfo] = useState("");
   const [minYearSelected, setMinYearSelected] = useState("");
   const [maxYearSelected, setMaxYearSelected] = useState("");
-  const [memberLimit, SetMemberLimit] = useState(null);
+  const [memberLimit, SetMemberLimit] = useState(0);
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [year, setYear] = useState({ minYear: [], maxYear: [] });
   const [visible, setVisible] = useState(false);
+  const [memberStatus, setmemberStatus] = useState([]);
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -146,6 +162,25 @@ const AzitEditForm = () => {
     "azitDetail",
     azitLookup
   );
+
+  useEffect(() => {
+    if (data) {
+      setClubName(data.clubName);
+      setClubInfo(data.clubInfo);
+      SetMemberLimit(data.memberLimit);
+      setGenderSelected(data.genderRestriction);
+      setMinYearSelected(data.birthYearMin ? data.birthYearMin : "");
+      setMaxYearSelected(data.birthYearMax ? data.birthYearMax : "");
+      data.birthYearMin ? setChecked(false) : nolimit();
+      setFee(data.fee);
+      setMeetingDate(data.meetingDate);
+      setMeetingTime(data.meetingTime);
+      setCheck(data.isOnline);
+      setWriteInfo(data.location ? data.location : "");
+      setmemberStatus(data.clubMembers);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   useEffect(() => {
     // 이하가 먼저 선택 됐을 때 > 이상은 이하 밑으론 내려가면 안된다.
@@ -183,35 +218,24 @@ const AzitEditForm = () => {
     }
   };
 
-  const onChangeDate = (e) => {
-    setMeetingDate(e.target.value);
-  };
-  const onChangeTime = (e) => {
-    setMeetingTime(e.target.value);
-  };
-
-  const onChangeClubName = (e) => {
-    setClubName(e.target.value);
-  };
-
-  const onChangeClubInfo = (e) => {
-    setClubInfo(e.target.value);
-  };
-
-  const handleMinYearSelect = (e) => {
-    setMinYearSelected(e.target.value);
-  };
-
-  const handleMaxYearSelect = (e) => {
-    setMaxYearSelected(e.target.value);
-  };
-
-  const GenderhandleSelect = (e) => {
-    setGenderSelected(e.target.value);
-  };
-
-  const handleChkChange = (e) => {
-    setCheck(e.target.id);
+  const handleData = (e) => {
+    if (e.target.id === "meetingDate") {
+      setMeetingDate(e.target.value);
+    } else if (e.target.id === "meetingTime") {
+      setMeetingTime(e.target.value);
+    } else if (e.target.id === "clubName") {
+      setClubName(e.target.value);
+    } else if (e.target.id === "clubInfo") {
+      setClubInfo(e.target.value);
+    } else if (e.target.id === "minAge") {
+      setMinYearSelected(e.target.value);
+    } else if (e.target.id === "maxAge") {
+      setMaxYearSelected(e.target.value);
+    } else if (e.target.id === "genderSelected") {
+      setGenderSelected(e.target.value);
+    } else if (e.target.id === "online" || e.target.id === "offline") {
+      setCheck(e.target.id);
+    }
   };
 
   // 제한없음 체크박스 클릭시 멤버 나이 Select 창 비활성화
@@ -248,156 +272,231 @@ const AzitEditForm = () => {
     setVisible(false);
   };
 
+  const clubId = Number(`${id}`);
+
+  let body = {
+    clubId,
+    clubName,
+    clubInfo,
+    memberLimit,
+    meetingDate,
+    meetingTime,
+    fee,
+    genderRestriction: genderSelected,
+    birthYearMin: minYearSelected ? minYearSelected : null,
+    birthYearMax: maxYearSelected ? maxYearSelected : null,
+    isOnline: check,
+    location: writeInfo,
+  };
+
+  const navigate = useNavigate();
+
+  const azitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = body;
+
+      await axiosInstance.patch(`api/clubs/${id}`, payload, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          "Content-Type": "application/json",
+        },
+      });
+      // 참가비, 성별제한 나이 있을 경우 > 제한없음,
+      navigate(`/azit/detail/${id}`);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const { mutate } = useMutation(azitEdit);
+
   return (
     <EditFormWrap>
-      <form>
-        <div className="inputContainer">
-          <label>아지트 이름</label>
-          <input
-            minLength={2}
-            maxLength={24}
-            onChange={onChangeClubName}
-            value={clubName}
-          ></input>
-        </div>
-        <div className="inputContainer">
-          <label>아지트 설명</label>
-          <textarea
-            placeholder="텍스트를 입력해주세요."
-            maxLength={128}
-            onChange={onChangeClubInfo}
-            value={clubInfo}
-          ></textarea>
-        </div>
-        <div className="inputContainer people">
-          <label>참가인원</label>
-          <input
-            type="number"
-            min="3"
-            max="20"
-            onChange={onChangeMemberLimit}
-            value={memberLimit || ""}
-          ></input>
-        </div>
-        <div className="inputContainer">
-          <label>성별</label>
-          <div className="selectBox">
-            <select onChange={GenderhandleSelect} value={genderSelected}>
-              <option value="ALL" key="ALL">
-                제한없음
-              </option>
-              <option value="MALE_ONLY" key="MALE_ONLY">
-                남
-              </option>
-              <option value="FEMALE_ONLY" key="FEMALE_ONLY">
-                여
-              </option>
-            </select>
-            <span className="selectArrow" />
-          </div>
-        </div>
-        <div className="inputContainer">
-          <label>멤버의 나이를 알려주세요.</label>
-          <div className="ageSelect">
-            <div className="selectBox">
-              <select
-                onChange={handleMinYearSelect}
-                value={minYearSelected}
-                id="minAge"
-              >
-                <option>부터</option>
-                {year.minYear.map((item) => (
-                  <option value={item} key={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-              <span className="selectArrow" />
+      {isError && <EtcWrap>{error.message}</EtcWrap>}
+      {isLoading && (
+        <EtcWrap>
+          <Loading />
+        </EtcWrap>
+      )}
+      {data && (
+        <>
+          <form onSubmit={mutate}>
+            <div className="inputContainer">
+              <label>아지트 이름</label>
+              <input
+                minLength={2}
+                maxLength={24}
+                onChange={handleData}
+                value={clubName}
+                disabled={memberStatus.length === 0 ? false : true}
+                id="clubName"
+              ></input>
             </div>
-            <span>~</span>
-            <div className="selectBox">
-              <select
-                onChange={handleMaxYearSelect}
-                value={maxYearSelected}
-                id="maxAge"
-              >
-                <option>까지</option>
-                {year.maxYear.map((item) => (
-                  <option value={item} key={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-              <span className="selectArrow" />
+            <div className="inputContainer">
+              <label>아지트 설명</label>
+              <textarea
+                placeholder="텍스트를 입력해주세요."
+                maxLength={128}
+                onChange={handleData}
+                value={clubInfo}
+                id="clubInfo"
+              ></textarea>
             </div>
-            <input
-              className="checkBox"
-              type="checkbox"
-              value={checked}
-              onClick={nolimit}
-            />
-            <span>제한없음</span>
-          </div>
-        </div>
-        <div className="inputContainer">
-          <label>예상 참가비</label>
-          <input
-            type="text"
-            value={fee}
-            onChange={(e) => setFee(PriceFormat(e.target.value))}
-          ></input>
-        </div>
-        <div className="inputContainer">
-          <label>날짜 및 시간</label>
-          <div className="wd70">
-            <input type="date" onChange={onChangeDate} />
-            <input type="time" onChange={onChangeTime} />
-          </div>
-        </div>
-        <div className="radioContainer">
-          <label>장소를 정해볼까요?</label>
-          <div>
-            <input
-              onChange={handleChkChange}
-              id="offline"
-              type="radio"
-              name="place"
-            />
-            <Label check={check === "offline"} htmlFor="offline">
-              오프라인
-            </Label>
-            <input
-              onChange={handleChkChange}
-              id="online"
-              type="radio"
-              name="place"
-            />
-            <Label2 check={check === "online"} htmlFor="online">
-              온라인
-            </Label2>
-          </div>
-          {check === "offline" ? (
-            <>
-              <div
-                className="selectPlace"
-                onClick={() => setVisible(true)}
-                placeholder="장소를 입력해주세요."
-              >
-                {writeInfo ? writeInfo : "장소를 입력해주세요."}
+            <div className="inputContainer people">
+              <label>참가인원</label>
+              <input
+                type="number"
+                min="3"
+                max="20"
+                onChange={onChangeMemberLimit}
+                value={memberLimit}
+                disabled={memberStatus.length === 0 ? false : true}
+                id="memberLimit"
+              ></input>
+            </div>
+            <div className="inputContainer">
+              <label>성별</label>
+              <div className="selectBox">
+                <select
+                  onChange={handleData}
+                  value={genderSelected}
+                  id="genderSelected"
+                >
+                  <option value="ALL" key="ALL">
+                    제한없음
+                  </option>
+                  <option value="MALE_ONLY" key="MALE_ONLY">
+                    남
+                  </option>
+                  <option value="FEMALE_ONLY" key="FEMALE_ONLY">
+                    여
+                  </option>
+                </select>
+                <span className="selectArrow" />
               </div>
-              {visible ? (
-                <div>
-                  <DaumPostcode onComplete={handleComplete} height={700} />
+            </div>
+            <div className="inputContainer">
+              <label>멤버의 나이를 알려주세요.</label>
+              <div className="ageSelect">
+                <div className="selectBox">
+                  <select
+                    onChange={handleData}
+                    value={minYearSelected}
+                    id="minAge"
+                  >
+                    <option value={""}>부터</option>
+                    {year.minYear.map((item) => (
+                      <option value={item} key={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="selectArrow" />
                 </div>
+                <span>~</span>
+                <div className="selectBox">
+                  <select
+                    onChange={handleData}
+                    value={maxYearSelected}
+                    id="maxAge"
+                  >
+                    <option value={""}>까지</option>
+                    {year.maxYear.map((item) => (
+                      <option value={item} key={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="selectArrow" />
+                </div>
+                <input
+                  className="checkBox"
+                  type="checkbox"
+                  checked={checked}
+                  onChange={nolimit}
+                />
+                <span>제한없음</span>
+              </div>
+            </div>
+            <div className="inputContainer">
+              <label>예상 참가비</label>
+              <input
+                type="text"
+                value={PriceFormat(String(fee))}
+                onChange={(e) => setFee(PriceFormat(e.target.value))}
+              ></input>
+            </div>
+            <div className="inputContainer">
+              <label>날짜 및 시간</label>
+              <div className="wd70">
+                <input
+                  type="date"
+                  id="meetingDate"
+                  onChange={handleData}
+                  value={meetingDate}
+                  disabled={memberStatus.length === 0 ? false : true}
+                />
+                <input
+                  type="time"
+                  onChange={handleData}
+                  id="meetingTime"
+                  value={meetingTime}
+                  disabled={memberStatus.length === 0 ? false : true}
+                />
+              </div>
+            </div>
+            <div className="radioContainer">
+              <label>장소를 정해볼까요?</label>
+              <div>
+                <input
+                  onChange={handleData}
+                  id="offline"
+                  type="radio"
+                  name="place"
+                  disabled={memberStatus.length === 0 ? false : true}
+                />
+                <Label check={check === "offline"} htmlFor="offline">
+                  오프라인
+                </Label>
+                <input
+                  onChange={handleData}
+                  id="online"
+                  type="radio"
+                  name="place"
+                  disabled={memberStatus.length === 0 ? false : true}
+                />
+                <Label2 check={check === "online"} htmlFor="online">
+                  온라인
+                </Label2>
+              </div>
+              {check === "offline" ? (
+                <>
+                  <div
+                    className="selectPlace"
+                    onClick={() => setVisible(true)}
+                    placeholder="장소를 입력해주세요."
+                  >
+                    {writeInfo ? writeInfo : "장소를 입력해주세요."}
+                  </div>
+                  {visible ? (
+                    <div>
+                      <DaumPostcode onComplete={handleComplete} height={700} />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </>
               ) : (
-                <></>
+                <div className="selectPlace">온라인</div>
               )}
-            </>
-          ) : (
-            <div className="selectPlace">온라인</div>
-          )}
-        </div>
-      </form>
+            </div>
+            <div className="buttonWrap">
+              <Button state="active" title="수정완료" />
+            </div>
+          </form>
+        </>
+      )}
     </EditFormWrap>
   );
 };
