@@ -11,18 +11,17 @@ const HeaderWrap = styled.header`
   align-items: center;
   padding: 0 2rem;
   border-bottom: 1px solid var(--border-color);
-`;
-const Header = styled.div``;
-const Edit = styled.span`
-  font-size: var(--caption-font);
-`;
-const Img = styled.img.attrs({ src: `${editIcon}` })`
-  width: 3rem;
-  height: 3rem;
-`;
-const ReportIcon = styled.img.attrs({ src: `${reportIcon}` })`
-  width: 3rem;
-  height: 3rem;
+  > a {
+    font-size: var(--caption-font);
+  }
+  > a:last-child {
+    width: 3rem;
+    height: 3rem;
+    margin-left: 1rem;
+    > img {
+      width: 100%;
+    }
+  }
 `;
 
 const UserPageHeader = () => {
@@ -30,17 +29,18 @@ const UserPageHeader = () => {
 
   return (
     <HeaderWrap>
-      <Header />
-      <Link to="/userpage/edit">
-        {myPage ? (
-          <Edit>프로필 수정</Edit>
-        ) : (
-          <Link to="/userpage/report">
-            <ReportIcon alt="reportIcon" />
+      {myPage ? (
+        <>
+          <Link to="/userpage/edit">프로필 수정</Link>
+          <Link to="/userpage/setting">
+            <img alt="editIcon" src={editIcon} />
           </Link>
-        )}
-      </Link>
-      <Link to="/userpage/setting">{myPage ? <Img alt="editIcon" /> : ""}</Link>
+        </>
+      ) : (
+        <Link to="/userpage/report">
+          <img alt="reportIcon" src={reportIcon} />
+        </Link>
+      )}
     </HeaderWrap>
   );
 };

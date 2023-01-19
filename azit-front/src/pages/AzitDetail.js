@@ -352,9 +352,11 @@ const AzitDetail = () => {
               <ul>
                 <li>참가비 : {PriceFormat(String(data.fee))}원</li>
                 <li>
-                  나이,성별 제한 : {MaxAgeConvert(data.birthYearMax)}{" "}
-                  {MinAgeConvert(data.birthYearMin)},
-                  {genderConvert(data.genderRestriction)}
+                  나이,성별 제한 :
+                  <span>{MinAgeConvert(data.birthYearMin)}</span>
+                  <span> ~ </span>
+                  <span>{MaxAgeConvert(data.birthYearMax)}, </span>
+                  <span>{genderConvert(data.genderRestriction)}</span>
                 </li>
               </ul>
             </div>

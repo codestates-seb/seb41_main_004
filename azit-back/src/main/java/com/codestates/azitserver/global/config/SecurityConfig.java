@@ -71,8 +71,8 @@ public class SecurityConfig {
 
 				/*======아래 도메인에 맞는 권한 설정을 부여해야합니다.======*/
 				/*======clubs======*/
-				.antMatchers(HttpMethod.GET, "/api/clubs/recommend/**").authenticated()  // 회원 추천 아지트 조회
 				.antMatchers(HttpMethod.GET, "/api/clubs/members/**").authenticated()  // 특정 회원이 참여한 아지트 조회
+				.antMatchers("/api/clubs/reports/**").permitAll()  // 아지트 신고
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
 				/*==========member==========*/
