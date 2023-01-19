@@ -76,7 +76,12 @@ public class ClubFieldDescriptor {
 			.andWithPrefix("data.host.",
 				fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 				fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-				fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름")
+				fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름"),
+				fieldWithPath("fileInfo").type(JsonFieldType.OBJECT).description("회원 프로필 이미지")
+			).andWithPrefix("data.host.fileInfo.",
+				fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("파일 고유 식별자"),
+				fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 저장 경로"),
+				fieldWithPath("fileName").type(JsonFieldType.STRING).description("파일 이름")
 			).and(
 				fieldWithPath("data.categorySmall").type(JsonFieldType.OBJECT).description("아지트 소분류 카테고리")
 			).andWithPrefix("data.categorySmall.",
@@ -118,7 +123,12 @@ public class ClubFieldDescriptor {
 		).andWithPrefix("data[].host.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름"),
+			fieldWithPath("fileInfo").type(JsonFieldType.OBJECT).description("회원 프로필 이미지")
+		).andWithPrefix("data[].host.fileInfo.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("배너 이미지 고유 식별자"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("배너 이미지 파일 저장 경로"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("배너 이미지 파일 이름")
 		).and(
 			fieldWithPath("data[].categorySmall").type(JsonFieldType.OBJECT).description("아지트 소분류 카테고리")
 		).andWithPrefix("data[].categorySmall.",

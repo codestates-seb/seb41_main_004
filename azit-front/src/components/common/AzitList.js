@@ -8,7 +8,7 @@ const ListWrap = styled.article`
   margin-bottom: 1rem;
 `;
 const DetailWrap = styled.div`
-position:relative;
+  position: relative;
   padding: 1rem;
   border-radius: 5px;
   background-color: var(--white-color);
@@ -57,6 +57,7 @@ position:relative;
             overflow: hidden;
             border: 1px solid var(--white-color);
             margin-left: -5px;
+            background-color: var(--background-color);
             > img {
               max-width: 100%;
             }
@@ -123,35 +124,49 @@ const Status = styled.div`
   justify-content: center;
   align-items: center;
   width: 7.2rem;
-  background-color: ${(props) => props.status === "참여중" ? 'var(--point-color)' : props.status === "신청중" ? "var(--green-color)" : "var(--light-font-color)"};
-  color:var(--white-color);
+  background-color: ${(props) =>
+    props.status === "참여중"
+      ? "var(--point-color)"
+      : props.status === "신청중"
+      ? "var(--green-color)"
+      : "var(--light-font-color)"};
+  color: var(--white-color);
   border-radius: 0 5px 0 10px;
-  >span {
-    font-size:var(--caption-font);
+  > span {
+    font-size: var(--caption-font);
   }
-`
+`;
 const AzitList = ({ data }) => {
-  const [meetDate, setMeetDate] = useState("00월 00일 00:00")
+  const [meetDate, setMeetDate] = useState("00월 00일 00:00");
+  const [clubMember, setClubMember] = useState([]);
+
+  // 상태가 대기중이 아닌사람 filter하는 로직
+  useEffect(() => {
+    let filterMember = data.clubMembers.filter((member) => {
+      return member.clubMemberStatus === "CLUB_JOINED";
+    });
+    setClubMember(filterMember);
+  }, [data]);
 
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
-  },[data.meetingDate, data.meetingTime])
+  }, [data.meetingDate, data.meetingTime]);
 
   const repeatAvatar = (data) => {
     let result = [];
-    if (data.length >= 5) {
-      for (let i = 0; i < 5; i++) {
+    if (data.length >= 4) {
+      for (let i = 0; i < 4; i++) {
         result.push(
-          <div key={data[i].userId} className="imgWrap">
-            <img alt={data[i].userName} src={data[i].avatarUrl} />
+          <div key={data[i].clubMemberId} className="imgWrap">
+            <img alt={data[i].member.nickname} src={data[i].member.avatarUrl} />
           </div>
         );
       }
     } else {
       for (let i = 0; i < data.length; i++) {
         result.push(
-          <div key={data[i].userId} className="imgWrap">
-            <img alt={data[i].userName} src={data[i].avatarUrl} />
+          <div key={data[i].clubMemberId} className="imgWrap">
+            <img alt={data[i].member.nickname} src={data[i].member.avatarUrl} />
           </div>
         );
       }
@@ -164,8 +179,16 @@ const AzitList = ({ data }) => {
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
-          <Status status={"종료됨"}><span>참여중</span></Status>
-          <ImgWrap clubImg={`${data.bannerImage ?  `${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}` : null}`} />
+          <Status status={"종료됨"}>
+            <span>참여중</span>
+          </Status>
+          <ImgWrap
+            clubImg={`${
+              data.bannerImage
+                ? `${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`
+                : null
+            }`}
+          />
           <div className="infoCell">
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
@@ -174,16 +197,25 @@ const AzitList = ({ data }) => {
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
-              <span className="place">{data.isOnline === "online" ? "온라인" : data.location}∙</span>
+              <span className="place">
+                {data.isOnline === "online" ? "온라인" : data.location}∙
+              </span>
               <span className="time">{meetDate}</span>
             </div>
             <div className="etcCell">
-              <div className="profileAvatar">{data.clubMembers ? repeatAvatar(data.clubMembers) : null}</div>
+              <div className="profileAvatar">
+                <div className="imgWrap">
+                  <img alt={data.host.nickname} src={data.host.avatarUrl} />
+                </div>
+                {clubMember ? repeatAvatar(clubMember) : null}
+              </div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{data.clubMembers.length} </span>/
-                  <span className="limit"> {data.memberLimit}</span>명
+                  <span className="current">
+                    {clubMember.length + 1}{" "}
+                  </span>
+                  /<span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
               <span className="clubHost">{data.host.nickname}</span>

@@ -33,7 +33,12 @@ public class ClubReportFieldDescriptor {
 		).andWithPrefix("data.club.host.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 이름"),
+			fieldWithPath("fileInfo").type(JsonFieldType.OBJECT).description("회원 프로필 이미지")
+		).andWithPrefix("data.club.host.fileInfo.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("파일 고유 식별자"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 저장 경로"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("파일 이름")
 		).and(
 			fieldWithPath("data.club.categorySmall").type(JsonFieldType.OBJECT).description("아지트 소분류 카테고리")
 		).andWithPrefix("data.club.categorySmall.",
@@ -47,7 +52,12 @@ public class ClubReportFieldDescriptor {
 		).andWithPrefix("data.member.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			fieldWithPath("fileInfo").type(JsonFieldType.OBJECT).description("회원 프로필 이미지")
+		).andWithPrefix("data.member.fileInfo.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("파일 고유 식별자"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 저장 경로"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("파일 이름")
 		);
 	}
 }

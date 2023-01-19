@@ -7,7 +7,7 @@ import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
-import useDidMountEffect from "../util/useDidMountEffect";
+import {useFirstRender} from "../util/useDidMountEffect";
 
 //import { useSelector } from "react-redux";
 const accessToken = localStorage.getItem("accessToken");
@@ -115,7 +115,6 @@ const UserProfileEdit = () => {
       setImgFile(reader.result);
     };
   };
-  console.log(checkedInputs);
 
   // 이미지 변환 함수
   function dataURLtoFile(dataurl, filename) {
@@ -136,25 +135,27 @@ const UserProfileEdit = () => {
     }
   }
 
-  useDidMountEffect(() => {
-    let file = dataURLtoFile(imgFile, "sendImg");
-    const formData = new FormData();
-    formData.append("image", file); //명세서보고 "image"는 고치기
-    const postFile = async () => {
-      try {
-        const res = await axiosInstance.post("api/members/3", formData, {
-          headers: { Authorization: accessToken },
-          "Content-Type": "multipart/form-data",
-        });
+  const firstRender = useFirstRender();
+  useEffect(() => {
+    if(!firstRender && imgFile) {
+      let file = dataURLtoFile(imgFile, "sendImg");
+      const formData = new FormData();
+      formData.append("image", file);
+      const postFile = async () => {
+        try {
+          await axiosInstance.post("api/members/", formData, {
+            headers: { Authorization: accessToken },
+            "Content-Type": "multipart/form-data",
+          });
 
-        console.log(res);
-        alert("프로필 이미지가 수정이 완료되었습니다.");
-      } catch (e) {
-        console.log("프로필 이미지 수정 실패");
-      }
-    };
-    postFile();
-  }, [imgFile]);
+          alert("프로필 이미지가 수정이 완료되었습니다.");
+        } catch (e) {
+          console.log("프로필 이미지 수정 실패");
+        }
+      };
+      postFile();
+    }
+  }, [firstRender, imgFile]);
 
   useEffect(() => {
     axiosInstance
@@ -165,19 +166,18 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
         setGetImgFile(
           `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
         );
-
+          
         let categoryList = [];
         res.data.data.categorySmallIdList.map((category) => {
           return categoryList.push(category);
         });
         setCheckedInputs(categoryList);
-        console.log(checkedInputs);
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -202,7 +202,7 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-    console.log(body);
+
     axiosInstance
       .patch("api/members/3", body, {
         headers: {
@@ -211,7 +211,7 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+
         if (res.status >= 200 && res.status < 300) {
           navigate("/userpage");
         }

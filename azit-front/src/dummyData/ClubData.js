@@ -16,8 +16,8 @@ export const ClubData = [
       categorySmallId: 1,
     },
     host: {
-      memberId:1,
-      nickname: "여덟글자의호스트"
+      memberId: 1,
+      nickname: "여덟글자의호스트",
     },
     fee: 10000,
     joinMethod: "APPROVAL",
@@ -28,94 +28,17 @@ export const ClubData = [
     joinQuestion: "재밌게 즐기실거죠?",
     clubMembers: [
       {
-        userId: 1,
-        userName: "테스트네임",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 2,
-        userName: "테스트네임2",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 3,
-        userName: "테스트네임3",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 4,
-        userName: "테스트네임4",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 5,
-        userName: "테스트네임5",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 6,
-        userName: "테스트네임6",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 7,
-        userName: "테스트네임7",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 8,
-        userName: "테스트네임8",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 9,
-        userName: "테스트네임9",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 10,
-        userName: "테스트네임10",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 11,
-        userName: "테스트네임11",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 12,
-        userName: "테스트네임12",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 13,
-        userName: "테스트네임13",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 14,
-        userName: "테스트네임14",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 15,
-        userName: "테스트네임15",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 16,
-        userName: "테스트네임16",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 17,
-        userName: "테스트네임17",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 18,
-        userName: "테스트네임18",
-        avatarUrl: TestProfileImg,
+        clubMemberId: 1,
+        clubMemberStatus: "CLUB_WAITING",
+        joinAnswer: "1번 아지트 저도 참가할래요!",
+        member: {
+          email: "user_test@hello.com",
+          memberId: 2,
+          nickname: "user_test",
+          fileInfo : {
+            fileUrl: TestProfileImg,
+          }
+        },
       },
     ],
   },
@@ -134,8 +57,8 @@ export const ClubData = [
       categorySmallId: 1,
     },
     host: {
-      memberId:1,
-      nickname: "여덟글자의호스트"
+      memberId: 1,
+      nickname: "여덟글자의호스트",
     },
     fee: 10000,
     joinMethod: "APPROVAL",
@@ -146,19 +69,14 @@ export const ClubData = [
     joinQuestion: "재밌게 즐기실거죠?",
     clubMembers: [
       {
-        userId: 1,
-        userName: "테스트네임",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 2,
-        userName: "테스트네임2",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 3,
-        userName: "테스트네임3",
-        avatarUrl: TestProfileImg,
+        clubMemberId: 1,
+        clubMemberStatus: "CLUB_WAITING",
+        joinAnswer: "1번 아지트 저도 참가할래요!",
+        member: {
+          email: "user_test@hello.com",
+          memberId: 2,
+          nickname: "user_test",
+        },
       },
     ],
   },
@@ -177,8 +95,8 @@ export const ClubData = [
       categorySmallId: 1,
     },
     host: {
-      memberId:1,
-      nickname: "여덟글자의호스트"
+      memberId: 1,
+      nickname: "여덟글자의호스트",
     },
     fee: 10000,
     joinMethod: "APPROVAL",
@@ -189,24 +107,14 @@ export const ClubData = [
     joinQuestion: "재밌게 즐기실거죠?",
     clubMembers: [
       {
-        userId: 1,
-        userName: "테스트네임",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 2,
-        userName: "테스트네임2",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 3,
-        userName: "테스트네임3",
-        avatarUrl: TestProfileImg,
-      },
-      {
-        userId: 4,
-        userName: "테스트네임4",
-        avatarUrl: TestProfileImg,
+        clubMemberId: 1,
+        clubMemberStatus: "CLUB_WAITING",
+        joinAnswer: "1번 아지트 저도 참가할래요!",
+        member: {
+          email: "user_test@hello.com",
+          memberId: 2,
+          nickname: "user_test",
+        },
       },
     ],
   },
