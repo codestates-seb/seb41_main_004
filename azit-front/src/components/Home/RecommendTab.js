@@ -12,7 +12,7 @@ const RecommendTab = () => {
   // 무한스크롤 함수 0번이 guest
   const fetchInfiniteList = async (pageParam) => { 
     const res = await axiosInstance.get(
-      `/api/clubs/recommend/${localStorage.getItem("userId") ? localStorage.getItem("userId") : 0}?page=${pageParam}&size=5`,
+      `/api/clubs/recommend/${localStorage.getItem("memberId") ? localStorage.getItem("memberId") : 0}?page=${pageParam}&size=5`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
       }
