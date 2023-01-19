@@ -25,8 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
-import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
+import com.codestates.azitserver.domain.auth.entity.AuthNumber;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.repository.AuthNumberRepository;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
@@ -45,45 +46,62 @@ public class AuthService {
 	private final RedisUtils redisUtils;
 	private final JwtTokenizer jwtTokenizer;
 	private final JavaMailSender javaMailSender;
+	private final AuthNumberRepository authNumberRepository;
 
 	/**
-	 * 이메일 인증
-	 * @param request 이메일 주소
+	 * 인증번호 발송 메서드
+	 * @param request 회원 eamil
 	 * @throws Exception
 	 */
-	// public void sendAuthEmail(AuthDto.SendEmail request) throws Exception {
-	// 	// request의 email로 회원 찾기
-	// 	Member member = findVerifiedMemberByEmail(request.getEmail());
-	// 	String authNum = createAuthNumber();
-	//
-	// 	// 인증번호 담은 메일 작성, 전송
-	// 	sendMessage(createAuthEmail(request.getEmail(), authNum));
-	//
-	// 	AuthResponseDto.ResponseEmail response = new AuthResponseDto.ResponseEmail();
-	// 	response.setEmail(request.getEmail());
-	// 	response.setServerNumber(authNum);
-	//
-	// 	return response;
-	// }
-	//
-	// // 비번 초기화 메서드
-	// public void resetPassword(AuthDto.SendPWEmail request) throws Exception {
-	// 	String email = request.getEmail();
-	//
-	// 	//인증번호가 일치하는지 확인
-	// 	stringConfirmer(request.getMemberNumber(), request.getServerNumber());
-	//
-	// 	//랜덤 비번 생성
-	// 	String tempPassword = createTempPassword();
-	//
-	// 	//랜덤 비번 이메일 전송
-	// 	sendMessage(createPWEmail(email, tempPassword));
-	//
-	// 	//랜덤 비번 DB 저장
-	// 	Member member = findVerifiedMemberByEmail(email);
-	// 	member.setPassword(passwordEncoder.encode(tempPassword));
-	// 	memberRepository.save(member);
-	// }
+	public void sendAuthEmail(AuthDto.SendEmail request) throws Exception {
+		// request의 email로 회원 찾기. (회원 email인지 확인)
+		String email = request.getEmail();
+		Member member = findVerifiedMemberByEmail(email);
+
+		// 인증번호 생성, 메일 작성, 전송
+		String authNum = createAuthNumber();
+		sendMessage(createAuthEmail(email, authNum));
+
+		// db에 저장 (같은 email 존재하면 덮어쓰기)
+		AuthNumber authNumber = new AuthNumber();
+		if (authNumberRepository.findByEmail(email).isPresent()) {
+			authNumber = findVerifiedAuthNumberByEmail(email);
+		} else {
+			authNumber.setEmail(email);
+		}
+		authNumber.setAuthNum(authNum);
+		authNumberRepository.save(authNumber);
+	}
+
+	/**
+	 * 임시 비밀번호 발급 메서드
+	 * @param request email, 인증번호
+	 * @throws Exception
+	 */
+	public void resetPassword(AuthDto.SendPWEmail request) throws Exception {
+		// 입력값으로 email, authNum 받음
+		String email = request.getEmail();
+		String authNum = request.getAuthNum();
+
+		// email로 db에서 AuthNumber authDBNum 찾아오기
+		AuthNumber findAuthNumber = findVerifiedAuthNumberByEmail(email);
+		String DBNumber = findAuthNumber.getAuthNum();
+
+		// 둘이 일치하는지 확인
+		stringConfirmer(authNum, DBNumber);
+
+		// 랜덤 비밀번호 생성, 메일 작성, 메일 전송
+		String tempPassword = createTempPassword();
+		sendMessage(createPWEmail(email, tempPassword));
+
+		// 랜덤 비번 Member DB 저장
+		Member member = findVerifiedMemberByEmail(email);
+		member.setPassword(passwordEncoder.encode(tempPassword));
+		memberRepository.save(member);
+
+		// db에서 authNumber 정보 삭제
+		authNumberRepository.delete(findAuthNumber);
+	}
 
 	/**
 	 * 이메일 인증 메일 작성
@@ -252,7 +270,7 @@ public class AuthService {
 
 	/**
 	 * Email로 Member 찾아서 반환
-	 * @param Email 회원 unique email
+	 * @param Email 회원 email
 	 * @return Member
 	 */
 	private Member findVerifiedMemberByEmail(String Email) {
@@ -261,6 +279,19 @@ public class AuthService {
 			() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
 		return findMember;
+	}
+
+	/**
+	 * Email로 AuthNumber 찾아서 반환
+	 * @param Email 회원 email
+	 * @return AuthNumber
+	 */
+	private AuthNumber findVerifiedAuthNumberByEmail(String Email) {
+		Optional<AuthNumber> optionalMember = authNumberRepository.findByEmail(Email);
+		AuthNumber findAuthNumber = optionalMember.orElseThrow(
+			() -> new BusinessLogicException(ExceptionCode.AUTH_NUMBER_NOT_FOUND));
+
+		return findAuthNumber;
 	}
 
 	/**

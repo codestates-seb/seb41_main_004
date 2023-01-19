@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
-import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
@@ -27,19 +26,19 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 	private final AuthService authService;
 
-	// @PostMapping("/refresh/passwords/email")
-	// public ResponseEntity sendEmail(@RequestBody AuthDto.SendEmail request) throws Exception {
-	// 	authService.sendAuthEmail(request);
-	//
-	// 	return new ResponseEntity<>(HttpStatus.OK);
-	// }
-	//
-	// @PostMapping("/refresh/passwords")
-	// public ResponseEntity sendPassword(@RequestBody AuthDto.SendPWEmail request) throws Exception {
-	// 	authService.resetPassword(request);
-	//
-	// 	return new ResponseEntity<>(HttpStatus.OK);
-	// }
+	@PostMapping("/refresh/passwords/email")
+	public ResponseEntity sendEmail(@RequestBody AuthDto.SendEmail request) throws Exception {
+		authService.sendAuthEmail(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/refresh/passwords")
+	public ResponseEntity sendPassword(@RequestBody AuthDto.SendPWEmail request) throws Exception {
+		authService.resetPassword(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	// 비밀번호 인증(password 변경 페이지로 가기 전)
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
