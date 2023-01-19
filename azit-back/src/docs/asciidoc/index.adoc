@@ -126,6 +126,7 @@ include::{snippets}/patch-member/path-parameters.adoc[]
 .request-headers
 include::{snippets}/patch-member/request-headers.adoc[]
 
+
 .request-fields
 include::{snippets}/patch-member/request-fields.adoc[]
 
@@ -134,6 +135,29 @@ include::{snippets}/patch-member/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-member/response-fields.adoc[]
+
+=== 회원 프로필 이미지 수정
+
+.curl-request
+include::{snippets}/patch-member-image/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-member-image/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-member-image/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-member-image/request-headers.adoc[]
+
+.request-parts
+include::{snippets}/patch-member-image/request-parts.adoc[]
+
+.http-response
+include::{snippets}/patch-member-image/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-member-image/response-fields.adoc[]
 
 === 회원 1명 조회
 

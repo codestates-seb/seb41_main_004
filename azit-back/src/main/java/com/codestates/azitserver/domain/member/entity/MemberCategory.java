@@ -27,12 +27,12 @@ public class MemberCategory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberCategoryId; // PK
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	@JsonBackReference
 	private Member member; // FK
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORY_SMALL_ID")
 	@JsonBackReference
 	private CategorySmall categorySmall; // FK
