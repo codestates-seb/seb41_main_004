@@ -63,11 +63,11 @@ INSERT INTO FILE_INFO (FILE_NAME, FILE_URL) VALUES ('a7d3fdeeac6c9538b4b1372efa8
 
 -- DUMMY USER
 INSERT INTO MEMBER (EMAIL, PASSWORD, NICKNAME, MEMBER_STATUS, BIRTH_YEAR, REPUTATION, FILE_INFO_ID)
-VALUES ('admin_test@hello.com', '{bcrypt}$2a$10$VG83rqZddIfFCzHu4zCIwulurZs4xUED/dLnnFdbiyHodunY8pDyC', 'admin_test', 'ACTIVE', 2000, 10, 4);
+VALUES ('admin_test@hello.com', '{bcrypt}$2a$10$ABAABZhKO6b.igytRYCM/untHs3dFIy6fu8knBKZnuzgN.qERHNaG', 'admin_test', 'ACTIVE', 2000, 10, 4);
 INSERT INTO MEMBER (EMAIL, PASSWORD, NICKNAME, MEMBER_STATUS, BIRTH_YEAR, REPUTATION, FILE_INFO_ID)
-VALUES ('user_test@hello.com', '{bcrypt}$2a$10$VG83rqZddIfFCzHu4zCIwulurZs4xUED/dLnnFdbiyHodunY8pDyC', 'user_test', 'ACTIVE', 2000, 10, 5);
+VALUES ('user_test@hello.com', '{bcrypt}$2a$10$ABAABZhKO6b.igytRYCM/untHs3dFIy6fu8knBKZnuzgN.qERHNaG', 'user_test', 'ACTIVE', 2000, 10, 5);
 INSERT INTO MEMBER (EMAIL, PASSWORD, NICKNAME, MEMBER_STATUS, BIRTH_YEAR, ABOUT_ME, REPUTATION, FILE_INFO_ID)
-VALUES ('kinstub1@hello.com', '{bcrypt}$2a$10$VG83rqZddIfFCzHu4zCIwulurZs4xUED/dLnnFdbiyHodunY8pDyC', 'kimstub1', 'ACTIVE', 1995,'kimstub1의 자기소개 뿌잉뿌잉', 10, 3);
+VALUES ('kinstub1@hello.com', '{bcrypt}$2a$10$ABAABZhKO6b.igytRYCM/untHs3dFIy6fu8knBKZnuzgN.qERHNaG', 'kimstub1', 'ACTIVE', 1995,'kimstub1의 자기소개 뿌잉뿌잉', 10, 3);
 
 -- DUMMY USER ROLE
 INSERT INTO MEMBER_ROLES (MEMBER_MEMBER_ID, ROLES) VALUES (1, 'ADMIN');
