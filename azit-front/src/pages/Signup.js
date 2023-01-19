@@ -21,9 +21,9 @@ const Signup = () => {
 
   const SignupButtonClick = async(data) => {
     // eslint-disable-next-line
-    const { nickname, email, password, passwordCheck } = data;  
-    console.log(data);
-    navigate('/signup/add');
+    // const { nickname, email, password, passwordCheck } = data;  
+    // console.log(data);
+    navigate('/signup/add', {state:data, replace: true});
   }
 
   return (

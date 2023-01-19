@@ -9,10 +9,9 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.codestates.azitserver.domain.category.entity.CategorySmall;
+import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
-import com.codestates.azitserver.domain.member.entity.MemberCategory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -112,7 +111,7 @@ public class MemberDto {
 		private Long memberId;
 		private String email;
 		private String nickname;
-		private FileInfo fileInfo;
+		private FileInfoDto.Response fileInfo;
 	}
 
 	@Getter
@@ -122,5 +121,6 @@ public class MemberDto {
 		private Long memberId;
 		private String email;
 		private String nickname;
+		private FileInfoDto.Response fileInfo;
 	}
 }

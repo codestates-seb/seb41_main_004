@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
-import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.global.validator.NotSpace;
 
@@ -60,7 +60,7 @@ public class ClubDto {
 		private Club.GenderRestriction genderRestriction;
 
 		@NotNull
-		@FutureOrPresent(message = "Appointment date cannot be in the past." )
+		@FutureOrPresent(message = "Appointment date cannot be in the past.")
 		private LocalDate meetingDate;
 
 		@NotNull
@@ -78,11 +78,6 @@ public class ClubDto {
 		@NotNull
 		@Positive
 		private Long categorySmallId;
-
-		// TODO : 연관관계 매핑
-
-		// private Long hostId;
-		// private String bannerImageUrl;
 	}
 
 	/**
@@ -122,7 +117,7 @@ public class ClubDto {
 
 		private Club.GenderRestriction genderRestriction;
 
-		@FutureOrPresent(message = "Appointment date cannot be in the past." )
+		@FutureOrPresent(message = "Appointment date cannot be in the past.")
 		private LocalDate meetingDate;
 
 		private LocalTime meetingTime;
@@ -154,7 +149,7 @@ public class ClubDto {
 		private Club.ClubStatus clubStatus;
 		private MemberDto.ResponseEmailAndNickname host;
 		private CategoryDto.SmallResponse categorySmall;
-		private FileInfo bannerImage;
+		private FileInfoDto.Response bannerImage;
 		private List<ClubMemberDto.Response> clubMembers;
 	}
 

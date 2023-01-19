@@ -35,6 +35,9 @@ export const ClubData = [
           email: "user_test@hello.com",
           memberId: 2,
           nickname: "user_test",
+          fileInfo : {
+            fileUrl: TestProfileImg,
+          }
         },
       },
     ],

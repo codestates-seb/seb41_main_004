@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
+import { useParams } from "react-router-dom";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -47,11 +48,13 @@ const DeleteBtnWrap = styled.div`
 `;
 
 const AzitSetting = () => {
+  const { id } = useParams();
+
   return (
     <AzitSettingWrap>
       <Header title="아지트 설정" />
       <SettingBar>
-        <Link to="/azit/edit">
+        <Link to={`/azit/edit/${id}`}>
           <span>아지트 수정하기</span>
           <div>
             <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />

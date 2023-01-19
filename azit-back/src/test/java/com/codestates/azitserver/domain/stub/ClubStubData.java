@@ -100,7 +100,7 @@ public class ClubStubData {
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
 		response.setHost(stubMemberIdAndNickname());
 		response.setCategorySmall(getSmallResponse());
-		response.setBannerImage(FileInfoStubData.getDefaultFileInfo());
+		response.setBannerImage(FileInfoStubData.getFileInfoDtoResponse());
 
 		return response;
 	}

@@ -172,7 +172,7 @@ const UserProfileEdit = () => {
         setGetImgFile(
           `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
         );
-
+          
         let categoryList = [];
         res.data.data.categorySmallIdList.map((category) => {
           return categoryList.push(category);

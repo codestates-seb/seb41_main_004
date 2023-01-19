@@ -39,11 +39,13 @@ const Login = () => {
         const nickname = res.data.nickname;
         const email = res.data.email;
         const profileUrl = res.data.profileUrl;
+        const memberId = res.data.memberId;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('email', email);
         localStorage.setItem('nickname', nickname);
         localStorage.setItem('profileUrl', profileUrl);
+        localStorage.setItem('memberId', memberId);
         setCookie('accessToken', accessToken);
         navigate('/');
         dispatch(loginStatusSlice.actions.login());
