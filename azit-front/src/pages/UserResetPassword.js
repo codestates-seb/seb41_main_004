@@ -34,9 +34,9 @@ const UserResetPassword = () => {
         }
       );
       console.log(res);
-      navigate("/login")
+      navigate("/login", { replace: true });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
   return (
