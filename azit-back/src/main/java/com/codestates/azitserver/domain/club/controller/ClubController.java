@@ -164,9 +164,13 @@ public class ClubController {
 	 */
 	@GetMapping("/recommend/{member-id:[0-9]+}")
 	public ResponseEntity<?> getClubByMemberRecommend(@Positive @RequestParam(name = "page") int page,
-		@Positive @RequestParam(name = "size") int size, @Positive @PathVariable("member-id") Long memberId) {
-
-		// TODO : Need to service logic.
+		@Positive @RequestParam(name = "size") int size, @Positive @PathVariable("member-id") Long memberId,
+		@LoginMember Member member) {
+		// api 파라미터값의 memberId와 실제 요청하는 주체가 다르면 전체 아지트를 불러옵니다.
+		boolean isNotMember = clubService.verifyOrFindAll(member, memberId);
+		if (isNotMember) {
+			return getAllClub(page, size);
+		}
 
 		Page<Club> clubPage = clubService.findClubsMemberRecommend(memberId, page - 1, size);
 		List<Club> clubs = clubPage.getContent();

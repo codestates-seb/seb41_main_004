@@ -5,16 +5,16 @@ import google from "../images/googleLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginStatusSlice } from "../redux/loginSlice";
-import axios from "axios";
 import { setCookie } from "../util/cookie/cookie";
-import jwt_decode from 'jwt-decode';
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../util/axios";
+// eslint-disable-next-line
+import { useEffect } from "react";
 
 
 
 const Login = () => {
-  
+  // eslint-disable-next-line
   const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
@@ -22,7 +22,12 @@ const Login = () => {
   // useForm의 isSubmitting으로 로그인 로딩 구현
   const { register, handleSubmit, formState: { errors } } = useForm({mode: "onchange"});
 
+  const oAuthHandler = () => {
+    window.location.assign('http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
+  }
+
   const loginButtonClick = async (data) => {
+    // eslint-disable-next-line
     const { email, password } = data;
       try {
         const res = await axiosInstance.post(
@@ -33,10 +38,12 @@ const Login = () => {
         const refreshToken = res.headers.get('Refresh');
         const nickname = res.data.nickname;
         const email = res.data.email;
+        const profileUrl = res.data.profileUrl;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('email', email);
         localStorage.setItem('nickname', nickname);
+        localStorage.setItem('profileUrl', profileUrl);
         setCookie('accessToken', accessToken);
         navigate('/');
         dispatch(loginStatusSlice.actions.login());
@@ -90,10 +97,10 @@ const Login = () => {
         <Link to="/signup">회원가입하기</Link>
       </LoginFooter>
       <Line />
-      <Link to="/" className="snsWrap">
-        <SnsLoginButton>Sign in with Google</SnsLoginButton>
+      {/* <Link to="/" className="snsWrap"> */}
+        <SnsLoginButton onClick={oAuthHandler}>Sign in with Google</SnsLoginButton>
         {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
-      </Link>
+      {/* </Link> */}
     </LoginContainer>
   );
 };

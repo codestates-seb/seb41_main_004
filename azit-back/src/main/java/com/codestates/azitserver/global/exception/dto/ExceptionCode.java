@@ -12,6 +12,7 @@ import lombok.Getter;
 public enum ExceptionCode {
 	// 400
 	INVALID_CLUB_MEMBER_STATUS(40001, "Invalid club member status"),
+	HOST_REPORT_FAILED(40002, "Host is not allowed to report its own azit"),
 
 	// 403
 	CLUB_CANCELED(40301, "The Club is canceled"),
@@ -31,12 +32,11 @@ public enum ExceptionCode {
 	INVALID_MEETING_METHOD(40902, "Meeting method is \"offline\" or \"online\" only"),
 	CLUB_MEMBER_EXISTS(40903, "Member already signed up the club before"),
 	HOST_FAILED(40904, "The host cannot join its club"),
+	CLUB_REPORT_EXIST(40905, "Member already report the club"),
 
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
 
 	private int status;
 	private String message;
-
-
 }

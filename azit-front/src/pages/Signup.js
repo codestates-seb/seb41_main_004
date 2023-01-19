@@ -4,7 +4,6 @@ import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import axios from "axios";
 
 
 
@@ -23,7 +22,6 @@ const Signup = () => {
   const SignupButtonClick = async(data) => {
     // eslint-disable-next-line
     const { nickname, email, password, passwordCheck } = data;  
-    // 서버로 data POST
     console.log(data);
     navigate('/signup/add');
   }
