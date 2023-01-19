@@ -38,7 +38,10 @@ const ReportWrap = styled.form`
     }
   }
 `;
-
+const Select = styled.select`
+  color:${(props) => props.status !== "" ? 'var(--font-color)' : `var(--light-font-color)` };
+  /* color:${(props) => console.log(props.status === "") ? 'var(--font-color)' : `var(--light-font-color)` }; */
+`
 const AzitReport = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -50,22 +53,19 @@ const AzitReport = () => {
   const handleReportReason = (e) => {
     setReportReason(e.target.value);
   };
+  console.log(reportCategory)
   const posting = async (e) => {
     e.preventDefault();
     try {
       const payload = { reportCategory, reportReason };
-      // const res = 
-      await axiosInstance.post(
-        `/api/clubs/reports/${id}`,
-        payload,
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
-      );
+      // const res =
+      await axiosInstance.post(`/api/clubs/reports/${id}`, payload, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
       // console.log(res);
       navigate(-1);
     } catch (error) {
-      alert("신고 내용을 보내지 못했습니다.")
+      alert(error.message);
       // console.log(error);
     }
   };
@@ -80,13 +80,17 @@ const AzitReport = () => {
             <span className="essential">(필수)</span>
           </label>
           <div className="selectBox">
-            <select onChange={handleReportCategory} value={reportCategory}>
+            <Select
+              status={reportCategory}
+              onChange={handleReportCategory}
+              value={reportCategory}
+            >
               {ReportData.map((item) => (
                 <option value={item.value} key={item.id}>
                   {item.name}
                 </option>
               ))}
-            </select>
+            </Select>
             <span className="selectArrow" />
           </div>
         </div>
