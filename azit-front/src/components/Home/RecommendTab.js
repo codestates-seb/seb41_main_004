@@ -1,32 +1,77 @@
-import styled from "styled-components";
-import { ClubData } from "../../dummyData/ClubData";
+import React, { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
+import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
 import Null from "./Null";
+import Loading from "../common/Loading";
 
-const MoreBtn = styled.button`
-  width: 100%;
-  height: 4rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  font-size: var(--big-font);
-  font-weight: var(--bold-weight);
-  color: var(--sub-font-color);
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
 const RecommendTab = () => {
-  // 추천목록 불러오는 코드를 써 map을 돌린 후 props로 내린다.
+  const { ref, inView } = useInView();
+
+  // 무한스크롤 함수 0번이 guest
+  const fetchInfiniteList = async (pageParam) => { 
+    const res = await axiosInstance.get(
+      `/api/clubs/recommend/${localStorage.getItem("userId") ? localStorage.getItem("userId") : 0}?page=${pageParam}&size=5`,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+
+    return {
+      board_page: res.data.data,
+      nextPage: pageParam + 1,
+      isLast:
+        res.data.data.length > 0
+          ? res.data.pageInfo.page === res.data.pageInfo.totalPages
+          : true,
+    };
+  };
+
+  const { data, status, fetchNextPage, isFetchingNextPage, error } =
+    useInfiniteQuery(
+      "recommend",
+      ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
+      {
+        staleTime: 6 * 10 * 1000,
+        cacheTime: 6 * 10 * 1000,
+        getNextPageParam: (lastPage) =>
+          !lastPage.isLast ? lastPage.nextPage : undefined,
+      }
+    );
+
+  // 맨 밑에 도달했을 시 함수호출
+  useEffect(() => {
+      if (inView) fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
+
   return (
     <>
-      {ClubData ? (
-        ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+      <article className="resultCell">
+        {status === "loading" && <Loading />}
+        {status === "error" && <Null text={error.message} />}
+        {data?.pages.map((page, index) => (
+          <React.Fragment key={index}>
+            {page.board_page.length > 0 ? (
+              page.board_page.map((daysData) => (
+                <AzitList key={daysData.clubId} data={daysData} />
+              ))
+            ) : (
+              <Null text="관심 카테고리를 선택해주세요." />
+            )}
+          </React.Fragment>
+        ))}
+      </article>
+      {status !== "error" && status === "success" ? (
+        isFetchingNextPage ? (
+          <Loading />
+        ) : (
+          <div ref={ref} />
+        )
       ) : (
-        <Null text="추천 아지트가 없습니다." />
+        <></>
       )}
-      {ClubData && <MoreBtn>더보기 +</MoreBtn>}
     </>
   );
 };
