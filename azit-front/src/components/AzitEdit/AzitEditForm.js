@@ -335,8 +335,8 @@ const AzitEditForm = () => {
         <div className="inputContainer">
           <label>날짜 및 시간</label>
           <div className="wd70">
-            <input type="date"></input>
-            <input type="time"></input>
+            <input type="date" onChange={onChangeDate} />
+            <input type="time" onChange={onChangeTime} />
           </div>
         </div>
         <div className="radioContainer">
