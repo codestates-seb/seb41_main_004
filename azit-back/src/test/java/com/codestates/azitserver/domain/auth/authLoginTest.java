@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.domain.stub.FileInfoStubData;
@@ -78,7 +78,7 @@ public class authLoginTest {
 	@DisplayName("로그인하면 토큰과 회원정보를 보내준다.")
 	public void loginTest() throws Exception {
 		// given - LoginDto로 요청값 받으면 json 형식으로
-		LoginDto.Post loginDto = new LoginDto.Post();
+		AuthDto.Post loginDto = new AuthDto.Post();
 		loginDto.setEmail("stubmember@naver.com");
 		loginDto.setPassword("123456@asdf");
 

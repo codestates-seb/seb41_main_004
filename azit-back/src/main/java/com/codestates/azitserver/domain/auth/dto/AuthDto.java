@@ -3,7 +3,7 @@ package com.codestates.azitserver.domain.auth.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LoginDto {
+public class AuthDto {
 
 	@Getter
 	@Setter
@@ -28,14 +28,9 @@ public class LoginDto {
 	@Getter
 	@Setter
 	public static class ResponseWithProfile {
+		private Long memberId;
 		private String email;
 		private String nickname;
 		private String profileUrl;
-	}
-
-	@Getter
-	@Setter
-	public static class ResponseMatcher {
-		Boolean matchingResult;
 	}
 }
