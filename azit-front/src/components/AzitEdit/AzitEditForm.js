@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { PriceFormat } from "../../util/azitPreviewDateConvert";
 import DaumPostcode from "react-daum-postcode";
+import { axiosInstance } from "../../util/axios";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 
 const EditFormWrap = styled.div`
   flex: 1;
@@ -117,6 +120,8 @@ const Label2 = styled.label`
 `;
 
 const AzitEditForm = () => {
+  const { id } = useParams();
+
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -131,6 +136,16 @@ const AzitEditForm = () => {
   const [fee, setFee] = useState("");
   const [year, setYear] = useState({ minYear: [], maxYear: [] });
   const [visible, setVisible] = useState(false);
+
+  const azitLookup = async () => {
+    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    return res.data.data;
+  };
+
+  const { isError, isLoading, data, error } = useQuery(
+    "azitDetail",
+    azitLookup
+  );
 
   useEffect(() => {
     // 이하가 먼저 선택 됐을 때 > 이상은 이하 밑으론 내려가면 안된다.

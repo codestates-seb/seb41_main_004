@@ -62,7 +62,7 @@ function App() {
           <Route path="/signup/add" element={<SignupAdditional />}></Route>
 
           {/* 유저페이지 */}
-          <Route path="/userpage" element={<UserPage />}></Route>
+          <Route path="/userpage/:id" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
           <Route path="/userpage/verifypw" element={<UserVerifyPassword />}></Route>
           <Route path="/userpage/resetpw" element={<UserResetPassword />}></Route>
