@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.codestates.azitserver.domain.club.controller.descriptor.ClubFieldDescriptor;
+import com.codestates.azitserver.domain.club.controller.helper.ClubControllerTestHelper;
 import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
@@ -356,5 +358,41 @@ class ClubControllerTest implements ClubControllerTestHelper {
 					ClubFieldDescriptor.getMultiResponseSnippet()
 				)
 			);
+	}
+
+	@Test
+	void testGetClubByMemberRecommend() throws Exception {
+		// given
+		Long memberId = 1L;
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("page", "1");
+		queryParams.add("size", "10");
+
+		given(clubService.verifyOrFindAll(Mockito.any(Member.class), Mockito.anyLong())).willReturn(false);
+		given(clubService.findClubsMemberRecommend(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(
+			clubPage);
+		given(mapper.clubToClubDtoResponse(Mockito.anyList())).willReturn(List.of(response));
+
+		// when
+		ResultActions actions = mockMvc.perform(
+			getRequestBuilder(getClubUrl() + "/recommend/{member-id}", queryParams, memberId)
+				.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument("get-club-by-member-recommend",
+				pathParameters(List.of(
+					parameterWithName("member-id").description("회원 고유 식별자"))
+				),
+				requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+				requestParameters(
+					List.of(
+						parameterWithName("page").description("Page 번호"),
+						parameterWithName("size").description("Page 크기")
+					)
+				),
+				ClubFieldDescriptor.getMultiResponseSnippet()
+			));
 	}
 }

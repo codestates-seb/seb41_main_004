@@ -1,25 +1,28 @@
-import axios from "axios";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
-import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
-import { Link, useParams } from "react-router-dom";
+// import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
-import { ImgModal } from "../components/common/Modal";
-//import { useSelector } from "react-redux";
-const URL = process.env.REACT_APP_BASE_URL;
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../util/axios";
+import useDidMountEffect from "../util/useDidMountEffect";
 
-const ProfileEditForm = styled.div`
+//import { useSelector } from "react-redux";
+const accessToken = localStorage.getItem("accessToken");
+
+const ProfileEditForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;
   margin-top: 5.5rem;
   min-height: calc(100vh - 5.5rem);
+  align-items: center;
   /* justify-content: space-between; */
   & > article {
     margin-top: 2rem;
+    width: 100%;
     & > .selectBox {
       margin-bottom: 1rem;
     }
@@ -64,21 +67,24 @@ const ProfileEditForm = styled.div`
       }
     }
   }
-  & > .buttonWrap {
+  & button {
     margin-top: 3rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: flex-end;
   }
 `;
 
 const ProfileImageWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
   > input {
+    // 프로필이미지의 이미지첨부 input창 숨김
     display: none;
+  }
+  > label {
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+    height: 2.7rem;
+    cursor: pointer;
   }
 `;
 
@@ -88,24 +94,17 @@ const ProfileImage = styled.div`
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
-`;
-
-const ImageAddIcon = styled.img`
-  cursor: pointer;
-  margin-top: -2rem;
-  margin-left: 5rem;
+  background-color: var(--background-color);
 `;
 
 const UserProfileEdit = () => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [checkedInputs, setCheckedInputs] = useState([]);
-  const [nameValue, SetNameValue] = useState("");
-  const [introValue, setIntroValue] = useState("");
-  const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
-  const [intro, setIntro] = useState("유저 자기소개 불러와야함"); //소개 get으로 받아오는것
-  const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
   const [imgFile, setImgFile] = useState("");
+  const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
+  const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
+  const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
+  const navigate = useNavigate();
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -116,7 +115,9 @@ const UserProfileEdit = () => {
       setImgFile(reader.result);
     };
   };
+  console.log(checkedInputs);
 
+  // 이미지 변환 함수
   function dataURLtoFile(dataurl, filename) {
     if (!dataurl) {
       return;
@@ -135,34 +136,55 @@ const UserProfileEdit = () => {
     }
   }
 
-  let file = dataURLtoFile(imgFile, "sendImg");
-  // console.log(file);
+  useDidMountEffect(() => {
+    let file = dataURLtoFile(imgFile, "sendImg");
+    const formData = new FormData();
+    formData.append("image", file);
+    const postFile = async () => {
+      try {
+        const res = await axiosInstance.post("api/members/", formData, {
+          headers: { Authorization: accessToken },
+          "Content-Type": "multipart/form-data",
+        });
 
-  // let { id } = useParams();
+        console.log(res);
+        alert("프로필 이미지가 수정이 완료되었습니다.");
+      } catch (e) {
+        console.log("프로필 이미지 수정 실패");
+      }
+    };
+    postFile();
+  }, [imgFile]);
 
   useEffect(() => {
-    axios
-      .get(`${URL}/api/members/1`, {
+    axiosInstance
+      .get("api/members/3", {
         headers: {
-          "Content-Type": "application/json;",
+          Authorization: accessToken,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
-        console.log(res);
-        SetdefaultName(res.nickname);
-        setIntro(res.aboutMe);
-        setprofileImg(res.data.fileInfo.fileName);
+        SetdefaultName(res.data.data.nickname);
+        setIntro(res.data.data.aboutMe);
+        setGetImgFile(
+          `${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
+        );
+
+        let categoryList = [];
+        res.data.data.categorySmallIdList.map((category) => {
+          return categoryList.push(category);
+        });
+        setCheckedInputs(categoryList);
+        console.log(checkedInputs);
       })
       .catch((error) => {
         console.log("error : ", error);
-        alert("중복된 닉네임입니다. 다시 시도하세요.");
       });
   }, []);
 
-  const modalHandler = () => {
-    setModalOpen(!modalOpen);
-  };
   const changeHandler = (checked, id) => {
+    //console.log(checked, id); //true , '전시'
     if (checked) {
       setCheckedInputs([...checkedInputs, id]);
     } else {
@@ -171,19 +193,39 @@ const UserProfileEdit = () => {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.preventDefault();
     let body = {
-      nickname: nameValue,
-      aboutMe: introValue,
-      fileName: imgFile,
+      nickname: defaultName,
+      aboutMe: intro,
+      // fileName: imgFile,
+      categorySmallId: checkedInputs,
     };
-    console.log(body);
+
+    axiosInstance
+      .patch("api/members/3", body, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status >= 200 && res.status < 300) {
+          navigate("/userpage");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        //alert("중복된 닉네임입니다. 다시 시도하세요.");
+        //alert창은 axios patch에서 에러뜨면 해야됨
+      });
   };
 
   return (
     <>
       <Header title="프로필 수정" />
-      <ProfileEditForm>
+      <ProfileEditForm onSubmit={handleEdit}>
         <ProfileImageWrap>
           <input
             type="file"
@@ -192,25 +234,22 @@ const UserProfileEdit = () => {
             onChange={saveImgFile}
             ref={imgRef}
           ></input>
-
           <ProfileImage
-            imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
+            imgSrc={
+              imgFile ? imgFile : `${process.env.REACT_APP_S3_URL}${getImgFile}`
+            }
           ></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
-            <ImageAddIcon
-              // onClick={() => modalHandler()}
-              src={ImgAddIcon}
-            ></ImageAddIcon>
+            <img alt="imgEditBtn" src={ImgAddIcon} />
           </label>
-          {modalOpen && <ImgModal modalHandler={modalHandler} />}
+          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
           <input
             onChange={(e) => {
-              SetNameValue(e.target.value);
-              console.log(nameValue);
+              SetdefaultName(e.target.value);
             }}
             defaultValue={defaultName}
           ></input>
@@ -219,8 +258,7 @@ const UserProfileEdit = () => {
           <label>자기소개를 입력해주세요.</label>
           <textarea
             onChange={(e) => {
-              setIntroValue(e.target.value);
-              console.log(introValue);
+              setIntro(e.target.value);
             }}
             placeholder="텍스트를 입력해 주세요."
             defaultValue={intro}
@@ -233,22 +271,23 @@ const UserProfileEdit = () => {
               <div className="interestContainer" key={interest.id}>
                 <div className="subtitle">{interest.subtitle}</div>
                 <div className="tagContainer">
-                  {interest.tags.map((tag, idx) => {
+                  {interest.tags.map((tag) => {
+                    //console.log(tag, idx);
+                    //전시,영화,뮤지컬,공연,디자인 등등,  0,1,2,3,4,5
                     return (
-                      <span className="tag" key={idx}>
+                      <span className="tag" key={tag.tagId}>
                         <input
-                          id={tag}
+                          id={tag.tagId}
                           type="checkbox"
                           onChange={(e) => {
-                            changeHandler(e.currentTarget.checked, tag);
+                            changeHandler(e.currentTarget.checked, tag.tagId);
                           }}
-                          checked={checkedInputs.includes(tag) ? true : false}
-                          name={tag}
-                          onClick={() => {
-                            handleEdit();
-                          }} //button에다가 onClick 줘야함
+                          checked={
+                            checkedInputs.includes(tag.tagId) ? true : false
+                          }
+                          name={tag.tagName}
                         ></input>
-                        <label htmlFor={tag}>{tag}</label>
+                        <label htmlFor={tag.tagId}>{tag.tagName}</label>
                       </span>
                     );
                   })}
@@ -258,9 +297,8 @@ const UserProfileEdit = () => {
           })}
         </article>
         {/*Link -> useNavigate 로 변환 필요 / */}
-        <div className="buttonWrap"></div>
         {/* <Link to="/"> */}
-        <Button title="수정 완료" state="active"></Button>
+        <Button type="submit" title="수정 완료" state="active"></Button>
         {/* </Link> */}
       </ProfileEditForm>
     </>

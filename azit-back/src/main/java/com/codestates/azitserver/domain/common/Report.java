@@ -11,10 +11,12 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // Inheritance 사용안한이유: https://ict-nroo.tistory.com/128
 
 @Getter
+@Setter
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Report extends Auditable{
