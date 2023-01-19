@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { axiosInstance } from "../../util/axios";
+import { useQuery } from "react-query";
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -10,76 +12,41 @@ const Container = styled.div`
 `;
 
 const Categorys = styled.span`
-  margin: 0.5rem;
-  padding: 1rem;
+  margin: 0 0.5rem 1rem;
+  padding: 0.5rem 1.5rem;
   background-color: #bb2649;
   color: white;
   border-radius: 2rem;
   font-size: var(--main-font);
 `;
 
-const Category = () => {
-  const inter = [
-    {
-      id: 1,
-      tags: "전시",
-    },
-    {
-      id: 2,
-      tags: "영화",
-    },
-    {
-      id: 3,
-      tags: "뮤지컬",
-    },
-    {
-      id: 4,
-      tags: "공연",
-    },
-    {
-      id: 5,
-      tags: "디자인",
-    },
-    {
-      id: 6,
-      tags: "클라이밍",
-    },
-    {
-      id: 7,
-      tags: "등산",
-    },
-    {
-      id: 8,
-      tags: "헬스",
-    },
-    {
-      id: 9,
-      tags: "헬스",
-    },
-    {
-      id: 10,
-      tags: "헬스",
-    },
-    {
-      id: 11,
-      tags: "헬스",
-    },
-    {
-      id: 12,
-      tags: "헬스",
-    },
-    {
-      id: 13,
-      tags: "헬스",
-    },
-  ];
+const Category = ({ getCategoryList }) => {
+  const [categoryList, setCategoryList] = useState([]);
+  const smallCategory = async () => {
+    const res = await axiosInstance.get("/api/categories/small");
+    return res.data.data;
+  };
+  const { data: smallCategoryList } = useQuery("smallCategory", () =>
+    smallCategory()
+  );
+  useEffect(() => {
+    if (smallCategoryList) {
+      setCategoryList(
+        smallCategoryList.filter((item) =>
+          getCategoryList.includes(item.categorySmallId)
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [smallCategoryList, getCategoryList]);
+
   return (
     <Container>
-      {inter
-        .filter((tag) => tag.id === 7)
-        .map((tag) => {
-          return <Categorys key={tag.id}>{tag.tags}</Categorys>;
-        })}
+      {categoryList.map((tag) => {
+        return (
+          <Categorys key={tag.categorySmallId}>{tag.categoryName}</Categorys>
+        );
+      })}
     </Container>
   );
 };
