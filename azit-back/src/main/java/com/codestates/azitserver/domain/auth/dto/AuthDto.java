@@ -25,6 +25,19 @@ public class AuthDto {
 		private String newPasswordCheck;
 	}
 
+	// @Getter
+	// @Setter
+	// public static class sendEmail {
+	// 	private String email;
+	// }
+	//
+	// @Getter
+	// @Setter
+	// public static class sendPassword {
+	// 	private String email;
+	// 	private String authNumber;
+	// }
+
 	@Getter
 	@Setter
 	public static class ResponseWithProfile {

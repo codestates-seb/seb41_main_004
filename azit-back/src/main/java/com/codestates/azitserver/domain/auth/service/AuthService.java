@@ -48,11 +48,11 @@ public class AuthService {
 	public void updatePassword(Long memberId, AuthDto.PatchPassword request, Member member) {
 		// 요청주체의 memberId가 api memberId와 일치하는지 확인 -> 일치하지 않으면 예외 발생
 		if (!member.getMemberId().equals(memberId)) {
-			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED); //409
 		}
 
 		// password와 passwordCheck가 같은지 확인해서 같지 않으면 exception 보냄
-		passwordConfirmer(request);
+		passwordConfirmer(request); // 404
 
 		// member 찾고, 새 비밀번호를 암호화해서 넣고 저장 (소셜은 비밀번호가 없으니 비밀번호가 있는 경우에만 수정)
 		Member findMember = findVerifiedMember(memberId);
