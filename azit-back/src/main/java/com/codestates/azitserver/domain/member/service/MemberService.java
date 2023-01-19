@@ -24,6 +24,7 @@ import com.codestates.azitserver.domain.fileInfo.service.StorageService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
+import com.codestates.azitserver.domain.member.repository.MemberCategoryRepository;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
@@ -39,6 +40,8 @@ public class MemberService {
 	private final CustomBeanUtils<Member> beanUtils;
 	private final StorageService storageService;
 	private final CategoryService categoryService;
+
+	private final MemberCategoryRepository memberCategoryRepository;
 
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
@@ -129,6 +132,9 @@ public class MemberService {
 		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
 		updatedMember.setPassword(encryptedPassword);
 
+		// MemberCategory 기존 데이터 테이블 삭제
+		memberCategoryRepository.deleteAllByMember(member);
+
 		// 카테고리 넣기
 		List<MemberCategory> memberCategoryList = new ArrayList<>();
 
@@ -142,7 +148,7 @@ public class MemberService {
 					.member(updatedMember)
 					.build());
 			}
-			updatedMember.addMemberCategorySmallList(memberCategoryList);
+			updatedMember.setMemberCategoryList(memberCategoryList);
 		}
 		return memberRepository.save(updatedMember);
 
