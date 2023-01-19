@@ -178,7 +178,7 @@ const AzitCreateForm = ({ imgFile }) => {
     }
     setYear((originYear) => ({ ...originYear, maxYear: resetMaxYear }));
   }, [minYearSelected]);
-  
+
   useEffect(() => {
     let resetMinYear = [];
     for (let i = 1950; i <= maxYearSelected; i++) {
