@@ -262,6 +262,7 @@ const AzitPreview = () => {
   const memberLimit = state.memberLimit;
 
   const accessToken = localStorage.getItem("accessToken");
+  const profileUrl = localStorage.getItem("profileUrl");
 
   const openAzit = async () => {
     const formData = new FormData();
@@ -284,7 +285,7 @@ const AzitPreview = () => {
       memberLimit,
       joinMethod: "APPROVAL",
     };
-    // console.log(data);
+
     formData.append(
       "data",
       new Blob([JSON.stringify(data)], { type: "application/json" })
@@ -372,8 +373,14 @@ const AzitPreview = () => {
           <ul>
             <li>참가비 : {PriceFormat(String(fee))}원</li>
             <li>
-              나이,성별 제한 : {MaxAgeConvert(birthYearMax)}{" "}
-              {MinAgeConvert(birthYearMin)}, {genderConvert(genderRestriction)}
+              나이,성별 제한 :<span>{MinAgeConvert(birthYearMin)}</span>
+              {MaxAgeConvert(birthYearMin) === "나이 제한없음" ? (
+                <></>
+              ) : (
+                <span> ~ </span>
+              )}
+              <span>{MaxAgeConvert(birthYearMax)}, </span>
+              <span>{genderConvert(genderRestriction)}</span>
             </li>
           </ul>
         </div>

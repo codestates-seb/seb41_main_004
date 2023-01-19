@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.codestates.azitserver.domain.auth.controller.AuthController;
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.stub.MemberStubData;
@@ -65,14 +65,14 @@ public class authControllerTest {
 		// given
 		Long memberId = 1L;
 
-		LoginDto.MatchPassword matchDto = new LoginDto.MatchPassword();
+		AuthDto.MatchPassword matchDto = new AuthDto.MatchPassword();
 		matchDto.setPassword("123456@asdf");
 
 		String content = gson.toJson(matchDto);
 
 		boolean matchingResult = true;
 
-		given(authService.passwordMatcher(Mockito.anyLong(), Mockito.any(LoginDto.MatchPassword.class)))
+		given(authService.passwordMatcher(Mockito.anyLong(), Mockito.any(AuthDto.MatchPassword.class)))
 			.willReturn(matchingResult);
 
 		// when
@@ -107,14 +107,14 @@ public class authControllerTest {
 		// given
 		Long memberId = 1L;
 
-		LoginDto.PatchPassword patchDto = new LoginDto.PatchPassword();
+		AuthDto.PatchPassword patchDto = new AuthDto.PatchPassword();
 		patchDto.setNewPassword("new123456@asdf");
 		patchDto.setNewPasswordCheck("new123456@asdf");
 
 		String content = gson.toJson(patchDto);
 
 		doNothing().when(authService)
-			.updatePassword(Mockito.anyLong(), Mockito.any(LoginDto.PatchPassword.class), eq(member));
+			.updatePassword(Mockito.anyLong(), Mockito.any(AuthDto.PatchPassword.class), eq(member));
 
 		// when
 		ResultActions actions =
