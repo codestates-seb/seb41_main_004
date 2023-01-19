@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const useDidMountEffect = (func, deps) => {
+export const useDidMountEffect = (func, deps) => {
   const didMount = useRef(false);
 
   useEffect(() => {
@@ -10,4 +10,12 @@ const useDidMountEffect = (func, deps) => {
   }, deps);
 };
 
-export default useDidMountEffect;
+export function useFirstRender() {
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    firstRender.current = false;
+  }, []);
+
+  return firstRender.current;
+}

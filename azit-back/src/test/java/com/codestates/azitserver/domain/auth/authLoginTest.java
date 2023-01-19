@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.codestates.azitserver.domain.auth.dto.LoginDto;
+import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.domain.stub.FileInfoStubData;
@@ -78,7 +78,7 @@ public class authLoginTest {
 	@DisplayName("로그인하면 토큰과 회원정보를 보내준다.")
 	public void loginTest() throws Exception {
 		// given - LoginDto로 요청값 받으면 json 형식으로
-		LoginDto.Post loginDto = new LoginDto.Post();
+		AuthDto.Post loginDto = new AuthDto.Post();
 		loginDto.setEmail("stubmember@naver.com");
 		loginDto.setPassword("123456@asdf");
 
@@ -100,6 +100,7 @@ public class authLoginTest {
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
 			.andExpect(header().exists("Refresh"))
+			.andExpect(jsonPath("$.memberId").value(1L))
 			.andExpect(jsonPath("$.email").value("stubmember@naver.com"))
 			.andExpect(jsonPath("$.nickname").value("김스텁"))
 			.andExpect(jsonPath("$.profileUrl").exists())
@@ -113,6 +114,7 @@ public class authLoginTest {
 					headerWithName("Authorization").description("액세스 토큰"),
 					headerWithName("Refresh").description("리프레시 토큰")),
 				responseFields(List.of(
+					fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버아이디"),
 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
 					fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
 					fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필주소")))

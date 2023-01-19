@@ -3,7 +3,7 @@ package com.codestates.azitserver.domain.auth.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LoginDto {
+public class AuthDto {
 
 	@Getter
 	@Setter
@@ -25,17 +25,25 @@ public class LoginDto {
 		private String newPasswordCheck;
 	}
 
-	@Getter
-	@Setter
-	public static class ResponseWithProfile {
-		private String email;
-		private String nickname;
-		private String profileUrl;
-	}
+	// @Getter
+	// @Setter
+	// public static class sendEmail {
+	// 	private String email;
+	// }
+	//
+	// @Getter
+	// @Setter
+	// public static class sendPassword {
+	// 	private String email;
+	// 	private String authNumber;
+	// }
 
 	@Getter
 	@Setter
-	public static class ResponseMatcher {
-		Boolean matchingResult;
+	public static class ResponseWithProfile {
+		private Long memberId;
+		private String email;
+		private String nickname;
+		private String profileUrl;
 	}
 }
