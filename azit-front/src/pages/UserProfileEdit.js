@@ -1,26 +1,28 @@
-import axios from "axios";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
-import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
 // import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
-import { ImgModal } from "../components/common/Modal";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../util/axios";
+import useDidMountEffect from "../util/useDidMountEffect";
+
 //import { useSelector } from "react-redux";
-const URL = process.env.REACT_APP_BASE_URL;
 const accessToken = localStorage.getItem("accessToken");
 
-const ProfileEditForm = styled.div`
+const ProfileEditForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;
   margin-top: 5.5rem;
   min-height: calc(100vh - 5.5rem);
+  align-items: center;
   /* justify-content: space-between; */
   & > article {
     margin-top: 2rem;
+    width: 100%;
     & > .selectBox {
       margin-bottom: 1rem;
     }
@@ -65,22 +67,24 @@ const ProfileEditForm = styled.div`
       }
     }
   }
-  & > .buttonWrap {
+  & button {
     margin-top: 3rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: flex-end;
   }
 `;
 
 const ProfileImageWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
   > input {
     // 프로필이미지의 이미지첨부 input창 숨김
     display: none;
+  }
+  > label {
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+    height: 2.7rem;
+    cursor: pointer;
   }
 `;
 
@@ -90,22 +94,19 @@ const ProfileImage = styled.div`
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
-`;
-
-const ImageAddIcon = styled.img`
-  cursor: pointer;
-  margin-top: -2rem;
-  margin-left: 5rem;
+  background-color: var(--background-color);
 `;
 
 const UserProfileEdit = () => {
   const [checkedInputs, setCheckedInputs] = useState([]);
-  const [imgFile, setImgFile] = useState(""); //이미지 get으로 받아오는것
+  const [imgFile, setImgFile] = useState("");
+  const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
   const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
+  const navigate = useNavigate();
 
-  const saveImgFile = async (e) => {
+  const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
 
@@ -113,25 +114,10 @@ const UserProfileEdit = () => {
     reader.onloadend = () => {
       setImgFile(reader.result);
     };
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    axios
-      .post(`${URL}api/members/`, formData, {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+  console.log(checkedInputs);
 
+  // 이미지 변환 함수
   function dataURLtoFile(dataurl, filename) {
     if (!dataurl) {
       return;
@@ -150,23 +136,40 @@ const UserProfileEdit = () => {
     }
   }
 
-  let file = dataURLtoFile(imgFile, "sendImg");
-  // console.log(file);
+  useDidMountEffect(() => {
+    let file = dataURLtoFile(imgFile, "sendImg");
+    const formData = new FormData();
+    formData.append("image", file);
+    const postFile = async () => {
+      try {
+        const res = await axiosInstance.post("api/members/", formData, {
+          headers: { Authorization: accessToken },
+          "Content-Type": "multipart/form-data",
+        });
+
+        console.log(res);
+        alert("프로필 이미지가 수정이 완료되었습니다.");
+      } catch (e) {
+        console.log("프로필 이미지 수정 실패");
+      }
+    };
+    postFile();
+  }, [imgFile]);
 
   useEffect(() => {
-    axios
-      .get(`${URL}api/members/3`, {
+    axiosInstance
+      .get("api/members/3", {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-        console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
-        console.log(res.data.data.fileInfo.fileName);
-        setImgFile(res.data.data.fileInfo.fileUrl);
+        setGetImgFile(
+          `${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
+        );
 
         let categoryList = [];
         res.data.data.categorySmallIdList.map((category) => {
@@ -198,10 +201,9 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-    console.log(body);
 
-    axios
-      .patch(`${URL}api/members/1`, body, {
+    axiosInstance
+      .patch("api/members/3", body, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
@@ -209,6 +211,9 @@ const UserProfileEdit = () => {
       })
       .then((res) => {
         console.log(res);
+        if (res.status >= 200 && res.status < 300) {
+          navigate("/userpage");
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -220,7 +225,7 @@ const UserProfileEdit = () => {
   return (
     <>
       <Header title="프로필 수정" />
-      <ProfileEditForm>
+      <ProfileEditForm onSubmit={handleEdit}>
         <ProfileImageWrap>
           <input
             type="file"
@@ -230,13 +235,12 @@ const UserProfileEdit = () => {
             ref={imgRef}
           ></input>
           <ProfileImage
-            imgSrc={imgFile ? imgFile : BasicProfileImgIcon}
+            imgSrc={
+              imgFile ? imgFile : `${process.env.REACT_APP_S3_URL}${getImgFile}`
+            }
           ></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
-            <ImageAddIcon
-              // onClick={() => modalHandler()}
-              src={ImgAddIcon}
-            ></ImageAddIcon>
+            <img alt="imgEditBtn" src={ImgAddIcon} />
           </label>
           {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
@@ -293,11 +297,8 @@ const UserProfileEdit = () => {
           })}
         </article>
         {/*Link -> useNavigate 로 변환 필요 / */}
-        <div className="buttonWrap"></div>
         {/* <Link to="/"> */}
-        <form onSubmit={handleEdit}>
-          <Button type="submit" title="수정 완료" state="active"></Button>
-        </form>
+        <Button type="submit" title="수정 완료" state="active"></Button>
         {/* </Link> */}
       </ProfileEditForm>
     </>
