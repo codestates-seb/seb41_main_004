@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.stub;
 
+import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 
 public class FileInfoStubData {
@@ -13,4 +14,15 @@ public class FileInfoStubData {
 
 		return fileInfo;
 	}
+
+	public static FileInfoDto.Response getFileInfoDtoResponse() {
+		FileInfoDto.Response response = new FileInfoDto.Response();
+		response.setFileId(1L);
+		response.setFileName("이미지파일.png");
+		response.setFileUrl("/folder1/folder2");
+
+		return response;
+	}
+
+
 }
