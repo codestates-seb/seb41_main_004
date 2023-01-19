@@ -24,8 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 public class StorageServiceLocal implements StorageService {
 	@Override
 	public Map<String, String> upload(String prefix, MultipartFile file) {
-		// Path path = Paths.get(System.getProperty("user.dir"), prefix);  // 쉘에서는 사용자 디렉토리로 설정이 되어 경로 문제 발생
+		Path path1 = Paths.get(System.getProperty("user.dir"), prefix);  // 쉘에서는 사용자 디렉토리로 설정이 되어 경로 문제 발생
 		Path path = Paths.get(ClassLoader.getSystemClassLoader().getResource(".").getPath(), prefix);
+
+		// log 출력
+		System.out.println("=".repeat(88));
+		System.out.println(path1);
+		System.out.println(path);
 
 		// contents exist
 		if (file ==null || file.isEmpty()) {
