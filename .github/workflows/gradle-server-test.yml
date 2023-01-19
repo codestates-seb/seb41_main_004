@@ -8,9 +8,9 @@
 name: Java CI with Gradle
 
 on:
-  pull_request:  # dev branch로 pull request시에 테스트 코드의 정상 작동 유무를 확인합니다.
-    branches: [ "dev" ]
-    paths: [ "azit-back/**" ]  # azit-back 폴더의 변경사항만 적용
+  pull_request: # dev branch로 pull request시에 테스트 코드의 정상 작동 유무를 확인합니다.
+    branches: ["dev"]
+    paths: ["azit-back/**"] # azit-back 폴더의 변경사항만 적용
 
 permissions:
   contents: read
@@ -27,8 +27,8 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: "11"
+          distribution: "temurin"
 
       # gradlew에 실행 권한 부여
       - name: Add permission
@@ -36,4 +36,4 @@ jobs:
 
       # Backend code test
       - name: Server unit test
-        run: ./gradlew test
+        run: ./gradlew test -i

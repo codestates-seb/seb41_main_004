@@ -137,18 +137,17 @@ const UserProfileEdit = () => {
 
   const firstRender = useFirstRender();
   useEffect(() => {
-    if(firstRender && imgFile) {
+    if(!firstRender && imgFile) {
       let file = dataURLtoFile(imgFile, "sendImg");
       const formData = new FormData();
       formData.append("image", file);
       const postFile = async () => {
         try {
-          const res = await axiosInstance.post("api/members/", formData, {
+          await axiosInstance.post("api/members/", formData, {
             headers: { Authorization: accessToken },
             "Content-Type": "multipart/form-data",
           });
-  
-          console.log(res);
+
           alert("프로필 이미지가 수정이 완료되었습니다.");
         } catch (e) {
           console.log("프로필 이미지 수정 실패");
@@ -167,6 +166,7 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
+
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
         setGetImgFile(
@@ -211,7 +211,7 @@ const UserProfileEdit = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+
         if (res.status >= 200 && res.status < 300) {
           navigate("/userpage");
         }
@@ -236,9 +236,7 @@ const UserProfileEdit = () => {
             ref={imgRef}
           ></input>
           <ProfileImage
-            imgSrc={
-              imgFile ? imgFile : `${getImgFile}`
-            }
+            imgSrc={imgFile ? imgFile : `${getImgFile}`}
           ></ProfileImage>
           <label className="profileImgLabel" htmlFor="profileImg">
             <img alt="imgEditBtn" src={ImgAddIcon} />

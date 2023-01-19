@@ -39,6 +39,9 @@ dependencies {
 	// aws s3 file upload
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.382'
 
+	// aws parameter store
+	implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+
 	// 인증
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation'it.ozimov:embedded-redis:0.7.2'
@@ -61,6 +64,12 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	 asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
+	}
 }
 
 tasks.named('test') {

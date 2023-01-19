@@ -354,7 +354,11 @@ const AzitDetail = () => {
                 <li>
                   나이,성별 제한 :
                   <span>{MinAgeConvert(data.birthYearMin)}</span>
-                  <span> ~ </span>
+                  {MaxAgeConvert(data.birthYearMin) === "나이 제한없음" ? (
+                    <></>
+                  ) : (
+                    <span> ~ </span>
+                  )}
                   <span>{MaxAgeConvert(data.birthYearMax)}, </span>
                   <span>{genderConvert(data.genderRestriction)}</span>
                 </li>
