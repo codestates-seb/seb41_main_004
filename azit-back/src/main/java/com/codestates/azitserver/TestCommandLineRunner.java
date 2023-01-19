@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class TestCommandLineRunner implements CommandLineRunner {
-	@Value("${ADMIN_EMAIL}")
+	@Value("${mail.address.admin}")
 	private String email;
 
 	@Override
