@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { interests } from "../../dummyData/Category";
 
 const Container = styled.div`
   display: flex;
@@ -20,25 +19,67 @@ const Categorys = styled.span`
 `;
 
 const Category = () => {
-  const inter = {
-    Id: 1,
-    tags: [
-      "전시",
-      "영화",
-      "뮤지컬",
-      "공연",
-      "디자인",
-      "클라이밍",
-      "등산",
-      "헬스",
-      "필라테스",
-      "골프",
-    ],
-  };
-
+  const inter = [
+    {
+      id: 1,
+      tags: "전시",
+    },
+    {
+      id: 2,
+      tags: "영화",
+    },
+    {
+      id: 3,
+      tags: "뮤지컬",
+    },
+    {
+      id: 4,
+      tags: "공연",
+    },
+    {
+      id: 5,
+      tags: "디자인",
+    },
+    {
+      id: 6,
+      tags: "클라이밍",
+    },
+    {
+      id: 7,
+      tags: "등산",
+    },
+    {
+      id: 8,
+      tags: "헬스",
+    },
+    {
+      id: 9,
+      tags: "헬스",
+    },
+    {
+      id: 10,
+      tags: "헬스",
+    },
+    {
+      id: 11,
+      tags: "헬스",
+    },
+    {
+      id: 12,
+      tags: "헬스",
+    },
+    {
+      id: 13,
+      tags: "헬스",
+    },
+  ];
   return (
     <Container>
-      <Categorys>{inter.tags.filter((tag, idx) => tag !== [7, 13])}</Categorys>
+      {inter
+        .filter((tag) => tag.id === 7)
+        .map((tag) => {
+          return <Categorys key={tag.id}>{tag.tags}</Categorys>;
+        })}
     </Container>
   );
 };
