@@ -6,7 +6,7 @@ import editIcon from "../../images/edit-icon.png";
 const HeaderWrap = styled.header`
   width: 100%;
   max-width: 50rem;
-  padding:0 2rem;
+  padding: 0 2rem;
   height: 5.5rem;
   background-color: var(--white-color);
   position: fixed;
@@ -43,7 +43,7 @@ const IconWrap = styled.div`
   img {
     max-width: 100%;
   }
-`
+`;
 
 const AzitDetailHeader = ({ clubData }) => {
   const navigate = useNavigate();
@@ -58,12 +58,12 @@ const AzitDetailHeader = ({ clubData }) => {
       <IconWrap>
         {clubData ? (
           nowUser === String(clubData.host.memberId) ? (
-            <Link to={`/azit/edit/${id}`}>
+            <Link to={`/azit/setting/${id}`}>
               <img alt="EditIcon" src={editIcon} />
             </Link>
           ) : (
             <Link to={`/azit/report/${id}`}>
-            <img alt="ReportIcon" src={reportIcon} />
+              <img alt="ReportIcon" src={reportIcon} />
             </Link>
           )
         ) : (

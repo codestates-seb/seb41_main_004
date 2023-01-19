@@ -4,6 +4,7 @@ import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,11 +52,11 @@ public class GlobalExceptionAdvice {
 	}
 
 	@ExceptionHandler
-	public ErrorResponse handleBusinessLogicException(BusinessLogicException exception) {
+	public ResponseEntity<?> handleBusinessLogicException(BusinessLogicException exception) {
 		log.debug("Business logic exception occurred: {}", exception.getMessage(), exception);
 		final ErrorResponse response = ErrorResponse.of(exception.getExceptionCode());
 
-		return response;
+		return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
 	}
 
 	@ExceptionHandler
