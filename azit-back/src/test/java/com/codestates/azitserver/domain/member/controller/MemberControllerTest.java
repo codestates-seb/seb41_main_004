@@ -112,7 +112,6 @@ class MemberControllerTest {
 			.andExpect(jsonPath("$.data.memberId").value(1))
 			.andDo(getDefaultDocument(
 					"post-member",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParts(List.of(
 						partWithName("data").description("이미지를 제외한 데이터"),
 						partWithName("image").description("이미지").optional()

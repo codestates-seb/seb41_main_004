@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -72,6 +71,11 @@ public class Member extends Auditable {
 	@JsonManagedReference
 	@Column(name = "MEMBER_CATEGORY_LIST")
 	private List<MemberCategory> memberCategoryList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "reportee")
+	@JsonManagedReference
+	@Column(name = "MEMBER_REPORT_LIST")
+	private List<MemberMemberReport> memberMemberReportList = new ArrayList<>();
 
 
 
