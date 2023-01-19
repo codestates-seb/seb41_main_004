@@ -118,4 +118,17 @@ public class ClubStubData {
 		return new PageImpl<>(List.of(getDefaultClub()), PageRequest.of(0, 10,
 			Sort.by("createdAt").descending()), 1);
 	}
+
+	public static ClubDto.ReportClubResponse getClubDtoReportClubResponse() {
+		ClubDto.ReportClubResponse reportClubResponse = new ClubDto.ReportClubResponse();
+
+		reportClubResponse.setClubId(1L);
+		reportClubResponse.setClubName("재밌는 아지트");
+		reportClubResponse.setClubInfo("재밌는 아지트입니다.");
+		reportClubResponse.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
+		reportClubResponse.setHost(stubMemberIdAndNickname());
+		reportClubResponse.setCategorySmall(getSmallResponse());
+
+		return reportClubResponse;
+	}
 }

@@ -114,4 +114,13 @@ public class MemberDto {
 		private String nickname;
 		private FileInfo fileInfo;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ResponseEmailAndNickname {
+		private Long memberId;
+		private String email;
+		private String nickname;
+	}
 }

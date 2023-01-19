@@ -152,10 +152,21 @@ public class ClubDto {
 		private String location;
 		private String joinQuestion;
 		private Club.ClubStatus clubStatus;
-		private MemberDto.Response host;
+		private MemberDto.ResponseEmailAndNickname host;
 		private CategoryDto.SmallResponse categorySmall;
 		private FileInfo bannerImage;
 		private List<ClubMemberDto.Response> clubMembers;
+	}
+
+	@Getter
+	@Setter
+	public static class ReportClubResponse {
+		private Long clubId;
+		private String clubName;
+		private String clubInfo;
+		private Club.ClubStatus clubStatus;
+		private MemberDto.ResponseEmailAndNickname host;
+		private CategoryDto.SmallResponse categorySmall;
 	}
 }
 

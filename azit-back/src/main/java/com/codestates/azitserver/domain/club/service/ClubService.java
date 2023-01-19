@@ -1,21 +1,27 @@
 package com.codestates.azitserver.domain.club.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.entity.MemberCategory;
+import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -25,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClubService {
 	private final ClubRepository clubRepository;
+	private final MemberService memberService;
 	private final CustomBeanUtils<Club> beanUtils;
 	private final StorageService storageService;
 
@@ -109,10 +116,23 @@ public class ClubService {
 	}
 
 	public Page<Club> findClubsMemberRecommend(Long memberId, int page, int size) {
-		// TODO : Member 도메인이 완성되면 연관관계 매핑 후 회원의 관심 카테고리를 가져와서 db 질의.
-		// TODO : 정렬 기준을 어떻게 가져오면 좋을지 고민해보기.
+		// TODO : 정렬 기준을 어떻게 가져오면 좋을지 고민해보기. 현재는 최신순으로 내림차순 정렬
 
-		return null;
+		Member member = memberService.findExistingMember(memberId);
+		List<MemberCategory> memberCategoryList = member.getMemberCategoryList();
+
+		List<CategorySmall> categorySmall = memberCategoryList.stream()
+			.map(MemberCategory::getCategorySmall)
+			.collect(Collectors.toList());
+
+		Page<Club> clubs = new PageImpl<>(List.of(), PageRequest.of(page, size,
+			Sort.by("createdAt").descending()), 0);
+		if (categorySmall.size() != 0) {
+			clubs = clubRepository.findAllClubByCategorySmallIds(categorySmall,
+				PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		}
+
+		return clubs;
 	}
 
 	// TODO : MemberId가 참여하고 있는 아지트를 조회하는 서비스 로직 필요.
@@ -134,5 +154,9 @@ public class ClubService {
 		if (club.getClubStatus() == Club.ClubStatus.CLUB_CANCEL) {
 			throw new BusinessLogicException(ExceptionCode.CLUB_CANCELED);
 		}
+	}
+
+	public boolean verifyOrFindAll(Member member, Long memberId) {
+		return member == null || !memberId.equals(member.getMemberId());
 	}
 }
