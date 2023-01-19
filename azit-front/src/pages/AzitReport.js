@@ -2,8 +2,12 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
+import { ReportData } from "../dummyData/ReportData";
+import { axiosInstance } from "../util/axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
 
-const ReportWrap = styled.div`
+const ReportWrap = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,6 +16,14 @@ const ReportWrap = styled.div`
   > .ReportForm {
     flex: 1;
     > div {
+      > label span {
+        font-size: var(--caption-font);
+        margin-left: 0.2rem;
+        color: var(--light-font-color);
+        &.essential {
+          color: var(--point-color);
+        }
+      }
       > textarea {
         margin-bottom: 0.4rem;
       }
@@ -28,23 +40,50 @@ const ReportWrap = styled.div`
 `;
 
 const AzitReport = () => {
-  const reportList = ["사유1", "사유2", "사유3", "사유4", "사유5"];
-  const [reportSelected, setReportSelected] = useState("사유1");
-  const reportHandleSelect = (e) => {
-    setReportSelected(e.target.value);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [reportCategory, setReportCategory] = useState(ReportData[0].value);
+  const [reportReason, setReportReason] = useState("");
+  const handleReportCategory = (e) => {
+    setReportCategory(e.target.value);
   };
-
+  const handleReportReason = (e) => {
+    setReportReason(e.target.value);
+  };
+  const posting = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = { reportCategory, reportReason };
+      // const res = 
+      await axiosInstance.post(
+        `/api/clubs/reports/${id}`,
+        payload,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      );
+      // console.log(res);
+      navigate(-1);
+    } catch (error) {
+      alert("신고 내용을 보내지 못했습니다.")
+      // console.log(error);
+    }
+  };
+  const { mutate } = useMutation(posting);
   return (
-    <ReportWrap>
+    <ReportWrap onSubmit={mutate}>
       <Header title="아지트 신고"></Header>
       <div className="ReportForm">
         <div>
-          <label>사유 선택</label>
+          <label>
+            사유 선택
+            <span className="essential">(필수)</span>
+          </label>
           <div className="selectBox">
-            <select onChange={reportHandleSelect} value={reportSelected}>
-              {reportList.map((item) => (
-                <option value={item} key={item}>
-                  {item}
+            <select onChange={handleReportCategory} value={reportCategory}>
+              {ReportData.map((item) => (
+                <option value={item.value} key={item.id}>
+                  {item.name}
                 </option>
               ))}
             </select>
@@ -52,8 +91,14 @@ const AzitReport = () => {
           </div>
         </div>
         <div>
-          <label>신고내용</label>
-          <textarea></textarea>
+          <label>
+            신고내용<span>(선택)</span>
+          </label>
+          <textarea
+            maxLength={128}
+            onChange={handleReportReason}
+            value={reportReason}
+          ></textarea>
         </div>
         <div>
           <li>
@@ -64,7 +109,10 @@ const AzitReport = () => {
           </li>
         </div>
       </div>
-      <Button state="disabled" title="신고 하기" />
+      <Button
+        state={reportCategory.length > 0 ? "active" : "disabled"}
+        title="신고 하기"
+      />
     </ReportWrap>
   );
 };

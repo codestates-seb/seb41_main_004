@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
-import testProfileImg from "../images/testProfileImg.png";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
@@ -15,6 +14,7 @@ import {
   timeConvert,
 } from "../util/azitPreviewDateConvert";
 import Loading from "../components/common/Loading";
+import { useState, useEffect } from "react";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -73,8 +73,8 @@ const AzitDetailForm = styled.div`
     flex-direction: row;
     > span {
       text-align: center;
-      padding: 0.2rem 0;
-      width: 6rem;
+      padding: 0.2rem 1rem;
+      min-width: 6rem;
       line-height: 2rem;
       background-color: var(--point-color);
       color: var(--white-color);
@@ -118,6 +118,10 @@ const AzitDetailForm = styled.div`
         > a {
           position: relative;
           margin-right: 1rem;
+          > img:first-child {
+            width: 5rem;
+            border-radius: 70%;
+          }
           > .hostIcon {
             top: 0;
             right: 0;
@@ -195,7 +199,7 @@ const AzitDetailForm = styled.div`
         margin-right: 1rem;
         text-align: center;
         p {
-          width: 5rem;
+          min-width: 5rem;
         }
       }
       > li:last-child {
@@ -232,11 +236,6 @@ const AzitDetailForm = styled.div`
   }
 `;
 
-const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
-  width: 5rem;
-  border-radius: 70%;
-`;
-
 const UserImgWrap = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -245,6 +244,7 @@ const UserImgWrap = styled.div`
   border-radius: 50%;
   background-image: url(${(props) => props.userUrl});
   background-size: cover;
+  background-color: var(--background-color);
 `;
 
 const ImgWrap = styled.div`
@@ -267,6 +267,7 @@ const EtcWrap = styled.div`
 `;
 const AzitDetail = () => {
   const { id } = useParams();
+  const [clubMember, setClubMember] = useState([]);
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -279,6 +280,17 @@ const AzitDetail = () => {
   );
 
   console.log(data);
+
+  useEffect(() => {
+    if (data) {
+      let filterMember = data.clubMembers.filter((member) => {
+        return member.clubMemberStatus === "CLUB_JOINED";
+      });
+      setClubMember(filterMember);
+    }
+  }, [data]);
+
+  console.log(clubMember);
 
   return (
     <AzitDetailWrap>
@@ -300,15 +312,18 @@ const AzitDetail = () => {
             <div className="desc">
               <span>{data.categorySmall.categoryName}</span>
               <p>
-                {data.clubMembers.length}/{data.memberLimit}명
+                {clubMember.length + 1}/{data.memberLimit}명
               </p>
             </div>
             <div className="azitInfo">
               <div className="hostInfo">
                 <label>아지트 정보</label>
                 <div>
-                  <Link to="/userpage">
-                    <TestImg />
+                  <Link to={`/userpage/${data.host.memberId}`}>
+                    <img
+                      alt="hostImg"
+                      src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                    />
                     <img alt="HostIcon" src={HostIcon} className="hostIcon" />
                   </Link>
                   <div>
@@ -337,11 +352,21 @@ const AzitDetail = () => {
             <div className="memberList">
               <h3>참여 멤버</h3>
               <ul className="selectWrap">
-                {data.clubMembers.map((profile, idx) => (
-                  <li key={idx}>
-                    <Link to="/userpage">
-                      <UserImgWrap userUrl={profile.userUrl} />
-                      <p>유저 네임</p>
+                <li>
+                  <Link to={`/userpage/${data.host.memberId}`}>
+                    <UserImgWrap
+                      userUrl={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                    />
+                    <p>{data.host.nickname}</p>
+                  </Link>
+                </li>
+                {clubMember.map((member) => (
+                  <li key={member.clubMemberId}>
+                    <Link to={`/userpage/${member.member.memberId}`}>
+                      <UserImgWrap
+                        userUrl={`${process.env.REACT_APP_S3_URL}${member.member.fileInfo.fileUrl}/${member.member.fileInfo.fileName}`}
+                      />
+                      <p>{member.member.nickname}</p>
                     </Link>
                   </li>
                 ))}
