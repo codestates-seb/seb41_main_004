@@ -51,39 +51,39 @@ public class AuthService {
 	 * @param request 이메일 주소
 	 * @throws Exception
 	 */
-	public AuthResponseDto.ResponseEmail sendAuthEmail(AuthDto.SendEmail request) throws Exception {
-		// request의 email로 회원 찾기
-		Member member = findVerifiedMemberByEmail(request.getEmail());
-		String authNum = createAuthNumber();
-
-		// 인증번호 담은 메일 작성, 전송
-		sendMessage(createAuthEmail(request.getEmail(), authNum));
-
-		AuthResponseDto.ResponseEmail response = new AuthResponseDto.ResponseEmail();
-		response.setEmail(request.getEmail());
-		response.setServerNumber(authNum);
-
-		return response;
-	}
-
-	// 비번 초기화 메서드
-	public void resetPassword(AuthDto.SendPWEmail request) throws Exception {
-		String email = request.getEmail();
-
-		//인증번호가 일치하는지 확인
-		stringConfirmer(request.getMemberNumber(), request.getServerNumber());
-
-		//랜덤 비번 생성
-		String tempPassword = createTempPassword();
-
-		//랜덤 비번 이메일 전송
-		sendMessage(createPWEmail(email, tempPassword));
-
-		//랜덤 비번 DB 저장
-		Member member = findVerifiedMemberByEmail(email);
-		member.setPassword(passwordEncoder.encode(tempPassword));
-		memberRepository.save(member);
-	}
+	// public void sendAuthEmail(AuthDto.SendEmail request) throws Exception {
+	// 	// request의 email로 회원 찾기
+	// 	Member member = findVerifiedMemberByEmail(request.getEmail());
+	// 	String authNum = createAuthNumber();
+	//
+	// 	// 인증번호 담은 메일 작성, 전송
+	// 	sendMessage(createAuthEmail(request.getEmail(), authNum));
+	//
+	// 	AuthResponseDto.ResponseEmail response = new AuthResponseDto.ResponseEmail();
+	// 	response.setEmail(request.getEmail());
+	// 	response.setServerNumber(authNum);
+	//
+	// 	return response;
+	// }
+	//
+	// // 비번 초기화 메서드
+	// public void resetPassword(AuthDto.SendPWEmail request) throws Exception {
+	// 	String email = request.getEmail();
+	//
+	// 	//인증번호가 일치하는지 확인
+	// 	stringConfirmer(request.getMemberNumber(), request.getServerNumber());
+	//
+	// 	//랜덤 비번 생성
+	// 	String tempPassword = createTempPassword();
+	//
+	// 	//랜덤 비번 이메일 전송
+	// 	sendMessage(createPWEmail(email, tempPassword));
+	//
+	// 	//랜덤 비번 DB 저장
+	// 	Member member = findVerifiedMemberByEmail(email);
+	// 	member.setPassword(passwordEncoder.encode(tempPassword));
+	// 	memberRepository.save(member);
+	// }
 
 	/**
 	 * 이메일 인증 메일 작성

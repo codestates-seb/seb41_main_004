@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class AuthDto {
-
 	/**
 	 * 로그인
 	 */
@@ -50,7 +49,6 @@ public class AuthDto {
 	@Setter
 	public static class SendPWEmail {
 		private String email;
-		private String memberNumber; // 회원이 입력한 인증번호
-		private String serverNumber; // 서버가 발급해준 인증번호
+		private String authNum;
 	}
 }
