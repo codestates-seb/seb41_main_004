@@ -44,7 +44,7 @@ function App() {
           {/* 아지트 */}
           <Route path="/azit/create" element={<AzitCreate />}></Route>
           <Route path="/azit/setting" element={<AzitSetting />}></Route>
-          <Route path="/azit/edit" element={<AzitEdit />}></Route>
+          <Route path="/azit/edit/:id" element={<AzitEdit />}></Route>
           <Route path="/azit/join" element={<AzitJoin />}></Route>
           <Route path="/azit/report" element={<AzitReport />}></Route>
           <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
@@ -61,7 +61,7 @@ function App() {
           <Route path="/signup/add" element={<SignupAdditional />}></Route>
 
           {/* 유저페이지 */}
-          <Route path="/userpage" element={<UserPage />}></Route>
+          <Route path="/userpage/:id" element={<UserPage />}></Route>
           <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
           <Route path="/userpage/report" element={<UserReport />}></Route>
           <Route path="/userpage/followcheck" element={<FollowCheck />}></Route>
