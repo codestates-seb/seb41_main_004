@@ -53,7 +53,7 @@ const AzitReport = () => {
   const handleReportReason = (e) => {
     setReportReason(e.target.value);
   };
-  console.log(reportCategory)
+  // console.log(reportCategory)
   const posting = async (e) => {
     e.preventDefault();
     try {
@@ -70,6 +70,7 @@ const AzitReport = () => {
     }
   };
   const { mutate } = useMutation(posting);
+  
   return (
     <ReportWrap onSubmit={mutate}>
       <Header title="아지트 신고"></Header>
