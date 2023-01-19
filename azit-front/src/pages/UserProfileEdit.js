@@ -99,14 +99,6 @@ const ProfileImage = styled.div`
 
 const UserProfileEdit = () => {
   const [checkedInputs, setCheckedInputs] = useState([]);
-<<<<<<< HEAD
-  const [nameValue, SetNameValue] = useState("");
-  const [introValue, setIntroValue] = useState("");
-  const [defaultName, SetdefaultName] = useState("test"); //이름 get으로 받아오는것
-  const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
-  const [profileImg, setprofileImg] = useState(""); //이미지 get으로 받아오는것
-=======
->>>>>>> 58c1c5400602a4261c60419c6273812c14fc26a9
   const [imgFile, setImgFile] = useState("");
   const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
   const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
@@ -209,7 +201,6 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-
     axiosInstance
       .patch("api/members/3", body, {
         headers: {
