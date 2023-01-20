@@ -102,7 +102,7 @@ const SignupAdditional = () => {
         <ProfileImageWrap>
             <input
             type="file"
-            accept="jpg, jpeg, png"
+            accept="image/jpg, image/jpeg, image/png"
             id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
