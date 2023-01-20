@@ -104,6 +104,7 @@ public class authLoginTest {
 			.andExpect(jsonPath("$.email").value("stubmember@naver.com"))
 			.andExpect(jsonPath("$.nickname").value("김스텁"))
 			.andExpect(jsonPath("$.profileUrl").exists())
+			.andExpect(jsonPath("$.profileImageName").exists())
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),
@@ -117,7 +118,8 @@ public class authLoginTest {
 					fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("멤버아이디"),
 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
 					fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-					fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필주소")))
+					fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필 이미지 주소"),
+					fieldWithPath("profileImageName").type(JsonFieldType.STRING).description("프로필 이미지 이름")))
 			));
 	}
 }

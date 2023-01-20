@@ -78,6 +78,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		responseWithProfileDto.setNickname(member.getNickname());
 		try {
 			responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+			responseWithProfileDto.setProfileImageName(member.getFileInfo().getFileName());
 		} catch (NullPointerException e) {
 			log.warn("Profile image is null:{}", e.getLocalizedMessage());
 		}
