@@ -234,7 +234,7 @@ const UserProfileEdit = () => {
         <ProfileImageWrap>
           <input
             type="file"
-            accept="jpg, jpeg, png"
+            accept="jpg,jpeg,png"
             id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
