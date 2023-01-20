@@ -263,6 +263,8 @@ const AzitPreview = () => {
 
   const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
+  const profileName = localStorage.getItem("profilName");
+  console.log(profileUrl);
 
   const openAzit = async () => {
     const formData = new FormData();
@@ -334,7 +336,11 @@ const AzitPreview = () => {
             <div>
               <Link to="/userpage">
                 <TestImg />
-                <img alt="HostIcon" src={HostIcon} className="hostIcon" />
+                <img
+                  alt="HostIcon"
+                  src={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+                  className="hostIcon"
+                />
               </Link>
               <div>
                 <label>호스트</label>
@@ -363,7 +369,9 @@ const AzitPreview = () => {
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
             <li>
-              <UserImgWrap userUrl={TestAvatarUrl} />
+              <UserImgWrap
+                userUrl={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+              />
               <p>{localStorage.getItem("nickname")}</p>
             </li>
           </ul>
