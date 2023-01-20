@@ -279,8 +279,6 @@ const AzitDetail = () => {
     azitLookup
   );
 
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       let filterMember = data.clubMembers.filter((member) => {
@@ -289,8 +287,6 @@ const AzitDetail = () => {
       setClubMember(filterMember);
     }
   }, [data]);
-
-  console.log(clubMember);
 
   return (
     <AzitDetailWrap>

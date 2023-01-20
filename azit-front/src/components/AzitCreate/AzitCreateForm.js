@@ -162,7 +162,7 @@ const AzitCreateForm = ({ imgFile }) => {
   const [genderSelected, setGenderSelected] = useState("ALL");
   const [minYearSelected, setMinYearSelected] = useState("");
   const [maxYearSelected, setMaxYearSelected] = useState("");
-  const [memberLimit, SetMemberLimit] = useState(null);
+  const [memberLimit, SetMemberLimit] = useState(3);
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [question, setQuestion] = useState("");
@@ -199,10 +199,11 @@ const AzitCreateForm = ({ imgFile }) => {
   }, [checked]);
 
   const onChangeMemberLimit = (e) => {
-    if (e.target.value >= 3) {
+    if (e.target.value >= 3 && e.target.value <= 20) {
       return SetMemberLimit(e.target.value);
-    } else {
-      return;
+    } else if (e.target.value >= 20) {
+      alert("최대 20명까지 가능합니다.");
+      return SetMemberLimit(20);
     }
   };
 
@@ -298,6 +299,10 @@ const AzitCreateForm = ({ imgFile }) => {
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
   let numberMemberLimit = Number(memberLimit);
+
+  // 오늘 기준으로 이전 날짜 선택 제한
+  let today = new Date();
+  let Today = today.toISOString().split("T")[0];
 
   let body = {
     bannerImg: file,
@@ -568,8 +573,8 @@ const AzitCreateForm = ({ imgFile }) => {
         <div className="inputContainer">
           <label>날짜와 시간을 정해볼까요?</label>
           <div className="wd70">
-            <input type="date" onChange={onChangeDate} />
-            <input type="time" onChange={onChangeTime} />
+            <input type="date" id="Date" min={Today} onChange={onChangeDate} />
+            <input type="time" id="Time" onChange={onChangeTime} />
           </div>
         </div>
         <div className="radioContainer">
@@ -682,7 +687,7 @@ const AzitCreateForm = ({ imgFile }) => {
             min="3"
             max="20"
             onChange={onChangeMemberLimit}
-            value={memberLimit || ""}
+            value={memberLimit || 3}
           ></input>
         </div>
         <div className="inputContainer">

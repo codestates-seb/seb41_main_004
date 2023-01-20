@@ -71,6 +71,34 @@ include::{snippets}/patch-password/request-fields.adoc[]
 .http-response
 include::{snippets}/patch-password/http-response.adoc[]
 
+=== 비밀번호 찾기 (이메일 인증번호 발송)
+
+.curl-request
+include::{snippets}/send-authNum/curl-request.adoc[]
+
+.http-request
+include::{snippets}/send-authNum/http-request.adoc[]
+
+.request-fields
+include::{snippets}/send-authNum/request-fields.adoc[]
+
+.http-response
+include::{snippets}/send-authNum/http-response.adoc[]
+
+=== 비밀번호 찾기 (랜덤 비밀번호 발송)
+
+.curl-request
+include::{snippets}/send-randomPW/curl-request.adoc[]
+
+.http-request
+include::{snippets}/send-randomPW/http-request.adoc[]
+
+.request-fields
+include::{snippets}/send-randomPW/request-fields.adoc[]
+
+.http-response
+include::{snippets}/send-randomPW/http-response.adoc[]
+
 === 토큰 재발급
 
 .curl-request

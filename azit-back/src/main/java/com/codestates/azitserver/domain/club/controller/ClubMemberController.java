@@ -85,7 +85,8 @@ public class ClubMemberController {
 	public ResponseEntity<?> patchClubMembers(@Positive @PathVariable("club-id") Long clubId,
 		@Positive @PathVariable("member-id") Long memberId, @RequestBody ClubMemberDto.Patch body,
 		@LoginMember Member member) {
-		clubMemberService.updateMemberStatus(member, clubId, memberId, body.getStatus());
+		clubMemberService.updateMemberStatus(member, clubId, memberId,
+			ClubMember.ClubMemberStatus.valueOf(body.getStatus()));
 
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
