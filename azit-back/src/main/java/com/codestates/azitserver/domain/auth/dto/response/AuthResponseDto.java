@@ -14,5 +14,6 @@ public class AuthResponseDto {
 		private String email;
 		private String nickname;
 		private String profileUrl;
+		private String profileImageName;
 	}
 }
