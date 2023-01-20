@@ -139,7 +139,7 @@ const Status = styled.div`
 const AzitList = ({ data }) => {
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
-
+  console.log(data)
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers.filter((member) => {
@@ -158,7 +158,7 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < 4; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={data[i].member.avatarUrl} />
+            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
           </div>
         );
       }
@@ -166,7 +166,7 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < data.length; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={data[i].member.avatarUrl} />
+            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
           </div>
         );
       }
@@ -205,7 +205,7 @@ const AzitList = ({ data }) => {
             <div className="etcCell">
               <div className="profileAvatar">
                 <div className="imgWrap">
-                  <img alt={data.host.nickname} src={data.host.avatarUrl} />
+                  <img alt={data.host.nickname} src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`} />
                 </div>
                 {clubMember ? repeatAvatar(clubMember) : null}
               </div>
