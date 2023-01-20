@@ -63,7 +63,10 @@ function App() {
 
           {/* 유저페이지 */}
           <Route path="/userpage/:id" element={<UserPage />}></Route>
-          <Route path="/userpage/setting" element={<UserPageSetting />}></Route>
+          <Route
+            path="/userpage/setting/:id"
+            element={<UserPageSetting />}
+          ></Route>
           <Route
             path="/userpage/verifypw"
             element={<UserVerifyPassword />}
@@ -72,9 +75,12 @@ function App() {
             path="/userpage/resetpw"
             element={<UserResetPassword />}
           ></Route>
-          <Route path="/userpage/report" element={<UserReport />}></Route>
+          <Route path="/userpage/report/:id" element={<UserReport />}></Route>
           <Route path="/userpage/followcheck" element={<FollowCheck />}></Route>
-          <Route path="/userpage/edit" element={<UserProfileEdit />}></Route>
+          <Route
+            path="/userpage/edit/:id"
+            element={<UserProfileEdit />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </>
