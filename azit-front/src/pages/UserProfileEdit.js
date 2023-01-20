@@ -301,10 +301,7 @@ const UserProfileEdit = () => {
             );
           })}
         </article>
-        {/*Link -> useNavigate 로 변환 필요 / */}
-        {/* <Link to="/"> */}
         <Button type="submit" title="수정 완료" state="active"></Button>
-        {/* </Link> */}
       </ProfileEditForm>
     </>
   );
