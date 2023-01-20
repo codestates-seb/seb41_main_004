@@ -218,7 +218,7 @@ const AzitPreviewForm = styled.div`
 const TestImg = styled.div`
   width: 5rem;
   border-radius: 70%;
-  background-image: url(${(props) => props.userUrl});
+  background-image: url(${(props) => props.imgSrc});
 `;
 
 const UserImgWrap = styled.div`
@@ -227,7 +227,7 @@ const UserImgWrap = styled.div`
   margin: 0 auto;
   overflow: hidden;
   border-radius: 50%;
-  background-image: url(${(props) => props.userUrl});
+  background-image: url(${(props) => props.imgSrc});
   background-size: cover;
 `;
 
