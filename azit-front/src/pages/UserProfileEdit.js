@@ -148,12 +148,12 @@ const UserProfileEdit = () => {
               "Content-Type": "multipart/form-data",
             },
           });
-          localStorage.setItem('profileUrl', res.data.data.fileInfo.fileUrl);
-          localStorage.setItem('profileName', res.data.data.fileInfo.fileName);
+          localStorage.setItem("profileUrl", res.data.data.fileInfo.fileUrl);
+          localStorage.setItem("profileName", res.data.data.fileInfo.fileName);
 
-          alert("프로필 이미지가 수정이 완료되었습니다.");
+          alert("프로필 이미지 수정이 완료되었습니다.");
         } catch (e) {
-          alert("프로필 이미지 수정 실패");
+          alert("프로필 이미지 수정이 실패되었습니다.");
         }
       };
       postFile();
@@ -187,7 +187,7 @@ const UserProfileEdit = () => {
           console.log("error : ", error);
         });
     };
-    startGet()
+    startGet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
