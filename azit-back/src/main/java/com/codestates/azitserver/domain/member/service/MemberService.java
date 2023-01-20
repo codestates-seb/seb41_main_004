@@ -128,9 +128,9 @@ public class MemberService {
 		Member updatedMember = beanUtils.copyNonNullProperties(member, existingMember);
 		updatedMember.setMemberCategoryList(null);
 
-		// password 암호화
-		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
-		updatedMember.setPassword(encryptedPassword);
+		// // password 암호화
+		// String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
+		// updatedMember.setPassword(encryptedPassword);
 
 		// MemberCategory 기존 데이터 테이블 삭제
 		memberCategoryRepository.deleteAllByMember(member);
