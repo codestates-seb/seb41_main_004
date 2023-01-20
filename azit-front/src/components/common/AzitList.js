@@ -173,7 +173,8 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
-
+  // console.log(`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`);
+  
   return (
     <ListWrap>
       <DetailWrap>
