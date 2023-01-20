@@ -86,7 +86,7 @@ const DetailWrap = styled.div`
 `;
 const ImgWrap = styled.div`
   width: 8.5rem;
-  height: 8.5rem;
+
   margin-right: 10px;
   border-radius: 10px;
   background-color: var(--background-color);
@@ -139,7 +139,7 @@ const Status = styled.div`
 const AzitList = ({ data }) => {
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
-  console.log(data)
+
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers.filter((member) => {

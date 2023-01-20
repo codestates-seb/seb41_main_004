@@ -2,14 +2,12 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import ImgAddIcon from "../images/imgAddIcon.png";
-// import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
 import { useFirstRender } from "../util/useDidMountEffect";
 
-//import { useSelector } from "react-redux";
 const accessToken = localStorage.getItem("accessToken");
 
 const ProfileEditForm = styled.form`
@@ -144,12 +142,14 @@ const UserProfileEdit = () => {
       formData.append("image", file);
       const postFile = async () => {
         try {
-          await axiosInstance.post(`api/members/${id}`, formData, {
+          const res = await axiosInstance.post(`api/members/${id}`, formData, {
             headers: {
               Authorization: accessToken,
               "Content-Type": "multipart/form-data",
             },
           });
+          localStorage.setItem('profileUrl', res.data.data.fileInfo.fileUrl);
+          localStorage.setItem('profileName', res.data.data.fileInfo.fileName);
 
           alert("프로필 이미지가 수정이 완료되었습니다.");
         } catch (e) {
@@ -162,30 +162,32 @@ const UserProfileEdit = () => {
   }, [firstRender, imgFile]);
 
   useEffect(() => {
-    axiosInstance
-      .get(`api/members/${id}`, {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        SetdefaultName(res.data.data.nickname);
-        setIntro(res.data.data.aboutMe);
-        setGetImgFile(
-          `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
-        );
+    const startGet = async () => {
+      await axiosInstance
+        .get(`api/members/${id}`, {
+          headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          SetdefaultName(res.data.data.nickname);
+          setIntro(res.data.data.aboutMe);
+          setGetImgFile(
+            `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
+          );
 
-        let categoryList = [];
-        res.data.data.categorySmallIdList.map((category) => {
-          return categoryList.push(category);
+          let categoryList = [];
+          res.data.data.categorySmallIdList.map((category) => {
+            return categoryList.push(category);
+          });
+          setCheckedInputs(categoryList);
+        })
+        .catch((error) => {
+          console.log("error : ", error);
         });
-        setCheckedInputs(categoryList);
-      })
-      .catch((error) => {
-        console.log("error : ", error);
-      });
+    };
+    startGet()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

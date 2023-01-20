@@ -6,7 +6,7 @@ import editIcon from "../../images/edit-icon.png";
 const HeaderWrap = styled.header`
   width: 100%;
   max-width: 50rem;
-  padding: 0 2rem;
+  padding: 0 2rem 0 1rem;
   height: 5.5rem;
   background-color: var(--white-color);
   position: fixed;

@@ -81,7 +81,7 @@ public class MemberService {
 	public Member profileImageCombiner(Long memberId, MultipartFile profileImage) {
 		Member member = getMemberById(memberId);
 
-		String prefix = "images/member_profileImg";
+		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
