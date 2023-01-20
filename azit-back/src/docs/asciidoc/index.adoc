@@ -110,9 +110,6 @@ include::{snippets}/token-reIssue/http-request.adoc[]
 .request-headers
 include::{snippets}/token-reIssue/request-headers.adoc[]
 
-.response-headers
-include::{snippets}/token-reIssue/response-headers.adoc[]
-
 .http-response
 include::{snippets}/token-reIssue/http-response.adoc[]
 
