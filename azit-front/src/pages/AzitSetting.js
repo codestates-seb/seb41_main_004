@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { useParams } from "react-router-dom";
+import { AzitDeleteModal } from "../components/AzitSetting/AzitDeleteModal";
+import { useState } from "react";
+import { axiosInstance } from "../util/axios";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -50,6 +53,16 @@ const DeleteBtnWrap = styled.div`
 const AzitSetting = () => {
   const { id } = useParams();
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
+  const navigate = useNavigate();
+
+  const DeleteButtonClick = () => {
+    navigate("/");
+  };
+
   return (
     <AzitSettingWrap>
       <Header title="아지트 설정" />
@@ -69,8 +82,14 @@ const AzitSetting = () => {
           </div>
         </Link>
       </SettingBar>
+      {modalOpen && (
+        <AzitDeleteModal
+          LogoutButtonClick={DeleteButtonClick}
+          modalHandler={modalHandler}
+        />
+      )}
       <DeleteBtnWrap>
-        <button>모임삭제</button>
+        <button onClick={modalHandler}>모임삭제</button>
       </DeleteBtnWrap>
     </AzitSettingWrap>
   );
