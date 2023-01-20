@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.auth.dto;
 
+import javax.validation.constraints.Pattern;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +31,12 @@ public class AuthDto {
 	@Getter
 	@Setter
 	public static class PatchPassword {
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()])[A-Za-z\\d~!@#$%^&*()]{8,16}$",
+			message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
 		private String newPassword;
+
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()])[A-Za-z\\d~!@#$%^&*()]{8,16}$",
+			message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
 		private String newPasswordCheck;
 	}
 
