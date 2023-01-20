@@ -215,9 +215,10 @@ const AzitPreviewForm = styled.div`
   }
 `;
 
-const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
+const TestImg = styled.div`
   width: 5rem;
   border-radius: 70%;
+  background-image: url(${(props) => props.userUrl});
 `;
 
 const UserImgWrap = styled.div`
@@ -265,6 +266,7 @@ const AzitPreview = () => {
   const profileUrl = localStorage.getItem("profileUrl");
   const profileName = localStorage.getItem("profilName");
   console.log(profileUrl);
+  console.log(profileName);
 
   const openAzit = async () => {
     const formData = new FormData();
@@ -335,12 +337,10 @@ const AzitPreview = () => {
             <label>아지트 정보</label>
             <div>
               <Link to="/userpage">
-                <TestImg />
-                <img
-                  alt="HostIcon"
-                  src={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
-                  className="hostIcon"
+                <TestImg
+                  imgSrc={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
                 />
+                <img alt="HostIcon" src={HostIcon} className="hostIcon" />
               </Link>
               <div>
                 <label>호스트</label>
@@ -370,7 +370,7 @@ const AzitPreview = () => {
           <ul className="selectWrap">
             <li>
               <UserImgWrap
-                userUrl={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+                imgSrc={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
               />
               <p>{localStorage.getItem("nickname")}</p>
             </li>
