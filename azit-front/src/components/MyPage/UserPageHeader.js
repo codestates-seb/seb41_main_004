@@ -24,6 +24,7 @@ const HeaderWrap = styled.header`
 `;
 
 const UserPageHeader = ({ myPage, id }) => {
+  console.log(myPage);
   return (
     <HeaderWrap>
       {myPage ? (

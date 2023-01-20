@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
-import testProfileImg from "../images/testProfileImg.png";
-import TestAvatarUrl from "../images/testProfileImg.png";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useLocation } from "react-router-dom";
@@ -215,9 +213,10 @@ const AzitPreviewForm = styled.div`
   }
 `;
 
-const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
+const TestImg = styled.div`
   width: 5rem;
   border-radius: 70%;
+  background-image: url(${(props) => props.imgSrc});
 `;
 
 const UserImgWrap = styled.div`
@@ -226,7 +225,7 @@ const UserImgWrap = styled.div`
   margin: 0 auto;
   overflow: hidden;
   border-radius: 50%;
-  background-image: url(${(props) => props.userUrl});
+  background-image: url(${(props) => props.imgSrc});
   background-size: cover;
 `;
 
@@ -263,6 +262,7 @@ const AzitPreview = () => {
 
   const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
+  const profileName = localStorage.getItem("profilName");
 
   const openAzit = async () => {
     const formData = new FormData();
@@ -333,7 +333,9 @@ const AzitPreview = () => {
             <label>아지트 정보</label>
             <div>
               <Link to="/userpage">
-                <TestImg />
+                <TestImg
+                  imgSrc={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+                />
                 <img alt="HostIcon" src={HostIcon} className="hostIcon" />
               </Link>
               <div>
@@ -363,7 +365,9 @@ const AzitPreview = () => {
           <h3>참여 멤버</h3>
           <ul className="selectWrap">
             <li>
-              <UserImgWrap userUrl={TestAvatarUrl} />
+              <UserImgWrap
+                imgSrc={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+              />
               <p>{localStorage.getItem("nickname")}</p>
             </li>
           </ul>

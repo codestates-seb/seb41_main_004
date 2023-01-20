@@ -36,7 +36,7 @@ public class ClubMemberStubData {
 	public static ClubMemberDto.Patch getClubMemberPatch() {
 		ClubMemberDto.Patch patch = new ClubMemberDto.Patch();
 
-		patch.setStatus(ClubMember.ClubMemberStatus.CLUB_JOINED);
+		patch.setStatus(String.valueOf(ClubMember.ClubMemberStatus.CLUB_JOINED));
 
 		return patch;
 	}
