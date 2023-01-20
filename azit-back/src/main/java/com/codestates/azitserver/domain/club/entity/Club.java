@@ -91,7 +91,7 @@ public class Club extends Auditable {
 	@JoinColumn(name = "HOST_ID", updatable = false)
 	private Member host;
 
-	@OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
 	private List<ClubMember> clubMembers = new ArrayList<>();
 
 	public ClubMember addClubMember(ClubMember clubMember) {

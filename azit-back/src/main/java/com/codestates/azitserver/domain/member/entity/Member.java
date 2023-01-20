@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

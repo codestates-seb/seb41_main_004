@@ -2,9 +2,9 @@ spring:
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATABASE_URL}  # mysql url
-    username: admin
-    password:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,7 +12,7 @@ spring:
 
 logging:
   level:
-    root: WARN
+    root: INFO
 
 # S3 Cloud
 aws:
