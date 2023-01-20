@@ -29,6 +29,8 @@ public enum ExceptionCode {
 	STRING_VALIDATION_FAILED(40408, "String confirmation failed"),
 	AUTH_NUMBER_NOT_FOUND(40409, "String confirmation failed"),
 
+	REPORT_NOT_FOUND(40408, "Member Report not found"),
+
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
 	INVALID_MEETING_METHOD(40902, "Meeting method is \"offline\" or \"online\" only"),
