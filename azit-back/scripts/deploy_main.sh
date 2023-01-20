@@ -31,4 +31,4 @@ sudo chmod -R 777 /home/ubuntu/action/logs/$UUID.log
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> $BUILD_LOG
-sudo nohup java -jar $DEPLOY_JAR --spring.profiles.active=local,aws >> /home/ubuntu/action/logs/$UUID.log 2>/home/ubuntu/action/deploy_err.log &
+sudo nohup java -jar $DEPLOY_JAR --spring.profiles.active=server,aws >> /home/ubuntu/action/logs/$UUID.log 2>/home/ubuntu/action/deploy_err.log &

@@ -9,7 +9,7 @@ name: Java CI with Gradle
 
 on:
   pull_request: # dev branch로 pull request시에 테스트 코드의 정상 작동 유무를 확인합니다.
-    branches: ["dev"]
+    branches: ["dev", "main"]
     paths: ["azit-back/**"] # azit-back 폴더의 변경사항만 적용
 
 permissions:

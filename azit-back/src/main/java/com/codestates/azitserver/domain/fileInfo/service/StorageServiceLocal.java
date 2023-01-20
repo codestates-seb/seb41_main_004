@@ -25,8 +25,12 @@ public class StorageServiceLocal implements StorageService {
 	@Override
 	public Map<String, String> upload(String prefix, MultipartFile file) {
 		Path path = Paths.get(System.getProperty("user.dir"), prefix);
+
+		// log 출력
+		log.info("로컬 저장 디렉토리 {} : ", path);
+
 		// contents exist
-		if (file.isEmpty()) {
+		if (file ==null || file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");
 		}
 

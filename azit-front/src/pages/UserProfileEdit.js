@@ -5,9 +5,9 @@ import ImgAddIcon from "../images/imgAddIcon.png";
 // import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
-import {useFirstRender} from "../util/useDidMountEffect";
+import { useFirstRender } from "../util/useDidMountEffect";
 
 //import { useSelector } from "react-redux";
 const accessToken = localStorage.getItem("accessToken");
@@ -98,6 +98,7 @@ const ProfileImage = styled.div`
 `;
 
 const UserProfileEdit = () => {
+  const { id } = useParams();
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [imgFile, setImgFile] = useState("");
   const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
@@ -137,42 +138,45 @@ const UserProfileEdit = () => {
 
   const firstRender = useFirstRender();
   useEffect(() => {
-    if(!firstRender && imgFile) {
+    if (!firstRender && imgFile) {
       let file = dataURLtoFile(imgFile, "sendImg");
       const formData = new FormData();
       formData.append("image", file);
       const postFile = async () => {
         try {
-          await axiosInstance.post("api/members/", formData, {
-            headers: { Authorization: accessToken },
-            "Content-Type": "multipart/form-data",
+          await axiosInstance.post(`api/members/${id}`, formData, {
+            headers: {
+              Authorization: accessToken,
+              "Content-Type": "multipart/form-data",
+            },
           });
 
           alert("프로필 이미지가 수정이 완료되었습니다.");
         } catch (e) {
-          console.log("프로필 이미지 수정 실패");
+          alert("프로필 이미지 수정 실패");
         }
       };
       postFile();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstRender, imgFile]);
 
   useEffect(() => {
     axiosInstance
-      .get("api/members/3", {
+      .get(`api/members/${id}`, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-
+        console.log(res);
         SetdefaultName(res.data.data.nickname);
         setIntro(res.data.data.aboutMe);
         setGetImgFile(
           `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
         );
-          
+
         let categoryList = [];
         res.data.data.categorySmallIdList.map((category) => {
           return categoryList.push(category);
@@ -182,6 +186,7 @@ const UserProfileEdit = () => {
       .catch((error) => {
         console.log("error : ", error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (checked, id) => {
@@ -204,22 +209,19 @@ const UserProfileEdit = () => {
     };
 
     axiosInstance
-      .patch("api/members/3", body, {
+      .patch(`api/members/${id}`, body, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-
         if (res.status >= 200 && res.status < 300) {
-          navigate("/userpage");
+          navigate(`/userpage/${id}`);
         }
       })
       .catch((error) => {
         console.log(error);
-        //alert("중복된 닉네임입니다. 다시 시도하세요.");
-        //alert창은 axios patch에서 에러뜨면 해야됨
       });
   };
 

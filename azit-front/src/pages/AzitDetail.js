@@ -305,7 +305,10 @@ const AzitDetail = () => {
         <>
           <ImgWrap
             alt="exampleImg"
-            imgSrc={`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`}
+            imgSrc={
+              data.bannerImage &&
+              `${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`
+            }
           ></ImgWrap>
           <AzitDetailForm>
             <div className="azitTitle">{data.clubName}</div>

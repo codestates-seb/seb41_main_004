@@ -84,7 +84,9 @@ const Search = () => {
       ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
       {
         enabled: !!value,
+        // 유통기한
         staleTime: 6 * 10 * 1000,
+        // 캐시에 저장할 기간
         cacheTime: 6 * 10 * 1000,
         getNextPageParam: (lastPage) =>
           !lastPage.isLast ? lastPage.nextPage : undefined,
