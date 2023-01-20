@@ -118,6 +118,24 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
+	// 닉네임 중복 확인
+	@GetMapping("/nickname")
+	public ResponseEntity nicknameCheck(@RequestBody MemberDto.NicknameCheck memberNickCheckDto) {
+
+
+		memberService.verifyExistNickname(memberNickCheckDto.getNickname());
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity emailCheck(@RequestBody MemberDto.EmailCheck memberEmailCheckDto) {
+		memberService.verifyExistEmail(memberEmailCheckDto.getEmail());
+
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	//회원 수정
 	@PatchMapping("/{member-id}")
 	public ResponseEntity patchMember(@Positive @PathVariable("member-id") Long memberId,

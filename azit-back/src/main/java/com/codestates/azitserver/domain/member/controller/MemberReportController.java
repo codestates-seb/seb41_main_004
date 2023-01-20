@@ -26,7 +26,7 @@ import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 @RestController
 @Validated
-@RequestMapping(value = "/api/member/reports", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api/members/reports", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class MemberReportController {
 
 	private final MemberReportService memberReportService;
@@ -52,9 +52,9 @@ public class MemberReportController {
 		// TODO 중복 신고 불가한지 확인
 		// memberReportService.verifyExistingReport(reportPostDto.getReporterId(), reportPostDto.getReporterId())
 
-		MemberReport memberReport = memberReportMapper.reportPostDtoToReport(reportPostDto);
-		MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(memberReport);
-
+		MemberReport tempMemberReport = memberReportMapper.reportPostDtoToReport(reportPostDto);
+		MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(tempMemberReport);
+		memberReportService.createMemberReport(tempMemberReport);
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
 

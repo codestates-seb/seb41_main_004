@@ -112,6 +112,9 @@ include::{snippets}/post-member/response-body.adoc[]
 .response-fields
 include::{snippets}/post-member/response-fields.adoc[]
 
+=== 닉네임 중복체크
+.curl-request
+include::{snippets}/nickname-check/curl-request.adoc[]
 === 회원 수정
 
 .curl-request

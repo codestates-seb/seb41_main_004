@@ -27,6 +27,8 @@ public enum ExceptionCode {
 	CLUB_MEMBER_NOT_FOUND(40406, "Join member not found"),
 	TOKEN_NOT_FOUND(40407, "Token not found"),
 
+	REPORT_NOT_FOUND(40408, "Member Report not found"),
+
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
 	INVALID_MEETING_METHOD(40902, "Meeting method is \"offline\" or \"online\" only"),
