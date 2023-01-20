@@ -223,6 +223,7 @@ const UserProfileEdit = () => {
         }
       })
       .catch((error) => {
+        alert("닉네임이 중복되었습니다. 다시 시도하세요.");
         console.log(error);
       });
   };
@@ -234,7 +235,8 @@ const UserProfileEdit = () => {
         <ProfileImageWrap>
           <input
             type="file"
-            accept="jpg,jpeg,png"
+            accept="image/jpg,image/jpeg,image/png"
+            //리액트에서는 image/를 해줘야 특정 파일형식만 업로드되게 적용됨
             id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
