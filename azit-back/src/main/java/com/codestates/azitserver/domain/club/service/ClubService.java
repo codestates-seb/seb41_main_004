@@ -72,7 +72,7 @@ public class ClubService {
 		Club club = findClubById(clubId);
 
 		// banner image 저장
-		String prefix = "images/club_banner";
+		String prefix = "/images/club_banner";
 		Map<String, String> map = storageService.upload(prefix, bannerImage);
 
 		FileInfo fileInfo = new FileInfo();
