@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codestates.azitserver.domain.member.dto.MemberDto;
-import com.codestates.azitserver.domain.member.entity.Member;
-import com.codestates.azitserver.domain.member.entity.MemberReport;
-import com.codestates.azitserver.domain.member.service.MemberMemberReportService;
 import com.codestates.azitserver.domain.member.dto.MemberReportDto;
+import com.codestates.azitserver.domain.member.entity.MemberReport;
 import com.codestates.azitserver.domain.member.mapper.MemberReportMapper;
+import com.codestates.azitserver.domain.member.service.MemberMemberReportService;
 import com.codestates.azitserver.domain.member.service.MemberReportService;
-import com.codestates.azitserver.global.dto.MultiResponseDto;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 @RestController
