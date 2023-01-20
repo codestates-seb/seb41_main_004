@@ -479,13 +479,19 @@ const AzitEditForm = () => {
               </div>
               {check === "offline" ? (
                 <>
-                  <div
-                    className="selectPlace"
-                    onClick={() => setVisible(true)}
-                    placeholder="장소를 입력해주세요."
-                  >
-                    {writeInfo ? writeInfo : "장소를 입력해주세요."}
-                  </div>
+                  {memberStatus.length === 0 ? (
+                    <div
+                      className="selectPlace"
+                      onClick={() => setVisible(true)}
+                      placeholder="장소를 입력해주세요."
+                    >
+                      {writeInfo ? writeInfo : "장소를 입력해주세요."}
+                    </div>
+                  ) : (
+                    <div className="selectPlace">
+                      {writeInfo ? writeInfo : "장소를 입력해주세요."}
+                    </div>
+                  )}
                   {visible ? (
                     <div>
                       <DaumPostcode onComplete={handleComplete} height={700} />
