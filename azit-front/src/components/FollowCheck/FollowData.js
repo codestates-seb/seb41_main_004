@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import DataList from "./DataList";
 
-
 const Null = styled.div`
   text-align: center;
   padding: 2rem;
