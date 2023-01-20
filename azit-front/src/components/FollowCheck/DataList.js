@@ -60,7 +60,7 @@ const DataList = ({ data }) => {
           <UserImg src={UserProfile} />
         </div>
         <FollowBox>
-          <h3>{data.user[0].userName}</h3>
+          <h3>{data.host.nickname}</h3>
           <p>{data.clubInfo}</p>
         </FollowBox>
         <ButtonBox>
