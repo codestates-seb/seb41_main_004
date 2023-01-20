@@ -2,9 +2,12 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { UserReportData } from "../dummyData/UserReportData";
+import { axiosInstance } from "../util/axios";
+import { useMutation } from "react-query";
 
-const ReportWrap = styled.div`
+const ReportWrap = styled.form`
   position: relative;
   margin-top: 5.5rem;
   padding: 2rem;
@@ -30,40 +33,76 @@ const ReportWrap = styled.div`
     }
   }
 `;
+const Select = styled.select`
+  color: ${(props) =>
+    props.status !== "" ? "var(--font-color)" : `var(--light-font-color)`};
+`;
 
 const UserReport = () => {
-  const reportList = ["사유1", "사유2", "사유3", "사유4", "사유5"];
-  const [reportSelected, setReportSelected] = useState("사유1");
-  const reportHandleSelect = (e) => {
-    setReportSelected(e.target.value);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [reportCategory, setReportCategory] = useState(UserReportData[0].value);
+  const [reportReason, setReportReason] = useState("");
+
+  const handleReportCategory = (e) => {
+    setReportCategory(e.target.value);
+  };
+  const handleReportReason = (e) => {
+    setReportReason(e.target.value);
   };
 
+  const posting = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = { reportCategory, reportReason };
+      await axiosInstance.post(`api/members/reports/${id}`, payload, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
+      navigate(-1);
+      console.log("보내짐");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  const { mutate } = useMutation(posting);
+
   return (
-    <ReportWrap>
+    <ReportWrap onSubmit={mutate}>
       <Header title="멤버 신고하기"></Header>
       <div className="ReportForm">
         <div>
           <label>신고 항목</label>
           <div className="selectBox">
-            <select onChange={reportHandleSelect} value={reportSelected}>
-              {reportList.map((item) => (
-                <option value={item} key={item}>
-                  {item}
+            <Select
+              status={reportCategory}
+              onChange={handleReportCategory}
+              value={reportCategory}
+            >
+              {UserReportData.map((item) => (
+                <option value={item.value} key={item.id}>
+                  {item.name}
                 </option>
               ))}
-            </select>
+            </Select>
             <span className="selectArrow" />
           </div>
         </div>
         <div>
           <label>신고내용(선택)</label>
-          <textarea placeholder="신고 사유를 간략하게 입력해 주세요."></textarea>
+          <textarea
+            maxLength={128}
+            onChange={handleReportReason}
+            placeholder="신고 사유를 간략하게 입력해 주세요."
+          ></textarea>
         </div>
         <div></div>
       </div>
-      <Link to="/userpage">
-        <Button title="신고 하기" state="active"></Button>
-      </Link>
+      {/* <Link to="/userpage"> */}
+      <Button
+        title="신고 하기"
+        state={reportCategory.length > 0 ? "active" : "disabled"}
+      ></Button>
+      {/* </Link> */}
     </ReportWrap>
   );
 };
