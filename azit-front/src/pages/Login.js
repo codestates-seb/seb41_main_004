@@ -47,8 +47,8 @@ const Login = () => {
         localStorage.setItem('profileUrl', profileUrl);
         localStorage.setItem('memberId', memberId);
         setCookie('accessToken', accessToken);
-        navigate('/');
         dispatch(loginStatusSlice.actions.login());
+        navigate('/');
       } catch (e) {
         // error handling 하기
         console.log(e.response.status);
