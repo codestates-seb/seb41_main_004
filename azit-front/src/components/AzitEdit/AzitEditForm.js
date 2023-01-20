@@ -273,6 +273,7 @@ const AzitEditForm = () => {
   };
 
   const clubId = Number(`${id}`);
+  let numberFee = Number(fee.toString().split(",").join(""));
 
   let body = {
     clubId,
@@ -281,13 +282,14 @@ const AzitEditForm = () => {
     memberLimit,
     meetingDate,
     meetingTime,
-    fee,
+    fee: numberFee,
     genderRestriction: genderSelected,
     birthYearMin: minYearSelected ? minYearSelected : null,
     birthYearMax: maxYearSelected ? maxYearSelected : null,
     isOnline: check,
     location: writeInfo,
   };
+  console.log(body);
 
   const navigate = useNavigate();
 
@@ -424,7 +426,7 @@ const AzitEditForm = () => {
               <input
                 type="text"
                 value={PriceFormat(String(fee))}
-                onChange={(e) => setFee(PriceFormat(e.target.value))}
+                onChange={(e) => setFee(e.target.value)}
               ></input>
             </div>
             <div className="inputContainer">
