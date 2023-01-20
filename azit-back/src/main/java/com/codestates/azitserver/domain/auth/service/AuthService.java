@@ -148,6 +148,14 @@ public class AuthService {
 		return message;
 	}
 
+	/**
+	 * 임시 비밀번호 발급 메일 작성
+	 * @param email 이메일 주소
+	 * @param tempPassword 임시 비밀번호
+	 * @return 이메일 본문
+	 * @throws MessagingException
+	 * @throws UnsupportedEncodingException
+	 */
 	public MimeMessage createPWEmail(String email, String tempPassword) throws
 		MessagingException,
 		UnsupportedEncodingException {
@@ -193,14 +201,19 @@ public class AuthService {
 		}
 	}
 
-	public boolean passwordMatcher(Long memberId, AuthDto.MatchPassword request) {
+	/**
+	 * 비밀번호 인증
+	 * @param memberId 회원 고유 식별자
+	 * @param request 입력 password
+	 */
+	public void passwordMatcher(Long memberId, AuthDto.MatchPassword request) {
 		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
 		Member findMember = findVerifiedMember(memberId);
 
 		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
-		boolean matchingResult = passwordEncoder.matches(request.getPassword(), findMember.getPassword());
-
-		return matchingResult;
+		if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword())) {
+			throw new BusinessLogicException(ExceptionCode.STRING_VALIDATION_FAILED);
+		}
 	}
 
 	//비밀번호 변경(patchPassword)

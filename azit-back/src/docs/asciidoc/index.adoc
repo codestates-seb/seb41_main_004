@@ -48,9 +48,6 @@ include::{snippets}/match-password/request-headers.adoc[]
 .request-fields
 include::{snippets}/match-password/request-fields.adoc[]
 
-.http-response
-include::{snippets}/match-password/http-response.adoc[]
-
 === 비밀번호 변경
 
 .curl-request
@@ -109,9 +106,6 @@ include::{snippets}/token-reIssue/http-request.adoc[]
 
 .request-headers
 include::{snippets}/token-reIssue/request-headers.adoc[]
-
-.response-headers
-include::{snippets}/token-reIssue/response-headers.adoc[]
 
 .http-response
 include::{snippets}/token-reIssue/http-response.adoc[]
