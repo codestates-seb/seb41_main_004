@@ -23,6 +23,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.auth.entity.AuthNumber;
@@ -53,16 +54,16 @@ public class AuthService {
 	 * @param request 회원 eamil
 	 * @throws Exception
 	 */
+	@Transactional
 	public void sendAuthEmail(AuthDto.SendEmail request) throws Exception {
 		// request의 email로 회원 찾기. (회원 email인지 확인)
 		String email = request.getEmail();
 		Member member = findVerifiedMemberByEmail(email);
 
-		// 인증번호 생성, 메일 작성, 전송
+		// 인증번호 생성
 		String authNum = createAuthNumber();
-		sendMessage(createAuthEmail(email, authNum));
 
-		// db에 저장 (같은 email 존재하면 덮어쓰기)
+		// email, authNum DB에 저장 (같은 email 존재하면 덮어쓰기)
 		AuthNumber authNumber = new AuthNumber();
 		if (authNumberRepository.findByEmail(email).isPresent()) {
 			authNumber = findVerifiedAuthNumberByEmail(email);
@@ -71,6 +72,9 @@ public class AuthService {
 		}
 		authNumber.setAuthNum(authNum);
 		authNumberRepository.save(authNumber);
+
+		// 메일 작성, 전송
+		sendMessage(createAuthEmail(email, authNum));
 	}
 
 	/**
@@ -78,6 +82,7 @@ public class AuthService {
 	 * @param request email, 인증번호
 	 * @throws Exception
 	 */
+	@Transactional
 	public void resetPassword(AuthDto.SendPWEmail request) throws Exception {
 		// 입력값으로 email, authNum 받음
 		String email = request.getEmail();
@@ -90,9 +95,8 @@ public class AuthService {
 		// 둘이 일치하는지 확인
 		stringConfirmer(authNum, DBNumber);
 
-		// 랜덤 비밀번호 생성, 메일 작성, 메일 전송
+		// 랜덤 비밀번호 생성
 		String tempPassword = createTempPassword();
-		sendMessage(createPWEmail(email, tempPassword));
 
 		// 랜덤 비번 Member DB 저장
 		Member member = findVerifiedMemberByEmail(email);
@@ -101,6 +105,9 @@ public class AuthService {
 
 		// db에서 authNumber 정보 삭제
 		authNumberRepository.delete(findAuthNumber);
+
+		// 메일 작성, 메일 전송
+		sendMessage(createPWEmail(email, tempPassword));
 	}
 
 	/**
