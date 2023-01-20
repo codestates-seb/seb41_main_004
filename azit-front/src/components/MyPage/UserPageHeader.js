@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import editIcon from "../../images/edit-icon.png";
@@ -24,20 +23,18 @@ const HeaderWrap = styled.header`
   }
 `;
 
-const UserPageHeader = () => {
-  const [myPage, setMyPage] = useState(true);
-
+const UserPageHeader = ({ myPage, id }) => {
   return (
     <HeaderWrap>
       {myPage ? (
         <>
-          <Link to="/userpage/edit">프로필 수정</Link>
-          <Link to="/userpage/setting">
+          <Link to={`/userpage/edit/${id}`}>프로필 수정</Link>
+          <Link to={`/userpage/setting/${id}`}>
             <img alt="editIcon" src={editIcon} />
           </Link>
         </>
       ) : (
-        <Link to="/userpage/report">
+        <Link to={`/userpage/report/${id}`}>
           <img alt="reportIcon" src={reportIcon} />
         </Link>
       )}

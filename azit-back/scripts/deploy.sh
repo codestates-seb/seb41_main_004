@@ -26,7 +26,7 @@ fi
 
 UUID = $(uuidgen)
 echo "> 로그파일 생성 $UUID.log" >> $BUILD_LOG
-mkdir -p /home/ubuntu/action/logs && sudo touch /home/ubuntu/action/logs/$UUID.log
+sudo mkdir -p /home/ubuntu/action/logs && sudo touch /home/ubuntu/action/logs/$UUID.log
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> $BUILD_LOG
