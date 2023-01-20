@@ -1,7 +1,7 @@
 export const genderConvert = (data) => {
-  if (data === "MALE_ONLY ") {
+  if (data === "MALE_ONLY") {
     return "남자";
-  } else if (data === "FEMALE_ONLY ") {
+  } else if (data === "FEMALE_ONLY") {
     return "여자";
   } else {
     return "성별 제한없음";
