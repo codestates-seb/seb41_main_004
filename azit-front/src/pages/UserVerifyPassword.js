@@ -27,7 +27,7 @@ const FormContainer = styled.form`
 
 const UserVerifyPassword = () => {
 
-  const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
+  const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
 
   const { register, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const navigate = useNavigate();

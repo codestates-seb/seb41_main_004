@@ -40,7 +40,6 @@ const ReportWrap = styled.form`
 `;
 const Select = styled.select`
   color:${(props) => props.status !== "" ? 'var(--font-color)' : `var(--light-font-color)` };
-  /* color:${(props) => console.log(props.status === "") ? 'var(--font-color)' : `var(--light-font-color)` }; */
 `
 const AzitReport = () => {
   const { id } = useParams();
@@ -53,20 +52,16 @@ const AzitReport = () => {
   const handleReportReason = (e) => {
     setReportReason(e.target.value);
   };
-  // console.log(reportCategory)
   const posting = async (e) => {
     e.preventDefault();
     try {
       const payload = { reportCategory, reportReason };
-      // const res =
       await axiosInstance.post(`/api/clubs/reports/${id}`, payload, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       });
-      // console.log(res);
       navigate(-1);
     } catch (error) {
       alert(error.message);
-      // console.log(error);
     }
   };
   const { mutate } = useMutation(posting);
@@ -123,3 +118,4 @@ const AzitReport = () => {
 };
 
 export default AzitReport;
+

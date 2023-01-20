@@ -174,7 +174,7 @@ const SignupAdditional = () => {
             );
           })}
         </article>
-            <Button title="회원가입" state={imgFile && aboutMe && checkedInputs ? "active" : "disabled"}></Button>
+            <Button title="회원가입" state={imgFile && aboutMe && checkedInputs.length > 0 ? "active" : "disabled"}></Button>
         {/* <div className="buttonWrap">
           <Link to="/login">
           </Link>
