@@ -170,4 +170,72 @@ public class authControllerTest {
 					headerWithName("Authorization").description("Jwt Access Token"),
 					headerWithName("Refresh").description("Jwt Refresh Token"))));
 	}
+
+	@Test
+	@DisplayName("sendAuthNum")
+	public void sendAuthNumTest() throws Exception {
+		// given
+		AuthDto.SendEmail dto = new AuthDto.SendEmail();
+		dto.setEmail("stubmember@naver.com");
+
+		String content = gson.toJson(dto);
+
+		doNothing().when(authService)
+			.sendAuthEmail(Mockito.any(AuthDto.SendEmail.class));
+
+		// when
+		ResultActions actions =
+			mockMvc.perform(
+				post("/api/auth/refresh/passwords/email")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.characterEncoding("UTF-8")
+					.with(csrf())
+					.content(content)
+			);
+
+		// then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("send-authNum",
+				requestFields(List.of(
+					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")))
+			));
+	}
+
+	@Test
+	@DisplayName("sendPassword")
+	public void sendPasswordTest() throws Exception {
+		// given
+		AuthDto.SendPWEmail dto = new AuthDto.SendPWEmail();
+		dto.setEmail("stubmember@naver.com");
+		dto.setAuthNum("123456");
+
+		String content = gson.toJson(dto);
+
+		doNothing().when(authService)
+			.resetPassword(Mockito.any(AuthDto.SendPWEmail.class));
+
+		// when
+		ResultActions actions =
+			mockMvc.perform(
+				post("/api/auth/refresh/passwords")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.characterEncoding("UTF-8")
+					.with(csrf())
+					.content(content)
+			);
+
+		// then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("send-randomPW",
+				requestFields(List.of(
+					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+					fieldWithPath("authNum").type(JsonFieldType.STRING).description("인증번호")))
+			));
+	}
 }

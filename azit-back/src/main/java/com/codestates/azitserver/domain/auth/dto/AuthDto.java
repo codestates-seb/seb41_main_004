@@ -58,14 +58,4 @@ public class AuthDto {
 		private String email;
 		private String authNum;
 	}
-
-	@Getter
-	@Setter
-	public static class ResponseWithProfile {
-		private Long memberId;
-		private String email;
-		private String nickname;
-		private String profileUrl;
-		private String profileImageName;
-	}
 }

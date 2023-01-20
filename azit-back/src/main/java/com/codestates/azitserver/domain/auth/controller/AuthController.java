@@ -26,19 +26,19 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 	private final AuthService authService;
 
-	// @PostMapping("/refresh/passwords/email")
-	// public ResponseEntity sendEmail (@RequestBody AuthDto.sendEmail request) {
-	// 	// request(email)을 service로 보낸다.
-	// 	// 200 OK만 보내기
-	// 	return null;
-	// }
-	//
-	// @PostMapping("/refresh/passwords")
-	// public ResponseEntity sendPassword (@RequestBody AuthDto.sendPassword request) {
-	// 	// request(email, authNumber)을 service로 보낸다.
-	// 	// 200 OK만 보내기
-	// 	return null;
-	// }
+	@PostMapping("/refresh/passwords/email")
+	public ResponseEntity sendAuthNum(@RequestBody AuthDto.SendEmail request) throws Exception {
+		authService.sendAuthEmail(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/refresh/passwords")
+	public ResponseEntity sendPassword(@RequestBody AuthDto.SendPWEmail request) throws Exception {
+		authService.resetPassword(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	// 비밀번호 인증(password 변경 페이지로 가기 전)
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
