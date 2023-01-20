@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const UserResetPassword = () => {
 
-  const newPasswordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
+  const newPasswordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
   // eslint-disable-next-line
   const { register, watch, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const newPassword = useRef();
