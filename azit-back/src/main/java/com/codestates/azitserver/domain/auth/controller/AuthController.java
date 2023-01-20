@@ -27,7 +27,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/refresh/passwords/email")
-	public ResponseEntity sendEmail(@RequestBody AuthDto.SendEmail request) throws Exception {
+	public ResponseEntity sendAuthNum(@RequestBody AuthDto.SendEmail request) throws Exception {
 		authService.sendAuthEmail(request);
 
 		return new ResponseEntity<>(HttpStatus.OK);
