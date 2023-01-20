@@ -55,7 +55,7 @@ const AzitCreate = () => {
       <div>
         <input
           type="file"
-          accept="jpg, jpeg, png"
+          accept="image/jpg, image/jpeg, image/png"
           id="bannerImg"
           onChange={saveImgFile}
           ref={imgRef}

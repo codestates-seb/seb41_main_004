@@ -48,10 +48,10 @@ public class ClubStubData {
 		post.setClubInfo("재밌는 아지트입니다.");
 		post.setMemberLimit(4);
 		post.setFee(10000);
-		post.setJoinMethod(Club.JoinMethod.APPROVAL);
+		post.setJoinMethod(String.valueOf(Club.JoinMethod.APPROVAL));
 		post.setBirthYearMin("1990");
 		post.setBirthYearMax("2000");
-		post.setGenderRestriction(Club.GenderRestriction.ALL);
+		post.setGenderRestriction(String.valueOf(Club.GenderRestriction.ALL));
 		post.setMeetingDate(LocalDate.now().plusDays(1));
 		post.setMeetingTime(LocalTime.now().plusHours(1));
 		post.setIsOnline("offline");
@@ -71,7 +71,7 @@ public class ClubStubData {
 		patch.setFee(10000);
 		patch.setBirthYearMin("1990");
 		patch.setBirthYearMax("2000");
-		patch.setGenderRestriction(Club.GenderRestriction.ALL);
+		patch.setGenderRestriction(String.valueOf(Club.GenderRestriction.ALL));
 		patch.setMeetingDate(LocalDate.now().plusDays(1));
 		patch.setMeetingTime(LocalTime.now().plusHours(1));
 		patch.setIsOnline("offline");

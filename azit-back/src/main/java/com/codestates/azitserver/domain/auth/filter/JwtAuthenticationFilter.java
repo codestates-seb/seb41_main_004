@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -72,12 +73,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		);
 
 		// 유저정보 만들기
-		AuthDto.ResponseWithProfile responseWithProfileDto = new AuthDto.ResponseWithProfile();
+		AuthResponseDto.ResponseWithProfile responseWithProfileDto = new AuthResponseDto.ResponseWithProfile();
 		responseWithProfileDto.setMemberId(member.getMemberId());
 		responseWithProfileDto.setEmail(member.getEmail());
 		responseWithProfileDto.setNickname(member.getNickname());
 		try {
 			responseWithProfileDto.setProfileUrl(member.getFileInfo().getFileUrl());
+			responseWithProfileDto.setProfileImageName(member.getFileInfo().getFileName());
 		} catch (NullPointerException e) {
 			log.warn("Profile image is null:{}", e.getLocalizedMessage());
 		}
