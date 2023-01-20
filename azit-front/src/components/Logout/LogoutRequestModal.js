@@ -42,9 +42,8 @@ const LogoutRequestModalWrap = styled.div`
     border-radius: 1rem;
     padding: 2rem;
     min-width: 35rem;
-    min-height: 17.5rem;
     > .buttonWrap {
-      margin-top: 1rem;
+      margin: 3rem 0;
       display: flex;
       justify-content: center;
       gap: 1rem;
