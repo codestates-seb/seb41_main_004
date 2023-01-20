@@ -279,8 +279,6 @@ const AzitDetail = () => {
     azitLookup
   );
 
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       let filterMember = data.clubMembers.filter((member) => {

@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
-import testProfileImg from "../images/testProfileImg.png";
-import TestAvatarUrl from "../images/testProfileImg.png";
 import { Link } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useLocation } from "react-router-dom";
@@ -265,8 +263,6 @@ const AzitPreview = () => {
   const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
   const profileName = localStorage.getItem("profilName");
-  console.log(profileUrl);
-  console.log(profileName);
 
   const openAzit = async () => {
     const formData = new FormData();
