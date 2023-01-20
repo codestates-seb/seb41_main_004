@@ -96,6 +96,11 @@ const AzitPreviewForm = styled.div`
           position: relative;
           margin-right: 1rem;
           pointer-events: none;
+
+          > img {
+            width: 5rem;
+            border-radius: 70%;
+          }
           > .hostIcon {
             top: 0;
             right: 0;
@@ -213,12 +218,6 @@ const AzitPreviewForm = styled.div`
   }
 `;
 
-const TestImg = styled.div`
-  width: 5rem;
-  border-radius: 70%;
-  background-image: url(${(props) => props.imgSrc});
-`;
-
 const UserImgWrap = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -262,7 +261,9 @@ const AzitPreview = () => {
 
   const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
-  const profileName = localStorage.getItem("profilName");
+  const profileName = localStorage.getItem("profileName");
+  console.log(profileName);
+  console.log(profileUrl);
 
   const openAzit = async () => {
     const formData = new FormData();
@@ -333,8 +334,9 @@ const AzitPreview = () => {
             <label>아지트 정보</label>
             <div>
               <Link to="/userpage">
-                <TestImg
-                  imgSrc={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
+                <img
+                  alt="hostProfile"
+                  src={`${process.env.REACT_APP_S3_URL}${profileUrl}/${profileName}`}
                 />
                 <img alt="HostIcon" src={HostIcon} className="hostIcon" />
               </Link>
