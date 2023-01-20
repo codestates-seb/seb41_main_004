@@ -86,7 +86,7 @@ const DetailWrap = styled.div`
 `;
 const ImgWrap = styled.div`
   width: 8.5rem;
-  height: 8.5rem;
+
   margin-right: 10px;
   border-radius: 10px;
   background-color: var(--background-color);
