@@ -24,7 +24,7 @@ else
   sleep 5
 fi
 
-UUID = $(uuidgen)
+UUID=$(uuidgen)
 echo "> 로그파일 생성 $UUID.log" >> $BUILD_LOG
 sudo mkdir -p /home/ubuntu/action/logs && sudo touch /home/ubuntu/action/logs/$UUID.log
 
