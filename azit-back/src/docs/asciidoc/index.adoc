@@ -143,6 +143,24 @@ include::{snippets}/post-member/response-fields.adoc[]
 === 닉네임 중복체크
 .curl-request
 include::{snippets}/nickname-check/curl-request.adoc[]
+
+.http-request
+include::{snippets}/nickname-check/http-request.adoc[]
+
+.request-fields
+include::{snippets}/nickname-check/request-fields.adoc[]
+
+=== 이메일 중복체크
+.curl-request
+include::{snippets}/email-check/curl-request.adoc[]
+
+.http-request
+include::{snippets}/email-check/http-request.adoc[]
+
+.request-fields
+include::{snippets}/email-check/request-fields.adoc[]
+
+
 === 회원 수정
 
 .curl-request

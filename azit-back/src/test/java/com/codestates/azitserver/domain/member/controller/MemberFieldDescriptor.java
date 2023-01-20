@@ -105,9 +105,13 @@ public class MemberFieldDescriptor {
 
 	public static RequestFieldsSnippet getNickCheckFieldsSnippet() {
 		return requestFields(
-			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자").optional(),
 			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+		);
+	}
 
+	public static RequestFieldsSnippet getEmailCheckFieldsSnippet() {
+		return requestFields(
+			fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
 		);
 	}
 }

@@ -217,7 +217,7 @@ class MemberControllerTest {
 			.andDo(getDefaultDocument(
 					"get-member-by-id",
 					pathParameters(List.of(parameterWithName("memberId")
-						.description("The id of the member to update"))),
+						.description("The id of the member"))),
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
@@ -226,27 +226,47 @@ class MemberControllerTest {
 	@Test
 	void nickCheckTest() throws Exception {
 		// given
-		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
-		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
-
+		MemberDto.NicknameCheck nicknameCheck = new MemberDto.NicknameCheck("닉네임");
+		String content = gson.toJson(nicknameCheck);
 		// when
 		ResultActions getActions =
 			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/{memberId}", 1L)
+				RestDocumentationRequestBuilders.get("/api/members/nickname")
 					.accept(MediaType.APPLICATION_JSON)
 					.contentType(MediaType.APPLICATION_JSON)
-					.header("Authorization", "Required JWT access token")
+					.content(content)
 			);
 		// then
 		getActions
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.memberId").value(1))
 			.andDo(getDefaultDocument(
 					"nickname-check",
-					pathParameters(List.of(parameterWithName("memberId")
-						.description("The id of the member to check a nickname"))),
-					MemberFieldDescriptor.getSingleResponseSnippet()
+				MemberFieldDescriptor.getNickCheckFieldsSnippet()
+				)
+			);
+	}
+
+	@Test
+	void emailCheckTest() throws Exception {
+		// given
+		MemberDto.EmailCheck emailCheck = new MemberDto.EmailCheck("kimstub@naver.com");
+		String content = gson.toJson(emailCheck);
+		// when
+		ResultActions getActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/members/email")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(content)
+			);
+		// then
+		getActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"email-check",
+					MemberFieldDescriptor.getEmailCheckFieldsSnippet()
 				)
 			);
 	}
