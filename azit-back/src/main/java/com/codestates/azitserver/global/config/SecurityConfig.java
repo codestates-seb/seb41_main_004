@@ -96,6 +96,8 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/categories").permitAll()
 
+				/*==========review==========*/
+				.antMatchers(HttpMethod.GET, "/api/reviews").permitAll()  // 회원에 대한 리뷰 조회
 
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
