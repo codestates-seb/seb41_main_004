@@ -98,7 +98,7 @@ public class ClubService {
 	}
 
 	public Page<Club> findClubs(int page, int size) {
-		return clubRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		return clubRepository.findAllWithoutCanceled(PageRequest.of(page, size, Sort.by("createdAt").descending()));
 	}
 
 	public Club findClubById(Long clubId) {
