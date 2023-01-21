@@ -514,9 +514,6 @@ include::{snippets}/get-club-member/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-club-member/path-parameters.adoc[]
 
-.request-parameters
-include::{snippets}/get-club-member/request-parameters.adoc[]
-
 .request-headers
 include::{snippets}/get-club-member/request-headers.adoc[]
 
