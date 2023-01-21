@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserReportData } from "../dummyData/UserReportData";
 import { axiosInstance } from "../util/axios";
 import { useMutation } from "react-query";
@@ -41,11 +41,11 @@ const Select = styled.select`
 const UserReport = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [reportCategory, setReportCategory] = useState(UserReportData[0].value);
+  const [reportList, setReportList] = useState(UserReportData[0].value);
   const [reportReason, setReportReason] = useState("");
 
-  const handleReportCategory = (e) => {
-    setReportCategory(e.target.value);
+  const handleReportList = (e) => {
+    setReportList(e.target.value);
   };
   const handleReportReason = (e) => {
     setReportReason(e.target.value);
@@ -54,7 +54,7 @@ const UserReport = () => {
   const posting = async (e) => {
     e.preventDefault();
     try {
-      const payload = { reportCategory, reportReason };
+      const payload = { reportList, reportReason };
       await axiosInstance.post(`api/members/reports/${id}`, payload, {
         headers: { Authorization: localStorage.getItem("accessToken") },
       });
@@ -74,9 +74,9 @@ const UserReport = () => {
           <label>신고 항목</label>
           <div className="selectBox">
             <Select
-              status={reportCategory}
-              onChange={handleReportCategory}
-              value={reportCategory}
+              status={reportList}
+              onChange={handleReportList}
+              value={reportList}
             >
               {UserReportData.map((item) => (
                 <option value={item.value} key={item.id}>
@@ -100,7 +100,7 @@ const UserReport = () => {
       {/* <Link to="/userpage"> */}
       <Button
         title="신고 하기"
-        state={reportCategory.length > 0 ? "active" : "disabled"}
+        state={reportList.length > 0 ? "active" : "disabled"}
       ></Button>
       {/* </Link> */}
     </ReportWrap>
