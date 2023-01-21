@@ -563,6 +563,74 @@ include::{snippets}/kick-club-members/request-headers.adoc[]
 .http-response
 include::{snippets}/kick-club-members/http-response.adoc[]
 
+== 참여자 리뷰
+
+=== 리뷰 작성
+
+.curl-request
+include::{snippets}/post-review/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-review/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-review/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-review/response-fields.adoc[]
+
+=== 리뷰 숨김/숨김해제
+
+.curl-request
+include::{snippets}/patch-review/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-review/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-review/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-review/response-fields.adoc[]
+
+=== 회원 리뷰 조회
+
+.curl-request
+include::{snippets}/find-all-by-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/find-all-by-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/find-all-by-member/request-parameters.adoc[]
+
+.request-headers
+include::{snippets}/find-all-by-member/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/find-all-by-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/find-all-by-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/find-all-by-member/response-fields.adoc[]
+
 == 카테고리
 
 === 전체 카테고리 조회
