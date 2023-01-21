@@ -3,7 +3,11 @@ import Gnb from "../components/common/Gnb";
 import Tab from "../components/Home/Tab";
 import Logo from "../images/logo.png";
 import MainImg from "../images/mainSlideImg01.png";
-
+import { useEffect, useState } from "react";
+import { LoginRequestModal } from "../components/common/Modal";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useFirstRender } from "../util/useDidMountEffect";
 const Header = styled.header`
   width: 100%;
   height: 5.5rem;
@@ -27,6 +31,20 @@ const SlideCell = styled.div`
   }
 `;
 const Home = () => {
+  const isLogin = useSelector((state) => state.loginStatus.isLogin);
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
+
+  // const firstRender = useFirstRender();
+  useEffect(() => {
+    if(!isLogin) {
+      modalHandler()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   return (
     <>
       <Gnb />
@@ -37,6 +55,7 @@ const Home = () => {
         <img alt="mainImage" src={MainImg} />
       </SlideCell>
       <Tab />
+      {modalOpen && <LoginRequestModal modalHandler={modalHandler}/>}
       
     </>
   );
