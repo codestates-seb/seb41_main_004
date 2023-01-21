@@ -17,13 +17,17 @@ import lombok.RequiredArgsConstructor;
 public class RedisUtils {
 	private final RedisTemplate<String, String> redisTemplate;
 
-	public void setData(String key, String email, Long expiration) {
+	public void setData(String token, String email, Long expiration) {
 		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(email.getClass()));
-		redisTemplate.opsForValue().set(key, email, expiration, TimeUnit.MINUTES);
+		redisTemplate.opsForValue().set(token, email, expiration, TimeUnit.MINUTES);
 	}
 
-	public Long getExpiration(String refreshToken) {
-		return redisTemplate.getExpire(refreshToken);
+	public void deleteData(String refreshToken) {
+		redisTemplate.delete(refreshToken);
+	}
+
+	public boolean isExists(String refreshToken) {
+		return Boolean.TRUE.equals(redisTemplate.hasKey(refreshToken));
 	}
 
 	public String getEmail(String refreshToken) {
