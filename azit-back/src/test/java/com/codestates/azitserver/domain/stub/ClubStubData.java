@@ -131,4 +131,14 @@ public class ClubStubData {
 
 		return reportClubResponse;
 	}
+
+	public static ClubDto.ReviewClubResponse getClubDtoReviewClubResponse() {
+		ClubDto.ReviewClubResponse reviewClubResponse = new ClubDto.ReviewClubResponse();
+
+		reviewClubResponse.setClubId(1L);
+		reviewClubResponse.setClubName("재밌는 아지트");
+		reviewClubResponse.setMeetingDate(LocalDate.now().minusDays(1));
+
+		return reviewClubResponse;
+	}
 }

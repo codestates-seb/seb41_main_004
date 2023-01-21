@@ -98,7 +98,7 @@ public class ClubService {
 	}
 
 	public Page<Club> findClubs(int page, int size) {
-		return clubRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		return clubRepository.findAllWithoutCanceled(PageRequest.of(page, size, Sort.by("createdAt").descending()));
 	}
 
 	public Club findClubById(Long clubId) {
@@ -163,5 +163,10 @@ public class ClubService {
 
 	public boolean verifyOrFindAll(Member member, Long memberId) {
 		return member == null || !memberId.equals(member.getMemberId());
+	}
+
+	public String getClubJoinQuestion(Long clubId) {
+		Club club = findClubById(clubId);
+		return club.getJoinQuestion();
 	}
 }

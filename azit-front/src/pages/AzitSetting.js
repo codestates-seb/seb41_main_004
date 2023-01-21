@@ -59,8 +59,17 @@ const AzitSetting = () => {
   };
   const navigate = useNavigate();
 
-  const DeleteButtonClick = () => {
-    navigate("/");
+  const DeleteButtonClick = async () => {
+    try {
+      const res = await axiosInstance.delete(`/api/clubs/${id}`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
+      console.log(res);
+      alert("아지트를 닫았습니다.");
+      navigate(`/`);
+    } catch (e) {
+      console.log("아지트 삭제 실패");
+    }
   };
 
   return (
@@ -84,7 +93,7 @@ const AzitSetting = () => {
       </SettingBar>
       {modalOpen && (
         <AzitDeleteModal
-          LogoutButtonClick={DeleteButtonClick}
+          DeleteButtonClick={DeleteButtonClick}
           modalHandler={modalHandler}
         />
       )}

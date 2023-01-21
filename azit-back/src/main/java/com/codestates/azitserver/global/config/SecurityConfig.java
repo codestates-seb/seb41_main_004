@@ -64,6 +64,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
 				.antMatchers("/h2/**").permitAll() // h2
+				.antMatchers("/h2").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
 				.antMatchers(HttpMethod.GET, "/api/errors").permitAll() // error
 				.antMatchers(HttpMethod.GET, "/health-check").permitAll()  // health-check
@@ -77,16 +78,26 @@ public class SecurityConfig {
 
 				/*==========member==========*/
 				.antMatchers(HttpMethod.GET, "/api/members/**").authenticated() //특정 회원 조회
+				.antMatchers(HttpMethod.GET, "/api/members/**/**").authenticated() // 중복체크
 				.antMatchers(HttpMethod.PATCH, "/api/members/**").authenticated() // 회원 정보 수정
 				.antMatchers(HttpMethod.DELETE, "/api/members/**").authenticated() // 회원 탈퇴(삭제)
 				.antMatchers(HttpMethod.GET, "/api/members").authenticated() // 전체 회원 조회 //TODO (미구현(error))
 				.antMatchers(HttpMethod.POST, "/api/members").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/members/**").permitAll()
 
+
 				/*==========category==========*/
+				.antMatchers(HttpMethod.GET, "/api/member/reports/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/member/reports").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/member/reports").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/members/reports/**").permitAll()
+
+				/*==========report==========*/
 				.antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/categories").permitAll()
 
+				/*==========review==========*/
+				.antMatchers(HttpMethod.GET, "/api/reviews").permitAll()  // 회원에 대한 리뷰 조회
 
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인

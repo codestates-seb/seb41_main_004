@@ -46,9 +46,9 @@ public class MemberService {
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
-		verifyExistNickname(tempMember.getNickname());
+		verifyExistNickname(tempMember);
 		// 이메일 중복 확인
-		verifyExistEmail(tempMember.getEmail());
+		verifyExistEmail(tempMember);
 		// password 암호화
 		String encryptedPassword = passwordEncoder.encode(tempMember.getPassword());
 
@@ -121,16 +121,16 @@ public class MemberService {
 		// 닉네임 변경하지 않는 경우( = 쓰던 닉네임 그대로 patch 요청 보내는 경우 닉중복첵을 하지않는다)
 		if (!existingMember.getNickname().equals(member.getNickname())) {
 			// 닉네임 변경하는 경우 닉네임 중복 확인
-			verifyExistNickname(member.getNickname());
+			verifyExistNickname(member);
 		}
 
 		// 업데이트 해
 		Member updatedMember = beanUtils.copyNonNullProperties(member, existingMember);
 		updatedMember.setMemberCategoryList(null);
 
-		// password 암호화
-		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
-		updatedMember.setPassword(encryptedPassword);
+		// // password 암호화
+		// String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
+		// updatedMember.setPassword(encryptedPassword);
 
 		// MemberCategory 기존 데이터 테이블 삭제
 		memberCategoryRepository.deleteAllByMember(member);
@@ -200,18 +200,35 @@ public class MemberService {
 		return null; //TODO
 	}
 
-	// 닉네임 중복 확인
+	// 닉네임 중복 확인 when just check nickname
 	public void verifyExistNickname(String nickname) {
 		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
 		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
 		}
 	}
-
+	// 닉네임 중복 확인 when sign-up
+	public void verifyExistNickname(Member member) {
+		String nickname = member.getNickname();
+		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+		if (optionalMember.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
+		}
+	}
+	// 닉네임 중복 확인 when just check nickname
 	public void verifyExistEmail(String email) {
 		Optional<Member> optionalMember = memberRepository.findByEmail(email);
 		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
+		}
+	}
+
+	// 닉네임 중복 확인 when sign-up
+	public void verifyExistEmail(Member member) {
+		String email = member.getEmail();
+		Optional<Member> optionalMember = memberRepository.findByEmail(email);
+		if (optionalMember.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_SIGNUP);
 		}
 	}
 

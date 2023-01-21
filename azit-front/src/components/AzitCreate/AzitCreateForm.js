@@ -150,6 +150,31 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
+const DaumPostcodeWrap = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  > .location {
+    position: relative;
+    z-index: 1;
+    background-color: var(--white-color);
+    border-radius: 1rem;
+    padding: 2rem;
+  }
+`;
+
 const AzitCreateForm = ({ imgFile }) => {
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
@@ -273,6 +298,12 @@ const AzitCreateForm = ({ imgFile }) => {
     }
     setWriteInfo(fullAddress);
     setVisible(false);
+  };
+
+  // daum 주소 style props로 전달
+  const DaumPostcodeStyle = {
+    width: "48rem",
+    height: "50rem",
   };
 
   // 이미지 base 64 를 image.file로 변환하는 함수
@@ -609,9 +640,17 @@ const AzitCreateForm = ({ imgFile }) => {
                 {writeInfo ? writeInfo : "장소를 입력해주세요."}
               </div>
               {visible ? (
-                <div>
-                  <DaumPostcode onComplete={handleComplete} height={700} />
-                </div>
+                <DaumPostcodeWrap>
+                  <DaumPostcode
+                    className="location"
+                    onComplete={handleComplete}
+                    style={DaumPostcodeStyle}
+                  />
+                  <div
+                    className="background"
+                    onClick={() => setVisible(false)}
+                  ></div>
+                </DaumPostcodeWrap>
               ) : (
                 <></>
               )}
