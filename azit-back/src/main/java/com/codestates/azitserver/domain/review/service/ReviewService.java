@@ -12,6 +12,7 @@ import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.domain.review.entity.Review;
 import com.codestates.azitserver.domain.review.repository.ReviewRepository;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewService {
 	private final ReviewRepository reviewRepository;
+	private final MemberRepository memberRepository;
 	private final MemberService memberService;
 	private final ClubService clubService;
 	private final ClubMemberService clubMemberService;
@@ -48,6 +50,10 @@ public class ReviewService {
 		if (optionalReview.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.REVIEW_ALREADY_EXIST);
 		}
+
+		// 리뷰를 작성하면 작성한 리뷰 대상자는 평판이 1 올라갑니다.
+		reviewee.setReputation(reviewee.getReputation() + 1);
+		memberRepository.save(reviewee);
 
 		return reviewRepository.save(review);
 	}
