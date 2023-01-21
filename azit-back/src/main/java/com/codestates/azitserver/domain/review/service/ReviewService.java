@@ -2,6 +2,9 @@ package com.codestates.azitserver.domain.review.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.club.entity.Club;
@@ -50,7 +53,7 @@ public class ReviewService {
 	}
 
 	public Review updateReviewStatus(Member member, Long reviewId, Boolean reviewStatus) {
-		Review review =findReviewById(reviewId);
+		Review review = findReviewById(reviewId);
 
 		// 리뷰 대상자는 해당 리뷰를 숨김처리 할 수 있습니다.
 		verifyMember(member, review.getReviewee().getMemberId());
@@ -62,6 +65,18 @@ public class ReviewService {
 	public Review findReviewById(Long reviewId) {
 		Optional<Review> optionalReview = reviewRepository.findById(reviewId);
 		return optionalReview.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+	}
+
+	public Page<Review> findReviewByRevieweeId(Member member, Long revieweeId, int page, int size) {
+		// 조회 요청자가 본인이 아닐때(비로그인 포함)에는 숨김처리 안 한 것들만 조회합니다.
+		// 조회 요청자가 본인일때는 숨김처리된 것들까지 조회합니다.
+		if (member == null ||!member.getMemberId().equals(revieweeId)) {
+			return reviewRepository.findAllReviewsByRevieweeIdWithoutHide(revieweeId,
+				PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		} else {
+			return reviewRepository.findAllReviewsByRevieweeId(revieweeId,
+				PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		}
 	}
 
 	// *** verification ***//

@@ -47,6 +47,15 @@ public class ReviewDto {
 	}
 
 	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class Get {
+		@NotNull
+		@Positive
+		private Long revieweeId;
+	}
+
+	@Getter
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor

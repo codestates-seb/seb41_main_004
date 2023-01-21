@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.review.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,4 +18,6 @@ public interface ReviewMapper {
 	@Mapping(source = "reviewee.memberId", target = "revieweeId")
 	@Mapping(source = "club.clubId", target = "clubId")
 	ReviewDto.Response reviewToReviewDtoResponse(Review review);
+
+	List<ReviewDto.Response> reviewToReviewDtoResponse(List<Review> reviews);
 }
