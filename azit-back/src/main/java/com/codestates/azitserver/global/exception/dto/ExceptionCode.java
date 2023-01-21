@@ -35,6 +35,8 @@ public enum ExceptionCode {
 	CLUB_MEMBER_EXISTS(40903, "Member already signed up the club before"),
 	HOST_FAILED(40904, "The host cannot join its club"),
 	CLUB_REPORT_EXIST(40905, "Member already report the club"),
+	RESTRICTED_UPDATE_FIELDS(40906, "Cannot update the azit because participants exist"),
+	REVIEW_ALREADY_EXIST(40906, "Review already exist"),
 
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
