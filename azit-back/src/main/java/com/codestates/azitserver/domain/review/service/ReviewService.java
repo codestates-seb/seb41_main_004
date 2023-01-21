@@ -25,7 +25,10 @@ public class ReviewService {
 	private final ClubService clubService;
 	private final ClubMemberService clubMemberService;
 
-	public Review createReview(Review review) {
+	public Review createReview(Member member, Review review) {
+		// 리뷰 작성은 본인만 가능합니다.
+		verifyMember(member, review.getReviewer().getMemberId());
+
 		// 리뷰의 대상들이 존재하는지 확인
 		Member reviewer = memberService.findExistingMember(review.getReviewer().getMemberId());
 		Member reviewee = memberService.findExistingMember(review.getReviewee().getMemberId());
@@ -46,7 +49,28 @@ public class ReviewService {
 		return reviewRepository.save(review);
 	}
 
+	public Review updateReviewStatus(Member member, Long reviewId, Boolean reviewStatus) {
+		Review review =findReviewById(reviewId);
+
+		// 리뷰 대상자는 해당 리뷰를 숨김처리 할 수 있습니다.
+		verifyMember(member, review.getReviewee().getMemberId());
+		review.setReviewStatus(reviewStatus);
+
+		return reviewRepository.save(review);
+	}
+
+	public Review findReviewById(Long reviewId) {
+		Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+		return optionalReview.orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+	}
+
 	// *** verification ***//
+	private void verifyMember(Member member, Long memberId) {
+		if (!member.getMemberId().equals(memberId)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
+	}
+
 	public boolean isHost(Club club, Long memberId) {
 		return club.getHost().getMemberId().equals(memberId);
 	}

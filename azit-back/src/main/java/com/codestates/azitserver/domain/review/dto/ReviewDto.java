@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class ReviewDto {
-
 	@Getter
 	@Setter
 	@NoArgsConstructor
@@ -37,6 +36,14 @@ public class ReviewDto {
 
 		@Length(max = 128)
 		private String commentBody;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class Patch {
+		@NotNull
+		private Boolean reviewStatus;
 	}
 
 	@Getter

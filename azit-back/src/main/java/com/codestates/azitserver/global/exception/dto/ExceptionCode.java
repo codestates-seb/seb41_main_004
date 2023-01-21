@@ -28,6 +28,7 @@ public enum ExceptionCode {
 	TOKEN_NOT_FOUND(40407, "Token not found"),
 	STRING_VALIDATION_FAILED(40408, "String confirmation failed"),
 	AUTH_NUMBER_NOT_FOUND(40409, "String confirmation failed"),
+	REVIEW_NOT_FOUND(40410, "Review not found"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
