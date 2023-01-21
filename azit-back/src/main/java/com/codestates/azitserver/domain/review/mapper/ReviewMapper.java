@@ -16,6 +16,7 @@ public interface ReviewMapper {
 	Review reviewDtoPostToReview(ReviewDto.Post post);
 
 	@Mapping(source = "reviewee.memberId", target = "revieweeId")
+	@Mapping(source = "commentCategory.commentCategory", target = "commentCategory")
 	ReviewDto.Response reviewToReviewDtoResponse(Review review);
 
 	List<ReviewDto.Response> reviewToReviewDtoResponse(List<Review> reviews);
