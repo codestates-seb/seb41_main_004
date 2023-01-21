@@ -7,6 +7,7 @@ import javax.validation.constraints.Positive;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.review.entity.Review;
 
 import lombok.AllArgsConstructor;
@@ -62,7 +63,7 @@ public class ReviewDto {
 	public static class Response {
 		private Long reviewId;
 		private Long revieweeId;
-		private Long clubId;
+		private ClubDto.ReviewClubResponse club;
 		private Review.CommentCategory commentCategory;
 		private String commentBody;
 		private Boolean reviewStatus;
