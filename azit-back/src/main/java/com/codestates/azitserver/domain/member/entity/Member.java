@@ -72,6 +72,11 @@ public class Member extends Auditable {
 	@Column(name = "MEMBER_CATEGORY_LIST")
 	private List<MemberCategory> memberCategoryList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "reportee")
+	@JsonManagedReference
+	@Column(name = "MEMBER_REPORT_LIST")
+	private List<MemberMemberReport> memberMemberReportList = new ArrayList<>();
+
 
 
 	public enum Gender {

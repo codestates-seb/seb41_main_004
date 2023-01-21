@@ -55,7 +55,7 @@ function App() {
             <Route path="/azit/create" element={<AzitCreate />}></Route>
             <Route path="/azit/setting/:id" element={<AzitSetting />}></Route>
             <Route path="/azit/edit/:id" element={<AzitEdit />}></Route>
-            <Route path="/azit/join" element={<AzitJoin />}></Route>
+            <Route path="/azit/join/:id" element={<AzitJoin />}></Route>
             <Route path="/azit/report/:id" element={<AzitReport />}></Route>
             <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
             <Route path="/azit/member" element={<AzitMember />}></Route>
@@ -88,7 +88,6 @@ function App() {
               element={<UserProfileEdit />}
             ></Route>
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </>

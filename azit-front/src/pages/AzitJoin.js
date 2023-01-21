@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
+import { axiosInstance } from "../util/axios";
+import { useQuery, useMutation } from "react-query";
+import Loading from "../components/common/Loading";
+import { useNavigate } from "react-router-dom";
 
 const JoinWrap = styled.div`
   position: relative;
