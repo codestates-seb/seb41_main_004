@@ -119,7 +119,7 @@ public class AuthService {
 		redisUtils.deleteData(ATKemail);
 
 		Long expiration = jwtTokenizer.getATKExpiration(accessToken);
-		redisUtils.setData("blackList", accessToken, expiration);
+		redisUtils.setData("blackList " + accessToken, accessToken, expiration);
 	}
 
 	/**
