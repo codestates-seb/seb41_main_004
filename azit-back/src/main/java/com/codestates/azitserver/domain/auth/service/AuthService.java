@@ -113,22 +113,13 @@ public class AuthService {
 	@Transactional
 	public void logout(HttpServletRequest request) {
 		String accessToken = request.getHeader("Authorization");
-		String refreshToken = request.getHeader("Refresh");
-
-		//Bearer 제거
 		accessToken = accessToken.split(" ")[1];
 
-		String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-		Map<String, Object> claims = jwtTokenizer.getClaims(accessToken, base64EncodedSecretKey).getBody();
-		String ATKemail = (String)claims.get("email");
-		long ATKexpiration = (long)claims.get("expiration") - new Date().getTime();
+		String ATKemail = jwtTokenizer.getATKemail(accessToken);
+		redisUtils.deleteData(ATKemail);
 
-		//accessToken이랑 refreshToken이랑 같은 회원 정보인지 확인해서 맞으면 계속 진행
-		if (redisUtils.getEmail(refreshToken).equals(ATKemail)) {
-			redisUtils.deleteData(refreshToken);
-
-			redisUtils.setData("blackList " + accessToken, "blackList", ATKexpiration);
-		}
+		Long expiration = jwtTokenizer.getATKExpiration(accessToken);
+		redisUtils.setData("blackList", accessToken, expiration);
 	}
 
 	/**
@@ -182,13 +173,18 @@ public class AuthService {
 	@Transactional
 	public void reIssueToken(HttpServletRequest request, HttpServletResponse response) {
 		String accessToken = request.getHeader("Authorization");
-		//TODO : accessToken받아서 어디다 쓸지 생각.. 검증..?
 		String refreshToken = request.getHeader("Refresh");
+		accessToken = accessToken.split(" ")[1];
+
+		String ATKemail = jwtTokenizer.getATKemail(accessToken);
+		//ATK, RTK 같은 유저거인지 검증
+		if (!redisUtils.getRTKbyEmail(ATKemail).equals(refreshToken)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+		}
 
 		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
-		if (redisUtils.isExists(refreshToken)) {
-			String Email = redisUtils.getEmail(refreshToken);
-			Member findMember = findVerifiedMemberByEmail(Email);
+		if (redisUtils.isExists(ATKemail)) {
+			Member findMember = findVerifiedMemberByEmail(ATKemail);
 			accessToken = delegateAccessToken(findMember);
 
 			response.setHeader("Authorization", "Bearer " + accessToken);

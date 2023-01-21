@@ -75,8 +75,8 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		Long expiration = entry.getValue().getTime();
 
 		redisUtils.setData(
-			refreshToken,
 			member.getEmail(),
+			refreshToken,
 			expiration
 		);
 
