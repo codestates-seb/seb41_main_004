@@ -164,4 +164,9 @@ public class ClubService {
 	public boolean verifyOrFindAll(Member member, Long memberId) {
 		return member == null || !memberId.equals(member.getMemberId());
 	}
+
+	public String getClubJoinQuestion(Long clubId) {
+		Club club = findClubById(clubId);
+		return club.getJoinQuestion();
+	}
 }

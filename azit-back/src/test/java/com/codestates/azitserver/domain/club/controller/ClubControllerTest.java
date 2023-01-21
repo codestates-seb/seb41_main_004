@@ -3,6 +3,8 @@ package com.codestates.azitserver.domain.club.controller;
 import static com.codestates.azitserver.global.utils.AsciiDocsUtils.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
@@ -394,5 +397,35 @@ class ClubControllerTest implements ClubControllerTestHelper {
 				),
 				ClubFieldDescriptor.getMultiResponseSnippet()
 			));
+	}
+
+	@Test
+	public void getClubJoinQuestion() throws Exception {
+		// given
+		Long clubId = 1L;
+		String joinQuestion = "참여 신청 질문입니다.";
+
+		given(clubService.getClubJoinQuestion(Mockito.anyLong())).willReturn(joinQuestion);
+
+		// when
+		ResultActions actions = mockMvc.perform(get(getClubUri() + "/join-question", clubId)
+			.accept(MediaType.APPLICATION_JSON)
+			.characterEncoding(StandardCharsets.UTF_8));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument("get-club-join-question",
+					pathParameters(List.of(
+						parameterWithName("club-id").description("아지트 고유 식별자"))
+					),
+					responseFields(
+						fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터")
+					).andWithPrefix("data.",
+						fieldWithPath("clubId").type(JsonFieldType.NUMBER).description("아지트 고유 식별자"),
+						fieldWithPath("joinQuestion").type(JsonFieldType.STRING).description("참가 신청 질문")
+					)
+				)
+			);
 	}
 }

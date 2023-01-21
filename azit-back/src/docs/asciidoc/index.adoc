@@ -478,6 +478,23 @@ include::{snippets}/post-club-report/http-response.adoc[]
 .response-fields
 include::{snippets}/post-club-report/response-fields.adoc[]
 
+=== 아지트 참여 질문 조회
+
+.curl-request
+include::{snippets}/get-club-join-question/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-club-join-question/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-club-join-question/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-club-join-question/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-club-join-question/response-fields.adoc[]
+
 == 아지트 참여
 
 === 참여 신청
