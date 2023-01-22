@@ -26,6 +26,7 @@ import AzitMember from "./pages/AzitMember.js";
 import AzitPreview from "./pages/AzitPreview";
 import UserVerifyPassword from "./pages/UserVerifyPassword";
 import RequireAuth from "./components/common/RequireAuth";
+import UserWithdrawl from "./pages/UserWithdrawl";
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
             <Route path="/azit/join/:id" element={<AzitJoin />}></Route>
             <Route path="/azit/report/:id" element={<AzitReport />}></Route>
             <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
-            <Route path="/azit/member" element={<AzitMember />}></Route>
+            <Route path="/azit/member/:id" element={<AzitMember />}></Route>
             <Route path="/azit/preview" element={<AzitPreview />}></Route>
 
             {/* 리뷰 */}
@@ -77,6 +78,10 @@ function App() {
             <Route
               path="/userpage/resetpw"
               element={<UserResetPassword />}
+            ></Route>
+            <Route
+              path="/userpage/withdrawl"
+              element={<UserWithdrawl />}
             ></Route>
             <Route path="/userpage/report/:id" element={<UserReport />}></Route>
             <Route
