@@ -94,7 +94,7 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
-      window.location.reload();
+
       console.log("아지트 참가 수락 완료");
     } catch (e) {
       console.log("아지트 참가 수락 실패");
@@ -114,10 +114,29 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
-      window.location.reload();
+
       console.log("아지트 참가 거절 완료");
     } catch (e) {
       console.log("아지트 참가 거절 실패");
+    }
+  };
+
+  const azitMemberKicks = async () => {
+    try {
+      await axiosInstance.patch(
+        `api/clubs/${id}/kicks/${data.member.memberId}`,
+
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("아지트 강퇴");
+    } catch (e) {
+      console.log("아지트 강퇴 실패");
     }
   };
 
@@ -146,7 +165,7 @@ const MemberList = ({ data, state }) => {
                 </button>
               </>
             ) : (
-              <button className="export">
+              <button className="export" onClick={azitMemberKicks}>
                 <img alt="exportIcon" src={ExportIcon} />
               </button>
             )}
