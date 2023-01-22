@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
+import { axiosInstance } from "../../util/axios";
+import { useParams } from "react-router-dom";
 
 const ListWrap = styled.li`
   margin-top: 1rem;
@@ -77,8 +79,50 @@ const ListWrap = styled.li`
 `;
 
 const MemberList = ({ data, state }) => {
+  const { id } = useParams();
+
+  const azitMemberAccept = async () => {
+    try {
+      const payload = { status: "CLUB_JOINED" };
+      await axiosInstance.patch(
+        `api/clubs/${id}/signups/${data.member.memberId}`,
+        payload,
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      window.location.reload();
+      console.log("아지트 참가 수락 완료");
+    } catch (e) {
+      console.log("아지트 참가 수락 실패");
+    }
+  };
+
+  const azitMemberDeny = async () => {
+    try {
+      const payload = { status: "CLUB_REJECTED" };
+      await axiosInstance.patch(
+        `api/clubs/${id}/signups/${data.member.memberId}`,
+        payload,
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      window.location.reload();
+      console.log("아지트 참가 거절 완료");
+    } catch (e) {
+      console.log("아지트 참가 거절 실패");
+    }
+  };
+
   return (
-    <ListWrap>
+    <ListWrap key={data.clubMemberId}>
       <div className="userWrap">
         <Link to="/userpage" className="avatarWrap">
           <img
@@ -94,8 +138,12 @@ const MemberList = ({ data, state }) => {
           <div className="btnWrap">
             {state === "CLUB_WAITING" ? (
               <>
-                <button className="watingBtn accept">수락</button>
-                <button className="watingBtn reject">거절</button>
+                <button className="watingBtn accept" onClick={azitMemberAccept}>
+                  수락
+                </button>
+                <button className="watingBtn reject" onClick={azitMemberDeny}>
+                  거절
+                </button>
               </>
             ) : (
               <button className="export">
