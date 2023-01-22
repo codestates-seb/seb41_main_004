@@ -81,15 +81,18 @@ const MemberList = ({ data, state }) => {
     <ListWrap>
       <div className="userWrap">
         <Link to="/userpage" className="avatarWrap">
-          <img alt={data.userName} src={data.userAvatar} />
+          <img
+            alt={data.userName}
+            src={`${process.env.REACT_APP_S3_URL}${data.member.fileInfo.fileUrl}/${data.member.fileInfo.fileName}`}
+          />
         </Link>
         <div className="etcWrap">
           <div className="profileWrap">
-            <h3 className="name">{data.userName}</h3>
-            <p className="introduce">{data.userIntroduce}</p>
+            <h3 className="name">{data.member.nickname}</h3>
+            <p className="introduce">{data.member.userIntroduce}</p>
           </div>
           <div className="btnWrap">
-            {state === "wating" ? (
+            {state === "CLUB_WAITING" ? (
               <>
                 <button className="watingBtn accept">수락</button>
                 <button className="watingBtn reject">거절</button>
@@ -102,7 +105,7 @@ const MemberList = ({ data, state }) => {
           </div>
         </div>
       </div>
-      <div className="answer">{data.ClubAnswer}</div>
+      <div className="answer">{data.joinAnswer}</div>
     </ListWrap>
   );
 };

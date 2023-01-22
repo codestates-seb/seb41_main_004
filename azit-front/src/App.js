@@ -58,7 +58,7 @@ function App() {
             <Route path="/azit/join/:id" element={<AzitJoin />}></Route>
             <Route path="/azit/report/:id" element={<AzitReport />}></Route>
             <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
-            <Route path="/azit/member" element={<AzitMember />}></Route>
+            <Route path="/azit/member/:id" element={<AzitMember />}></Route>
             <Route path="/azit/preview" element={<AzitPreview />}></Route>
 
             {/* 리뷰 */}
