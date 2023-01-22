@@ -293,7 +293,6 @@ const AzitEditForm = () => {
     isOnline: check,
     location: writeInfo,
   };
-  console.log(body);
 
   const navigate = useNavigate();
 
