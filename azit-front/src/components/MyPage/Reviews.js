@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import React, { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { axiosInstance } from "../../util/axios";
+import { useInfiniteQuery } from "react-query";
 import { toDateFormatOfKR } from "../../util/toDateFormatOfKR";
 
 const Container = styled.div`
@@ -50,7 +54,49 @@ const Contents = styled.p`
   color: var(--sub-font-color);
 `;
 
-const Reviews = () => {
+const Reviews = ({ id }) => {
+  console.log(id); //UserPage ->  Profile -> Tab -> Reviews로 id 가져옴
+  const { ref, inView } = useInView();
+  let body = {
+    revieweeId: id,
+  };
+
+  const fetchInfiniteList = async (pageParam) => {
+    const res = await axiosInstance.get(
+      `/api/reviews?page=${pageParam}&size=10`,
+      body,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+    console.log(res);
+    return {
+      board_page: res.data.data,
+      nextPage: pageParam + 1,
+      isLast:
+        res.data.data.length > 0
+          ? res.data.pageInfo.page === res.data.pageInfo.totalPages
+          : true,
+    };
+  };
+
+  const { data, status, fetchNextPage, isFetchingNextPage, error } =
+    useInfiniteQuery(
+      "reviews",
+      ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
+      {
+        staleTime: 6 * 10 * 1000,
+        cacheTime: 6 * 10 * 1000,
+        getNextPageParam: (lastPage) =>
+          !lastPage.isLast ? lastPage.nextPage : undefined,
+      }
+    );
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
+
   return (
     <Container>
       <Box>
