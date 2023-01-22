@@ -102,4 +102,16 @@ public class MemberFieldDescriptor {
 				fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("프로핀 사진 파일 경로")
 			);
 	}
+
+	public static RequestFieldsSnippet getNickCheckFieldsSnippet() {
+		return requestFields(
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+		);
+	}
+
+	public static RequestFieldsSnippet getEmailCheckFieldsSnippet() {
+		return requestFields(
+			fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+		);
+	}
 }

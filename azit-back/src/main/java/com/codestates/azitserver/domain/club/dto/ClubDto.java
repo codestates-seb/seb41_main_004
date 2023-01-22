@@ -167,5 +167,14 @@ public class ClubDto {
 		private MemberDto.ResponseEmailAndNickname host;
 		private CategoryDto.SmallResponse categorySmall;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ReviewClubResponse {
+		private Long clubId;
+		private String clubName;
+		private LocalDate meetingDate;
+	}
 }
 

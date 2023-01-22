@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
@@ -268,6 +268,7 @@ const EtcWrap = styled.div`
 const AzitDetail = () => {
   const { id } = useParams();
   const [clubMember, setClubMember] = useState([]);
+  const navigate = useNavigate();
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -286,6 +287,7 @@ const AzitDetail = () => {
       });
       setClubMember(filterMember);
     }
+    console.log(data);
   }, [data]);
 
   return (
@@ -389,7 +391,12 @@ const AzitDetail = () => {
               </ul>
             </div>
             {data.clubStatus === "CLUB_ACTIVE" ? (
-              <button className="active">아지트 가입하기</button>
+              <button
+                className="active"
+                onClick={() => navigate(`/azit/join/${id}`)}
+              >
+                아지트 가입하기
+              </button>
             ) : (
               <button className="disabled">이미 종료된 아지트입니다</button>
             )}

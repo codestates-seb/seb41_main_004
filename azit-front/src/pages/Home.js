@@ -38,11 +38,11 @@ const Home = () => {
 
   // const firstRender = useFirstRender();
   useEffect(() => {
-    if(!isLogin) {
-      modalHandler()
+    if (!isLogin) {
+      modalHandler();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -54,8 +54,7 @@ const Home = () => {
         <img alt="mainImage" src={MainImg} />
       </SlideCell>
       <Tab />
-      {modalOpen && <LoginRequestModal modalHandler={modalHandler}/>}
-      
+      {modalOpen && <LoginRequestModal modalHandler={modalHandler} />}
     </>
   );
 };

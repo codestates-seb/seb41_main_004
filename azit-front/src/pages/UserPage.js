@@ -9,7 +9,7 @@ const UserPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    // 키로 부터 데이터 읽기
+    // localStorage 키로 부터 데이터 읽기
     id === localStorage.getItem("memberId")
       ? setMyPage(true)
       : setMyPage(false);

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.Positive;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
@@ -23,7 +21,6 @@ import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
-import com.codestates.azitserver.global.dto.MultiResponseDto;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -58,19 +55,14 @@ public class ClubMemberController {
 	/**
 	 * 특정 아지트에 참여신청을 보낸 사용자를 전체 조회합니다.
 	 * @param clubId 조회할 아지트 고유 식별자
-	 * @param page 페이지 번호
-	 * @param size 페이지에 들어갈 크기
 	 * @return 성공하면 상태값과 함께 참여 신청을 보낸 사용자를 담은 배열을 반환합니다.
 	 */
 	@GetMapping("/signups")
-	public ResponseEntity<?> getClubMember(@Positive @PathVariable("club-id") Long clubId,
-		@Positive @RequestParam(name = "page") int page,
-		@Positive @RequestParam(name = "size") int size) {
-		Page<ClubMember> clubMemberPage = clubMemberService.getAllClubMemberByClubId(clubId, page - 1, size);
-		List<ClubMember> clubMembers = clubMemberPage.getContent();
+	public ResponseEntity<?> getClubMember(@Positive @PathVariable("club-id") Long clubId) {
+		List<ClubMember> clubMembers = clubMemberService.getAllClubMemberByClubId(clubId);
 		List<ClubMemberDto.Response> responses = mapper.clubMemberToClubMemberDtoResponse(clubMembers);
 
-		return new ResponseEntity<>(new MultiResponseDto<>(responses, clubMemberPage), HttpStatus.OK);
+		return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
 	}
 
 	/**
