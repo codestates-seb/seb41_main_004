@@ -28,6 +28,7 @@ const FindPassword = () => {
     e.preventDefault();
     const payload = {"email":`${email}`}
     try {
+      // eslint-disable-next-line
       const res = await axiosInstance.post(
         `/api/auth/refresh/passwords/email`,
         payload,
@@ -45,12 +46,12 @@ const FindPassword = () => {
 
   const verifyNumSubmitClick = async (e) => {
     e.preventDefault();
-    console.log("클릭")
     const payload = {
       "email":`${email}`,
       "authNum":`${verifyNum}`
     }
     try {
+      // eslint-disable-next-line
       const res = await axiosInstance.post(
         `/api/auth/refresh/passwords`,
         payload,
@@ -58,28 +59,22 @@ const FindPassword = () => {
       alert('이메일이 전송되었습니다. 전송된 비밀번호로 로그인 후 비밀번호를 변경해주세요.');
       navigate('/login');
     } catch (error) {
-      console.log(error);
       if (error.response.status === 404) {
         alert("인증 번호가 일치하지 않습니다.")
       } else {
         alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
       }
     }
-    console.log(payload);
   };
-
-  console.log(email);
-  console.log(verifyNum);
 
   return (
     <>
       <Header title="비밀번호 찾기"></Header>
-      <FormContainer>
+      <FormContainer onSubmit={verifyNumSubmitClick}>
         <div>
           <div className="emailInputWrap">
             <div>
               <label>이메일</label>
-              {/*이메일 보낸 후 비활성화되어야 함 -> disabled true*/}
               <input 
                 onChange={storeEmail} 
                 disabled={isClicked ? true : false} 
@@ -87,13 +82,11 @@ const FindPassword = () => {
                 placeholder="가입한 계정을 입력해 주세요."
                 />
             </div>
-              {/*이메일 보낸 후 버튼 글자색 바뀌어야 함 -> 클래스명에 disabled 추가*/}
               <button 
                 onClick={emailSubmitClick} 
                 className={isClicked ? "disabled" : "emailSubmitButton"}
               >전송</button>
           </div>
-          {/*이메일 전송 전에는 display none 이어야 함 -> 클래스명: verifyInputWrap*/}
           <div className={isClicked ? "" : "verifyInputHidden"}>
             <input
               onChange={storeVerifyNum} 
@@ -101,7 +94,6 @@ const FindPassword = () => {
           </div>
         </div>
         <Button
-          onClick={verifyNumSubmitClick}
           title="비밀번호 찾기" 
           state={email && verifyNum.length > 0 ? "active" : "disabled"}></Button>
       </FormContainer>
@@ -109,7 +101,7 @@ const FindPassword = () => {
   )
 };
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;
