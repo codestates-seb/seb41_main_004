@@ -124,7 +124,7 @@ const MemberList = ({ data, state }) => {
   return (
     <ListWrap key={data.clubMemberId}>
       <div className="userWrap">
-        <Link to="/userpage" className="avatarWrap">
+        <Link to={`/userpage/${data.member.memberId}`} className="avatarWrap">
           <img
             alt={data.userName}
             src={`${process.env.REACT_APP_S3_URL}${data.member.fileInfo.fileUrl}/${data.member.fileInfo.fileName}`}
