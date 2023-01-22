@@ -119,7 +119,7 @@ public class AuthService {
 		redisUtils.deleteData(ATKemail);
 
 		Long expiration = jwtTokenizer.getATKExpiration(accessToken);
-		redisUtils.setData("blackList " + accessToken, accessToken, expiration);
+		redisUtils.setData(accessToken, "blackList", expiration);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class AuthService {
 
 		String ATKemail = jwtTokenizer.getATKemail(accessToken);
 		//ATK, RTK 같은 유저거인지 검증
-		if (!redisUtils.getRTKbyEmail(ATKemail).equals(refreshToken)) {
+		if (!redisUtils.getValuebyKey(ATKemail).equals(refreshToken)) {
 			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 		}
 

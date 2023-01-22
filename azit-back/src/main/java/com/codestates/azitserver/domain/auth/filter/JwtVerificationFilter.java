@@ -9,17 +9,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
+import com.codestates.azitserver.domain.auth.utils.RedisUtils;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ErrorResponse;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,6 +37,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
 	private final MemberDetailsService memberDetailsService;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
@@ -39,6 +46,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 		try {
 			Map<String, Object> claims = verifyJws(request);
+			System.out.println("isLogout 전");
+			isLogout(request);
+			System.out.println("isLogout 후");
 			setAuthenticationToContext(claims, request);
 		} catch (SignatureException se) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -93,5 +103,22 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	private String resolveToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.split(" ")[1];
+		}
+		return null;
+	}
+
+	private void isLogout(HttpServletRequest request) {
+		String jwt = resolveToken(request);
+
+		if (!ObjectUtils.isEmpty(redisTemplate.opsForValue().get(jwt))) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_TOKEN);
+		}
 	}
 }
