@@ -220,10 +220,10 @@ const UserProfileEdit = () => {
         if (res.status >= 200 && res.status < 300) {
           navigate(`/userpage/${id}`);
         }
+        console.log(res);
       })
       .catch((error) => {
         alert("닉네임이 중복되었습니다. 다시 시도하세요.");
-        console.log(error);
       });
   };
 
@@ -300,10 +300,7 @@ const UserProfileEdit = () => {
             );
           })}
         </article>
-        {/*Link -> useNavigate 로 변환 필요 / */}
-        {/* <Link to="/"> */}
         <Button type="submit" title="수정 완료" state="active"></Button>
-        {/* </Link> */}
       </ProfileEditForm>
     </>
   );

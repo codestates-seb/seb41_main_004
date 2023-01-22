@@ -287,6 +287,7 @@ const AzitDetail = () => {
       });
       setClubMember(filterMember);
     }
+    console.log(data);
   }, [data]);
 
   return (
