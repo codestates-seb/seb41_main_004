@@ -7,7 +7,7 @@ import { useState } from "react";
 
 
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -52,10 +52,11 @@ const UserWithdrawl = () => {
   const agreedCheckClick = () => {
     setAgree(!isAgreed);
   }
-  console.log(isAgreed)
 
-  const withdrawlButtonClick = async() => {
+  const withdrawlButtonClick = async(e) => {
+    e.preventDefault();
     try {
+      // eslint-disable-next-line
       const res = await axiosInstance.delete(
         `/api/members/${memberId}`,
         {
@@ -64,17 +65,15 @@ const UserWithdrawl = () => {
       )
       alert('회원 탈퇴가 완료되었습니다. azit를 이용해 주셔서 감사합니다.');
       navigate('/login', { replace: true });
-      console.log(res)
     } catch (e) {
       alert(e.message);
-      console.log(e);
     }
   }
 
   return (
     <>
       <Header title="회원탈퇴"></Header>
-      <FormContainer>
+      <FormContainer onSubmit={withdrawlButtonClick}>
         <div className="withdrawlFormWrap">
           <div className="title">azit 탈퇴 전 확인하세요</div>
           <div className="warningMsg">
@@ -91,7 +90,6 @@ const UserWithdrawl = () => {
           </div>
         </div>
         <Button
-        onClick={withdrawlButtonClick}
         type="submit" 
         title="회원 탈퇴" 
         state={isAgreed ? "active" : "disabled"}></Button>
