@@ -84,7 +84,7 @@ const AzitSetting = () => {
         </Link>
       </SettingBar>
       <SettingBar>
-        <Link to="/azit/member">
+        <Link to={`/azit/member/${id}`}>
           <span>아지트 멤버관리</span>
           <div>
             <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
