@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-import { axiosInstance } from "../../util/axios";
-import { useInfiniteQuery } from "react-query";
 import { toDateFormatOfKR } from "../../util/toDateFormatOfKR";
+// import { useEffect } from "react";
+// import { useInView } from "react-intersection-observer";
+// import { useInfiniteQuery } from "react-query";
+// import { useParams } from "react-router-dom";
+// import { axiosInstance } from "../../util/axios";
 
 const Container = styled.div`
   width: 100%;
@@ -54,48 +55,61 @@ const Contents = styled.p`
   color: var(--sub-font-color);
 `;
 
-const Reviews = ({ id }) => {
-  console.log(id); //UserPage ->  Profile -> Tab -> Reviews로 id 가져옴
-  const { ref, inView } = useInView();
-  let body = {
-    revieweeId: id,
-  };
+const Reviews = () => {
+  // const { ref, inView } = useInView();
+  // const { id } = useParams();
+  // useEffect(() => {
+  //   const raw = JSON.stringify({
+  //     "revieweeId": 2
+  //   });
+  //   const getAxios = async () => {
+  //     const res = await axiosInstance.get(`/api/reviews?page=1&size=5`, {
+  //       headers: { Authorization: localStorage.getItem("accessToken") },
+  //       body: raw,
+  //     });
+  //     console.log(res);
+  //   };
+  //   getAxios();
+  // }, []);
 
-  const fetchInfiniteList = async (pageParam) => {
-    const res = await axiosInstance.get(
-      `/api/reviews?page=${pageParam}&size=10`,
-      body,
-      {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      }
-    );
-    console.log(res);
-    return {
-      board_page: res.data.data,
-      nextPage: pageParam + 1,
-      isLast:
-        res.data.data.length > 0
-          ? res.data.pageInfo.page === res.data.pageInfo.totalPages
-          : true,
-    };
-  };
+  // 무한스크롤 함수 0번이 guest
+  // const fetchInfiniteList = async (pageParam) => {
+  //   let d
+  //   const res = await axiosInstance.get(
+  //     `/api/reviews?page=${pageParam}&size=5`,
+  //     { 'revieweeId': id },
+  //     {
+  //       headers: { Authorization: localStorage.getItem("accessToken") },
+  //     }
+  //   );
 
-  const { data, status, fetchNextPage, isFetchingNextPage, error } =
-    useInfiniteQuery(
-      "reviews",
-      ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
-      {
-        staleTime: 6 * 10 * 1000,
-        cacheTime: 6 * 10 * 1000,
-        getNextPageParam: (lastPage) =>
-          !lastPage.isLast ? lastPage.nextPage : undefined,
-      }
-    );
+  //   return {
+  //     board_page: res.data.data,
+  //     nextPage: pageParam + 1,
+  //     isLast:
+  //       res.data.data.length > 0
+  //         ? res.data.pageInfo.page === res.data.pageInfo.totalPages
+  //         : true,
+  //   };
+  // };
 
-  useEffect(() => {
-    if (inView) fetchNextPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView]);
+  // const { data, status, fetchNextPage, isFetchingNextPage, error } =
+  //   useInfiniteQuery(
+  //     "recommend",
+  //     ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
+  //     {
+  //       staleTime: 6 * 10 * 1000,
+  //       cacheTime: 6 * 10 * 1000,
+  //       getNextPageParam: (lastPage) =>
+  //         !lastPage.isLast ? lastPage.nextPage : undefined,
+  //     }
+  //   );
+  //     console.log(status)
+  // // 맨 밑에 도달했을 시 함수호출
+  // useEffect(() => {
+  //   if (inView) fetchNextPage();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [inView]);
 
   return (
     <Container>
