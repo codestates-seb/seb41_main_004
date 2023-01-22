@@ -5,9 +5,8 @@ import Logo from "../images/logo.png";
 import MainImg from "../images/mainSlideImg01.png";
 import { useEffect, useState } from "react";
 import { LoginRequestModal } from "../components/common/Modal";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFirstRender } from "../util/useDidMountEffect";
+
 const Header = styled.header`
   width: 100%;
   height: 5.5rem;
