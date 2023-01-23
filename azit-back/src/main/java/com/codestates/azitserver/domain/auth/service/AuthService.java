@@ -110,9 +110,6 @@ public class AuthService {
 		sendMessage(createPWEmail(email, tempPassword));
 	}
 
-	//  TODO : logout > reIssue / reIssue > logout 하면 아래의 에러 발생 중..
-	//   AccessDeniedException
-	//   NestedServletException : IllegalStateException: getWriter() has already been called for this response
 	@Transactional
 	public void logout(HttpServletRequest request) {
 		String accessToken = request.getHeader("Authorization");
@@ -294,7 +291,7 @@ public class AuthService {
 
 	private String delegateAccessToken(Member member) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("username", member.getEmail());
+		claims.put("email", member.getEmail());
 		claims.put("roles", member.getRoles());
 
 		String subject = member.getEmail();

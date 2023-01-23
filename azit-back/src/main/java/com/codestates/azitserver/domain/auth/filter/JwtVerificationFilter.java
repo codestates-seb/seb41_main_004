@@ -22,7 +22,6 @@ import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
-import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ErrorResponse;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
@@ -46,9 +45,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 		try {
 			Map<String, Object> claims = verifyJws(request);
-			System.out.println("isLogout 전");
 			isLogout(request);
-			System.out.println("isLogout 후");
 			setAuthenticationToContext(claims, request);
 		} catch (SignatureException se) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
