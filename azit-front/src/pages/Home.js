@@ -36,10 +36,12 @@ const Home = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
   };
 
-  // const firstRender = useFirstRender();
   useEffect(() => {
-    if (!isLogin) {
+    let isLocation = JSON.parse(window.localStorage.getItem("isLocation"))
+
+    if (!isLogin && isLocation) {
       modalHandler();
+      window.localStorage.setItem("isLocation", false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

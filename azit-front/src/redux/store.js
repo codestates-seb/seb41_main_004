@@ -30,6 +30,8 @@ const store = configureStore({
 });
 
 export default store;
+
+// 기존 store 
 // export const store = configureStore({
 //   reducer: {
 //     loginStatus: loginStatusSlice.reducer,

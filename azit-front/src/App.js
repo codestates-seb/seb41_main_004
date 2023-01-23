@@ -27,6 +27,7 @@ import AzitPreview from "./pages/AzitPreview";
 import UserVerifyPassword from "./pages/UserVerifyPassword";
 import RequireAuth from "./components/common/RequireAuth";
 import UserWithdrawl from "./pages/UserWithdrawl";
+import Missing from "./components/common/Missing";
 
 function App() {
   return (
@@ -93,6 +94,9 @@ function App() {
               element={<UserProfileEdit />}
             ></Route>
           </Route>
+
+          {/* catch all */}
+          <Route path="*" element={<Missing />} />
         </Routes>
       </BrowserRouter>
     </>
