@@ -23,9 +23,7 @@ import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
-import com.codestates.azitserver.global.exception.dto.ErrorResponse;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -44,27 +42,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		try {
+			isLogout(request); // 로그아웃된 토큰으로 접근 시 401, Unauthorized
 			Map<String, Object> claims = verifyJws(request);
-			isLogout(request);
 			setAuthenticationToContext(claims, request);
 		} catch (SignatureException se) {
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(403, "Signature unauthorized");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", se);
 		} catch (ExpiredJwtException ee) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(401, "Expired JWT");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", ee);
 		} catch (Exception e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(400, "Bad request");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", e);
 		}
 		filterChain.doFilter(request, response);
 	}
