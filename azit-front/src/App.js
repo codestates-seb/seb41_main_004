@@ -26,6 +26,7 @@ import AzitMember from "./pages/AzitMember.js";
 import AzitPreview from "./pages/AzitPreview";
 import UserVerifyPassword from "./pages/UserVerifyPassword";
 import RequireAuth from "./components/common/RequireAuth";
+import UserWithdrawl from "./pages/UserWithdrawl";
 
 function App() {
   return (
@@ -77,6 +78,10 @@ function App() {
             <Route
               path="/userpage/resetpw"
               element={<UserResetPassword />}
+            ></Route>
+            <Route
+              path="/userpage/withdrawl"
+              element={<UserWithdrawl />}
             ></Route>
             <Route path="/userpage/report/:id" element={<UserReport />}></Route>
             <Route
