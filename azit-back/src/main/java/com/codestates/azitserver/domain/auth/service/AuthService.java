@@ -110,6 +110,9 @@ public class AuthService {
 		sendMessage(createPWEmail(email, tempPassword));
 	}
 
+	//  TODO : logout > reIssue / reIssue > logout 하면 아래의 에러 발생 중..
+	//   AccessDeniedException
+	//   NestedServletException : IllegalStateException: getWriter() has already been called for this response
 	@Transactional
 	public void logout(HttpServletRequest request) {
 		String accessToken = request.getHeader("Authorization");
@@ -177,6 +180,10 @@ public class AuthService {
 		accessToken = accessToken.split(" ")[1];
 
 		String ATKemail = jwtTokenizer.getATKemail(accessToken);
+
+		//TODO : 재발급 되어도 발급 이전 ATK 살아있음
+		// ATK 만료시간 남아있으면 재발급 못하게 코드 작성하고 테스트동안에는 편하게 테스트하기위해 주석처리해두기
+
 		//ATK, RTK 같은 유저거인지 검증
 		if (!redisUtils.getValuebyKey(ATKemail).equals(refreshToken)) {
 			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
