@@ -72,8 +72,8 @@ const Reviews = () => {
   //   getAxios();
   // }, []);
 
-  // 무한스크롤 함수 0번이 guest
-  // const fetchInfiniteList = async (pageParam) => {
+  // 무한스크롤 함수
+  // const getInfiniteList = async (pageParam) => {
   //   let d
   //   const res = await axiosInstance.get(
   //     `/api/reviews?page=${pageParam}&size=5`,
@@ -96,7 +96,7 @@ const Reviews = () => {
   // const { data, status, fetchNextPage, isFetchingNextPage, error } =
   //   useInfiniteQuery(
   //     "recommend",
-  //     ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
+  //     ({ pageParam = 1 }) => getInfiniteList(pageParam),
   //     {
   //       staleTime: 6 * 10 * 1000,
   //       cacheTime: 6 * 10 * 1000,
