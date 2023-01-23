@@ -21,7 +21,7 @@ const TabMenu = styled.ul`
     padding: 10px;
     justify-content: center;
     align-items: center;
-    transition: 0.5s;
+    transition: color 0.5s;
     cursor: pointer;
   }
   .submenu::after {
