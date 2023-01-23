@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { toDateFormatOfKR } from "../../util/toDateFormatOfKR";
 
 const Container = styled.article`
   width: 100%;
@@ -45,7 +44,7 @@ const Container = styled.article`
   }
 `;
 const Review = ({data}) => {
-    console.log(data)
+
     return (
         <Container>
         <div className="titleWrap">
