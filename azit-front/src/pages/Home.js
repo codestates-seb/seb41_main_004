@@ -37,9 +37,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    let isLocation = window.localStorage.getItem("isLocation")
+    let isLocation = JSON.parse(window.localStorage.getItem("isLocation"))
 
-    if (!isLogin && isLocation === "true") {
+    if (!isLogin && isLocation) {
       modalHandler();
       window.localStorage.setItem("isLocation", false);
     }
