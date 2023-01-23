@@ -115,11 +115,10 @@ const EtcWrap = styled.div`
   }
 `;
 const Status = styled.div`
-  /* display: none; */
   position: absolute;
   right: 0;
   top: 0;
-  /* display: flex; */
+  display: flex;
   height: 2.2rem;
   justify-content: center;
   align-items: center;
@@ -192,7 +191,7 @@ const AzitList = ({ data, myPage }) => {
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
           {myPage ? (
-            <Status status={"종료됨"}>
+            <Status status={"신청중"}>
               <span>참여중</span>
             </Status>
           ) : (

@@ -62,6 +62,7 @@ const Container = styled.div`
   }
 `;
 const ActivityHistory = ({ myPage }) => {
+  console.log(myPage);
   const [hostCheck, setHostCheck] = useState(false);
 
   const handleCheck = () => {
