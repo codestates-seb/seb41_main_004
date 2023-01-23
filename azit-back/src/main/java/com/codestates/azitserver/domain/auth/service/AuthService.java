@@ -178,9 +178,6 @@ public class AuthService {
 
 		String ATKemail = jwtTokenizer.getATKemail(accessToken);
 
-		//TODO : 재발급 되어도 발급 이전 ATK 살아있음
-		// ATK 만료시간 남아있으면 재발급 못하게 코드 작성하고 테스트동안에는 편하게 테스트하기위해 주석처리해두기
-
 		//ATK, RTK 같은 유저거인지 검증
 		if (!redisUtils.getValuebyKey(ATKemail).equals(refreshToken)) {
 			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
@@ -189,9 +186,13 @@ public class AuthService {
 		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
 		if (redisUtils.isExists(ATKemail)) {
 			Member findMember = findVerifiedMemberByEmail(ATKemail);
-			accessToken = delegateAccessToken(findMember);
+			String NewAccessToken = delegateAccessToken(findMember);
 
-			response.setHeader("Authorization", "Bearer " + accessToken);
+			// 이전 accessToken을 남은 시간만큼 blackList로 지정
+			Long expiration = jwtTokenizer.getATKExpiration(accessToken);
+			redisUtils.setData(accessToken, "blackList", expiration);
+
+			response.setHeader("Authorization", "Bearer " + NewAccessToken);
 			response.setHeader("Refresh", refreshToken);
 		} else {
 			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
