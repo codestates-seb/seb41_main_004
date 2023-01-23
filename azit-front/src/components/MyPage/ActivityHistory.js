@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
@@ -60,14 +61,21 @@ const Container = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const ActivityHistory = () => {
+const ActivityHistory = ({ myPage }) => {
+  const [hostCheck, setHostCheck] = useState(false);
+
+  const handleCheck = () => {
+    setHostCheck(!hostCheck);
+    console.log(hostCheck);
+  };
+
   return (
     <>
       <Container>
         <div className="Box">
           <label className="checkContainer">
             호스트인 아지트만 보기
-            <input type="checkbox" />
+            <input type="checkbox" onChange={handleCheck} />
             <span className="checkmark" />
           </label>
           <div className="selectWrapper">
@@ -80,7 +88,9 @@ const ActivityHistory = () => {
           </div>
         </div>
         {ClubData ? (
-          ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+          ClubData.map((data) => (
+            <AzitList key={data.clubId} data={data} myPage={myPage} />
+          ))
         ) : (
           <></>
         )}

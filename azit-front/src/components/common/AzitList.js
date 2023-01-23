@@ -115,7 +115,7 @@ const EtcWrap = styled.div`
   }
 `;
 const Status = styled.div`
-  display: none;
+  /* display: none; */
   position: absolute;
   right: 0;
   top: 0;
@@ -136,7 +136,8 @@ const Status = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const AzitList = ({ data }) => {
+const AzitList = ({ data, myPage }) => {
+  // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
 
@@ -147,10 +148,13 @@ const AzitList = ({ data }) => {
     });
     setClubMember(filterMember);
   }, [data]);
+  //console.log(clubMember);
+  //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
   }, [data.meetingDate, data.meetingTime]);
+  //console.log(meetDate); //01월20일 23:59
 
   const repeatAvatar = (data) => {
     let result = [];
@@ -158,7 +162,10 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < 4; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
+            <img
+              alt={data[i].member.nickname}
+              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+            />
           </div>
         );
       }
@@ -166,23 +173,32 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < data.length; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
+            <img
+              alt={data[i].member.nickname}
+              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+            />
           </div>
         );
       }
     }
+
     return <>{result}</>;
   };
   // console.log(`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`);
-  
+
   return (
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
-          <Status status={"종료됨"}>
-            <span>참여중</span>
-          </Status>
+          {myPage ? (
+            <Status status={"종료됨"}>
+              <span>참여중</span>
+            </Status>
+          ) : (
+            ""
+          )}
+
           <ImgWrap
             clubImg={`${
               data.bannerImage
@@ -206,17 +222,18 @@ const AzitList = ({ data }) => {
             <div className="etcCell">
               <div className="profileAvatar">
                 <div className="imgWrap">
-                  <img alt={data.host.nickname} src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`} />
+                  <img
+                    alt={data.host.nickname}
+                    src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                  />
                 </div>
                 {clubMember ? repeatAvatar(clubMember) : null}
               </div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">
-                    {clubMember.length + 1}{" "}
-                  </span>
-                  /<span className="limit"> {data.memberLimit}</span>명
+                  <span className="current">{clubMember.length + 1} </span>/
+                  <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
               <span className="clubHost">{data.host.nickname}</span>
