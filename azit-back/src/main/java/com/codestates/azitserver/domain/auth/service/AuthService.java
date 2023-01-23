@@ -16,7 +16,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.mail.MailException;
@@ -26,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.entity.AuthNumber;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.repository.AuthNumberRepository;
@@ -167,11 +167,11 @@ public class AuthService {
 
 	/**
 	 * 토큰 재발급
-	 * @param request refreshToken, 만료 accessToken
-	 * @param response 재발급 토큰 보낼 response
+	 * @param request AccessToken, RefreshToken
+	 * @return 새로운 AccessToken 정보가 담긴 Dto
 	 */
 	@Transactional
-	public void reIssueToken(HttpServletRequest request, HttpServletResponse response) {
+	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request) {
 		String accessToken = request.getHeader("Authorization");
 		String refreshToken = request.getHeader("Refresh");
 		accessToken = accessToken.split(" ")[1];
@@ -192,8 +192,11 @@ public class AuthService {
 			Long expiration = jwtTokenizer.getATKExpiration(accessToken);
 			redisUtils.setData(accessToken, "blackList", expiration);
 
-			response.setHeader("Authorization", "Bearer " + NewAccessToken);
-			response.setHeader("Refresh", refreshToken);
+			AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
+			tokenResponse.setAccessToken("Bearer " + NewAccessToken);
+			tokenResponse.setRefreshToken(refreshToken);
+
+			return tokenResponse;
 		} else {
 			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
 		}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
@@ -61,9 +62,11 @@ public class AuthController {
 
 	@PostMapping("/reIssue")
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
-		authService.reIssueToken(request, response);
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request);
+		response.setHeader("Authorization", tokenResponse.getAccessToken());
+		response.setHeader("Refresh", tokenResponse.getRefreshToken());
 
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	//로그아웃
