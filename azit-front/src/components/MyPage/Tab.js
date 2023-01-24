@@ -17,13 +17,13 @@ const TabMenu = styled.ul`
   .submenu {
     position: relative;
     display: flex;
-    width: calc(100% / ${props => props.length});
+    width: calc(100% / ${(props) => props.length});
     padding: 10px;
     justify-content: center;
     align-items: center;
     transition: color 0.5s;
     cursor: pointer;
-  }
+  } 
   .submenu::after {
     content: "";
     display: block;
@@ -50,20 +50,20 @@ const Desc = styled.div`
   padding: 2rem 2rem 10rem;
 `;
 
-const Tab = ({myPage}) => {
+const Tab = ({ myPage }) => {
   // Tab Menu 중 현재 어떤 Tab이 선택되어 있는지 확인하기 위한 currentTab 상태와 currentTab을 갱신하는 함수가 존재해야 하고, 초기값은 0.
   const [currentTab, clickTab] = useState(0);
   const [menuArr, setMenuArr] = useState([
-    { name: "활동내역", content: <ActivityHistory /> }
+    { name: "활동내역", content: <ActivityHistory /> },
   ]);
   useEffect(() => {
-    myPage ? setMenuArr([
-      { name: "활동내역", content: <ActivityHistory /> },
-      { name: "리뷰보기", content: <Reviews /> },
-    ]) : setMenuArr([
-      { name: "활동내역", content: <ActivityHistory /> }
-    ])
-  }, [myPage])
+    myPage
+      ? setMenuArr([
+          { name: "활동내역", content: <ActivityHistory /> },
+          { name: "리뷰보기", content: <Reviews /> },
+        ])
+      : setMenuArr([{ name: "활동내역", content: <ActivityHistory /> }]);
+  }, [myPage]);
 
   const selectMenuHandler = (index) => {
     // parameter로 현재 선택한 인덱스 값을 전달해야 하며, 이벤트 객체(event)는 쓰지 않는다

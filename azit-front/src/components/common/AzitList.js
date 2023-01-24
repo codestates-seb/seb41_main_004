@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserListIcon from "../../images/userListIcon.png";
 import { toDateFormatOfMonthDay } from "../../util/toDateFormatOfKR";
@@ -99,10 +99,10 @@ const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
 const EtcWrap = styled.div`
-  /* display: flex; */
+  display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
-  display: none;
+  /* display: none; */
   button,
   a {
     cursor: pointer;
@@ -137,6 +137,7 @@ const Status = styled.div`
   }
 `;
 const AzitList = ({ data }) => {
+  const navigate = useNavigate();
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
 
@@ -173,8 +174,10 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
-  // console.log(`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`);
-  
+  const reviewMove = () => {
+    navigate(`/review/Create/${data.clubId}`, {state:{data}})
+  }
+
   return (
     <ListWrap>
       <DetailWrap>
@@ -231,7 +234,7 @@ const AzitList = ({ data }) => {
         </div>
         {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
-          <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
+          <button onClick={reviewMove}>리뷰 작성하러 가기 〉</button>
         </div>
       </EtcWrap>
     </ListWrap>
