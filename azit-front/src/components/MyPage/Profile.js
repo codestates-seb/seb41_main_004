@@ -128,6 +128,7 @@ const Profile = ({ myPage, id }) => {
     });
     return res.data.data;
   };
+
   const {
     data: userData,
     isError,

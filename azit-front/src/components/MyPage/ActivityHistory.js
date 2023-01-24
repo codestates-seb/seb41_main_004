@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
+import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
 
 const Container = styled.div`
@@ -65,10 +67,20 @@ const Container = styled.div`
 const ActivityHistory = ({ myPage }) => {
   const [hostCheck, setHostCheck] = useState(false);
   const [selectCheck, setSelectCheck] = useState(0);
-  //const [filterList, setFilterList] = useState(data);
+  const [filterList, setFilterList] = useState("");
 
   const { id } = useParams();
   //data = axios.get(api/club/usePage/1)
+  const activeData = async () => {
+    const res = await axiosInstance.get(`/api/clubs/1`);
+    return res.data.data;
+  };
+
+  const { data, isError, isLoading, error } = useQuery("userActivityData", () =>
+    activeData()
+  );
+
+  console.log(data);
 
   const handleCheckInput = () => {
     setHostCheck(!hostCheck);
@@ -80,14 +92,27 @@ const ActivityHistory = ({ myPage }) => {
   };
   //console.log(selectCheck);
 
-  // useEffect((hostCheck,selectCheck ) => {
-  //   setFilterList(data.filter((data) => {data.data.hostId === id && data.data.selectValue === selectCheck }))
-  //   else if(hostCheck === true) {
-  //    setFilterList(data.filter((data) => {data.data.hostId === id}))
-  //}else if(selectCheck){
-  // setFilterList(data.filter((data) => {data.data.selectValue === selectCheck}))
-  //}
-  // },[data])
+  // useEffect(() => {
+  //   if (hostCheck === true && selectCheck === true) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.host.memberId === id && data.data.selectValue === selectCheck;
+  //       })
+  //     );
+  //   } else if (hostCheck === true) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.data.hostId === id;
+  //       })
+  //     );
+  //   } else if (selectCheck) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.data.selectValue === selectCheck;
+  //       })
+  //     );
+  //   }
+  // }, [data]);
 
   return (
     <>

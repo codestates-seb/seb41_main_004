@@ -195,7 +195,7 @@ const AzitList = ({ data, myPage }) => {
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
           {myPage ? (
-            <Status status={"신청중"}>
+            <Status status={"참여중"}>
               <span>참여중</span>
             </Status>
           ) : (
