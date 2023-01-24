@@ -100,14 +100,8 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		response.setHeader("Refresh", refreshToken);
 		response.getWriter().write(info);
 
-		redirect(request, response, accessToken, refreshToken);
-	}
-
-	private void redirect(HttpServletRequest request, HttpServletResponse response,
-		String accessToken, String refreshToken)
-		throws IOException {
-
 		String uri = createURI(accessToken, refreshToken).toString();
+
 		getRedirectStrategy().sendRedirect(request, response, uri);
 	}
 
@@ -152,7 +146,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 			.scheme("http")
 			.host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
 			.port(8080)
-			.path("/receive-token.html")
+			.path("/oauth")
 			.queryParams(queryParams)
 			.build()
 			.toUri();
