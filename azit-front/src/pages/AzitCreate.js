@@ -3,15 +3,13 @@ import AzitCreateForm from "../components/AzitCreate/AzitCreateForm";
 import Header from "../components/common/Header";
 import BannerImg from "../images/BannerImg.png";
 import { useState, useRef } from "react";
+import { ImageModal } from "../components/AzitCreate/ImageModal";
 
 const AzitaddWrap = styled.div`
   display: flex;
   flex-direction: column;
   > div {
     position: relative;
-    > input {
-      display: none;
-    }
 
     > label {
       position: absolute;
@@ -36,8 +34,19 @@ const ImgWrap = styled.div`
 `;
 
 const AzitCreate = () => {
-  const [imgFile, setImgFile] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const imgRef = useRef();
+
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
+
+  const resetImgFile = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+    setImgFile(null);
+  };
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -49,21 +58,34 @@ const AzitCreate = () => {
     };
   };
 
+  const onCrop = () => {
+    if (imgFile) {
+      const imageElement = imgRef?.current;
+      const cropper = imageElement?.cropper;
+      setCroppedImage(cropper.getCroppedCanvas().toDataURL());
+    }
+  };
+
   return (
     <AzitaddWrap>
       <Header title="아지트 생성" />
       <div>
-        <input
-          type="file"
-          accept="image/jpg, image/jpeg, image/png"
-          id="bannerImg"
-          onChange={saveImgFile}
-          ref={imgRef}
-        ></input>
-        <ImgWrap imgSrc={imgFile ? imgFile : BannerImg}></ImgWrap>
-        <label className="bannerImgLabel" htmlFor="bannerImg"></label>
+        {modalOpen && (
+          <ImageModal
+            modalHandler={modalHandler}
+            resetImgFile={resetImgFile}
+            saveImgFile={saveImgFile}
+            imgRef={imgRef}
+            onCrop={onCrop}
+            imgFile={imgFile}
+            setImgFile={setImgFile}
+            setCroppedImage={setCroppedImage}
+          ></ImageModal>
+        )}
+        <ImgWrap imgSrc={croppedImage ? croppedImage : BannerImg}></ImgWrap>
+        <label className="bannerImgLabel" onClick={modalHandler}></label>
       </div>
-      <AzitCreateForm imgFile={imgFile} />
+      <AzitCreateForm croppedImage={croppedImage} />
     </AzitaddWrap>
   );
 };
