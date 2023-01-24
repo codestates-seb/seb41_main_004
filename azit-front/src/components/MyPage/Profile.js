@@ -179,7 +179,7 @@ const Profile = ({ myPage, id }) => {
             </Link>
           </InfoWrapper>
           <Category getCategoryList={userData.categorySmallIdList} />
-          <Tab />
+          <Tab myPage={myPage}/>
         </>
       )}
     </ProfileWrapper>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { WaitingMemberData } from "../../dummyData/AzitMemberData";
 import MemberList from "./MemberList";
 
 const WaitingWrap = styled.article`
@@ -57,11 +56,11 @@ const WaitingWrap = styled.article`
 
 const Null = styled.div`
   text-align: center;
-  padding:2rem 0;
-  color:var(--sub-font-color);
+  padding: 2rem 0;
+  color: var(--sub-font-color);
 `;
 
-const WaitingMember = () => {
+const WaitingMember = ({ waitingMembers }) => {
   const [view, setView] = useState(false);
   const viewHandler = () => {
     setView(!view);
@@ -70,7 +69,7 @@ const WaitingMember = () => {
     <WaitingWrap>
       <div className="title">
         <h3>가입 대기 멤버</h3>
-        <span className="count">{WaitingMemberData.length}</span>
+        <span className="count">{waitingMembers.length}</span>
         <button
           className={view ? "viewBtn active" : "viewBtn"}
           onClick={() => {
@@ -81,9 +80,15 @@ const WaitingMember = () => {
         </button>
       </div>
       <ul className={view ? "watingList active" : "watingList"}>
-        {WaitingMemberData.length > 0 && WaitingMemberData ? (
-          WaitingMemberData?.map((data) => {
-            return <MemberList key={data.userId} data={data} state="wating" />;
+        {waitingMembers.length > 0 && waitingMembers ? (
+          waitingMembers?.map((data) => {
+            return (
+              <MemberList
+                key={data.memberId}
+                data={data}
+                state={data.clubMemberStatus}
+              />
+            );
           })
         ) : (
           <Null>가입 대기 멤버가 없습니다.</Null>

@@ -5,9 +5,8 @@ import Logo from "../images/logo.png";
 import MainImg from "../images/mainSlideImg01.png";
 import { useEffect, useState } from "react";
 import { LoginRequestModal } from "../components/common/Modal";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFirstRender } from "../util/useDidMountEffect";
+
 const Header = styled.header`
   width: 100%;
   height: 5.5rem;
@@ -37,13 +36,15 @@ const Home = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
   };
 
-  // const firstRender = useFirstRender();
   useEffect(() => {
-    if(!isLogin) {
-      modalHandler()
+    let isLocation = JSON.parse(window.localStorage.getItem("isLocation"))
+
+    if (!isLogin && isLocation) {
+      modalHandler();
+      window.localStorage.setItem("isLocation", false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -55,8 +56,7 @@ const Home = () => {
         <img alt="mainImage" src={MainImg} />
       </SlideCell>
       <Tab />
-      {modalOpen && <LoginRequestModal modalHandler={modalHandler}/>}
-      
+      {modalOpen && <LoginRequestModal modalHandler={modalHandler} />}
     </>
   );
 };

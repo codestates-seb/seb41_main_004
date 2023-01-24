@@ -26,6 +26,8 @@ import AzitMember from "./pages/AzitMember.js";
 import AzitPreview from "./pages/AzitPreview";
 import UserVerifyPassword from "./pages/UserVerifyPassword";
 import RequireAuth from "./components/common/RequireAuth";
+import UserWithdrawl from "./pages/UserWithdrawl";
+import Missing from "./components/common/Missing";
 
 function App() {
   return (
@@ -55,10 +57,10 @@ function App() {
             <Route path="/azit/create" element={<AzitCreate />}></Route>
             <Route path="/azit/setting/:id" element={<AzitSetting />}></Route>
             <Route path="/azit/edit/:id" element={<AzitEdit />}></Route>
-            <Route path="/azit/join" element={<AzitJoin />}></Route>
+            <Route path="/azit/join/:id" element={<AzitJoin />}></Route>
             <Route path="/azit/report/:id" element={<AzitReport />}></Route>
             <Route path="/azit/detail/:id" element={<AzitDetail />}></Route>
-            <Route path="/azit/member" element={<AzitMember />}></Route>
+            <Route path="/azit/member/:id" element={<AzitMember />}></Route>
             <Route path="/azit/preview" element={<AzitPreview />}></Route>
 
             {/* 리뷰 */}
@@ -78,6 +80,10 @@ function App() {
               path="/userpage/resetpw"
               element={<UserResetPassword />}
             ></Route>
+            <Route
+              path="/userpage/withdrawl"
+              element={<UserWithdrawl />}
+            ></Route>
             <Route path="/userpage/report/:id" element={<UserReport />}></Route>
             <Route
               path="/userpage/followcheck"
@@ -88,7 +94,9 @@ function App() {
               element={<UserProfileEdit />}
             ></Route>
           </Route>
-          
+
+          {/* catch all */}
+          <Route path="*" element={<Missing />} />
         </Routes>
       </BrowserRouter>
     </>
