@@ -28,6 +28,7 @@ import UserVerifyPassword from "./pages/UserVerifyPassword";
 import RequireAuth from "./components/common/RequireAuth";
 import UserWithdrawl from "./pages/UserWithdrawl";
 import Missing from "./components/common/Missing";
+import OauthGoogle from "./pages/OauthGoogle";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
 
           {/* 로그인 관련 */}
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/oauth" element={<OauthGoogle />}></Route>
           <Route path="/findpw" element={<FindPassword />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/signup/add" element={<SignupAdditional />}></Route>
