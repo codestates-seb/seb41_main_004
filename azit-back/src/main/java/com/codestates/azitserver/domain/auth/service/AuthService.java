@@ -16,7 +16,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.mail.MailException;
@@ -26,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.entity.AuthNumber;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.repository.AuthNumberRepository;
@@ -110,6 +110,98 @@ public class AuthService {
 		sendMessage(createPWEmail(email, tempPassword));
 	}
 
+	@Transactional
+	public void logout(HttpServletRequest request) {
+		String accessToken = request.getHeader("Authorization");
+		accessToken = accessToken.split(" ")[1];
+
+		String ATKemail = jwtTokenizer.getATKemail(accessToken);
+		redisUtils.deleteData(ATKemail);
+
+		Long expiration = jwtTokenizer.getATKExpiration(accessToken);
+		redisUtils.setData(accessToken, "blackList", expiration);
+	}
+
+	/**
+	 * 비밀번호 인증
+	 * @param memberId 회원 고유 식별자
+	 * @param request 입력 password
+	 */
+	public void passwordMatcher(Long memberId, AuthDto.MatchPassword request) {
+		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
+		Member findMember = findVerifiedMember(memberId);
+
+		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
+		if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword())) {
+			throw new BusinessLogicException(ExceptionCode.STRING_VALIDATION_FAILED);
+		}
+	}
+
+	/**
+	 * 비밀번호 변경
+	 * @param memberId 회원 고유 식별자
+	 * @param request 입력 newPassword, newPasswordCheck
+	 * @param member 요청 회원 정보
+	 */
+	public void updatePassword(Long memberId, AuthDto.PatchPassword request, Member member) {
+		// 요청주체의 memberId가 api memberId와 일치하는지 확인 -> 일치하지 않으면 예외 발생
+		if (!member.getMemberId().equals(memberId)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
+
+		// password와 passwordCheck가 같은지 확인해서 같지 않으면 exception 보냄
+		stringConfirmer(request.getNewPassword(), request.getNewPasswordCheck());
+
+		// member 찾고, 새 비밀번호를 암호화해서 넣고 저장 (소셜은 비밀번호가 없으니 비밀번호가 있는 경우에만 수정)
+		Member findMember = findVerifiedMember(memberId);
+
+		try {
+			Optional.ofNullable(findMember.getPassword())
+				.ifPresent(password -> findMember.setPassword(passwordEncoder.encode(request.getNewPassword())));
+			memberRepository.save(findMember);
+
+		} catch (EntityNotFoundException e) {
+			log.warn("Failed to change password. Existing password not found: {}", e.getLocalizedMessage());
+		}
+	}
+
+	/**
+	 * 토큰 재발급
+	 * @param request AccessToken, RefreshToken
+	 * @return 새로운 AccessToken 정보가 담긴 Dto
+	 */
+	@Transactional
+	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request) {
+		String accessToken = request.getHeader("Authorization");
+		String refreshToken = request.getHeader("Refresh");
+		accessToken = accessToken.split(" ")[1];
+
+		String ATKemail = jwtTokenizer.getATKemail(accessToken);
+
+		//ATK, RTK 같은 유저거인지 검증
+		if (!redisUtils.getValuebyKey(ATKemail).equals(refreshToken)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+		}
+
+		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
+		if (redisUtils.isExists(ATKemail)) {
+			Member findMember = findVerifiedMemberByEmail(ATKemail);
+			String NewAccessToken = delegateAccessToken(findMember);
+
+			// 이전 accessToken을 남은 시간만큼 blackList로 지정
+			Long expiration = jwtTokenizer.getATKExpiration(accessToken);
+			redisUtils.setData(accessToken, "blackList", expiration);
+
+			AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
+			tokenResponse.setAccessToken("Bearer " + NewAccessToken);
+			tokenResponse.setRefreshToken(refreshToken);
+
+			return tokenResponse;
+		} else {
+			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
+		}
+	}
+
 	/**
 	 * 이메일 인증 메일 작성
 	 * @param email 이메일 주소
@@ -148,6 +240,14 @@ public class AuthService {
 		return message;
 	}
 
+	/**
+	 * 임시 비밀번호 발급 메일 작성
+	 * @param email 이메일 주소
+	 * @param tempPassword 임시 비밀번호
+	 * @return 이메일 본문
+	 * @throws MessagingException
+	 * @throws UnsupportedEncodingException
+	 */
 	public MimeMessage createPWEmail(String email, String tempPassword) throws
 		MessagingException,
 		UnsupportedEncodingException {
@@ -193,64 +293,9 @@ public class AuthService {
 		}
 	}
 
-	public boolean passwordMatcher(Long memberId, AuthDto.MatchPassword request) {
-		// 입력받은 memberId로 memberRepository 안의 member를 찾는다
-		Member findMember = findVerifiedMember(memberId);
-
-		// 입력받은 password와 findMember의 password가 일치하는지 확인(matches 사용하면 암호화한 값과 비교해준다)
-		boolean matchingResult = passwordEncoder.matches(request.getPassword(), findMember.getPassword());
-
-		return matchingResult;
-	}
-
-	//비밀번호 변경(patchPassword)
-	public void updatePassword(Long memberId, AuthDto.PatchPassword request, Member member) {
-		// 요청주체의 memberId가 api memberId와 일치하는지 확인 -> 일치하지 않으면 예외 발생
-		if (!member.getMemberId().equals(memberId)) {
-			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
-		}
-
-		// password와 passwordCheck가 같은지 확인해서 같지 않으면 exception 보냄
-		stringConfirmer(request.getNewPassword(), request.getNewPasswordCheck());
-
-		// member 찾고, 새 비밀번호를 암호화해서 넣고 저장 (소셜은 비밀번호가 없으니 비밀번호가 있는 경우에만 수정)
-		Member findMember = findVerifiedMember(memberId);
-
-		try {
-			Optional.ofNullable(findMember.getPassword())
-				.ifPresent(password -> findMember.setPassword(passwordEncoder.encode(request.getNewPassword())));
-			memberRepository.save(findMember);
-
-		} catch (EntityNotFoundException e) {
-			log.warn("Failed to change password. Existing password not found: {}", e.getLocalizedMessage());
-		}
-	}
-
-	/**
-	 * 토큰 재발급
-	 * @param request refreshToken, 만료 accessToken
-	 * @param response 재발급 토큰 보낼 response
-	 */
-	public void reIssueToken(HttpServletRequest request, HttpServletResponse response) {
-		String accessToken = request.getHeader("Authorization");
-		String refreshToken = request.getHeader("Refresh");
-
-		if (redisUtils.getExpiration(refreshToken) > 0) {
-			String Email = redisUtils.getEmail(refreshToken);
-			Member findMember = findVerifiedMemberByEmail(Email);
-			// accessToken = delegateAccessToken(findVerifiedMember(memberId));
-			accessToken = delegateAccessToken(findMember);
-
-			response.setHeader("Authorization", "Bearer " + accessToken);
-			response.setHeader("Refresh", refreshToken);
-		} else {
-			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
-		}
-	}
-
 	private String delegateAccessToken(Member member) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("username", member.getEmail());
+		claims.put("email", member.getEmail());
 		claims.put("roles", member.getRoles());
 
 		String subject = member.getEmail();

@@ -16,4 +16,11 @@ public class AuthResponseDto {
 		private String profileUrl;
 		private String profileImageName;
 	}
+
+	@Getter
+	@Setter
+	public static class TokenResponse {
+		private String accessToken;
+		private String refreshToken;
+	}
 }
