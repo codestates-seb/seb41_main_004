@@ -1,4 +1,4 @@
-package com.codestates.azitserver.domain.member.controller;
+package com.codestates.azitserver.domain.member.controller.descriptor;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.*;

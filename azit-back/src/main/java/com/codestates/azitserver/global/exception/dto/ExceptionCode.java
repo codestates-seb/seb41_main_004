@@ -35,10 +35,6 @@ public enum ExceptionCode {
 	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
 
-	REPORT_NOT_FOUND(40408, "Member Report not found"),
-
-	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
-	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
