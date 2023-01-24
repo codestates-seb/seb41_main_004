@@ -67,8 +67,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		// redis에 refreshToken, 멤버정보, 만료시간 전달
 		redisUtils.setData(
-			refreshToken,
 			member.getEmail(),
+			refreshToken,
 			expiration
 		);
 

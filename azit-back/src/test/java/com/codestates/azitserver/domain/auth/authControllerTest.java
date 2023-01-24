@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.codestates.azitserver.domain.auth.controller.AuthController;
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.stub.MemberStubData;
@@ -70,10 +71,7 @@ public class authControllerTest {
 
 		String content = gson.toJson(matchDto);
 
-		boolean matchingResult = true;
-
-		given(authService.passwordMatcher(Mockito.anyLong(), Mockito.any(AuthDto.MatchPassword.class)))
-			.willReturn(matchingResult);
+		doNothing().when(authService).passwordMatcher(Mockito.anyLong(), Mockito.any(AuthDto.MatchPassword.class));
 
 		// when
 		ResultActions actions =
@@ -143,35 +141,6 @@ public class authControllerTest {
 	}
 
 	@Test
-	@DisplayName("reIssueToken")
-	public void reIssueTokenTest() throws Exception {
-		// given
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		request.addHeader("Authorization", "Required JWT access token");
-		request.addHeader("Refresh", "Required JWT refresh token");
-
-		doNothing().when(authService).reIssueToken(Mockito.any(), Mockito.any());
-
-		// when
-		ResultActions actions =
-			mockMvc.perform(
-				post("/api/auth/reIssue")
-					.header("Authorization", "Required JWT access token")
-					.header("Refresh", "Required JWT refresh token")
-					.with(csrf())
-			);
-
-		// then
-		actions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(document("token-reIssue",
-				requestHeaders(
-					headerWithName("Authorization").description("Jwt Access Token"),
-					headerWithName("Refresh").description("Jwt Refresh Token"))));
-	}
-
-	@Test
 	@DisplayName("sendAuthNum")
 	public void sendAuthNumTest() throws Exception {
 		// given
@@ -237,5 +206,68 @@ public class authControllerTest {
 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
 					fieldWithPath("authNum").type(JsonFieldType.STRING).description("인증번호")))
 			));
+	}
+
+	@Test
+	@DisplayName("reIssueToken")
+	public void reIssueTokenTest() throws Exception {
+		// given
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.addHeader("Authorization", "Required JWT access token");
+		request.addHeader("Refresh", "Required JWT refresh token");
+
+		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
+		tokenResponse.setAccessToken("New JWT access token");
+		tokenResponse.setRefreshToken("JWT Refresh Token");
+
+		given(authService.reIssueToken(Mockito.any())).willReturn(tokenResponse);
+
+		// when
+		ResultActions actions =
+			mockMvc.perform(
+				post("/api/auth/reIssue")
+					.header("Authorization", "Required JWT access token")
+					.header("Refresh", "Required JWT refresh token")
+					.with(csrf())
+			);
+
+		// then
+		actions
+			.andDo(print())
+			.andExpect(status().isCreated())
+			.andDo(document("token-reIssue",
+				requestHeaders(
+					headerWithName("Authorization").description("Jwt Access Token"),
+					headerWithName("Refresh").description("Jwt Refresh Token")),
+				responseHeaders(
+					headerWithName("Authorization").description("Jwt Access Token"),
+					headerWithName("Refresh").description("Jwt Refresh Token")
+				)));
+	}
+
+	@Test
+	@DisplayName("logout")
+	public void logoutTest() throws Exception {
+		// given
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.addHeader("Authorization", "Required JWT access token");
+
+		doNothing().when(authService).logout(Mockito.any());
+
+		// when
+		ResultActions actions =
+			mockMvc.perform(
+				post("/api/auth/logout")
+					.header("Authorization", "Required JWT access token")
+					.with(csrf())
+			);
+
+		// then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(document("logout",
+				requestHeaders(
+					headerWithName("Authorization").description("Jwt Access Token"))));
 	}
 }

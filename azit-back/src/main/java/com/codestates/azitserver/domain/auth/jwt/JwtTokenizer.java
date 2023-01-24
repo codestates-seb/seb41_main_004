@@ -84,6 +84,24 @@ public class JwtTokenizer {
 		return expiration;
 	}
 
+	public Long getATKExpiration(String accessToken) {
+		Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+		Date expiration = Jwts.parserBuilder()
+			.setSigningKey(key)
+			.build()
+			.parseClaimsJws(accessToken)
+			.getBody()
+			.getExpiration();
+		Long now = new Date().getTime();
+		return (expiration.getTime() - now);
+	}
+
+	public String getATKemail(String accessToken) {
+		String base64EncodedSecretKey = encodeBase64SecretKey(secretKey);
+		Map<String, Object> claims = getClaims(accessToken, base64EncodedSecretKey).getBody();
+		return (String)claims.get("email");
+	}
+
 	// 서명에 사용할 Secret Key 생성
 	private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
 		byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);

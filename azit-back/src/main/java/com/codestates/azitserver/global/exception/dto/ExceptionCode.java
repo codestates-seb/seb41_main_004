@@ -13,6 +13,7 @@ public enum ExceptionCode {
 	// 400
 	INVALID_CLUB_MEMBER_STATUS(40001, "Invalid club member status"),
 	HOST_REPORT_FAILED(40002, "Host is not allowed to report its own azit"),
+	INVALID_TOKEN(40003, "Invalid token"),
 
 	// 403
 	CLUB_CANCELED(40301, "The Club is canceled"),

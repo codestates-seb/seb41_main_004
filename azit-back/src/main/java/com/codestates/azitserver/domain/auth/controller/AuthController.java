@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
@@ -44,14 +45,9 @@ public class AuthController {
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
 	public ResponseEntity matchPassword(@Positive @PathVariable("member-id") Long memberId,
 		@RequestBody AuthDto.MatchPassword request) {
-		boolean result = authService.passwordMatcher(memberId, request);
+		authService.passwordMatcher(memberId, request);
 
-		if (result) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//비밀번호 변경
@@ -66,13 +62,18 @@ public class AuthController {
 
 	@PostMapping("/reIssue")
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
-		authService.reIssueToken(request, response);
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request);
+		response.setHeader("Authorization", tokenResponse.getAccessToken());
+		response.setHeader("Refresh", tokenResponse.getRefreshToken());
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	//로그아웃
+	@PostMapping("/logout")
+	public ResponseEntity logout(HttpServletRequest request) {
+		authService.logout(request);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
-	// 	//로그아웃
-	// 	@PostMapping("/logout")
-	//
-	// }
 }
