@@ -290,7 +290,7 @@ const AzitDetail = () => {
     if (data) {
       return setHostId(data.host.memberId);
     }
-  });
+  }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -299,9 +299,6 @@ const AzitDetail = () => {
       });
       setClubMember(filterMember);
     }
-  }, [data]);
-
-  useEffect(() => {
     if (data) {
       let waitingMember = data.clubMembers.filter((member) => {
         return member.clubMemberStatus !== "CLUB_JOINED";
