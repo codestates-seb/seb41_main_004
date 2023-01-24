@@ -78,7 +78,7 @@ const ActivityHistory = ({ myPage }) => {
   const handleCheckSelect = (e) => {
     setSelectCheck(e.target.value);
   };
-  console.log(selectCheck);
+  //console.log(selectCheck);
 
   // useEffect((hostCheck,selectCheck ) => {
   //   setFilterList(data.filter((data) => {data.data.hostId === id && data.data.selectValue === selectCheck }))

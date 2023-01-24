@@ -139,7 +139,11 @@ const AzitList = ({ data, myPage }) => {
   // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
+  const [activeHide, setActiveHide] = useState(false);
 
+  const handleActiveHide = () => {
+    setActiveHide(!activeHide);
+  };
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers.filter((member) => {
@@ -209,7 +213,7 @@ const AzitList = ({ data, myPage }) => {
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
               <Tag className="category">{data.categorySmall.categoryName}</Tag>
-              <Tag tagDisplay="none">숨겨짐</Tag>
+              {activeHide ? <Tag>숨겨짐</Tag> : null}
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
@@ -243,8 +247,8 @@ const AzitList = ({ data, myPage }) => {
       {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 display none 상태 */}
       <EtcWrap>
         <div className="ActivityView">
-          <button type="button">
-            {myPage ? "활동내역 보이기" : true ? null : "활동내역 숨기기"}
+          <button type="button" onClick={handleActiveHide}>
+            {myPage && (activeHide ? "활동내역 보이기" : "활동내역 숨기기")}
           </button>
         </div>
         {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
