@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import AzitList from "../common/AzitList";
@@ -62,13 +63,31 @@ const Container = styled.div`
   }
 `;
 const ActivityHistory = ({ myPage }) => {
-  console.log(myPage);
   const [hostCheck, setHostCheck] = useState(false);
+  const [selectCheck, setSelectCheck] = useState(0);
+  //const [filterList, setFilterList] = useState(data);
 
-  const handleCheck = () => {
+  const { id } = useParams();
+  //data = axios.get(api/club/usePage/1)
+
+  const handleCheckInput = () => {
     setHostCheck(!hostCheck);
-    console.log(hostCheck);
+    //console.log(hostCheck); false <-> true
   };
+
+  const handleCheckSelect = (e) => {
+    setSelectCheck(e.target.value);
+  };
+  console.log(selectCheck);
+
+  // useEffect((hostCheck,selectCheck ) => {
+  //   setFilterList(data.filter((data) => {data.data.hostId === id && data.data.selectValue === selectCheck }))
+  //   else if(hostCheck === true) {
+  //    setFilterList(data.filter((data) => {data.data.hostId === id}))
+  //}else if(selectCheck){
+  // setFilterList(data.filter((data) => {data.data.selectValue === selectCheck}))
+  //}
+  // },[data])
 
   return (
     <>
@@ -76,11 +95,11 @@ const ActivityHistory = ({ myPage }) => {
         <div className="Box">
           <label className="checkContainer">
             호스트인 아지트만 보기
-            <input type="checkbox" onChange={handleCheck} />
+            <input type="checkbox" onChange={handleCheckInput} />
             <span className="checkmark" />
           </label>
           <div className="selectWrapper">
-            <select>
+            <select onChange={handleCheckSelect}>
               <option value="전체보기">전체보기</option>
               <option value="참여중인 모임">참여중인 모임</option>
               <option value="신청한 모임">신청한 모임</option>

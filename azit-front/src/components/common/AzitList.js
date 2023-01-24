@@ -99,10 +99,10 @@ const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
 const EtcWrap = styled.div`
-  /* display: flex; */
+  display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
-  display: none;
+  /* display: none; */
   button,
   a {
     cursor: pointer;
@@ -243,11 +243,15 @@ const AzitList = ({ data, myPage }) => {
       {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 display none 상태 */}
       <EtcWrap>
         <div className="ActivityView">
-          <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
+          <button type="button">
+            {myPage ? "활동내역 보이기" : true ? null : "활동내역 숨기기"}
+          </button>
         </div>
         {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
-          <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
+          <Link to="/review/Create">
+            {myPage ? "리뷰 작성하러 가기 〉" : null}
+          </Link>
         </div>
       </EtcWrap>
     </ListWrap>
