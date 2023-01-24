@@ -1,9 +1,8 @@
 package com.codestates.azitserver.domain.club.repository;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +14,5 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	@Query("select cm from ClubMember cm where cm.member.memberId = :memberId and cm.club.clubId = :clubId")
 	Optional<ClubMember> findMemberJoinClub(Long memberId, Long clubId);
 
-	Page<ClubMember> findClubMembersByClub(Club Club, Pageable pageable);
+	List<ClubMember> findClubMembersByClub(Club Club);
 }

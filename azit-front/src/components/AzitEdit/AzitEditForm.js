@@ -183,7 +183,6 @@ const AzitEditForm = () => {
   }, [data]);
 
   useEffect(() => {
-    // 이하가 먼저 선택 됐을 때 > 이상은 이하 밑으론 내려가면 안된다.
     let resetMaxYear = [];
     for (let i = minYearSelected; i <= 2023; i++) {
       resetMaxYear.push(`${String(i)}`);
@@ -211,10 +210,11 @@ const AzitEditForm = () => {
   }, [checked]);
 
   const onChangeMemberLimit = (e) => {
-    if (e.target.value >= 3) {
+    if (e.target.value >= 3 && e.target.value <= 20) {
       return SetMemberLimit(e.target.value);
-    } else if (e.target.value > 20) {
-      return alert("최대 20명까지 가능합니다.");
+    } else if (e.target.value >= 20) {
+      alert("최대 20명까지 가능합니다.");
+      return SetMemberLimit(20);
     }
   };
 
@@ -275,6 +275,10 @@ const AzitEditForm = () => {
   const clubId = Number(`${id}`);
   let numberFee = Number(fee.toString().split(",").join(""));
 
+  // 오늘 기준으로 이전 날짜 선택 제한
+  let today = new Date();
+  let Today = today.toISOString().split("T")[0];
+
   let body = {
     clubId,
     clubName,
@@ -289,7 +293,6 @@ const AzitEditForm = () => {
     isOnline: check,
     location: writeInfo,
   };
-  console.log(body);
 
   const navigate = useNavigate();
 
@@ -304,8 +307,8 @@ const AzitEditForm = () => {
           "Content-Type": "application/json",
         },
       });
-      // 참가비, 성별제한 나이 있을 경우 > 제한없음,
-      navigate(`/azit/detail/${id}`);
+
+      navigate(-2);
     } catch (error) {
       alert(error.message);
     }
@@ -434,6 +437,7 @@ const AzitEditForm = () => {
               <div className="wd70">
                 <input
                   type="date"
+                  min={Today}
                   id="meetingDate"
                   onChange={handleData}
                   value={meetingDate}
@@ -474,13 +478,19 @@ const AzitEditForm = () => {
               </div>
               {check === "offline" ? (
                 <>
-                  <div
-                    className="selectPlace"
-                    onClick={() => setVisible(true)}
-                    placeholder="장소를 입력해주세요."
-                  >
-                    {writeInfo ? writeInfo : "장소를 입력해주세요."}
-                  </div>
+                  {memberStatus.length === 0 ? (
+                    <div
+                      className="selectPlace"
+                      onClick={() => setVisible(true)}
+                      placeholder="장소를 입력해주세요."
+                    >
+                      {writeInfo ? writeInfo : "장소를 입력해주세요."}
+                    </div>
+                  ) : (
+                    <div className="selectPlace">
+                      {writeInfo ? writeInfo : "장소를 입력해주세요."}
+                    </div>
+                  )}
                   {visible ? (
                     <div>
                       <DaumPostcode onComplete={handleComplete} height={700} />

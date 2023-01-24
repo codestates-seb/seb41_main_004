@@ -35,20 +35,21 @@ const Login = () => {
           data
         );
         const accessToken = res.headers.get('Authorization');
-        const refreshToken = res.headers.get('Refresh');
         const nickname = res.data.nickname;
         const email = res.data.email;
         const profileUrl = res.data.profileUrl;
         const memberId = res.data.memberId;
+        const profileName = res.data.profileImageName;
         localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('email', email);
         localStorage.setItem('nickname', nickname);
         localStorage.setItem('profileUrl', profileUrl);
         localStorage.setItem('memberId', memberId);
+        localStorage.setItem('profileName', profileName);
         setCookie('accessToken', accessToken);
-        navigate('/');
         dispatch(loginStatusSlice.actions.login());
+        navigate('/');
+        console.log(res);
       } catch (e) {
         // error handling 하기
         console.log(e.response.status);

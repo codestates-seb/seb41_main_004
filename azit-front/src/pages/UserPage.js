@@ -7,7 +7,9 @@ import { useState, useEffect } from "react";
 const UserPage = () => {
   const [myPage, setMyPage] = useState(false);
   const { id } = useParams();
+
   useEffect(() => {
+    // localStorage 키로 부터 데이터 읽기
     id === localStorage.getItem("memberId")
       ? setMyPage(true)
       : setMyPage(false);

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
@@ -268,6 +268,12 @@ const EtcWrap = styled.div`
 const AzitDetail = () => {
   const { id } = useParams();
   const [clubMember, setClubMember] = useState([]);
+  const [waitingMembers, setWaitingMembers] = useState([]);
+  const [clubMemberId, setClubMemberId] = useState([]);
+  const [waitingMemberId, setWaitingMemberId] = useState([]);
+  const [hostId, setHostId] = useState(null);
+  const memberId = Number(localStorage.getItem("memberId"));
+  const navigate = useNavigate();
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -279,7 +285,12 @@ const AzitDetail = () => {
     azitLookup
   );
 
-  console.log(data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (data) {
+      return setHostId(data.host.memberId);
+    }
+  });
 
   useEffect(() => {
     if (data) {
@@ -290,7 +301,40 @@ const AzitDetail = () => {
     }
   }, [data]);
 
-  console.log(clubMember);
+  useEffect(() => {
+    if (data) {
+      let waitingMember = data.clubMembers.filter((member) => {
+        return member.clubMemberStatus !== "CLUB_JOINED";
+      });
+      setWaitingMembers(waitingMember);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (clubMember.length !== 0) {
+      for (let i = 0; i < clubMember.length; i++) {
+        if (clubMember[i].member.memberId === memberId) {
+          setClubMemberId(clubMember[i].member.memberId);
+        } else {
+          return;
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clubMember]);
+
+  useEffect(() => {
+    if (waitingMembers.length !== 0) {
+      for (let i = 0; i < waitingMembers.length; i++) {
+        if (waitingMembers[i].member.memberId === memberId) {
+          setWaitingMemberId(waitingMembers[i].member.memberId);
+        } else {
+          return;
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [waitingMembers]);
 
   return (
     <AzitDetailWrap>
@@ -392,10 +436,49 @@ const AzitDetail = () => {
                 </li>
               </ul>
             </div>
-            {data.clubStatus === "CLUB_ACTIVE" ? (
-              <button className="active">아지트 가입하기</button>
+            {data.clubStatus === "CLUB_ACTIVE" && hostId === memberId ? (
+              <button
+                className="active"
+                onClick={() => navigate(`/azit/edit/${id}`)}
+              >
+                아지트 수정하기
+              </button>
             ) : (
+              <></>
+            )}
+            {data.clubStatus === "CLUB_ACTIVE" &&
+            clubMemberId.length === 0 &&
+            waitingMemberId.length === 0 &&
+            hostId !== memberId ? (
+              <button
+                className="active"
+                onClick={() => navigate(`/azit/join/${id}`)}
+              >
+                아지트 가입하기
+              </button>
+            ) : (
+              <></>
+            )}
+            {data.clubStatus === "CLUB_ACTIVE" &&
+            clubMemberId.length !== 0 &&
+            clubMember.length !== 0 &&
+            hostId !== memberId ? (
+              <button className="active">이미 참여 중인 아지트입니다</button>
+            ) : (
+              <></>
+            )}
+            {data.clubStatus === "CLUB_ACTIVE" &&
+            waitingMemberId.length !== 0 &&
+            waitingMembers.length !== 0 &&
+            hostId !== memberId ? (
+              <button className="active">이미 신청 중인 아지트입니다</button>
+            ) : (
+              <></>
+            )}
+            {data.clubStatus !== "CLUB_ACTIVE" ? (
               <button className="disabled">이미 종료된 아지트입니다</button>
+            ) : (
+              <></>
             )}
           </AzitDetailForm>
         </>

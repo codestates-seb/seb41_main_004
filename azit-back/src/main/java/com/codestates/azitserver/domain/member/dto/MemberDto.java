@@ -35,7 +35,7 @@ public class MemberDto {
 
 		@NotBlank(message = "Password is required")
 
-		@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
+		@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()])[a-zA-Z0-9~!@#$%^&*()]{8,16}$",
 			message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
 		private String password;
 
@@ -86,6 +86,26 @@ public class MemberDto {
 		@NotNull(message = "Choose at least one category")
 		private List<Long> categorySmallId;
 
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class NicknameCheck {
+		@NotBlank(message = "Nickname is required")
+		@Length(min = 2, max = 8, message = "Nickname must be between 2 and 8 characters long")
+		private String nickname;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class EmailCheck {
+		@NotBlank(message = "Email is required")
+		@Email(message = "Invalid email address")
+		private String email;
 	}
 
 	@Getter

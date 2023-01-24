@@ -42,7 +42,7 @@ public class StorageServiceAwsS3 implements StorageService {
 			ObjectMetadata objMeta = new ObjectMetadata();
 			objMeta.setContentLength(file.getInputStream().available());
 
-			amazonS3.putObject(bucket + "/" + prefix, filename, file.getInputStream(), objMeta);
+			amazonS3.putObject(bucket + prefix, filename, file.getInputStream(), objMeta);
 			log.info("Banner image saved to AWS S3 {} : {}", bucket, prefix + "/" + filename);
 		} catch (IOException exception) {
 			throw new StorageException("Failed to store file.", exception);

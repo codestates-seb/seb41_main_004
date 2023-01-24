@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.global.validator.EnumValue;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,8 @@ public class ClubMemberDto {
 	@NoArgsConstructor
 	public static class Patch {
 		@NotNull
-		private ClubMember.ClubMemberStatus status;
+		@EnumValue(enumClass = ClubMember.ClubMemberStatus.class, ignoreCase = true)
+		private String status;
 	}
 
 	@Getter

@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { useParams } from "react-router-dom";
+import { AzitDeleteModal } from "../components/AzitSetting/AzitDeleteModal";
+import { useState } from "react";
+import { axiosInstance } from "../util/axios";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -50,6 +53,25 @@ const DeleteBtnWrap = styled.div`
 const AzitSetting = () => {
   const { id } = useParams();
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
+  const navigate = useNavigate();
+
+  const DeleteButtonClick = async () => {
+    try {
+      const res = await axiosInstance.delete(`/api/clubs/${id}`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
+      console.log(res);
+      alert("아지트를 닫았습니다.");
+      navigate(`/`);
+    } catch (e) {
+      console.log("아지트 삭제 실패");
+    }
+  };
+
   return (
     <AzitSettingWrap>
       <Header title="아지트 설정" />
@@ -62,15 +84,21 @@ const AzitSetting = () => {
         </Link>
       </SettingBar>
       <SettingBar>
-        <Link to="/azit/member">
+        <Link to={`/azit/member/${id}`}>
           <span>아지트 멤버관리</span>
           <div>
             <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
           </div>
         </Link>
       </SettingBar>
+      {modalOpen && (
+        <AzitDeleteModal
+          DeleteButtonClick={DeleteButtonClick}
+          modalHandler={modalHandler}
+        />
+      )}
       <DeleteBtnWrap>
-        <button>모임삭제</button>
+        <button onClick={modalHandler}>모임삭제</button>
       </DeleteBtnWrap>
     </AzitSettingWrap>
   );

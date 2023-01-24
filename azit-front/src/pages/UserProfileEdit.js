@@ -148,12 +148,12 @@ const UserProfileEdit = () => {
               "Content-Type": "multipart/form-data",
             },
           });
-          localStorage.setItem('profileUrl', res.data.data.fileInfo.fileUrl);
-          localStorage.setItem('profileName', res.data.data.fileInfo.fileName);
+          localStorage.setItem("profileUrl", res.data.data.fileInfo.fileUrl);
+          localStorage.setItem("profileName", res.data.data.fileInfo.fileName);
 
-          alert("프로필 이미지가 수정이 완료되었습니다.");
+          alert("프로필 이미지 수정이 완료되었습니다.");
         } catch (e) {
-          alert("프로필 이미지 수정 실패");
+          alert("프로필 이미지 수정이 실패되었습니다.");
         }
       };
       postFile();
@@ -187,7 +187,7 @@ const UserProfileEdit = () => {
           console.log("error : ", error);
         });
     };
-    startGet()
+    startGet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -221,9 +221,10 @@ const UserProfileEdit = () => {
         if (res.status >= 200 && res.status < 300) {
           navigate(`/userpage/${id}`);
         }
+        console.log(res);
       })
       .catch((error) => {
-        console.log(error);
+        alert("닉네임이 중복되었습니다. 다시 시도하세요.");
       });
   };
 
@@ -234,7 +235,8 @@ const UserProfileEdit = () => {
         <ProfileImageWrap>
           <input
             type="file"
-            accept="jpg, jpeg, png"
+            accept="image/jpg,image/jpeg,image/png"
+            //리액트에서는 image/를 해줘야 특정 파일형식만 업로드되게 적용됨
             id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
@@ -299,10 +301,7 @@ const UserProfileEdit = () => {
             );
           })}
         </article>
-        {/*Link -> useNavigate 로 변환 필요 / */}
-        {/* <Link to="/"> */}
         <Button type="submit" title="수정 완료" state="active"></Button>
-        {/* </Link> */}
       </ProfileEditForm>
     </>
   );

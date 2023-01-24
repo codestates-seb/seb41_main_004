@@ -150,6 +150,31 @@ const Label2 = styled.label`
     props.check ? "background-color: var(--point-color); color:white;" : ""}
 `;
 
+const DaumPostcodeWrap = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  > .location {
+    position: relative;
+    z-index: 1;
+    background-color: var(--white-color);
+    border-radius: 1rem;
+    padding: 2rem;
+  }
+`;
+
 const AzitCreateForm = ({ imgFile }) => {
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
@@ -162,7 +187,7 @@ const AzitCreateForm = ({ imgFile }) => {
   const [genderSelected, setGenderSelected] = useState("ALL");
   const [minYearSelected, setMinYearSelected] = useState("");
   const [maxYearSelected, setMaxYearSelected] = useState("");
-  const [memberLimit, SetMemberLimit] = useState(null);
+  const [memberLimit, SetMemberLimit] = useState(3);
   const [checked, setChecked] = useState(false);
   const [fee, setFee] = useState("");
   const [question, setQuestion] = useState("");
@@ -199,10 +224,11 @@ const AzitCreateForm = ({ imgFile }) => {
   }, [checked]);
 
   const onChangeMemberLimit = (e) => {
-    if (e.target.value >= 3) {
+    if (e.target.value >= 3 && e.target.value <= 20) {
       return SetMemberLimit(e.target.value);
-    } else {
-      return;
+    } else if (e.target.value >= 20) {
+      alert("최대 20명까지 가능합니다.");
+      return SetMemberLimit(20);
     }
   };
 
@@ -274,6 +300,12 @@ const AzitCreateForm = ({ imgFile }) => {
     setVisible(false);
   };
 
+  // daum 주소 style props로 전달
+  const DaumPostcodeStyle = {
+    width: "48rem",
+    height: "50rem",
+  };
+
   // 이미지 base 64 를 image.file로 변환하는 함수
   function dataURLtoFile(dataurl, filename) {
     if (!dataurl) {
@@ -298,6 +330,10 @@ const AzitCreateForm = ({ imgFile }) => {
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
   let numberMemberLimit = Number(memberLimit);
+
+  // 오늘 기준으로 이전 날짜 선택 제한
+  let today = new Date();
+  let Today = today.toISOString().split("T")[0];
 
   let body = {
     bannerImg: file,
@@ -568,8 +604,8 @@ const AzitCreateForm = ({ imgFile }) => {
         <div className="inputContainer">
           <label>날짜와 시간을 정해볼까요?</label>
           <div className="wd70">
-            <input type="date" onChange={onChangeDate} />
-            <input type="time" onChange={onChangeTime} />
+            <input type="date" id="Date" min={Today} onChange={onChangeDate} />
+            <input type="time" id="Time" onChange={onChangeTime} />
           </div>
         </div>
         <div className="radioContainer">
@@ -604,9 +640,17 @@ const AzitCreateForm = ({ imgFile }) => {
                 {writeInfo ? writeInfo : "장소를 입력해주세요."}
               </div>
               {visible ? (
-                <div>
-                  <DaumPostcode onComplete={handleComplete} height={700} />
-                </div>
+                <DaumPostcodeWrap>
+                  <DaumPostcode
+                    className="location"
+                    onComplete={handleComplete}
+                    style={DaumPostcodeStyle}
+                  />
+                  <div
+                    className="background"
+                    onClick={() => setVisible(false)}
+                  ></div>
+                </DaumPostcodeWrap>
               ) : (
                 <></>
               )}
@@ -682,7 +726,7 @@ const AzitCreateForm = ({ imgFile }) => {
             min="3"
             max="20"
             onChange={onChangeMemberLimit}
-            value={memberLimit || ""}
+            value={memberLimit || 3}
           ></input>
         </div>
         <div className="inputContainer">

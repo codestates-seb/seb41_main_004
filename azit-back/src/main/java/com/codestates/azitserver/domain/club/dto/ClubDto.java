@@ -18,6 +18,7 @@ import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.global.validator.EnumValue;
 import com.codestates.azitserver.global.validator.NotSpace;
 
 import lombok.Getter;
@@ -46,7 +47,8 @@ public class ClubDto {
 		private Integer fee;
 
 		@NotNull
-		private Club.JoinMethod joinMethod;
+		@EnumValue(enumClass = Club.JoinMethod.class, ignoreCase = true)
+		private String joinMethod;
 
 		@Length(min = 4, max = 4, message = "Birth year must be 4 digit number.")
 		@Pattern(regexp = "\\d{4}", message = "The birth year must be 4 digit number.")
@@ -57,7 +59,8 @@ public class ClubDto {
 		private String birthYearMax;
 
 		@NotNull
-		private Club.GenderRestriction genderRestriction;
+		@EnumValue(enumClass = Club.GenderRestriction.class, ignoreCase = true)
+		private String genderRestriction;
 
 		@NotNull
 		@FutureOrPresent(message = "Appointment date cannot be in the past.")
@@ -115,7 +118,8 @@ public class ClubDto {
 		@Pattern(regexp = "\\d{4}", message = "The birth year must be 4 digit number.")
 		private String birthYearMax;
 
-		private Club.GenderRestriction genderRestriction;
+		@EnumValue(enumClass = Club.GenderRestriction.class, ignoreCase = true)
+		private String genderRestriction;
 
 		@FutureOrPresent(message = "Appointment date cannot be in the past.")
 		private LocalDate meetingDate;
@@ -162,6 +166,15 @@ public class ClubDto {
 		private Club.ClubStatus clubStatus;
 		private MemberDto.ResponseEmailAndNickname host;
 		private CategoryDto.SmallResponse categorySmall;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ReviewClubResponse {
+		private Long clubId;
+		private String clubName;
+		private LocalDate meetingDate;
 	}
 }
 

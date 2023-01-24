@@ -21,6 +21,10 @@ const UserPageSetting = () => {
     navigate('/login');
   }
 
+  const withdrawlButtonClick = () => {
+    navigate('/userpage/withdrawl');
+  }
+
   return (
     <AzitSettingWrap>
       <Header title="설정" />
@@ -42,7 +46,7 @@ const UserPageSetting = () => {
       </SettingBar>
       {modalOpen && <LogoutRequestModal LogoutButtonClick={LogoutButtonClick} modalHandler={modalHandler} />}
       <DeleteBtnWrap>
-        <button>회원탈퇴</button>
+        <button onClick={withdrawlButtonClick}>회원탈퇴</button>
       </DeleteBtnWrap>
     </AzitSettingWrap>
   );
