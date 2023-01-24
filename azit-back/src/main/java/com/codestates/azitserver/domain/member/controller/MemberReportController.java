@@ -33,16 +33,13 @@ public class MemberReportController {
 
 	private final MemberReportMapper memberReportMapper;
 
-	private final MemberMemberReportService memberMemberReportService;
 
 	public MemberReportController(
 		MemberReportService memberReportService,
-		MemberReportMapper memberReportMapper,
-		MemberMemberReportService memberMemberReportService
+		MemberReportMapper memberReportMapper
 	) {
 		this.memberReportService = memberReportService;
 		this.memberReportMapper = memberReportMapper;
-		this.memberMemberReportService = memberMemberReportService;
 	}
 
 	// 신고 생성

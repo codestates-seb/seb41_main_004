@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class MemberMemberReport {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberReportId; // PK
+	private Long memberMemberReportId; // PK
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPORTER_MEMBER_ID")
