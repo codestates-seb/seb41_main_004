@@ -9,18 +9,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetails;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
-import com.codestates.azitserver.global.exception.dto.ErrorResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -31,6 +34,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 	private final JwtTokenizer jwtTokenizer;
 	private final CustomAuthorityUtils authorityUtils;
 	private final MemberDetailsService memberDetailsService;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
@@ -38,26 +42,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		try {
+			isLogout(request); // 로그아웃된 토큰으로 접근 시 401, Unauthorized
 			Map<String, Object> claims = verifyJws(request);
 			setAuthenticationToContext(claims, request);
 		} catch (SignatureException se) {
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(403, "Signature unauthorized");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", se);
 		} catch (ExpiredJwtException ee) {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(401, "Expired JWT");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", ee);
 		} catch (Exception e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			ErrorResponse errorResponse = new ErrorResponse(400, "Bad request");
-			new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+			request.setAttribute("exception", e);
 		}
 		filterChain.doFilter(request, response);
 	}
@@ -93,5 +86,22 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	private String resolveToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.split(" ")[1];
+		}
+		return null;
+	}
+
+	private void isLogout(HttpServletRequest request) {
+		String jwt = resolveToken(request);
+
+		if (!ObjectUtils.isEmpty(redisTemplate.opsForValue().get(jwt))) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_TOKEN);
+		}
 	}
 }
