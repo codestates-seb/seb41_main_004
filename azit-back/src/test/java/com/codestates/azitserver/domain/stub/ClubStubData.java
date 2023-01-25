@@ -1,7 +1,6 @@
 package com.codestates.azitserver.domain.stub;
 
 import static com.codestates.azitserver.domain.stub.CategoryStubData.*;
-import static com.codestates.azitserver.domain.stub.MemberStubData.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -98,7 +97,7 @@ public class ClubStubData {
 		response.setLocation("서울시 송파구");
 		response.setJoinQuestion("재밌는 아지트 맞을까요?");
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
-		response.setHost(stubMemberIdAndNickname());
+		response.setHost(MemberStubData.stubMemberIdAndNickname());
 		response.setCategorySmall(getSmallResponse());
 		response.setBannerImage(FileInfoStubData.getFileInfoDtoResponse());
 
@@ -126,7 +125,7 @@ public class ClubStubData {
 		reportClubResponse.setClubName("재밌는 아지트");
 		reportClubResponse.setClubInfo("재밌는 아지트입니다.");
 		reportClubResponse.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
-		reportClubResponse.setHost(stubMemberIdAndNickname());
+		reportClubResponse.setHost(MemberStubData.stubMemberIdAndNickname());
 		reportClubResponse.setCategorySmall(getSmallResponse());
 
 		return reportClubResponse;
