@@ -121,23 +121,37 @@ const MemberList = ({ data, state }) => {
     }
   };
 
-  const azitMemberKicks = async () => {
-    try {
-      await axiosInstance.patch(
-        `api/clubs/${id}/kicks/${data.member.memberId}`,
+  // const azitMemberKicks = async () => {
+  //   try {
+  //     await axiosInstance.patch(
+  //       `api/clubs/${id}/kicks/${data.member.memberId}`,
 
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  //       {
+  //         headers: {
+  //           Authorization: localStorage.getItem("accessToken"),
+  //           "Content-Type": "application/json; ; charset=UTF-8",
+  //         },
+  //       }
+  //     );
 
-      console.log("아지트 강퇴");
-    } catch (e) {
-      console.log("아지트 강퇴 실패");
-    }
+  //     console.log("아지트 강퇴");
+  //   } catch (e) {
+  //     console.log("아지트 강퇴 실패");
+  //   }
+  // };
+  const azitMemberKicks = () => {
+    fetch(
+      `${process.env.REACT_APP_BASE_URL}api/clubs/${id}/kicks/${data.member.memberId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    )
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
   };
 
   return (
