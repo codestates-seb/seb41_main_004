@@ -230,7 +230,7 @@ public class authControllerTest {
 		// when
 		ResultActions actions =
 			mockMvc.perform(
-				post("/api/auth/reIssue")
+				post("/api/auth/re-issue")
 					.header("Refresh", "Required JWT refresh token")
 					.contentType(MediaType.APPLICATION_JSON)
 					.characterEncoding("UTF-8")
