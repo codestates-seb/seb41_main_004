@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 import { axiosInstance } from "../../util/axios";
@@ -8,13 +8,16 @@ import Loading from "../common/Loading";
 
 const RecommendTab = () => {
   const { ref, inView } = useInView();
-
+  const [memberId, setMemberId] = useState(0);
+  useEffect(() => {
+    if (localStorage.getItem("memberId")) {
+      setMemberId(localStorage.getItem("memberId"))
+    }
+  },[]);
   // 무한스크롤 함수 0번이 guest
-  const fetchInfiniteList = async (pageParam) => {
+  const fetchInfiniteList = async (pageParam, memberId) => {
     const res = await axiosInstance.get(
-      `/api/clubs/recommend/${
-        localStorage.getItem("memberId") ? localStorage.getItem("memberId") : 0
-      }?page=${pageParam}&size=5`,
+      `/api/clubs/recommend/${memberId}?page=${pageParam}&size=5`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
       }
@@ -32,8 +35,8 @@ const RecommendTab = () => {
 
   const { data, status, fetchNextPage, isFetchingNextPage, error } =
     useInfiniteQuery(
-      "recommend",
-      ({ pageParam = 1 }) => fetchInfiniteList(pageParam),
+      ["recommend", memberId],
+      ({ pageParam = 1 }) => fetchInfiniteList(pageParam, memberId),
       {
         staleTime: 6 * 10 * 1000,
         cacheTime: 6 * 10 * 1000,
