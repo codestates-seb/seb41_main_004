@@ -106,6 +106,28 @@ public class ClubMemberService {
 		clubMemberRepository.save(clubMember);
 	}
 
+	/**
+	 * 회원은 본인이 신청한 아지트를 신청 취소 할 수 있다.
+	 * @param member 요청을 보낸 회원
+	 * @param clubId 취소할 아지트 고유 식별자
+	 * @param memberId 취소할 아지트의 회원 고유 식볋자
+	 */
+	public void deleteClubMember(Member member, Long clubId, Long memberId) {
+		verifyMember(member, memberId);
+
+		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
+		clubService.findClubById(clubId);
+
+		// 취소하려는 사용자가 아지트에 신청한 회원이 맞고, 상태가 신청 대기, 승인됨이 맞는지 확인합니다.
+		ClubMember clubMember = findClubMemberByMemberIdAndClubId(memberId, clubId);
+		if (clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_JOINED
+			& clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_WAITING) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+
+		clubMemberRepository.deleteById(clubMember.getClubMemberId());
+	}
+
 	// *** verification ***
 	public void verifyMember(Member member, Long memberId) {
 		if (!member.getMemberId().equals(memberId)) {

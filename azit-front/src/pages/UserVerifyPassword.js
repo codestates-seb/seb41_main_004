@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../util/axios";
 

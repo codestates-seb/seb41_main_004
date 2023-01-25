@@ -132,6 +132,7 @@ public class MemberDto {
 		private Long memberId;
 		private String email;
 		private String nickname;
+		private String aboutMe;
 		private FileInfoDto.Response fileInfo;
 	}
 
