@@ -76,7 +76,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
 		given(reviewService.createReview(Mockito.any(), Mockito.any(Review.class))).willReturn(review);
 		given(mapper.reviewToReviewDtoResponse(Mockito.any(Review.class))).willReturn(response);
 
-		String content = objectMapper.writeValueAsString(post);
+		String content = objectMapper.writeValueAsString(List.of(post));
 
 		// when
 		ResultActions actions = mockMvc.perform(postRequestBuilder(createURI(getReviewUrl()), content)
@@ -88,7 +88,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
 			.andDo(getDefaultDocument("post-review",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					ReviewFieldsDescriptor.getPostRequestFieldsSnippet(),
-					ReviewFieldsDescriptor.getSingleResponseFieldsSnippet()
+					ReviewFieldsDescriptor.getSingleArrayResponseFieldsSnippet()
 				)
 			);
 	}
