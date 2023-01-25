@@ -28,7 +28,7 @@ server:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY:DOFHUEWJKF8971938576439NGBJCBGVYUGFTYSFRC56TUH8NUK6JNYO9UGV8WE678REFKUG3K6HG9283} # dummy
-  access-token-expiration-minutes: 30
+  access-token-expiration-minutes: 2 # 30
   refresh-token-expiration-minutes: 420
 
 mail:
