@@ -122,6 +122,7 @@ public class MemberDto {
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
 		private List<Long> categorySmallIdList;
+
 	}
 
 	@Getter
