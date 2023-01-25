@@ -29,6 +29,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.controller.descriptor.MemberFieldDescriptor;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -56,8 +58,13 @@ class MemberControllerTest {
 
 	@MockBean
 	private MemberCategoryService memberCategoryService;
+
+	@MockBean
+	private ClubMemberService clubMemberService;
 	@MockBean
 	private MemberMapper memberMapper;
+	@MockBean
+	private ClubMemberMapper clubMemberMapper;
 	@Autowired
 	private Gson gson;
 
