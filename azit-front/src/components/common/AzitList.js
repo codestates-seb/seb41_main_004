@@ -139,6 +139,8 @@ const AzitList = ({ data, myPage }) => {
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
   const [activeHide, setActiveHide] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [userStatus, setUserStatus] = useState("종료됨");
 
   const handleActiveHide = () => {
     setActiveHide(!activeHide);
@@ -150,7 +152,7 @@ const AzitList = ({ data, myPage }) => {
     });
     setClubMember(filterMember);
   }, [data]);
-  //console.log(clubMember);
+  // console.log(clubMember);
   //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
@@ -191,9 +193,10 @@ const AzitList = ({ data, myPage }) => {
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
+          {/* useState로 참여중 상태 받아와서 내려주면 될듯 */}
           {myPage ? (
-            <Status status={"참여중"}>
-              <span>참여중</span>
+            <Status status={userStatus}>
+              <span>{userStatus}</span>
             </Status>
           ) : (
             ""

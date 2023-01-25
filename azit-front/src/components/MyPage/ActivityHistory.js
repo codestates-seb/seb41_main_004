@@ -72,7 +72,7 @@ const ActivityHistory = ({ myPage }) => {
   const { id } = useParams();
   //data = axios.get(api/club/usePage/1)
   const activeData = async () => {
-    const res = await axiosInstance.get(`/api/clubs/1`);
+    const res = await axiosInstance.get(`/api/clubs/${id}`);
     return res.data.data;
   };
 
@@ -84,8 +84,8 @@ const ActivityHistory = ({ myPage }) => {
 
   const handleCheckInput = () => {
     setHostCheck(!hostCheck);
-    //console.log(hostCheck); false <-> true
   };
+  //console.log(hostCheck);  false <-> true
 
   const handleCheckSelect = (e) => {
     setSelectCheck(e.target.value);
