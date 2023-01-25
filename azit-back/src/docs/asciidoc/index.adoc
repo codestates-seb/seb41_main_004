@@ -650,8 +650,8 @@ include::{snippets}/find-all-by-member/request-parameters.adoc[]
 .request-headers
 include::{snippets}/find-all-by-member/request-headers.adoc[]
 
-.request-fields
-include::{snippets}/find-all-by-member/request-fields.adoc[]
+.path-parameters
+include::{snippets}/find-all-by-member/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/find-all-by-member/http-response.adoc[]

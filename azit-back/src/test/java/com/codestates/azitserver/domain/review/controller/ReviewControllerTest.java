@@ -128,28 +128,29 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
 		queryParams.add("page", "1");
 		queryParams.add("size", "10");
 
-		String content = objectMapper.writeValueAsString(get);
-
 		given(reviewService.findReviewByRevieweeId(Mockito.any(), Mockito.anyLong(), Mockito.anyInt(),
 			Mockito.anyInt())).willReturn(reviewPage);
 		given(mapper.reviewToReviewDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
-		ResultActions actions = mockMvc.perform(getRequestBuilder(getReviewUrl(), queryParams, content)
-			.header("Authorization", "Required JWT access token(Optional)"));
+		ResultActions actions = mockMvc.perform(
+			getRequestBuilder(getReviewUrl() + "/reviewee/{reviewee-id}", queryParams, 1L)
+				.header("Authorization", "Required JWT access token(Optional)"));
 
 		// then
 		actions.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument("find-all-by-member",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token(Optional)")),
+					pathParameters(List.of(
+						parameterWithName("reviewee-id").description("리뷰 대상자 고유 식별자"))
+					),
 					requestParameters(
 						List.of(
 							parameterWithName("page").description("Page 번호"),
 							parameterWithName("size").description("Page 크기")
 						)
 					),
-					ReviewFieldsDescriptor.getSetRequestFieldsSnippet(),
 					ReviewFieldsDescriptor.getMultiResponseFieldsSnippet()
 				)
 			);

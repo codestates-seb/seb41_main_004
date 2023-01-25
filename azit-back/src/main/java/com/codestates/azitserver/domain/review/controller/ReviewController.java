@@ -55,11 +55,12 @@ public class ReviewController {
 	}
 
 	//특정 회원에 대한 리뷰 전체 조회
-	@GetMapping
+	@GetMapping("/reviewee/{reviewee-id:[0-9+]}")
 	public ResponseEntity<?> findAllByMember(@Positive @RequestParam(name = "page") int page,
-		@Positive @RequestParam(name = "size") int size, @RequestBody ReviewDto.Get body, @LoginMember Member member) {
+		@Positive @RequestParam(name = "size") int size, @PathVariable("reviewee-id") Long revieweeId,
+		@LoginMember Member member) {
 
-		Page<Review> reviewPage = reviewService.findReviewByRevieweeId(member, body.getRevieweeId(), page - 1, size);
+		Page<Review> reviewPage = reviewService.findReviewByRevieweeId(member, revieweeId, page - 1, size);
 		List<Review> reviews = reviewPage.getContent();
 		List<ReviewDto.Response> response = mapper.reviewToReviewDtoResponse(reviews);
 
