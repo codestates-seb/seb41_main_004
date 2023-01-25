@@ -32,7 +32,8 @@ public class ClubMemberFieldDescriptor {
 		).andWithPrefix("data.member.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개")
 		).and(
 			fieldWithPath("data.member.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
 		).andWithPrefix("data.member.fileInfo.",
@@ -54,7 +55,8 @@ public class ClubMemberFieldDescriptor {
 		).andWithPrefix("data[].member.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개")
 		).and(
 			fieldWithPath("data[].member.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
 		).andWithPrefix("data[].member.fileInfo.",

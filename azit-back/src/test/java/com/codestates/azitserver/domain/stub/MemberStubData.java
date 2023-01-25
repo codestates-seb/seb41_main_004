@@ -137,6 +137,7 @@ public class MemberStubData {
         response.setFileInfo(FileInfoStubData.getFileInfoDtoResponse());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
+        response.setAboutMe("김스텁의 자기소개");
 
         return response;
     }
