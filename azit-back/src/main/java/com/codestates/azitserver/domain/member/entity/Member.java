@@ -78,10 +78,10 @@ public class Member extends Auditable {
 	@Column(name = "MEMBER_REPORT_LIST")
 	private List<MemberMemberReport> memberMemberReportList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
 	private List<Follow> followerList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
 	private List<Follow> followingList = new ArrayList<>();
 
 	public enum Gender {

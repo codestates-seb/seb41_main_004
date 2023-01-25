@@ -11,11 +11,11 @@ import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.member.entity.Member;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
 @Entity
+@NoArgsConstructor
 public class Follow extends Auditable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +38,28 @@ public class Follow extends Auditable {
 
 	public void setFollowee(Member member) {
 		this.followee = member;
-		if(!this.followee.getFollowingList().contains(this)) {
+		if (!this.followee.getFollowingList().contains(this)) {
 			this.followee.getFollowingList().add(this);
 		}
 	}
 
+	//*** Builder ***//
+	private Follow(Builder builder) {
+		this.follower = builder.follower;
+		this.followee = builder.followee;
+	}
+
+	public static class Builder {
+		private final Member follower;
+		private final Member followee;
+
+		public Builder(Member follower, Member followee) {
+			this.follower = follower;
+			this.followee = followee;
+		}
+
+		public Follow build() {
+			return new Follow(this);
+		}
+	}
 }

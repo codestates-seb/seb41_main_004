@@ -2,6 +2,7 @@ package com.codestates.azitserver.domain.follow.controller;
 
 import javax.validation.constraints.Positive;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +11,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codestates.azitserver.domain.follow.dto.FollowDto;
+import com.codestates.azitserver.domain.follow.entity.Follow;
+import com.codestates.azitserver.domain.follow.mapper.FollowMapper;
+import com.codestates.azitserver.domain.follow.service.FollowService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
+import com.codestates.azitserver.global.dto.SingleResponseDto;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("api/members/{member-id:[0-9]+}")
+@RequiredArgsConstructor
 public class FollowController {
+	private final FollowService followService;
+	private final FollowMapper mapper;
+
 	/**
 	 * 해당 회원을 팔로우 합니다.
 	 * @param memberId 팔로우 할 회원 고유 식별자
@@ -26,7 +40,14 @@ public class FollowController {
 	@PostMapping("/follow")
 	public ResponseEntity<?> postFollow(@Positive @PathVariable("member-id") Long memberId,
 		@LoginMember Member member) {
-		return null;
+		if (followService.verifyMemberAndMemberId(member, memberId)) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_APPLY_FOLLOW_);
+		}
+
+		Follow follow = followService.followMember(member, memberId);
+		FollowDto.Response response = mapper.followToFollowDtoResponse(follow);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
 
 	/**
