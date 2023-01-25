@@ -1,97 +1,86 @@
-// import { useEffect } from "react";
-// import { useInView } from "react-intersection-observer";
-// import { useInfiniteQuery } from "react-query";
-// import { useParams } from "react-router-dom";
-// import { axiosInstance } from "../../util/axios";
+import React, { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../../util/axios";
+import Loading from "../common/Loading";
+import Null from "../Home/Null";
 
 import Review from "./Review";
 
 const Reviews = () => {
-  // const { ref, inView } = useInView();
-  // const { id } = useParams();
-  // useEffect(() => {
-  //   const raw = JSON.stringify({
-  //     "revieweeId": 2
-  //   });
-  //   const getAxios = async () => {
-  //     const res = await axiosInstance.get(`/api/reviews?page=1&size=5`, {
-  //       headers: { Authorization: localStorage.getItem("accessToken") },
-  //       body: raw,
-  //     });
-  //     console.log(res);
-  //   };
-  //   getAxios();
-  // }, []);
+  const { ref, inView } = useInView();
+  const { id } = useParams();
 
   // 무한스크롤 함수
-  // const getInfiniteList = async (pageParam) => {
-  //   let d
-  //   const res = await axiosInstance.get(
-  //     `/api/reviews?page=${pageParam}&size=5`,
-  //     { 'revieweeId': id },
-  //     {
-  //       headers: { Authorization: localStorage.getItem("accessToken") },
-  //     }
-  //   );
+  const getInfiniteList = async (pageParam, id) => {
+    const res = await axiosInstance.get(
+      `/api/reviews/reviewee/${id}?page=${pageParam}&size=5`,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
 
-  //   return {
-  //     board_page: res.data.data,
-  //     nextPage: pageParam + 1,
-  //     isLast:
-  //       res.data.data.length > 0
-  //         ? res.data.pageInfo.page === res.data.pageInfo.totalPages
-  //         : true,
-  //   };
-  // };
+    return {
+      board_page: res.data.data,
+      nextPage: pageParam + 1,
+      isLast:
+        res.data.data.length > 0
+          ? res.data.pageInfo.page === res.data.pageInfo.totalPages
+          : true,
+    };
+  };
 
-  // const { data, status, fetchNextPage, isFetchingNextPage, error } =
-  //   useInfiniteQuery(
-  //     "recommend",
-  //     ({ pageParam = 1 }) => getInfiniteList(pageParam),
-  //     {
-  //       staleTime: 6 * 10 * 1000,
-  //       cacheTime: 6 * 10 * 1000,
-  //       getNextPageParam: (lastPage) =>
-  //         !lastPage.isLast ? lastPage.nextPage : undefined,
-  //     }
-  //   );
-  //     console.log(status)
-  // // 맨 밑에 도달했을 시 함수호출
-  // useEffect(() => {
-  //   if (inView) fetchNextPage();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [inView]);
-  const data = [
+  const {
+    data: reviewsData,
+    status,
+    fetchNextPage,
+    isFetchingNextPage,
+    error,
+  } = useInfiniteQuery(
+    ["reviewsGet", id],
+    ({ pageParam = 1 }) => getInfiniteList(pageParam, id),
     {
-      reviewId: 1,
-      revieweeId: 2,
-      club: {
-        clubId: 1,
-        clubName: "재밌는 아지트",
-        meetingDate: "2023-01-20",
-      },
-      commentCategory: "배려심이 있어요",
-      commentBody: "마음씨가 너무 착해요.",
-      reviewStatus: false,
-    },
-    {
-      reviewId: 2,
-      revieweeId: 2,
-      club: {
-        clubId: 1,
-        clubName: "재밌는 아지트",
-        meetingDate: "2023-01-20",
-      },
-      commentCategory: "배려심이 있어요",
-      commentBody: "마음씨가 너무 착해요.",
-      reviewStatus: false,
-    },
-  ];
+      staleTime: 6 * 10 * 1000,
+      cacheTime: 6 * 10 * 1000,
+      getNextPageParam: (lastPage) =>
+        !lastPage.isLast ? lastPage.nextPage : undefined,
+    }
+  );
+
+  // 맨 밑에 도달했을 시 함수호출
+  useEffect(() => {
+    if (inView) fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
   return (
     <>
-      {data.map((data) => (
-        <Review key={data.reviewId} data={data}/>
-      ))}
+      {status === "loading" ? (
+        <Loading />
+      ) : status === "error" ? (
+        <Null text={error.message} />
+      ) : (
+        reviewsData.pages.map((page, index) => (
+          <React.Fragment key={index}>
+            {page.board_page.length > 0 ? (
+              page.board_page.map((review) => (
+                <Review key={review.reviewId} review={review} />
+              ))
+            ) : (
+              <Null text="작성 된 리뷰가 없습니다." />
+            )}
+          </React.Fragment>
+        ))
+      )}
+      {status !== "error" && status === "success" ? (
+        isFetchingNextPage ? (
+          <Loading />
+        ) : (
+          <div ref={ref} />
+        )
+      ) : (
+        <></>
+      )}
     </>
   );
 };
