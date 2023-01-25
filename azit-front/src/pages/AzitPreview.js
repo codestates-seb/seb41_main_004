@@ -262,8 +262,6 @@ const AzitPreview = () => {
   const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
   const profileName = localStorage.getItem("profileName");
-  console.log(profileName);
-  console.log(profileUrl);
 
   const openAzit = async () => {
     const formData = new FormData();

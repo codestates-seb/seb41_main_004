@@ -128,6 +128,7 @@ const Profile = ({ myPage, id }) => {
     });
     return res.data.data;
   };
+
   const {
     data: userData,
     isError,
@@ -179,7 +180,7 @@ const Profile = ({ myPage, id }) => {
             </Link>
           </InfoWrapper>
           <Category getCategoryList={userData.categorySmallIdList} />
-          <Tab myPage={myPage}/>
+          <Tab myPage={myPage} />
         </>
       )}
     </ProfileWrapper>

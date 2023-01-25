@@ -195,9 +195,14 @@ const UserProfileEdit = () => {
     //console.log(checked, id); //true , '전시'
     if (checked) {
       setCheckedInputs([...checkedInputs, id]);
-    } else {
+    } else if (!checked) {
       // 체크 해제
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    }
+    if (checkedInputs.length >= 12) {
+      alert("관심사는 최대 12개까지 선택 가능합니다.");
+      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      checked = false;
     }
   };
 
@@ -246,7 +251,6 @@ const UserProfileEdit = () => {
           <label className="profileImgLabel" htmlFor="profileImg">
             <img alt="imgEditBtn" src={ImgAddIcon} />
           </label>
-          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
         <article>
           <label>닉네임</label>
@@ -259,12 +263,13 @@ const UserProfileEdit = () => {
           ></input>
         </article>
         <article>
-          <label>자기소개를 입력해주세요.</label>
+          <label>자기소개를 입력해주세요. (128자 이내)</label>
           <textarea
             onChange={(e) => {
               setIntro(e.target.value);
             }}
             placeholder="텍스트를 입력해 주세요."
+            maxLength={128}
             defaultValue={intro}
           ></textarea>
         </article>
