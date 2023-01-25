@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
+import Loading from "../common/Loading";
 
 const Container = styled.div`
   div.Box {
@@ -64,8 +65,17 @@ const Container = styled.div`
     font-size: var(--caption-font);
   }
 `;
+const EtcWrap = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+`;
+
 const ActivityHistory = ({ myPage }) => {
   const [hostCheck, setHostCheck] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [selectCheck, setSelectCheck] = useState(0);
   //const [filterList, setFilterList] = useState("");
 
@@ -115,32 +125,42 @@ const ActivityHistory = ({ myPage }) => {
   // }, [data]);
 
   return (
-    <>
-      <Container>
-        <div className="Box">
-          <label className="checkContainer">
-            호스트인 아지트만 보기
-            <input type="checkbox" onChange={handleCheckInput} />
-            <span className="checkmark" />
-          </label>
-          <div className="selectWrapper">
-            <select onChange={handleCheckSelect}>
-              <option value="전체보기">전체보기</option>
-              <option value="참여중인 모임">참여중인 모임</option>
-              <option value="신청한 모임">신청한 모임</option>
-              <option value="종료된 모임">종료된 모임</option>
-            </select>
+    <Container>
+      {isLoading ? (
+        <EtcWrap>
+          <Loading />
+        </EtcWrap>
+      ) : isError ? (
+        <EtcWrap>
+          <p>{error.message}</p>
+        </EtcWrap>
+      ) : (
+        <>
+          <div className="Box">
+            <label className="checkContainer">
+              호스트인 아지트만 보기
+              <input type="checkbox" onChange={handleCheckInput} />
+              <span className="checkmark" />
+            </label>
+            <div className="selectWrapper">
+              <select onChange={handleCheckSelect}>
+                <option value="전체보기">전체보기</option>
+                <option value="참여중인 모임">참여중인 모임</option>
+                <option value="신청한 모임">신청한 모임</option>
+                <option value="종료된 모임">종료된 모임</option>
+              </select>
+            </div>
           </div>
-        </div>
-        {ClubData ? (
-          ClubData.map((data) => (
-            <AzitList key={data.clubId} data={data} myPage={myPage} />
-          ))
-        ) : (
-          <></>
-        )}
-      </Container>
-    </>
+          {ClubData ? (
+            ClubData.map((data) => (
+              <AzitList key={data.clubId} data={data} myPage={myPage} />
+            ))
+          ) : (
+            <></>
+          )}
+        </>
+      )}
+    </Container>
   );
 };
 
