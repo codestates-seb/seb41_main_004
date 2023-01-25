@@ -10,9 +10,11 @@ const RecommendTab = () => {
   const { ref, inView } = useInView();
 
   // 무한스크롤 함수 0번이 guest
-  const fetchInfiniteList = async (pageParam) => { 
+  const fetchInfiniteList = async (pageParam) => {
     const res = await axiosInstance.get(
-      `/api/clubs/recommend/${localStorage.getItem("memberId") ? localStorage.getItem("memberId") : 0}?page=${pageParam}&size=5`,
+      `/api/clubs/recommend/${
+        localStorage.getItem("memberId") ? localStorage.getItem("memberId") : 0
+      }?page=${pageParam}&size=5`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
       }
@@ -42,7 +44,7 @@ const RecommendTab = () => {
 
   // 맨 밑에 도달했을 시 함수호출
   useEffect(() => {
-      if (inView) fetchNextPage();
+    if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
