@@ -591,7 +591,7 @@ include::{snippets}/kick-club-members/request-headers.adoc[]
 .http-response
 include::{snippets}/kick-club-members/http-response.adoc[]
 
-=== 아지트 참여 회원 강퇴
+=== 아지트 참여 신청 취소 및 나가기
 
 .curl-request
 include::{snippets}/delete-club-members/curl-request.adoc[]
