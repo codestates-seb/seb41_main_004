@@ -9,6 +9,7 @@ import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -19,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class ClubMemberService {
 	private final ClubMemberRepository clubMemberRepository;
 	private final ClubService clubService;
+
+	private final MemberService memberService;
 
 	public ClubMember signup(Member member, Long clubId, String joinAnswer) {
 		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
@@ -146,5 +149,10 @@ public class ClubMemberService {
 
 	public boolean verifyMemberIfClubHost(Club club, Long memberId) {
 		return club.getHost().getMemberId().equals(memberId);
+	}
+
+	public List<ClubMember> getAllClubMemberByMemberId(Long memberId) {
+		Member member = memberService.getMemberById(memberId);
+		return clubMemberRepository.findClubMembersByMember(member);
 	}
 }
