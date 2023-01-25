@@ -591,6 +591,23 @@ include::{snippets}/kick-club-members/request-headers.adoc[]
 .http-response
 include::{snippets}/kick-club-members/http-response.adoc[]
 
+=== 아지트 참여 회원 강퇴
+
+.curl-request
+include::{snippets}/delete-club-members/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-club-members/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-club-members/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/delete-club-members/request-headers.adoc[]
+
+.http-response
+include::{snippets}/delete-club-members/http-response.adoc[]
+
 == 참여자 리뷰
 
 === 리뷰 작성

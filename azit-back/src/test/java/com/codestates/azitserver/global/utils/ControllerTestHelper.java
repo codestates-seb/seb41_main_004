@@ -63,8 +63,8 @@ public interface ControllerTestHelper {
 			.content(content);
 	}
 
-	default MockHttpServletRequestBuilder deleteRequestBuilder(String url, long resourceId) {
-		return delete(url, resourceId);
+	default MockHttpServletRequestBuilder deleteRequestBuilder(String url, Object... urlVariables) {
+		return delete(url, urlVariables);
 	}
 
 	default URI createURI(String url) {
