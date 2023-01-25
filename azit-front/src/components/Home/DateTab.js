@@ -34,8 +34,8 @@ const DateTab = () => {
       ["get", days],
       ({ pageParam = 1 }) => fetchInfiniteList(pageParam, days),
       {
-        staleTime: 6 * 10 * 1000,
-        cacheTime: 6 * 10 * 1000,
+        // staleTime: 6 * 10 * 1000,
+        // cacheTime: 6 * 10 * 1000,
         getNextPageParam: (lastPage) =>
           !lastPage.isLast ? lastPage.nextPage : undefined,
       }

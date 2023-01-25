@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
@@ -81,6 +81,7 @@ const Null = styled.article`
 `;
 const ReviewCreate = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const hostId = JSON.parse(window.localStorage.getItem("memberId"));
   const [profileArr, setProfileArr] = useState([]);
   const [selectMember, setSelectMember] = useState([]);
@@ -90,7 +91,7 @@ const ReviewCreate = () => {
     return res.data.data;
   };
   const { data: azitData } = useQuery("azitLookup", azitLookup);
-
+  // console.log(postData)
   useEffect(() => {
     let selectMemberId = selectMember.map((el) => el.memberId);
     setPostData(
@@ -120,10 +121,22 @@ const ReviewCreate = () => {
       setSelectMember(selectMember.filter((el) => el !== id));
     }
   };
-
+  
+  const posting = async (e) => {
+    e.preventDefault();
+    try {
+      await axiosInstance.post(`/api/reviews`, postData, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
+      navigate(-1);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  const { mutate } = useMutation(posting);
   return (
-    <CreateWrap>
-      <Header title="리뷰 작성하기" toLink="/" />
+    <CreateWrap onSubmit={mutate}>
+      <Header title="리뷰 작성하기"/>
       <div className="createCell">
         {/* SelectCell */}
         <div className="selectCell">

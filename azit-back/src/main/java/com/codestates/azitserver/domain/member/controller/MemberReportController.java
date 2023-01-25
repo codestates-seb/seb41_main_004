@@ -43,7 +43,7 @@ public class MemberReportController {
 	}
 
 	// 신고 생성
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> postMemberReport(@RequestBody @Valid MemberReportDto.Post reportPostDto) {
 
 		// TODO 중복 신고 불가한지 확인

@@ -103,8 +103,6 @@ public class Club extends Auditable {
 		return clubMember;
 	}
 
-	// TODO: banner_image, host_id, club_members
-
 	public enum JoinMethod {
 		APPROVAL("승인제"),
 		FIRST_COME("선착순");

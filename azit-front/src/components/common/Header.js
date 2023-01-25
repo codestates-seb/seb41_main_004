@@ -41,11 +41,11 @@ const HeaderWrap = styled.header`
   }
 `;
 
-const Header = ({ title, toLink }) => {
+const Header = ({ title }) => {
   const navigate = useNavigate();
   return (
     <HeaderWrap>
-      <button onClick={() => navigate(toLink ? toLink : -1)}>
+      <button onClick={() => navigate(-1)}>
         <span />
       </button>
       <h2>{title ? title : ""}</h2>
