@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
+import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
 
 const Container = styled.div`
@@ -60,18 +64,67 @@ const Container = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const ActivityHistory = () => {
+const ActivityHistory = ({ myPage }) => {
+  const [hostCheck, setHostCheck] = useState(false);
+  const [selectCheck, setSelectCheck] = useState(0);
+  const [filterList, setFilterList] = useState("");
+
+  const { id } = useParams();
+  //data = axios.get(api/club/usePage/1)
+  const activeData = async () => {
+    const res = await axiosInstance.get(`/api/clubs/1`);
+    return res.data.data;
+  };
+
+  const { data, isError, isLoading, error } = useQuery("userActivityData", () =>
+    activeData()
+  );
+
+  console.log(data);
+
+  const handleCheckInput = () => {
+    setHostCheck(!hostCheck);
+    //console.log(hostCheck); false <-> true
+  };
+
+  const handleCheckSelect = (e) => {
+    setSelectCheck(e.target.value);
+  };
+  //console.log(selectCheck);
+
+  // useEffect(() => {
+  //   if (hostCheck === true && selectCheck === true) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.host.memberId === id && data.data.selectValue === selectCheck;
+  //       })
+  //     );
+  //   } else if (hostCheck === true) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.data.hostId === id;
+  //       })
+  //     );
+  //   } else if (selectCheck) {
+  //     setFilterList(
+  //       data.filter((data) => {
+  //         data.data.selectValue === selectCheck;
+  //       })
+  //     );
+  //   }
+  // }, [data]);
+
   return (
     <>
       <Container>
         <div className="Box">
           <label className="checkContainer">
             호스트인 아지트만 보기
-            <input type="checkbox" />
+            <input type="checkbox" onChange={handleCheckInput} />
             <span className="checkmark" />
           </label>
           <div className="selectWrapper">
-            <select>
+            <select onChange={handleCheckSelect}>
               <option value="전체보기">전체보기</option>
               <option value="참여중인 모임">참여중인 모임</option>
               <option value="신청한 모임">신청한 모임</option>
@@ -80,7 +133,9 @@ const ActivityHistory = () => {
           </div>
         </div>
         {ClubData ? (
-          ClubData.map((data) => <AzitList key={data.clubId} data={data} />)
+          ClubData.map((data) => (
+            <AzitList key={data.clubId} data={data} myPage={myPage} />
+          ))
         ) : (
           <></>
         )}

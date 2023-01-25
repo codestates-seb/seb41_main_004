@@ -99,10 +99,10 @@ const Tag = styled.span`
   display: ${(props) => (props.tagDisplay ? props.tagDisplay : "flex")};
 `;
 const EtcWrap = styled.div`
-  /* display: flex; */
+  display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
-  display: none;
+  /* display: none; */
   button,
   a {
     cursor: pointer;
@@ -115,11 +115,10 @@ const EtcWrap = styled.div`
   }
 `;
 const Status = styled.div`
-  display: none;
   position: absolute;
   right: 0;
   top: 0;
-  /* display: flex; */
+  display: flex;
   height: 2.2rem;
   justify-content: center;
   align-items: center;
@@ -136,10 +135,15 @@ const Status = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const AzitList = ({ data }) => {
+const AzitList = ({ data, myPage }) => {
+  // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
+  const [activeHide, setActiveHide] = useState(false);
 
+  const handleActiveHide = () => {
+    setActiveHide(!activeHide);
+  };
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers.filter((member) => {
@@ -147,10 +151,13 @@ const AzitList = ({ data }) => {
     });
     setClubMember(filterMember);
   }, [data]);
+  //console.log(clubMember);
+  //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
   }, [data.meetingDate, data.meetingTime]);
+  //console.log(meetDate); //01월20일 23:59
 
   const repeatAvatar = (data) => {
     let result = [];
@@ -158,7 +165,10 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < 4; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
+            <img
+              alt={data[i].member.nickname}
+              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+            />
           </div>
         );
       }
@@ -166,23 +176,32 @@ const AzitList = ({ data }) => {
       for (let i = 0; i < data.length; i++) {
         result.push(
           <div key={data[i].clubMemberId} className="imgWrap">
-            <img alt={data[i].member.nickname} src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`} />
+            <img
+              alt={data[i].member.nickname}
+              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+            />
           </div>
         );
       }
     }
+
     return <>{result}</>;
   };
   // console.log(`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`);
-  
+
   return (
     <ListWrap>
       <DetailWrap>
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
-          <Status status={"종료됨"}>
-            <span>참여중</span>
-          </Status>
+          {myPage ? (
+            <Status status={"참여중"}>
+              <span>참여중</span>
+            </Status>
+          ) : (
+            ""
+          )}
+
           <ImgWrap
             clubImg={`${
               data.bannerImage
@@ -194,7 +213,7 @@ const AzitList = ({ data }) => {
             <div className="tagWrap">
               {/* 카테고리 및 숨겨짐 들어갈 곳 tagDisplay에 none을 props로 넣을 시 사라짐 */}
               <Tag className="category">{data.categorySmall.categoryName}</Tag>
-              <Tag tagDisplay="none">숨겨짐</Tag>
+              {activeHide ? <Tag>숨겨짐</Tag> : null}
             </div>
             <h2 className="clubName">{data.clubName}</h2>
             <div className="placeTime">
@@ -206,17 +225,18 @@ const AzitList = ({ data }) => {
             <div className="etcCell">
               <div className="profileAvatar">
                 <div className="imgWrap">
-                  <img alt={data.host.nickname} src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`} />
+                  <img
+                    alt={data.host.nickname}
+                    src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                  />
                 </div>
                 {clubMember ? repeatAvatar(clubMember) : null}
               </div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">
-                    {clubMember.length + 1}{" "}
-                  </span>
-                  /<span className="limit"> {data.memberLimit}</span>명
+                  <span className="current">{clubMember.length + 1} </span>/
+                  <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
               <span className="clubHost">{data.host.nickname}</span>
@@ -227,11 +247,15 @@ const AzitList = ({ data }) => {
       {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 display none 상태 */}
       <EtcWrap>
         <div className="ActivityView">
-          <button type="button">활동내역 {true ? "보이기" : "숨기기"}</button>
+          <button type="button" onClick={handleActiveHide}>
+            {myPage && (activeHide ? "활동내역 보이기" : "활동내역 숨기기")}
+          </button>
         </div>
         {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
-          <Link to="/review/Create">리뷰 작성하러 가기 〉</Link>
+          <Link to="/review/Create">
+            {myPage ? "리뷰 작성하러 가기 〉" : null}
+          </Link>
         </div>
       </EtcWrap>
     </ListWrap>
