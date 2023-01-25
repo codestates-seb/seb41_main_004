@@ -317,20 +317,6 @@ class ClubControllerTest implements ClubControllerTestHelper {
 	}
 
 	@Test
-	void getClubByMemberRecommend() {
-
-		// TODO : implement
-
-	}
-
-	@Test
-	void getClubByMemberId() {
-
-		// TODO : implement
-
-	}
-
-	@Test
 	void search() throws Exception {
 		// given
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
