@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -67,7 +67,7 @@ const Container = styled.div`
 const ActivityHistory = ({ myPage }) => {
   const [hostCheck, setHostCheck] = useState(false);
   const [selectCheck, setSelectCheck] = useState(0);
-  const [filterList, setFilterList] = useState("");
+  //const [filterList, setFilterList] = useState("");
 
   const { id } = useParams();
   //data = axios.get(api/club/usePage/1)
@@ -80,7 +80,7 @@ const ActivityHistory = ({ myPage }) => {
     activeData()
   );
 
-  console.log(data);
+  //console.log(data); 받아오는 데이터 확인하기
 
   const handleCheckInput = () => {
     setHostCheck(!hostCheck);
