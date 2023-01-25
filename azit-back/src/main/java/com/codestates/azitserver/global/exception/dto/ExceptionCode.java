@@ -13,6 +13,7 @@ public enum ExceptionCode {
 	// 400
 	INVALID_CLUB_MEMBER_STATUS(40001, "Invalid club member status"),
 	HOST_REPORT_FAILED(40002, "Host is not allowed to report its own azit"),
+	INVALID_TOKEN(40003, "Invalid token"),
 
 	// 403
 	CLUB_CANCELED(40301, "The Club is canceled"),
@@ -34,6 +35,7 @@ public enum ExceptionCode {
 
 	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
+
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),

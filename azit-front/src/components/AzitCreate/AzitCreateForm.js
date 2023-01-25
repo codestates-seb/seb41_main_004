@@ -175,7 +175,7 @@ const DaumPostcodeWrap = styled.div`
   }
 `;
 
-const AzitCreateForm = ({ imgFile }) => {
+const AzitCreateForm = ({ croppedImage }) => {
   //  아지트 생성 폼 상태
   const [selected, setSelected] = useState("1"); //카테고리
   const [smallSelected, setSmallSeleted] = useState("1");
@@ -326,7 +326,7 @@ const AzitCreateForm = ({ imgFile }) => {
   }
   const navigate = useNavigate();
 
-  let file = dataURLtoFile(imgFile, "sendImg");
+  let file = dataURLtoFile(croppedImage, "sendImg");
   let categorySmallId = Number(smallSelected);
   let numberFee = Number(fee.split(",").join(""));
   let numberMemberLimit = Number(memberLimit);
@@ -750,7 +750,7 @@ const AzitCreateForm = ({ imgFile }) => {
       </form>
       <div className="buttonWrap">
         <button
-          className={imgFile && question && fee ? "nextBtn" : "disabled"}
+          className={croppedImage && question && fee ? "nextBtn" : "disabled"}
           onClick={move}
         >
           모임 미리보기
