@@ -64,7 +64,7 @@ function App() {
             <Route path="/azit/preview" element={<AzitPreview />}></Route>
 
             {/* 리뷰 */}
-            <Route path="/review/create" element={<ReviewCreate />}></Route>
+            <Route path="/review/create/:id" element={<ReviewCreate />}></Route>
 
             {/* 유저페이지 */}
             <Route path="/userpage/:id" element={<UserPage />}></Route>

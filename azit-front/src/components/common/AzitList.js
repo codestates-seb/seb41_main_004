@@ -102,7 +102,6 @@ const EtcWrap = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
-  /* display: none; */
   button,
   a {
     cursor: pointer;
@@ -187,7 +186,6 @@ const AzitList = ({ data, myPage }) => {
 
     return <>{result}</>;
   };
-  // console.log(`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`);
 
   return (
     <ListWrap>
@@ -245,19 +243,21 @@ const AzitList = ({ data, myPage }) => {
         </Link>
       </DetailWrap>
       {/* 마이페이지 일 때만 보이게 할 필요 있음 현재 display none 상태 */}
-      <EtcWrap>
-        <div className="ActivityView">
-          <button type="button" onClick={handleActiveHide}>
-            {myPage && (activeHide ? "활동내역 보이기" : "활동내역 숨기기")}
-          </button>
-        </div>
-        {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
-        <div className="ActivityReview">
-          <Link to="/review/Create">
-            {myPage ? "리뷰 작성하러 가기 〉" : null}
-          </Link>
-        </div>
-      </EtcWrap>
+      {myPage && (
+        <EtcWrap>
+          <div className="ActivityView">
+            <button type="button" onClick={handleActiveHide}>
+            활동내역 {activeHide ? "보이기" : "숨기기"}
+            </button>
+          </div>
+          {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
+          <div className="ActivityReview">
+            <Link to={`/review/create/${data.clubId}`}>
+              리뷰 작성하러 가기 〉
+            </Link>
+          </div>
+        </EtcWrap>
+      )}
     </ListWrap>
   );
 };
