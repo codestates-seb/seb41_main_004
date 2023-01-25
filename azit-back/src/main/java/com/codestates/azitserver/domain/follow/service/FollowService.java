@@ -43,6 +43,36 @@ public class FollowService {
 		return followRepository.save(follow);
 	}
 
+	/**
+	 * 팔로우 한 회원을 언팔로우합니다.
+	 * @param member 언팔로우 신청을 하려는 회원
+	 * @param memberId 언팔로우하려는 회원의 고유 식별자
+	 * @author cryoon
+	 */
+	public void unfollowMember(Member member, Long memberId) {
+		// 팔로워, 팔로잉이 존재하는지 확인합니다.
+		Member follower = memberService.findExistingMember(member.getMemberId());
+		Member followee = memberService.findExistingMember(memberId);
+
+		// 현재 회원이 팔로우한 상태인지 확인합니다.
+		Follow follow = findFollowByIds(follower.getMemberId(), followee.getMemberId());
+
+		// 팔로우 상태이면 팔로우 정보를 삭제합니다.
+		followRepository.deleteById(follow.getFollowId());
+	}
+
+	/**
+	 * 팔로워id, 팔로잉id를 통해 팔로우 정보가 있는지 확인합니다.
+	 * @param followerId 팔로워 고유 식별자
+	 * @param followeeId 팔로잉 고유 식별자
+	 * @return 팔로우 정보가 존재한다면 해당 팔로우 정보를 리턴합니다.
+	 * @author cryoon
+	 */
+	public Follow findFollowByIds(Long followerId, Long followeeId) {
+		Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFolloweeId(followerId, followeeId);
+		return optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
+	}
+
 	//*** verfification ***//
 	/**
 	 * 로그인한 회원과 요청하려는 회원이 일치하는지 확인합니다.

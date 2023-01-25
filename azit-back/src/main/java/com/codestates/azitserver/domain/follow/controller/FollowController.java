@@ -60,7 +60,13 @@ public class FollowController {
 	@PostMapping("/unfollow")
 	public ResponseEntity<?> postUnfollow(@Positive @PathVariable("member-id") Long memberId,
 		@LoginMember Member member) {
-		return null;
+		if (followService.verifyMemberAndMemberId(member, memberId)) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_APPLY_FOLLOW_);
+		}
+
+		followService.unfollowMember(member, memberId);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	/**

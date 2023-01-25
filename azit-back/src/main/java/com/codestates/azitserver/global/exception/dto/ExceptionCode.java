@@ -36,6 +36,7 @@ public enum ExceptionCode {
 
 	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
+	FOLLOW_NOT_FOUND(40412, "Follow not found"),
 
 
 	// 409
