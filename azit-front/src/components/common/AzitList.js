@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserListIcon from "../../images/userListIcon.png";
 import { toDateFormatOfMonthDay } from "../../util/toDateFormatOfKR";
@@ -137,10 +137,9 @@ const Status = styled.div`
   }
 `;
 const AzitList = ({ data }) => {
-  const navigate = useNavigate();
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
-
+  
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers.filter((member) => {
@@ -174,9 +173,6 @@ const AzitList = ({ data }) => {
     }
     return <>{result}</>;
   };
-  const reviewMove = () => {
-    navigate(`/review/Create/${data.clubId}`, {state:{data}})
-  }
 
   return (
     <ListWrap>
@@ -234,7 +230,7 @@ const AzitList = ({ data }) => {
         </div>
         {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
         <div className="ActivityReview">
-          <button onClick={reviewMove}>리뷰 작성하러 가기 〉</button>
+          <Link to={`/review/create/${data.clubId}`} >리뷰 작성하러 가기 〉</Link>
         </div>
       </EtcWrap>
     </ListWrap>

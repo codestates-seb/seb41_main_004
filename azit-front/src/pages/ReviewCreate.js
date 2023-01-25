@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import CreateItem from "../components/ReviewCreate/CreateItem";
+import { axiosInstance } from "../util/axios";
 
 const CreateWrap = styled.form`
   padding: 7.5rem 2rem 2rem;
@@ -61,6 +63,7 @@ const CreateWrap = styled.form`
     }
   }
 `;
+
 const UserImgWrap = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -77,29 +80,37 @@ const Null = styled.article`
   padding: 8rem 0;
 `;
 const ReviewCreate = () => {
-  const location = useLocation();
-  const data = location.state.data;
+  const { id } = useParams();
   const hostId = JSON.parse(window.localStorage.getItem("memberId"));
   const [profileArr, setProfileArr] = useState([]);
   const [selectMember, setSelectMember] = useState([]);
   const [postData, setPostData] = useState([]);
+  const azitLookup = async () => {
+    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    return res.data.data;
+  };
+  const { data: azitData } = useQuery("azitLookup", azitLookup);
 
   useEffect(() => {
-    let selectMemberId = selectMember.map((el) => el.memberId)
-    setPostData(postData.filter((el) => selectMemberId.includes(el.revieweeId)))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectMember])
-
-  useEffect(() => {
-    const joinedMembers = data.clubMembers
-      .filter((member) => member.clubMemberStatus === "CLUB_JOINED")
-      .map((member) => member.member);
-    const combineProfileArr = [{ ...data.host }, ...joinedMembers].filter(
-      (member) =>
-        member.memberId !== hostId
+    let selectMemberId = selectMember.map((el) => el.memberId);
+    setPostData(
+      postData.filter((el) => selectMemberId.includes(el.revieweeId))
     );
-    setProfileArr(combineProfileArr);
-  }, [data.clubMembers, data.host, hostId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectMember]);
+
+  useEffect(() => {
+    if (azitData) {
+      const joinedMembers = azitData.clubMembers
+        .filter((member) => member.clubMemberStatus === "CLUB_JOINED")
+        .map((member) => member.member);
+      const combineProfileArr = [{ ...azitData.host }, ...joinedMembers].filter(
+        (member) => member.memberId !== hostId
+      );
+      setProfileArr(combineProfileArr);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [azitData]);
 
   const handleSelectMember = (checked, id) => {
     if (checked) {
@@ -112,7 +123,7 @@ const ReviewCreate = () => {
 
   return (
     <CreateWrap>
-      <Header title="리뷰 작성하기" />
+      <Header title="리뷰 작성하기" toLink="/" />
       <div className="createCell">
         {/* SelectCell */}
         <div className="selectCell">
@@ -148,7 +159,7 @@ const ReviewCreate = () => {
               setPostData={setPostData}
               postData={postData}
               hostId={hostId}
-              clubId={data.clubId}
+              clubId={azitData.clubId}
             />
           ))
         ) : (
