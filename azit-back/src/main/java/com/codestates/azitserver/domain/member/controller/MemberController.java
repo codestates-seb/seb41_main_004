@@ -161,12 +161,6 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.ACCEPTED);
 	}
 
-	//TODO 팔로우, 언팔로우
-	@PostMapping("/follows/{member-id}")
-	public ResponseEntity followMember() {
-		return ResponseEntity.created(null).build();
-	}
-
 	//TODO 회원 신고
 	@PostMapping("/reports/{member-id}")
 	public ResponseEntity reportMember() {
