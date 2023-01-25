@@ -37,10 +37,6 @@ import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * TODO : Login 피트가 구현 되면 Member Principal을 받아와 요청의 주체와, 요청의 대상을 검증하는 로직 추가.
- * TODO : Member 파트가 구현 되면 관심 카테고리, 회원이 참여한 정보를 가져와 조회 api 완성.
- */
 @Validated
 @RestController
 @RequiredArgsConstructor
