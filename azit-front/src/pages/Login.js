@@ -36,6 +36,7 @@ const Login = () => {
           data
         );
         const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
         const nickname = res.data.nickname;
         const email = res.data.email;
         const profileUrl = res.data.profileUrl;
@@ -47,7 +48,7 @@ const Login = () => {
         localStorage.setItem('profileUrl', profileUrl);
         localStorage.setItem('memberId', memberId);
         localStorage.setItem('profileName', profileName);
-        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
         dispatch(loginStatusSlice.actions.login());
         navigate('/');
         console.log(res);
