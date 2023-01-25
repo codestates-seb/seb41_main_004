@@ -156,7 +156,6 @@ const AzitList = ({ data, myPage }) => {
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
   }, [data.meetingDate, data.meetingTime]);
-  //console.log(meetDate); //01월20일 23:59
 
   const repeatAvatar = (data) => {
     let result = [];
@@ -247,7 +246,7 @@ const AzitList = ({ data, myPage }) => {
         <EtcWrap>
           <div className="ActivityView">
             <button type="button" onClick={handleActiveHide}>
-            활동내역 {activeHide ? "보이기" : "숨기기"}
+              활동내역 {activeHide ? "보이기" : "숨기기"}
             </button>
           </div>
           {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}

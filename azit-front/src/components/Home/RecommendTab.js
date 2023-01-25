@@ -38,8 +38,8 @@ const RecommendTab = () => {
       ["recommend", memberId],
       ({ pageParam = 1 }) => fetchInfiniteList(pageParam, memberId),
       {
-        staleTime: 6 * 10 * 1000,
-        cacheTime: 6 * 10 * 1000,
+        // staleTime: 6 * 10 * 1000,
+        // cacheTime: 6 * 10 * 1000,
         getNextPageParam: (lastPage) =>
           !lastPage.isLast ? lastPage.nextPage : undefined,
       }
