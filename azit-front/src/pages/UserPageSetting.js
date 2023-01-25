@@ -16,9 +16,21 @@ const UserPageSetting = () => {
   const navigate = useNavigate();
 
   const LogoutButtonClick = () => {
-    removeCookie('accessToken');
-    localStorage.clear();
-    navigate('/login');
+    fetch(`http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    })
+      .then((response) => {
+        if(response.status === 200) {
+          removeCookie('refreshToken');
+          localStorage.clear();
+          navigate('/login');
+        }
+      }
+    )
   }
 
   const withdrawlButtonClick = () => {

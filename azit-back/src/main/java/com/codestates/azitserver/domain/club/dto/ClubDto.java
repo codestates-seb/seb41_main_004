@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.codestates.azitserver.domain.category.dto.CategoryDto;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.global.validator.EnumValue;
@@ -175,6 +176,18 @@ public class ClubDto {
 		private Long clubId;
 		private String clubName;
 		private LocalDate meetingDate;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ClubMemberResponse{
+		private Long clubId;
+		private String clubName;
+		private ClubMember.ClubMemberStatus clubMemberStatus;
+		private String host;
+		private Boolean isHidden;
+		private Boolean isReviewSummited;
 	}
 }
 

@@ -33,20 +33,17 @@ public class MemberReportController {
 
 	private final MemberReportMapper memberReportMapper;
 
-	private final MemberMemberReportService memberMemberReportService;
 
 	public MemberReportController(
 		MemberReportService memberReportService,
-		MemberReportMapper memberReportMapper,
-		MemberMemberReportService memberMemberReportService
+		MemberReportMapper memberReportMapper
 	) {
 		this.memberReportService = memberReportService;
 		this.memberReportMapper = memberReportMapper;
-		this.memberMemberReportService = memberMemberReportService;
 	}
 
 	// 신고 생성
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> postMemberReport(@RequestBody @Valid MemberReportDto.Post reportPostDto) {
 
 		// TODO 중복 신고 불가한지 확인

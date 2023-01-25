@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../util/axios";
 // eslint-disable-next-line
 import { useEffect } from "react";
+import { googleLogin } from "../util/oauthGoogle";
 
 
 
@@ -22,9 +23,9 @@ const Login = () => {
   // useForm의 isSubmitting으로 로그인 로딩 구현
   const { register, handleSubmit, formState: { errors } } = useForm({mode: "onchange"});
 
-  const oAuthHandler = () => {
-    window.location.assign('http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
-  }
+  // const oAuthHandler = () => {
+  //   window.location.assign('http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
+  // }
 
   const loginButtonClick = async (data) => {
     // eslint-disable-next-line
@@ -35,6 +36,7 @@ const Login = () => {
           data
         );
         const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
         const nickname = res.data.nickname;
         const email = res.data.email;
         const profileUrl = res.data.profileUrl;
@@ -46,7 +48,7 @@ const Login = () => {
         localStorage.setItem('profileUrl', profileUrl);
         localStorage.setItem('memberId', memberId);
         localStorage.setItem('profileName', profileName);
-        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
         dispatch(loginStatusSlice.actions.login());
         navigate('/');
         console.log(res);
@@ -100,10 +102,9 @@ const Login = () => {
         <Link to="/signup">회원가입하기</Link>
       </LoginFooter>
       <Line />
-      {/* <Link to="/" className="snsWrap"> */}
-        <SnsLoginButton onClick={oAuthHandler}>Sign in with Google</SnsLoginButton>
-        {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
-      {/* </Link> */}
+      <a href={googleLogin}>
+        <SnsLoginButton>Sign in with Google</SnsLoginButton>
+      </a>
     </LoginContainer>
   );
 };
@@ -115,7 +116,7 @@ const LoginContainer = styled.div`
   align-items: center;
   padding: 0rem 2rem 0rem 2rem;
   height: 100vh;
-  > .snsWrap {
+  > a {
     width: 100%;
   }
 `;

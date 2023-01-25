@@ -1,5 +1,7 @@
 package com.codestates.azitserver.domain.club.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -45,4 +47,11 @@ public class ClubMemberDto {
 		private ClubMember.ClubMemberStatus clubMemberStatus;
 	}
 
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ClubMemberParticipationStatusResponse {
+		private List<Long> clubMemberIdList;
+		private List<Boolean> participationStatusList;
+	}
 }

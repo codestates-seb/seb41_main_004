@@ -36,6 +36,7 @@ public enum ExceptionCode {
 	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
 
+
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
 	INVALID_MEETING_METHOD(40902, "Meeting method is \"offline\" or \"online\" only"),
