@@ -104,6 +104,9 @@ include::{snippets}/token-reIssue/curl-request.adoc[]
 .http-request
 include::{snippets}/token-reIssue/http-request.adoc[]
 
+.request-fields
+include::{snippets}/token-reIssue/request-fields.adoc[]
+
 .request-headers
 include::{snippets}/token-reIssue/request-headers.adoc[]
 
