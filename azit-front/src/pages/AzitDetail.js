@@ -269,11 +269,10 @@ const AzitDetail = () => {
   const { id } = useParams();
   const [clubMember, setClubMember] = useState([]);
   const [waitingMembers, setWaitingMembers] = useState([]);
-  const [clubMemberId, setClubMemberId] = useState([]);
-  const [waitingMemberId, setWaitingMemberId] = useState([]);
-  const [hostId, setHostId] = useState(null);
   const memberId = Number(localStorage.getItem("memberId"));
   const navigate = useNavigate();
+
+  const [btnStatus, setBtnStatus] = useState("join");
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -285,53 +284,56 @@ const AzitDetail = () => {
     azitLookup
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (data) {
-      return setHostId(data.host.memberId);
+      setClubMember(
+        data.clubMembers.filter(
+          (member) => member.clubMemberStatus === "CLUB_JOINED"
+        )
+      );
+      setWaitingMembers(
+        data.clubMembers.filter(
+          (member) => member.clubMemberStatus === "CLUB_WAITING"
+        )
+      );
     }
   }, [data]);
 
   useEffect(() => {
     if (data) {
-      let filterMember = data.clubMembers.filter((member) => {
-        return member.clubMemberStatus === "CLUB_JOINED";
-      });
-      setClubMember(filterMember);
-    }
-    if (data) {
-      let waitingMember = data.clubMembers.filter((member) => {
-        return member.clubMemberStatus !== "CLUB_JOINED";
-      });
-      setWaitingMembers(waitingMember);
-    }
-  }, [data]);
+      let joinId = clubMember.map((member) => member.member.memberId);
+      let waitingId = waitingMembers.map((member) => member.member.memberId);
 
-  useEffect(() => {
-    if (clubMember.length !== 0) {
-      for (let i = 0; i < clubMember.length; i++) {
-        if (clubMember[i].member.memberId === memberId) {
-          setClubMemberId(clubMember[i].member.memberId);
-        } else {
-          return;
-        }
+      if (data.clubStatus !== "CLUB_ACTIVE") {
+        setBtnStatus("close");
+        // 호스트가 아니고, 참가 신청을 하지 않고, 참가하지 않은 사람
+      } else if (data.memberLimit === joinId.length + 1) {
+        setBtnStatus("full");
+      } else if (
+        memberId !== data.host.memberId &&
+        !waitingId.includes(memberId) &&
+        !joinId.includes(memberId)
+      ) {
+        setBtnStatus("join");
+      } else if (memberId === data.host.memberId) {
+        setBtnStatus("edit");
+        // 호스트가 아니고, 신청 유저에 들어가있고, 참여 유저가 아닐 경우
+      } else if (
+        memberId !== data.host.memberId &&
+        waitingId.includes(memberId) &&
+        !joinId.includes(memberId)
+      ) {
+        setBtnStatus("wating");
+        // 호스트가 아니고, 신청 유저에 없고, 참여 유저에 들어와 있을 경우
+      } else if (
+        memberId !== data.host.memberId &&
+        !waitingId.includes(memberId) &&
+        joinId.includes(memberId)
+      ) {
+        setBtnStatus("joined");
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clubMember]);
-
-  useEffect(() => {
-    if (waitingMembers.length !== 0) {
-      for (let i = 0; i < waitingMembers.length; i++) {
-        if (waitingMembers[i].member.memberId === memberId) {
-          setWaitingMemberId(waitingMembers[i].member.memberId);
-        } else {
-          return;
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [waitingMembers]);
+  }, [clubMember, waitingMembers]);
 
   return (
     <AzitDetailWrap>
@@ -433,50 +435,40 @@ const AzitDetail = () => {
                 </li>
               </ul>
             </div>
-            {data.clubStatus === "CLUB_ACTIVE" && hostId === memberId ? (
-              <button
-                className="active"
-                onClick={() => navigate(`/azit/edit/${id}`)}
-              >
-                아지트 수정하기
-              </button>
-            ) : (
-              <></>
-            )}
-            {data.clubStatus === "CLUB_ACTIVE" &&
-            clubMemberId.length === 0 &&
-            waitingMemberId.length === 0 &&
-            hostId !== memberId ? (
-              <button
-                className="active"
-                onClick={() => navigate(`/azit/join/${id}`)}
-              >
-                아지트 가입하기
-              </button>
-            ) : (
-              <></>
-            )}
-            {data.clubStatus === "CLUB_ACTIVE" &&
-            clubMemberId.length !== 0 &&
-            clubMember.length !== 0 &&
-            hostId !== memberId ? (
-              <button className="active">이미 참여 중인 아지트입니다</button>
-            ) : (
-              <></>
-            )}
-            {data.clubStatus === "CLUB_ACTIVE" &&
-            waitingMemberId.length !== 0 &&
-            waitingMembers.length !== 0 &&
-            hostId !== memberId ? (
-              <button className="active">이미 신청 중인 아지트입니다</button>
-            ) : (
-              <></>
-            )}
-            {data.clubStatus !== "CLUB_ACTIVE" ? (
-              <button className="disabled">이미 종료된 아지트입니다</button>
-            ) : (
-              <></>
-            )}
+            <button
+              className={
+                btnStatus === "join" ||
+                btnStatus === "edit" ||
+                btnStatus === "wating" ||
+                btnStatus === "joined"
+                  ? "active"
+                  : "disabled"
+              }
+              onClick={
+                btnStatus === "wating" || btnStatus === "joined"
+                  ? () => {}
+                  : () =>
+                      navigate(
+                        btnStatus === "join"
+                          ? `/azit/join/${id}`
+                          : btnStatus === "edit"
+                          ? `/azit/edit/${id}`
+                          : ""
+                      )
+              }
+            >
+              {btnStatus === "join"
+                ? "아지트 가입하기"
+                : btnStatus === "edit"
+                ? "아지트 수정하기"
+                : btnStatus === "wating"
+                ? "가입 신청 취소하기"
+                : btnStatus === "joined"
+                ? "가입 신청 취소하기"
+                : btnStatus === "close"
+                ? "이미 종료된 아지트입니다."
+                : "이미 마감된 아지트입니다."}
+            </button>
           </AzitDetailForm>
         </>
       )}
