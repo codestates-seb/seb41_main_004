@@ -16,7 +16,7 @@ const UserPageSetting = () => {
   const navigate = useNavigate();
 
   const LogoutButtonClick = () => {
-    removeCookie('accessToken');
+    removeCookie('refreshToken');
     localStorage.clear();
     navigate('/login');
   }
