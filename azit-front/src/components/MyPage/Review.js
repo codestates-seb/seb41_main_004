@@ -43,18 +43,17 @@ const Container = styled.article`
     }
   }
 `;
-const Review = ({data}) => {
-
+const Review = ({review}) => {
     return (
         <Container>
         <div className="titleWrap">
-          <h3 className="title">{data.club.clubName}</h3>
-          <span className="date">{data.club.meetingDate}</span>
+          <h3 className="title">{review.club.clubName}</h3>
+          <span className="date">{review.club.meetingDate}</span>
         </div>
         <div className="contentWrap">
-          <p className="title">{data.commentCategory}</p>
+          <p className="title">{review.commentCategory}</p>
           <p className="content">
-          {data.commentBody}
+          {review.commentBody}
           </p>
         </div>
       </Container>

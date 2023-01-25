@@ -177,4 +177,31 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 				)
 			));
 	}
+
+	@Test
+	void deleteClubMembers() throws Exception {
+		// given
+		Long clubId = 1L;
+		Long memberId = 1L;
+
+		doNothing().when(clubMemberService)
+			.deleteClubMember(Mockito.any(Member.class), Mockito.anyLong(), Mockito.anyLong());
+
+		// when
+		ResultActions actions = mockMvc.perform(
+			deleteRequestBuilder(getClubMemberUrl("signups", "{member-id}"), clubId, memberId)
+				.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isNoContent())
+			.andDo(getDefaultDocument("delete-club-members",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+						parameterWithName("club-id").description("아지트 고유 식별자"),
+						parameterWithName("member-id").description("회원 고유 식별자"))
+					)
+				)
+			);
+	}
 }
