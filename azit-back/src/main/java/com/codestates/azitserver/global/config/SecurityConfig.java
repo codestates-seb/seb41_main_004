@@ -28,6 +28,7 @@ import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailure
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.azitserver.domain.auth.handler.OAuthSuccessHandler;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
@@ -44,6 +45,7 @@ public class SecurityConfig {
 	private final RedisUtils redisUtils;
 	private final MemberDetailsService memberDetailsService;
 	private final RedisTemplate<String, String> redisTemplate;
+	private final AuthService authService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -129,7 +131,7 @@ public class SecurityConfig {
 				.anyRequest().authenticated())
 
 			.oauth2Login(oauth2 -> oauth2
-				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));
+				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils, authService)));
 
 		return http.build();
 	}

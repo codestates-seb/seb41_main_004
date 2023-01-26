@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
+import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	private final JwtTokenizer jwtTokenizer;
 	private final MemberRepository memberRepository;
 	private final RedisUtils redisUtils;
+	private final AuthService authService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -41,33 +46,31 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		String email = String.valueOf(oAuth2User.getAttributes().get("email"));
 		String nickname = String.valueOf(oAuth2User.getAttributes().get("name"));
 
-		Member member = new Member();
-		member.setEmail(email);
-		member.setNickname(nickname);
-		memberRepository.save(member);
+		// email로 존재하는 회원인지 확인해서 존재하면 토큰만 발급
+		if (memberRepository.findByEmail(email).isPresent()) {
+			Optional<Member> optionalMember = memberRepository.findByEmail(email);
+			Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(
+				ExceptionCode.MEMBER_NOT_FOUND));
 
-		delegateTokens(member, request, response);
+			delegateTokens(member, request, response);
+		}
+		// 존재하지 않는 회원이면 회원정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
+		else {
+			// 회원가입 시, 유효성 평가를 피하기 위해 랜덤 비밀번호 생성하여 부여
+			String randomPW = authService.createTempPassword();
 
-		// // email로 존재하는 회원인지 확인해서 존재하면 토큰만 발급
-		// if (memberRepository.findByEmail(email).isPresent()) {
-		// 	Optional<Member> optionalMember = memberRepository.findByEmail(email);
-		// 	Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(
-		// 		ExceptionCode.MEMBER_NOT_FOUND));
-		//
-		// 	delegateTokens(member, request, response);
-		// }
-		// // 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
-		// else {
-		// 	AuthResponseDto.ResponseWithProfile responseWithProfileDto = new AuthResponseDto.ResponseWithProfile();
-		//
-		// 	responseWithProfileDto.setEmail(email);
-		// 	responseWithProfileDto.setNickname(nickname);
-		//
-		// 	ObjectMapper objectMapper = new ObjectMapper();
-		// 	String info = objectMapper.writeValueAsString(responseWithProfileDto);
-		//
-		// 	response.getWriter().write(info);
-		// }
+			AuthResponseDto.ResponseSocialFirst responseSocialFirst = new AuthResponseDto.ResponseSocialFirst();
+
+			responseSocialFirst.setEmail(email);
+			responseSocialFirst.setNickname(nickname);
+			responseSocialFirst.setPassword(randomPW);
+			responseSocialFirst.setPasswordCheck(randomPW);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String info = objectMapper.writeValueAsString(responseSocialFirst);
+
+			response.getWriter().write(info);
+		}
 	}
 
 	//토큰 발급 메서드
@@ -145,14 +148,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		queryParams.add("Authorization", "Bearer" + accessToken);
 		queryParams.add("Refresh", refreshToken);
 
-		log.info("===========================================");
-		log.info("createURI 들어옴");
-		log.info("===========================================");
-
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("localhost")
+			.host("localhost") // TODO : 프런트 배포하면 변경 필요!
 			.port(3000)
 			.path("/oauth")
 			.queryParams(queryParams)
