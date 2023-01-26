@@ -173,6 +173,8 @@ public class MemberController {
 	//TODO 회원 신고
 	@PostMapping("/reports/{member-id}")
 	public ResponseEntity reportMember() {
+		return null;
+	}
 
 	@GetMapping("/{member-id}/clubs/participation")
 	public ResponseEntity participationStatus(@Positive @PathVariable("member-id") Long memberId) {
