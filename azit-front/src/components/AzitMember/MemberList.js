@@ -94,7 +94,6 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
-
       console.log("아지트 참가 수락 완료");
     } catch (e) {
       console.log("아지트 참가 수락 실패");
@@ -114,44 +113,28 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
-
       console.log("아지트 참가 거절 완료");
     } catch (e) {
       console.log("아지트 참가 거절 실패");
     }
   };
 
-  // const azitMemberKicks = async () => {
-  //   try {
-  //     await axiosInstance.patch(
-  //       `api/clubs/${id}/kicks/${data.member.memberId}`,
-
-  //       {
-  //         headers: {
-  //           Authorization: localStorage.getItem("accessToken"),
-  //           "Content-Type": "application/json; ; charset=UTF-8",
-  //         },
-  //       }
-  //     );
-
-  //     console.log("아지트 강퇴");
-  //   } catch (e) {
-  //     console.log("아지트 강퇴 실패");
-  //   }
-  // };
-  const azitMemberKicks = () => {
-    fetch(
-      `${process.env.REACT_APP_BASE_URL}api/clubs/${id}/kicks/${data.member.memberId}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }
-    )
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+  const azitMemberKicks = async () => {
+    try {
+      await axiosInstance.patch(
+        `api/clubs/${id}/kicks/${data.member.memberId}`,
+        { body: "hello" },
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("아지트 강퇴 완료");
+    } catch (e) {
+      console.log("아지트 강퇴 실패");
+    }
   };
 
   return (
@@ -166,7 +149,7 @@ const MemberList = ({ data, state }) => {
         <div className="etcWrap">
           <div className="profileWrap">
             <h3 className="name">{data.member.nickname}</h3>
-            <p className="introduce">{data.member.userIntroduce}</p>
+            <p className="introduce">{data.member.aboutMe}</p>
           </div>
           <div className="btnWrap">
             {state === "CLUB_WAITING" ? (
