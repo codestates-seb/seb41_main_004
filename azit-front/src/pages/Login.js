@@ -11,6 +11,7 @@ import { axiosInstance } from "../util/axios";
 // eslint-disable-next-line
 import { useEffect } from "react";
 import { googleLogin } from "../util/oauthGoogle";
+import axios from "axios";
 
 
 
@@ -32,7 +33,7 @@ const Login = () => {
     const { email, password } = data;
       try {
         const res = await axiosInstance.post(
-          `/api/auth/login`,
+          `api/auth/login`,
           data
         );
         const accessToken = res.headers.get('Authorization');
@@ -51,15 +52,14 @@ const Login = () => {
         setCookie('refreshToken', refreshToken);
         dispatch(loginStatusSlice.actions.login());
         navigate('/');
-        console.log(res);
       } catch (e) {
         // error handling 하기
-        console.log(e.response.status);
-        if (e.response.status === 401) {
-          alert("유효하지 않은 유저 정보입니다.");
-        } else if(e.response.status === 500) {
-          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
-        }
+        console.log(e);
+        // if (e.response.status === 401) {
+        //   alert("유효하지 않은 유저 정보입니다.");
+        // } else if(e.response.status === 500) {
+        //   alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+        // }
       }
     };
 

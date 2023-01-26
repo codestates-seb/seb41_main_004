@@ -171,26 +171,29 @@ public class AuthService {
 	 * @return 새로운 AccessToken 정보가 담긴 Dto
 	 */
 	@Transactional
-	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request) {
-		String accessToken = request.getHeader("Authorization");
-		String refreshToken = request.getHeader("Refresh");
+	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, AuthDto.ReissueToken reissueInfo) {
+		String refreshToken = request.getHeader("Refresh"); // refreshToken
+		String email = reissueInfo.getEmail(); // 유저 email
+		String accessToken = reissueInfo.getAccessToken(); // 만료된 accessToken
 		accessToken = accessToken.split(" ")[1];
 
-		String ATKemail = jwtTokenizer.getATKemail(accessToken);
-
-		//ATK, RTK 같은 유저거인지 검증
-		if (!redisUtils.getValuebyKey(ATKemail).equals(refreshToken)) {
-			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+		// Redis에 저장된 email(key값)의 RTK(value값)가 요청 들어온 RTK와 일치하는지 확인
+		if (!redisUtils.getValuebyKey(email).equals(refreshToken)) {
+			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
 		}
 
 		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
-		if (redisUtils.isExists(ATKemail)) {
-			Member findMember = findVerifiedMemberByEmail(ATKemail);
+		if (redisUtils.isExists(email)) {
+			Member findMember = findVerifiedMemberByEmail(email);
 			String NewAccessToken = delegateAccessToken(findMember);
 
-			// 이전 accessToken을 남은 시간만큼 blackList로 지정
-			Long expiration = jwtTokenizer.getATKExpiration(accessToken);
-			redisUtils.setData(accessToken, "blackList", expiration);
+			// 만약 accessToken이 만료되지 않았으면 blackList 등록
+			try {
+				Long expiration = jwtTokenizer.getATKExpiration(accessToken);
+				redisUtils.setData(accessToken, "blackList", expiration);
+			} catch (Exception e) {
+				log.info("accessToken이 만료되어 blackList로 등록하지 않습니다.");
+			}
 
 			AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
 			tokenResponse.setAccessToken("Bearer " + NewAccessToken);
