@@ -149,7 +149,8 @@ const Profile = ({ myPage, id }) => {
       //   headers: { Authorization: localStorage.getItem("accessToken") }
       // })
     } catch (error) {
-      alert(error.message);
+      alert("팔로우 실패")
+      console.log(error.message);
     }
     // const res = await axiosInstance.post(`api/members/${id}/follow`,
     // {
