@@ -1,6 +1,7 @@
 package com.codestates.azitserver.domain.club.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
 import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
@@ -34,6 +37,8 @@ public class ClubService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Club> beanUtils;
 	private final StorageService storageService;
+
+	private final ClubMemberRepository clubMemberRepository;
 
 	public Club createClub(Club toClub, MultipartFile bannerImage) {
 		// online offline 외 문자열이 들어올 경우 예외처리
@@ -168,5 +173,15 @@ public class ClubService {
 	public String getClubJoinQuestion(Long clubId) {
 		Club club = findClubById(clubId);
 		return club.getJoinQuestion();
+	}
+
+	public List<ClubMember.ClubMemberStatus> getClubMemberStatusList(Member member) {
+		List<ClubMember> clubMemberList =  clubMemberRepository.findClubMembersByMember(member);
+		List<ClubMember.ClubMemberStatus> clubMemberStatusList = new ArrayList<>();
+
+		for (ClubMember clubMember : clubMemberList) {
+			clubMemberStatusList.add(clubMember.getClubMemberStatus());
+		}
+		return clubMemberStatusList;
 	}
 }
