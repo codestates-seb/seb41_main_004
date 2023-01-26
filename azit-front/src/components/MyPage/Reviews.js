@@ -11,7 +11,6 @@ import Review from "./Review";
 const Reviews = () => {
   const { ref, inView } = useInView();
   const { id } = useParams();
-
   // 무한스크롤 함수
   const getInfiniteList = async (pageParam, id) => {
     const res = await axiosInstance.get(

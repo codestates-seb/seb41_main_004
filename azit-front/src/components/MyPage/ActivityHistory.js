@@ -80,7 +80,7 @@ const ActivityHistory = ({ myPage }) => {
     activeData()
   );
 
-  console.log(data);
+
 
   const handleCheckInput = () => {
     setHostCheck(!hostCheck);
