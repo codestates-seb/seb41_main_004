@@ -1,8 +1,11 @@
 package com.codestates.azitserver.domain.follow.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -76,11 +79,62 @@ public class FollowService {
 		return optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
 	}
 
+	/**
+	 * member id의 회원을 팔로우한(followee가 member-id) 팔로우 정보를 조회합니다.
+	 * @param memberId 회원 고유식별자
+	 * @param page 페이지 번호
+	 * @param size 페이지 크기
+	 * @return 페이지네이션이 된 팔로우 정보 리스트
+	 */
 	public Page<Follow> findAllMemberFollower(Long memberId, int page, int size) {
 		Member member = memberService.findExistingMember(memberId);
 
-		return followRepository.findAllByFollower(member,
+		return followRepository.findAllByFollowee(member,
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+	}
+
+	public Page<Follow> findAllMemberFollowing(Long memberId, int page, int size) {
+		Member member = memberService.findExistingMember(memberId);
+
+		List<Follow> follower = followRepository.findAllByFollower(member);
+
+		// JPQL sub query를 통해서 값을 구하니 pagination이 안 돼서 직접 구현
+		PageRequest pageRequest = PageRequest.of(page, size);
+		final int start = (int)pageRequest.getOffset();
+		final int end = Math.min((start + pageRequest.getPageSize()), follower.size());
+
+		List<Follow> subList;
+		try {
+			subList = follower.subList(start, end);
+		} catch (Exception e) {
+			subList = new ArrayList<>();
+		}
+
+		final Page<Follow> followPage = new PageImpl<>(subList, pageRequest, follower.size());
+
+		return followPage;
+	}
+
+	/**
+	 * follow id를 통해 데이터를 삭제합니다.
+	 * @param followId 팔로우 고유 식별자
+	 * @author cryoon
+	 */
+	public void deleteFollowByFollowId(Long followId) {
+		Follow follow = findFollowByFollowId(followId);
+
+		followRepository.deleteById(followId);
+	}
+
+	/**
+	 * follow id를 통해 해당되는 데이터를 조회합니다.
+	 * @param followId 팔로우 고유 식별자
+	 * @return id와 일치하는 팔로우 객체
+	 * @author cryoon
+	 */
+	public Follow findFollowByFollowId(Long followId) {
+		Optional<Follow> optionalFollow = followRepository.findById(followId);
+		return optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
 	}
 
 	//*** verfification ***//
@@ -93,6 +147,9 @@ public class FollowService {
 	 * @author cryoon
 	 */
 	public boolean verifyMemberAndMemberId(Member member, Long memberId) {
+		if (member == null) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
 		return member.getMemberId().equals(memberId);
 	}
 
