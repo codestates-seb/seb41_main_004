@@ -136,21 +136,23 @@ const ActivityHistory = ({ myPage }) => {
         </EtcWrap>
       ) : (
         <>
-          <div className="Box">
-            <label className="checkContainer">
-              호스트인 아지트만 보기
-              <input type="checkbox" onChange={handleCheckInput} />
-              <span className="checkmark" />
-            </label>
-            <div className="selectWrapper">
-              <select onChange={handleCheckSelect}>
-                <option value="전체보기">전체보기</option>
-                <option value="참여중인 모임">참여중인 모임</option>
-                <option value="신청한 모임">신청한 모임</option>
-                <option value="종료된 모임">종료된 모임</option>
-              </select>
+          {myPage ? (
+            <div className="Box">
+              <label className="checkContainer">
+                호스트인 아지트만 보기
+                <input type="checkbox" onChange={handleCheckInput} />
+                <span className="checkmark" />
+              </label>
+              <div className="selectWrapper">
+                <select onChange={handleCheckSelect}>
+                  <option value="전체보기">전체보기</option>
+                  <option value="참여중인 모임">참여중인 모임</option>
+                  <option value="신청한 모임">신청한 모임</option>
+                  <option value="종료된 모임">종료된 모임</option>
+                </select>
+              </div>
             </div>
-          </div>
+          ) : null}
           {ClubData ? (
             ClubData.map((data) => (
               <AzitList key={data.clubId} data={data} myPage={myPage} />
