@@ -212,9 +212,10 @@ public class authControllerTest {
 	@DisplayName("re-issueToken")
 	public void reIssueTokenTest() throws Exception {
 		// given
+		String email = "testMemberEmail@hello.com";
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addHeader("Refresh", "Required JWT refresh token");
-		String memberEmail = "testMemberEmail@hello.com";
 
 		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
 		tokenResponse.setAccessToken("New JWT access token");
@@ -225,9 +226,9 @@ public class authControllerTest {
 		// when
 		ResultActions actions =
 			mockMvc.perform(
-				get("/api/auth/re-issue/{email:.+}/", memberEmail)
+				get("/api/auth/re-issue")
+					.queryParam("email", email)
 					.header("Refresh", "Required JWT refresh token")
-					.with(csrf())
 			);
 
 		// then
@@ -235,10 +236,10 @@ public class authControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(document("token-reIssue",
+				requestParameters(
+					List.of(parameterWithName("email").description("User Email"))),
 				requestHeaders(
 					headerWithName("Refresh").description("Jwt Refresh Token")),
-				pathParameters(List.of(
-					parameterWithName("email").description("Member Email"))),
 				responseHeaders(
 					headerWithName("Authorization").description("Jwt Access Token"),
 					headerWithName("Refresh").description("Jwt Refresh Token")
