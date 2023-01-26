@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
-import FollowerList from "./FollowerList";
+import DataList from "./DataList";
 
 const Null = styled.div`
   text-align: center;
@@ -12,7 +12,7 @@ const FollowingData = () => {
   return (
     <>
       {ClubData ? (
-        ClubData.map((data) => <FollowerList key={data.clubId} data={data} />)
+        ClubData.map((data) => <DataList key={data.clubId} data={data} />)
       ) : (
         <Null>팔로우 한 사람이 없습니다.</Null>
       )}

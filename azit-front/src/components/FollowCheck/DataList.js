@@ -49,9 +49,9 @@ const ButtonBox = styled.div`
   }
 `;
 
-const FollowerList = ({ data }) => {
+const DataList = ({ data }) => {
   // eslint-disable-next-line no-unused-vars
-  const [follower, SetFollower] = useState(true);
+  const [follow, SetFollow] = useState(true);
 
   return (
     <>
@@ -65,12 +65,13 @@ const FollowerList = ({ data }) => {
         </FollowBox>
         <ButtonBox>
           {/* 상황에 따라 맞는 버튼이 오도록 하기 필요 */}
-          <button className="disabled">팔로잉</button>
-          <button>팔로우</button>
+          <button>해제</button>
+          {/* <button className="disabled">팔로잉</button>
+          <button>팔로우</button> */}
         </ButtonBox>
       </Container>
     </>
   );
 };
 
-export default FollowerList;
+export default DataList;
