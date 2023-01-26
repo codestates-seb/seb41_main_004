@@ -2,6 +2,9 @@ package com.codestates.azitserver.domain.follow.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.follow.entity.Follow;
@@ -73,7 +76,15 @@ public class FollowService {
 		return optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
 	}
 
+	public Page<Follow> findAllMemberFollower(Long memberId, int page, int size) {
+		Member member = memberService.findExistingMember(memberId);
+
+		return followRepository.findAllByFollower(member,
+			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+	}
+
 	//*** verfification ***//
+
 	/**
 	 * 로그인한 회원과 요청하려는 회원이 일치하는지 확인합니다.
 	 * @param member 로그인 회원

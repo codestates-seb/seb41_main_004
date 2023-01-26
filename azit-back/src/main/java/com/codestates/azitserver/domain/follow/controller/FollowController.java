@@ -1,7 +1,10 @@
 package com.codestates.azitserver.domain.follow.controller;
 
+import java.util.List;
+
 import javax.validation.constraints.Positive;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.follow.dto.FollowDto;
@@ -17,6 +21,7 @@ import com.codestates.azitserver.domain.follow.mapper.FollowMapper;
 import com.codestates.azitserver.domain.follow.service.FollowService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
+import com.codestates.azitserver.global.dto.MultiResponseDto;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
@@ -76,8 +81,13 @@ public class FollowController {
 	 * @author cryoon
 	 */
 	@GetMapping("/follower")
-	public ResponseEntity<?> getFollowers(@Positive @PathVariable("member-id") Long memberId) {
-		return null;
+	public ResponseEntity<?> getFollowers(@Positive @PathVariable("member-id") Long memberId,
+		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size) {
+		Page<Follow> followPage = followService.findAllMemberFollower(memberId, page - 1, size);
+		List<Follow> follows = followPage.getContent();
+		List<FollowDto.Response> responses = mapper.followToFollowDtoResponse(follows);
+
+		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}
 
 	/**
