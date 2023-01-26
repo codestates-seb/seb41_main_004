@@ -10,12 +10,14 @@ import javax.persistence.ManyToOne;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.member.entity.Member;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Follow extends Auditable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +31,8 @@ public class Follow extends Auditable {
 	@JoinColumn(name = "FOLLOWEE_ID")
 	private Member followee;
 
+	private Boolean matpal;
+
 	public void setFollower(Member member) {
 		this.follower = member;
 		if (!this.follower.getFollowerList().contains(this)) {
@@ -41,6 +45,10 @@ public class Follow extends Auditable {
 		if (!this.followee.getFollowingList().contains(this)) {
 			this.followee.getFollowingList().add(this);
 		}
+	}
+
+	public Boolean getMatpal() {
+		return matpal != null;
 	}
 
 	//*** Builder ***//
