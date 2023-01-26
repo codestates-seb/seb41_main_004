@@ -14,6 +14,7 @@ public enum ExceptionCode {
 	INVALID_CLUB_MEMBER_STATUS(40001, "Invalid club member status"),
 	HOST_REPORT_FAILED(40002, "Host is not allowed to report its own azit"),
 	INVALID_TOKEN(40003, "Invalid token"),
+	INVALID_APPLY_FOLLOW_(40004, "Member cannot follow yourself"),
 
 	// 403
 	CLUB_CANCELED(40301, "The Club is canceled"),
@@ -35,6 +36,7 @@ public enum ExceptionCode {
 
 	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
+	FOLLOW_NOT_FOUND(40412, "Follow not found"),
 
 
 	// 409
@@ -45,6 +47,8 @@ public enum ExceptionCode {
 	CLUB_REPORT_EXIST(40905, "Member already report the club"),
 	RESTRICTED_UPDATE_FIELDS(40906, "Cannot update the azit because participants exist"),
 	REVIEW_ALREADY_EXIST(40906, "Review already exist"),
+	FOLLOW_EXIST(40907, "Follow already exist"),
+
 
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
