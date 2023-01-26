@@ -79,6 +79,9 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
 				/*==========member==========*/
+				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**").permitAll()  // 활동내역 관련
+				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**/**").permitAll()
+
 				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
 				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/members/nickname").permitAll()
@@ -91,6 +94,8 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/members").authenticated() // 전체 회원 조회 //TODO (미구현(error))
 				.antMatchers(HttpMethod.POST, "/api/members").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/members/**").permitAll()
+
+
 
 				.antMatchers(HttpMethod.GET, "/api/members/reports").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/members/reports/**").authenticated()

@@ -34,6 +34,8 @@ import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
 @RestController
 @RequestMapping(value = "/api/members", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -170,32 +172,47 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.ACCEPTED);
 	}
 
+
+	//참여상태무관 전체조회
 	@GetMapping("/{member-id}/clubs/participation")
-	public ResponseEntity participationStatus(@Positive @PathVariable("member-id") Long memberId) {
+	public ResponseEntity clubMemberStatus(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
-		// List<ClubMemberDto.ClubResponse> responses = clubMemberMapper.clubMemberToClubMemberDtoClubResponse(clubMemberList);
+		List<ClubMemberDto.ClubMemberStatusResponse> responses =
+			memberService.responseWithInfoGenerator(clubMemberList);
 
-		// List<Long> clubList = new ArrayList<>();
-		// for (ClubMember clubMember : clubMemberList) {
-		// 	clubList.add(clubMember.getClub().getClubId());
-		// }
+		return new ResponseEntity<>(responses, HttpStatus.OK);
+	}
+	// 참여상태별 조회
+	// club-member-status 0 : CLUB_WAITING
+	// club-member-status 1 : CLUB_JOINED
+	// club-member-status 2 : CLUB_REJECTED
+	// club-member-status 3 : CLUB_KICKED
+	@GetMapping("/{member-id}/clubs/participation/{club-member-status}")
+	public ResponseEntity clubMemberStatusWaiting(@Positive @PathVariable("member-id") Long memberId,
+		@PathVariable("club-member-status") int clubMemberStatusNumber) {
 
-		return new ResponseEntity<>( HttpStatus.OK);
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> filteredClubMemberList =
+			clubMemberService.getAllClubMemberByMemberIdAndStatus(memberId,
+				memberService.numberToStatus(clubMemberStatusNumber));
+		List<ClubMemberDto.ClubMemberStatusResponse> responses =
+			memberService.responseWithInfoGenerator(filteredClubMemberList);
+
+		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}
 
-	// @GetMapping("/{member-id}/clubs/")
-	// public ResponseEntity myDetails(@Positive @PathVariable("member-id") Long memberId) {
-	// 	Member member = memberService.getMemberById(memberId);
-	// 	List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
-	//
-	// 	// List<Long> clubList = new ArrayList<>();
-	// 	// for (ClubMember clubMember : clubMemberList) {
-	// 	// 	clubList.add(clubMember.getClub().getClubId());
-	// 	// }
-	//
-	// 	return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
-	// }
+	//호스트 여부 표시하여 조회
+	@GetMapping("/{member-id}/clubs/is-host")
+	public ResponseEntity clubMemberIsHost(@Positive @PathVariable("member-id") Long memberId) {
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
+		List<ClubMemberDto.ClubMemberStatusResponse> clubMemberStatusResponseList =
+			clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(clubMemberList);
+
+		return new ResponseEntity<>(clubMemberStatusResponseList, HttpStatus.OK);
+	}
+
 
 
 	//TODO 팔로우, 언팔로우

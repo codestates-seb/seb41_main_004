@@ -50,8 +50,15 @@ public class ClubMemberDto {
 	@Getter
 	@Setter
 	@NoArgsConstructor
-	public static class ClubMemberParticipationStatusResponse {
-		private List<Long> clubMemberIdList;
-		private List<Boolean> participationStatusList;
+	public static class ClubMemberStatusResponse {
+		private Long clubMemberId;
+		private Long clubId;
+		private ClubMember.ClubMemberStatus clubMemberStatus;
+		private Boolean isHost;
+		private Boolean isHidden;
+		private Boolean isReviewed;
+
 	}
+
+
 }

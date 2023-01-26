@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.club.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,4 +156,31 @@ public class ClubMemberService {
 		Member member = memberService.getMemberById(memberId);
 		return clubMemberRepository.findClubMembersByMember(member);
 	}
+
+	public List<ClubMember> getAllClubMemberByMemberIdAndStatus(Long memberId,
+		ClubMember.ClubMemberStatus clubMemberStatus) {
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
+		List<ClubMember> filteredClubMemberList = new ArrayList<>();
+		for (ClubMember clubMember : clubMemberList) {
+			if (clubMember.getClubMemberStatus() == clubMemberStatus) {
+				filteredClubMemberList.add(clubMember);
+			}
+		}
+		return filteredClubMemberList;
+	}
+
+	// TODO 진행중(호스트 여부, 아지트 숨김여부, 리뷰작성 여부)
+	// public List<ClubMember> getAllClubMemberByMemberIdWithQuestion(Long memberId,
+	// 	int question) {
+	// 	Member member = memberService.getMemberById(memberId);
+	// 	List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
+	// 	List<ClubMember> filteredClubMemberList = new ArrayList<>();
+	// 	for (ClubMember clubMember : clubMemberList) {
+	// 		if (clubMember.getClubMemberStatus() == clubMemberStatus) {
+	// 			filteredClubMemberList.add(clubMember);
+	// 		}
+	// 	}
+	// 	return filteredClubMemberList;
+	// }
 }

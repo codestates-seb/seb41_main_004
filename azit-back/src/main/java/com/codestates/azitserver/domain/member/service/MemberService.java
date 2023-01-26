@@ -17,7 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.category.service.CategoryService;
+import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
+import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
@@ -42,6 +48,8 @@ public class MemberService {
 	private final CategoryService categoryService;
 
 	private final MemberCategoryRepository memberCategoryRepository;
+
+	private final ClubMemberMapper clubMemberMapper;
 
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
@@ -185,6 +193,7 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
+
 	//팔로우, 언팔로우
 	public Member followMember(Member member) {
 		return null; //TODO
@@ -251,4 +260,42 @@ public class MemberService {
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 	}
 
+	public ClubMember.ClubMemberStatus numberToStatus(int clubMemberStatusNumber) {
+		if (clubMemberStatusNumber > 3 || clubMemberStatusNumber < 0) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+		ClubMember.ClubMemberStatus status = ClubMember.ClubMemberStatus.CLUB_WAITING;
+		switch (clubMemberStatusNumber) {
+			case 0 : break;
+			case 1 : status = ClubMember.ClubMemberStatus.CLUB_JOINED;
+					break;
+			case 2 : status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
+					break;
+			case 3 : status = ClubMember.ClubMemberStatus.CLUB_KICKED;
+					break;
+		}
+		return status;
+	}
+
+	public List<ClubMemberDto.ClubMemberStatusResponse>
+	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
+		List<ClubMemberDto.ClubMemberStatusResponse> clubMemberStatusResponseList = new ArrayList<>();
+		for (ClubMember clubMember : clubMemberList) {
+			ClubMemberDto.ClubMemberStatusResponse response =
+				clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(clubMember);
+			// Club Id
+			response.setClubId(clubMember.getClub().getClubId());
+			// Host 여부
+			response.setIsHost(clubMember.getClub().getHost().getMemberId()==clubMember.getMember().getMemberId());
+			// 숨김상태인지
+
+			// 리뷰 작성 했는지
+			// TODO
+			//  response.setIsReviewed(clubMember.getClub);
+
+
+			clubMemberStatusResponseList.add(response);
+		}
+		return clubMemberStatusResponseList;
+	}
 }
