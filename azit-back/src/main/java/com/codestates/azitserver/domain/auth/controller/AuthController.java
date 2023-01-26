@@ -7,6 +7,7 @@ import javax.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,19 +65,29 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping("/re-issue")
+	@GetMapping("/re-issue/{email:.+}")
 	@CrossOrigin(origins = {"http://localhost:3000",
-		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.POST)
+		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
-		@RequestBody AuthDto.SendEmail memberEmail) {
-		log.info("controller 요청 들어옴");
+		@PathVariable("email") String memberEmail) {
 		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
-
-		log.info("리스폰스 헤더로 담음");
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	// @PostMapping("/re-issue")
+	// @CrossOrigin(origins = {"http://localhost:3000",
+	// 	"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.POST)
+	// public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
+	// 	@RequestBody AuthDto.SendEmail memberEmail) {
+	// 	log.info("controller 요청 들어옴");
+	// 	AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
+	// 	response.setHeader("Authorization", tokenResponse.getAccessToken());
+	// 	response.setHeader("Refresh", tokenResponse.getRefreshToken());
+	//
+	// 	log.info("리스폰스 헤더로 담음");
+	// 	return new ResponseEntity<>(HttpStatus.CREATED);
+	// }
 	// @GetMapping("/re-issue")
 	// @CrossOrigin(origins = {"http://localhost:3000",
 	// 	"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)

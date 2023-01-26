@@ -104,8 +104,10 @@ include::{snippets}/token-reIssue/curl-request.adoc[]
 .http-request
 include::{snippets}/token-reIssue/http-request.adoc[]
 
-.request-fields
-include::{snippets}/token-reIssue/request-fields.adoc[]
+.path-parameters
+include::{snippets}/token-reIssue/path-parameters.adoc[]
+// .request-fields
+// include::{snippets}/token-reIssue/request-fields.adoc[]
 // .request-parameters
 // include::{snippets}/token-reIssue/request-parameters.adoc[]
 
