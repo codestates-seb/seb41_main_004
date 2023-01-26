@@ -97,6 +97,8 @@ public class MemberStubData {
         response.setCategorySmallIdList(
             List.of(8L, 13L)
         );
+        response.setFollower(123);
+        response.setFollowing(456);
 
         return response;
     }

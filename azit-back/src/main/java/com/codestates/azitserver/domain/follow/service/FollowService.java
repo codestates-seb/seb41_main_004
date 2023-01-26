@@ -89,8 +89,23 @@ public class FollowService {
 	public Page<Follow> findAllMemberFollower(Long memberId, int page, int size) {
 		Member member = memberService.findExistingMember(memberId);
 
-		return followRepository.findAllByFollowee(member,
-			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		List<Follow> followee = followRepository.findAllByFollowee(member);
+
+		// JPQL sub query를 통해서 값을 구하니 pagination이 안 돼서 직접 구현
+		PageRequest pageRequest = PageRequest.of(page, size);
+		final int start = (int)pageRequest.getOffset();
+		final int end = Math.min((start + pageRequest.getPageSize()), followee.size());
+
+		List<Follow> subList;
+		try {
+			subList = followee.subList(start, end);
+		} catch (Exception e) {
+			subList = new ArrayList<>();
+		}
+
+		final Page<Follow> followPage = new PageImpl<>(subList, pageRequest, followee.size());
+
+		return followPage;
 	}
 
 	public Page<Follow> findAllMemberFollowing(Long memberId, int page, int size) {
