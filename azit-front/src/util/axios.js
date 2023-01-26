@@ -47,3 +47,13 @@ export const axiosInstance = axios.create({
 //     return req;
 //   }
 // });
+
+//       localStorage.setItem("accessToken", res.headers.get("Authorization"));
+//     } catch (e) {
+//       console.log(e.response.data);
+//       console.log("에러");
+//     }
+
+//     return req;
+//   }
+// });
