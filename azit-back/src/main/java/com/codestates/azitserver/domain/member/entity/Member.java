@@ -78,7 +78,7 @@ public class Member extends Auditable {
 	@JsonManagedReference
 	@Column(name = "MEMBER_REPORT_LIST")
 	private List<MemberMemberReport> memberMemberReportList = new ArrayList<>();
-  
+
 	@OneToMany
 	@JsonManagedReference
 	@Column(name = "CLUB_MEMBER_LIST")
@@ -116,12 +116,6 @@ public class Member extends Auditable {
 	public Member(Long memberId, FileInfo fileInfo, String email, String nickname,
 		String password, Gender gender, String birthYear, String aboutMe,
 		Integer reputation, MemberStatus memberStatus, List<MemberCategory> memberCategoryList) {
-		//        Assert.hasText(email, "email must not be empty");
-		//        Assert.hasText(nickname, "nickname must not be empty");
-		//        Assert.hasText(password, "password must not be empty");
-		//        Assert.notNull(gender, "gender must not be empty");
-		//        Assert.notNull(reputation, "reputation must not be empty");
-		//        Assert.notNull(memberStatus, "memberStatus must not be empty");
 
 		this.memberId = memberId;
 		this.fileInfo = fileInfo;
