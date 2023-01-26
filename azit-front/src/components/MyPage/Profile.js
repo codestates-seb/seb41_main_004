@@ -77,16 +77,16 @@ const FollowWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    >.count {
+    > .count {
       color: #222222;
       font-size: var(--main-font);
     }
   }
-  >.line {
+  > .line {
     display: inline-block;
     width: 1px;
     height: 3rem;
-    margin:0 1.5rem;
+    margin: 0 1.5rem;
     background-color: var(--border-color);
   }
 `;
@@ -125,6 +125,8 @@ const EtcWrap = styled.article`
   justify-content: center;
 `;
 const Profile = ({ myPage, id }) => {
+
+  // 유저 데이터를 받아오는 함수
   const userDataGet = async () => {
     const res = await axiosInstance.get(`/api/members/${id}`, {
       headers: { Authorization: localStorage.getItem("accessToken") },
@@ -139,25 +141,50 @@ const Profile = ({ myPage, id }) => {
     error,
   } = useQuery("userData", () => userDataGet());
 
+  // 팔로우 여부 확인 함수
+  const followStatusGet = async (id) => {
+    const res = await axiosInstance.get(`api/members/${id}/follow-status`, {
+      headers: { Authorization: localStorage.getItem("accessToken") },
+    });
+    return res;
+  };
+
+  const {
+    data: followStatus,
+    isError: followIsError,
+    isLoading: followIsLoading,
+    error: followError,
+  } = useQuery(["followStatus", id], () => followStatusGet(id), {
+    enabled: id !== window.localStorage.getItem('memberId')
+  });
+  console.log(followStatus,followIsError, followIsLoading, followError);
+  
+  // 팔로우 기능 함수
   const followPost = async (id) => {
     try {
-      await axiosInstance.post(`api/members/${id}/follow`,{"body" : "follow"}, {
-        headers: { Authorization: localStorage.getItem("accessToken") }
-      });
+      await axiosInstance.post(
+        `api/members/${id}/follow`,
+        { body: "follow" },
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      );
       // await fetch(`${process.env.REACT_APP_BASE_URL}api/members/${id}/follow`, {
       //   method: 'POST',
       //   headers: { Authorization: localStorage.getItem("accessToken") }
       // })
     } catch (error) {
-      alert(error.message);
+      alert("팔로우 실패");
+      console.log(error.message);
     }
     // const res = await axiosInstance.post(`api/members/${id}/follow`,
     // {
     //   headers: { Authorization: localStorage.getItem("accessToken") },
     // })
     // return res
-  }
-  const {mutate} = useMutation(() => followPost(id));
+  };
+  const { mutate:followMutate } = useMutation(() => followPost(id));
+
   return (
     <ProfileWrapper>
       {isLoading ? (
@@ -184,7 +211,7 @@ const Profile = ({ myPage, id }) => {
           </TempWrap>
           <InfoWrapper>
             <ButtonWrapper>
-              {myPage ? "" : <Button onClick={mutate}>팔로우</Button>}
+              {myPage ? "" : <Button onClick={followMutate}>팔로우</Button>}
             </ButtonWrapper>
             <Name>{userData.nickname}</Name>
             <Text>{userData.aboutMe}</Text>
@@ -194,7 +221,7 @@ const Profile = ({ myPage, id }) => {
                   <span className="count">0</span>
                   팔로잉
                 </div>
-                <span className="line"/>
+                <span className="line" />
                 <div className="countWrap">
                   <span className="count">0</span>
                   팔로워
