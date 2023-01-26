@@ -85,7 +85,7 @@ public class FollowController {
 		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size) {
 		Page<Follow> followPage = followService.findAllMemberFollower(memberId, page - 1, size);
 		List<Follow> follows = followPage.getContent();
-		List<FollowDto.Response> responses = mapper.followToFollowDtoResponse(follows);
+		List<FollowDto.GetFollowerResponse> responses = mapper.followToFollowDtoGetFollowerResponse(follows);
 
 		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}
@@ -111,8 +111,15 @@ public class FollowController {
 	 * @author cryoon
 	 */
 	@DeleteMapping("/follower/{follow-id:[0-9]+}")
-	public void deleteFollowers(@Positive @PathVariable("member-id") Long memberId,
+	public ResponseEntity<?> deleteFollowers(@Positive @PathVariable("member-id") Long memberId,
 		@Positive @PathVariable("follow-id") Long followId, @LoginMember Member member) {
+		if (!followService.verifyMemberAndMemberId(member, memberId)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
+
+		followService.deleteFollowByFollowId(followId);
+		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

@@ -13,4 +13,6 @@ public interface FollowMapper {
 	FollowDto.Response followToFollowDtoResponse(Follow follow);
 
 	List<FollowDto.Response> followToFollowDtoResponse(List<Follow> follow);
+
+	List<FollowDto.GetFollowerResponse> followToFollowDtoGetFollowerResponse(List<Follow> follows);
 }

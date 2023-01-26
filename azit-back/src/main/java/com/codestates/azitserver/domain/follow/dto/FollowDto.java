@@ -15,4 +15,12 @@ public class FollowDto {
 		private MemberDto.ClubMemberMemberResponse follower;
 		private MemberDto.ClubMemberMemberResponse followee;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class GetFollowerResponse {
+		private Long followId;
+		private MemberDto.ClubMemberMemberResponse follower;
+	}
 }
