@@ -78,6 +78,9 @@ public class SecurityConfig {
 				.antMatchers("/api/clubs/reports/**").permitAll()  // 아지트 신고
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
+				/*======follow======*/
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+
 				/*==========member==========*/
 				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
 				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()

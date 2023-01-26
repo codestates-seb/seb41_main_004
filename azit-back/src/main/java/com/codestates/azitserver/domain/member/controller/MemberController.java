@@ -170,6 +170,12 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.ACCEPTED);
 	}
 
+	//TODO 회원 신고
+	@PostMapping("/reports/{member-id}")
+	public ResponseEntity reportMember() {
+		return null;
+	}
+
 	@GetMapping("/{member-id}/clubs/participation")
 	public ResponseEntity participationStatus(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
@@ -196,13 +202,6 @@ public class MemberController {
 	//
 	// 	return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
 	// }
-
-
-	//TODO 팔로우, 언팔로우
-	@PostMapping("/follows/{member-id}")
-	public ResponseEntity followMember() {
-		return ResponseEntity.created(null).build();
-	}
 
 	//TODO 회원 차단
 	@PostMapping("/blocks/{member-id}")
