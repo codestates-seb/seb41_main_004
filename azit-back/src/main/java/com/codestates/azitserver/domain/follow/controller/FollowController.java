@@ -97,10 +97,19 @@ public class FollowController {
 	 * @author cryoon
 	 */
 	@GetMapping("/following")
-	public ResponseEntity<?> getFollowings(@Positive @PathVariable("member-id") Long memberId) {
-		// TODO : 단순한 조회가 아닌 리스트 중에 나와의 팔로우 상태값까지 가져와야 합니다.
+	public ResponseEntity<?> getFollowings(@Positive @PathVariable("member-id") Long memberId,
+		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size,
+		@LoginMember Member member) {
+		// 본인만 팔로우한 사람들을 볼 수 있습니다.
+		if (!followService.verifyMemberAndMemberId(member, memberId)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
 
-		return null;
+		Page<Follow> followPage = followService.findAllMemberFollowing(memberId, page - 1, size);
+		List<Follow> follows = followPage.getContent();
+		List<FollowDto.GetFollowingResponse> responses = mapper.followToFollowDtoFollowingResponse(follows);
+
+		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}
 
 	/**

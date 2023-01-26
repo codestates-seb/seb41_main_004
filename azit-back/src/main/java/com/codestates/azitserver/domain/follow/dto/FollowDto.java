@@ -30,4 +30,13 @@ public class FollowDto {
 		private Long followId;
 		private MemberDto.ClubMemberMemberResponse follower;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class GetFollowingResponse {
+		private Long followId;
+		private MemberDto.ClubMemberMemberResponse followee;
+		private Boolean matpal;
+	}
 }

@@ -3,6 +3,7 @@ package com.codestates.azitserver.domain.follow.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.codestates.azitserver.domain.follow.dto.FollowDto;
 import com.codestates.azitserver.domain.follow.entity.Follow;
@@ -15,6 +16,9 @@ public interface FollowMapper {
 	List<FollowDto.Response> followToFollowDtoResponse(List<Follow> follow);
 
 	List<FollowDto.GetFollowerResponse> followToFollowDtoGetFollowerResponse(List<Follow> follows);
+
+	@Mapping(target = "matpal", expression = "java(follow.getMatpal())")
+	List<FollowDto.GetFollowingResponse> followToFollowDtoFollowingResponse(List<Follow> follows);
 
 	default FollowDto.FollowStatus getFollowStatus(boolean result) {
 		return new FollowDto.FollowStatus(result);

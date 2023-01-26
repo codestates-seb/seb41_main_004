@@ -1,8 +1,11 @@
 package com.codestates.azitserver.domain.follow.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -88,6 +91,28 @@ public class FollowService {
 
 		return followRepository.findAllByFollowee(member,
 			PageRequest.of(page, size, Sort.by("createdAt").descending()));
+	}
+
+	public Page<Follow> findAllMemberFollowing(Long memberId, int page, int size) {
+		Member member = memberService.findExistingMember(memberId);
+
+		List<Follow> follower = followRepository.findAllByFollower(member);
+
+		// JPQL sub query를 통해서 값을 구하니 pagination이 안 돼서 직접 구현
+		PageRequest pageRequest = PageRequest.of(page, size);
+		final int start = (int)pageRequest.getOffset();
+		final int end = Math.min((start + pageRequest.getPageSize()), follower.size());
+
+		List<Follow> subList;
+		try {
+			subList = follower.subList(start, end);
+		} catch (Exception e) {
+			subList = new ArrayList<>();
+		}
+
+		final Page<Follow> followPage = new PageImpl<>(subList, pageRequest, follower.size());
+
+		return followPage;
 	}
 
 	/**
