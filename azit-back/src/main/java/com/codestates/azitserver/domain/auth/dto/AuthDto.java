@@ -58,11 +58,4 @@ public class AuthDto {
 		private String email;
 		private String authNum;
 	}
-
-	@Getter
-	@Setter
-	public static class ReissueToken {
-		private String email;
-		private String accessToken;
-	}
 }
