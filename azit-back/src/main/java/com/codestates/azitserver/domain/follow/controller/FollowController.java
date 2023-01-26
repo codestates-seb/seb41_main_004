@@ -104,6 +104,24 @@ public class FollowController {
 	}
 
 	/**
+	 * 팔로우 정보를 조회해서 현재 로그인한 유저가 이 사람을 팔로우했는지 확인합니다.
+	 * @param memberId 팔로우 했는지 확인하고싶은 회원 고유 식별자
+	 * @param member 현재 로그인한 유저
+	 * @return 팔로우를 했는지 하지 않았는지 boolean 결과값을 응답으로 전달합니다.
+	 */
+	@GetMapping("follow-status")
+	public ResponseEntity<?> getFollowStatus(@Positive @PathVariable("member-id") Long memberId,
+		@LoginMember Member member) {
+		boolean result = false;
+		if (member != null) {
+			result = followService.isExistFollowByIds(member.getMemberId(), memberId);
+		}
+		FollowDto.FollowStatus response = mapper.getFollowStatus(result);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+	}
+
+	/**
 	 * 나를 팔로우 한 사람들 중 내가 강제로 팔로우를 해제합니다.
 	 * @param memberId 나.
 	 * @param followId 나를 팔로우 한 리스트중 해제하고 싶은 팔로우 고유 식별자
@@ -118,7 +136,7 @@ public class FollowController {
 		}
 
 		followService.deleteFollowByFollowId(followId);
-		
+
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

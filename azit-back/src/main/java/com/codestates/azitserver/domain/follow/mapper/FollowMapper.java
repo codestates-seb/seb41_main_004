@@ -15,4 +15,8 @@ public interface FollowMapper {
 	List<FollowDto.Response> followToFollowDtoResponse(List<Follow> follow);
 
 	List<FollowDto.GetFollowerResponse> followToFollowDtoGetFollowerResponse(List<Follow> follows);
+
+	default FollowDto.FollowStatus getFollowStatus(boolean result) {
+		return new FollowDto.FollowStatus(result);
+	}
 }
