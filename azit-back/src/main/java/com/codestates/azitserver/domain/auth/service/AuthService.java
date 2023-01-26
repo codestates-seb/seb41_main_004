@@ -168,21 +168,21 @@ public class AuthService {
 	/**
 	 * 토큰 재발급
 	 * @param request RefreshToken
-	 * @param memberEmail memberEmail (만료된 accessToken 재발급 위함)
+	 * @param email memberEmail
 	 * @return 새로운 AccessToken 정보가 담긴 Dto
 	 */
 	@Transactional
-	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, String memberEmail) {
+	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, String email) {
 		String refreshToken = request.getHeader("Refresh"); // refreshToken
 
 		// Redis에 저장된 email(key값)의 RTK(value값)가 요청 들어온 RTK와 일치하는지 확인
-		if (!redisUtils.getValuebyKey(memberEmail).equals(refreshToken)) {
+		if (!redisUtils.getValuebyKey(email).equals(refreshToken)) {
 			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 		}
 
 		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
-		if (redisUtils.isExists(memberEmail)) {
-			Member findMember = findVerifiedMemberByEmail(memberEmail);
+		if (redisUtils.isExists(email)) {
+			Member findMember = findVerifiedMemberByEmail(email);
 			String NewAccessToken = delegateAccessToken(findMember);
 
 			AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();

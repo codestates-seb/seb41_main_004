@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
@@ -63,12 +64,12 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@GetMapping("/re-issue/{email:.+}/")
+	@GetMapping("/re-issue")
 	@CrossOrigin(origins = {"http://localhost:3000",
 		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
-		@PathVariable("email") String memberEmail) {
-		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
+		@RequestParam("email") String email) {
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, email);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
 
