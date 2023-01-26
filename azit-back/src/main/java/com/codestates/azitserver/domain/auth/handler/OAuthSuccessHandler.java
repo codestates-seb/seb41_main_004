@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +22,6 @@ import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
-import com.codestates.azitserver.global.exception.BusinessLogicException;
-import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -44,26 +41,33 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		String email = String.valueOf(oAuth2User.getAttributes().get("email"));
 		String nickname = String.valueOf(oAuth2User.getAttributes().get("name"));
 
-		// email로 존재하는 회원인지 확인해서 존재하면 토큰만 발급
-		if (memberRepository.findByEmail(email).isPresent()) {
-			Optional<Member> optionalMember = memberRepository.findByEmail(email);
-			Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(
-				ExceptionCode.MEMBER_NOT_FOUND));
+		Member member = new Member();
+		member.setEmail(email);
+		member.setNickname(nickname);
+		memberRepository.save(member);
 
-			delegateTokens(member, request, response);
-		}
-		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
-		else {
-			AuthResponseDto.ResponseWithProfile responseWithProfileDto = new AuthResponseDto.ResponseWithProfile();
+		delegateTokens(member, request, response);
 
-			responseWithProfileDto.setEmail(email);
-			responseWithProfileDto.setNickname(nickname);
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			String info = objectMapper.writeValueAsString(responseWithProfileDto);
-
-			response.getWriter().write(info);
-		}
+		// // email로 존재하는 회원인지 확인해서 존재하면 토큰만 발급
+		// if (memberRepository.findByEmail(email).isPresent()) {
+		// 	Optional<Member> optionalMember = memberRepository.findByEmail(email);
+		// 	Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(
+		// 		ExceptionCode.MEMBER_NOT_FOUND));
+		//
+		// 	delegateTokens(member, request, response);
+		// }
+		// // 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
+		// else {
+		// 	AuthResponseDto.ResponseWithProfile responseWithProfileDto = new AuthResponseDto.ResponseWithProfile();
+		//
+		// 	responseWithProfileDto.setEmail(email);
+		// 	responseWithProfileDto.setNickname(nickname);
+		//
+		// 	ObjectMapper objectMapper = new ObjectMapper();
+		// 	String info = objectMapper.writeValueAsString(responseWithProfileDto);
+		//
+		// 	response.getWriter().write(info);
+		// }
 	}
 
 	//토큰 발급 메서드
@@ -144,8 +148,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
-			.port(8080)
+			// .host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
+			.host("localhost")
+			.port(3000)
 			.path("/oauth")
 			.queryParams(queryParams)
 			.build()
