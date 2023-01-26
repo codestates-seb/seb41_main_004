@@ -57,6 +57,7 @@ const DataList = ({ data, follower }) => {
       setFollow(false);
     }
   }, [follower]);
+  console.log(follower)
   return (
     <>
       <Container>
@@ -64,8 +65,8 @@ const DataList = ({ data, follower }) => {
           <UserImg src={UserProfile} />
         </div>
         <FollowBox>
-          <h3>{follow ? data.host.nickname : follower.follower.nickname}</h3>
-          <p>{follow ? data.clubInfo : follower.follower.email}</p>
+          <h3>{follow ? data?.host.nickname : follower?.followee.nickname}</h3>
+          <p>{follow ? data?.clubInfo : follower?.followee?.aboutMe}</p>
         </FollowBox>
         <ButtonBox>
           {/* 상황에 따라 맞는 버튼이 오도록 하기 필요 */}
