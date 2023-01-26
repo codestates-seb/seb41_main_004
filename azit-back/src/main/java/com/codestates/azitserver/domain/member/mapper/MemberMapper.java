@@ -21,6 +21,8 @@ public interface MemberMapper {
 	@Mapping(target = "reputation", ignore = true)
 	Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto);
 
+	@Mapping(target = "follower", expression = "java(member.getFollowerList().size())")
+	@Mapping(target = "following", expression = "java(member.getFollowingList().size())")
 	MemberDto.Response memberToMemberResponseDto(Member member);
 
 	List<MemberDto.Response> membersToMemberResponseDtos(List<Member> members);

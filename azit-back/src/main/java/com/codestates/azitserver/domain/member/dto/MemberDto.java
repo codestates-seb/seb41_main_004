@@ -122,6 +122,8 @@ public class MemberDto {
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
 		private List<Long> categorySmallIdList;
+		private Integer follower;
+		private Integer following;
 
 	}
 
