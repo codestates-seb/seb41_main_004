@@ -89,10 +89,10 @@ public class FollowController {
 
 		List<FollowDto.GetFollowerResponse> responses = mapper.followToFollowDtoGetFollowerResponse(follows);
 
-		// 본인이 아닐경우 모든 matpal값을 null로 합니다.
+		// 본인이 아닐경우 모든 matpal값을 false로 합니다.
 		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
 			for (FollowDto.GetFollowerResponse response : responses) {
-				response.setMatpal(null);
+				response.setMatpal(false);
 			}
 		}
 
@@ -113,10 +113,10 @@ public class FollowController {
 		List<Follow> follows = followPage.getContent();
 		List<FollowDto.GetFollowingResponse> responses = mapper.followToFollowDtoFollowingResponse(follows);
 
-		// 본인이 아닐경우 모든 matpal값을 null로 합니다.
+		// 본인이 아닐경우 모든 matpal값을 false 합니다.
 		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
 			for (FollowDto.GetFollowingResponse response : responses) {
-				response.setMatpal(null);
+				response.setMatpal(false);
 			}
 		}
 

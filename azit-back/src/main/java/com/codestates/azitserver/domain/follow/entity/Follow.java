@@ -61,9 +61,16 @@ public class Follow extends Auditable {
 		private final Member follower;
 		private final Member followee;
 
+		private Boolean matpal;
+
 		public Builder(Member follower, Member followee) {
 			this.follower = follower;
 			this.followee = followee;
+		}
+
+		public Builder matpal(Boolean matpal) {
+			this.matpal = matpal;
+			return this;
 		}
 
 		public Follow build() {
