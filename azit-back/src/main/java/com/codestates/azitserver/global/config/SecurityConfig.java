@@ -78,6 +78,9 @@ public class SecurityConfig {
 				.antMatchers("/api/clubs/reports/**").permitAll()  // 아지트 신고
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
+				/*======follow======*/
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+
 				/*==========member==========*/
 				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
 				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
@@ -112,6 +115,7 @@ public class SecurityConfig {
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
+				.antMatchers(HttpMethod.POST, "/api/auth/re-issue").permitAll() // 토큰 재발급
 
 				.anyRequest().authenticated())
 
