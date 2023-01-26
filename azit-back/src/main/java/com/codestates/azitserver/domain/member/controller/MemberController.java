@@ -174,7 +174,7 @@ public class MemberController {
 
 
 	//참여상태무관 전체조회
-	@GetMapping("/{member-id}/clubs/participation")
+	@GetMapping("/{member-id}/clubs")
 	public ResponseEntity clubMemberStatus(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
