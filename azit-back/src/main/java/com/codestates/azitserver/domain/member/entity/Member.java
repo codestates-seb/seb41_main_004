@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.follow.entity.Follow;
@@ -77,6 +78,11 @@ public class Member extends Auditable {
 	@JsonManagedReference
 	@Column(name = "MEMBER_REPORT_LIST")
 	private List<MemberMemberReport> memberMemberReportList = new ArrayList<>();
+  
+	@OneToMany
+	@JsonManagedReference
+	@Column(name = "CLUB_MEMBER_LIST")
+	private List<ClubMember> clubMemberList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
 	private List<Follow> followerList = new ArrayList<>();

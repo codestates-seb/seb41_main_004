@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
+import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
@@ -39,12 +43,17 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
 	private final MemberCategoryService memberCategoryService;
+	private final ClubMemberService clubMemberService;
+	private final ClubMemberMapper clubMemberMapper;
 
 	public MemberController(MemberService memberService, MemberMapper memberMapper,
-		MemberCategoryService memberCategoryService) {
+		MemberCategoryService memberCategoryService, ClubMemberService clubMemberService,
+		ClubMemberMapper clubMemberMapper) {
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.memberCategoryService = memberCategoryService;
+		this.clubMemberService = clubMemberService;
+		this.clubMemberMapper = clubMemberMapper;
 	}
 
 	//회원 생성
@@ -164,8 +173,33 @@ public class MemberController {
 	//TODO 회원 신고
 	@PostMapping("/reports/{member-id}")
 	public ResponseEntity reportMember() {
-		return ResponseEntity.created(null).build();
+
+	@GetMapping("/{member-id}/clubs/participation")
+	public ResponseEntity participationStatus(@Positive @PathVariable("member-id") Long memberId) {
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
+		// List<ClubMemberDto.ClubResponse> responses = clubMemberMapper.clubMemberToClubMemberDtoClubResponse(clubMemberList);
+
+		// List<Long> clubList = new ArrayList<>();
+		// for (ClubMember clubMember : clubMemberList) {
+		// 	clubList.add(clubMember.getClub().getClubId());
+		// }
+
+		return new ResponseEntity<>( HttpStatus.OK);
 	}
+
+	// @GetMapping("/{member-id}/clubs/")
+	// public ResponseEntity myDetails(@Positive @PathVariable("member-id") Long memberId) {
+	// 	Member member = memberService.getMemberById(memberId);
+	// 	List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
+	//
+	// 	// List<Long> clubList = new ArrayList<>();
+	// 	// for (ClubMember clubMember : clubMemberList) {
+	// 	// 	clubList.add(clubMember.getClub().getClubId());
+	// 	// }
+	//
+	// 	return new ResponseEntity<>(new SingleResponseDto<>(responses), HttpStatus.OK);
+	// }
 
 	//TODO 회원 차단
 	@PostMapping("/blocks/{member-id}")
