@@ -225,7 +225,7 @@ public class authControllerTest {
 		// when
 		ResultActions actions =
 			mockMvc.perform(
-				get("/api/auth/re-issue/{email:.+}", memberEmail)
+				get("/api/auth/re-issue/{email:.+}/", memberEmail)
 					.header("Refresh", "Required JWT refresh token")
 					.with(csrf())
 			);
