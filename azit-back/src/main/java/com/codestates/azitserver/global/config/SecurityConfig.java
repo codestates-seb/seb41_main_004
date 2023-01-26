@@ -28,7 +28,6 @@ import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationFailure
 import com.codestates.azitserver.domain.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.azitserver.domain.auth.handler.OAuthSuccessHandler;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
-import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.auth.userdetails.MemberDetailsService;
 import com.codestates.azitserver.domain.auth.utils.CustomAuthorityUtils;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;

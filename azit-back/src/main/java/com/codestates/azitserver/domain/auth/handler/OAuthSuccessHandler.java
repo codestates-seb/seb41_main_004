@@ -1,6 +1,5 @@
 package com.codestates.azitserver.domain.auth.handler;
 
-import static com.codestates.azitserver.domain.auth.service.AuthService.*;
 import static java.util.stream.Collectors.*;
 
 import java.io.IOException;
@@ -26,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.jwt.JwtTokenizer;
-import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.auth.utils.RedisUtils;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
