@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.common.Auditable;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
+import com.codestates.azitserver.domain.follow.entity.Follow;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Builder;
@@ -83,7 +84,11 @@ public class Member extends Auditable {
 	@Column(name = "CLUB_MEMBER_LIST")
 	private List<ClubMember> clubMemberList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+	private List<Follow> followerList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "followee", cascade = CascadeType.ALL)
+	private List<Follow> followingList = new ArrayList<>();
 
 	public enum Gender {
 		MALE("남자"),
@@ -131,7 +136,7 @@ public class Member extends Auditable {
 		this.memberCategoryList = memberCategoryList;
 	}
 
-	public void addMemberCategorySmallList(List<MemberCategory> memberCategoryList ) {
+	public void addMemberCategorySmallList(List<MemberCategory> memberCategoryList) {
 		this.memberCategoryList = memberCategoryList;
 	}
 

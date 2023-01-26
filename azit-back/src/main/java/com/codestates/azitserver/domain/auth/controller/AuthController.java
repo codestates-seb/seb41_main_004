@@ -60,9 +60,10 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping("/reIssue")
-	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
-		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request);
+	@PostMapping("/re-issue")
+	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
+		@RequestBody AuthDto.ReissueToken reissueInfo) {
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, reissueInfo);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
 

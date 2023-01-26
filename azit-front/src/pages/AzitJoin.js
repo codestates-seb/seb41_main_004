@@ -88,7 +88,12 @@ const AzitJoin = () => {
       alert("아지트 참가 신청이 완료되었습니다");
       navigate(-1);
     } catch (error) {
-      alert(error.message);
+      const statusCode = error.response.status;
+      if (statusCode === 409) {
+        return alert("이미 가입했던 아지트입니다.");
+      } else {
+        alert(error.message);
+      }
     }
   };
 

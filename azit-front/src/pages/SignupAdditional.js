@@ -97,7 +97,7 @@ const SignupAdditional = () => {
       // console.log(res)
     } catch (e) {
       // console.log("회원가입을 실패하였습니다.")
-      alert(e.message)
+      alert(e.response.data.message)
     }
   }
   return (
