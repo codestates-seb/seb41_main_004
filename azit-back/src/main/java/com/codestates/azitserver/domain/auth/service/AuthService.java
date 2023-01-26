@@ -165,104 +165,35 @@ public class AuthService {
 		}
 	}
 
+	/**
+	 * 토큰 재발급
+	 * @param request refreshToken
+	 * @param memberEmail email
+	 * @return NewAccessToken, refreshToken
+	 */
 	@Transactional
 	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, String memberEmail) {
-		log.info("service 들어옴");
 		String refreshToken = request.getHeader("Refresh"); // refreshToken
-		System.out.println("refreshToken = " + refreshToken);
 
 		// Redis에 저장된 email(key값)의 RTK(value값)가 요청 들어온 RTK와 일치하는지 확인
 		if (!redisUtils.getValuebyKey(memberEmail).equals(refreshToken)) {
-			log.info("member not found");
 			throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 		}
 
 		// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
 		if (redisUtils.isExists(memberEmail)) {
-			log.info("재발급 로직 들어옴");
 			Member findMember = findVerifiedMemberByEmail(memberEmail);
-			System.out.println("findMember = " + findMember);
 			String NewAccessToken = delegateAccessToken(findMember);
-			System.out.println("NewAccessToken = " + NewAccessToken);
 
 			AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
 			tokenResponse.setAccessToken("Bearer " + NewAccessToken);
 			tokenResponse.setRefreshToken(refreshToken);
-			System.out.println("tokenResponse = " + tokenResponse);
 
 			return tokenResponse;
 		} else {
 			throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
 		}
 	}
-	// @Transactional
-	// public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, AuthDto.SendEmail memberEmail) {
-	// 	log.info("service 들어옴");
-	// 	String refreshToken = request.getHeader("Refresh"); // refreshToken
-	// 	System.out.println("refreshToken = " + refreshToken);
-	// 	String email = memberEmail.getEmail();
-	// 	System.out.println(email);
-	//
-	// 	// Redis에 저장된 email(key값)의 RTK(value값)가 요청 들어온 RTK와 일치하는지 확인
-	// 	if (!redisUtils.getValuebyKey(email).equals(refreshToken)) {
-	// 		log.info("member not found");
-	// 		throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-	// 	}
-	//
-	// 	// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
-	// 	if (redisUtils.isExists(email)) {
-	// 		log.info("재발급 로직 들어옴");
-	// 		Member findMember = findVerifiedMemberByEmail(email);
-	// 		System.out.println("findMember = " + findMember);
-	// 		String NewAccessToken = delegateAccessToken(findMember);
-	// 		System.out.println("NewAccessToken = " + NewAccessToken);
-	//
-	// 		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
-	// 		tokenResponse.setAccessToken("Bearer " + NewAccessToken);
-	// 		tokenResponse.setRefreshToken(refreshToken);
-	// 		System.out.println("tokenResponse = " + tokenResponse);
-	//
-	// 		return tokenResponse;
-	// 	} else {
-	// 		throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
-	// 	}
-	// }
-	// /**
-	//  * 토큰 재발급
-	//  * @param request RefreshToken
-	//  * @param email memberEmail
-	//  * @return 새로운 AccessToken 정보가 담긴 Dto
-	//  */
-	// @Transactional
-	// public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, String email) {
-	// 	log.info("service 들어옴");
-	// 	String refreshToken = request.getHeader("Refresh"); // refreshToken
-	// 	System.out.println("refreshToken = " + refreshToken);
-	//
-	// 	// Redis에 저장된 email(key값)의 RTK(value값)가 요청 들어온 RTK와 일치하는지 확인
-	// 	if (!redisUtils.getValuebyKey(email).equals(refreshToken)) {
-	// 		log.info("member not found");
-	// 		throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-	// 	}
-	//
-	// 	// logout되면 redis에서 refreshToken 삭제되어 재발급 안 됨
-	// 	if (redisUtils.isExists(email)) {
-	// 		log.info("재발급 로직 들어옴");
-	// 		Member findMember = findVerifiedMemberByEmail(email);
-	// 		System.out.println("findMember = " + findMember);
-	// 		String NewAccessToken = delegateAccessToken(findMember);
-	// 		System.out.println("NewAccessToken = " + NewAccessToken);
-	//
-	// 		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
-	// 		tokenResponse.setAccessToken("Bearer " + NewAccessToken);
-	// 		tokenResponse.setRefreshToken(refreshToken);
-	// 		System.out.println("tokenResponse = " + tokenResponse);
-	//
-	// 		return tokenResponse;
-	// 	} else {
-	// 		throw new BusinessLogicException(ExceptionCode.TOKEN_NOT_FOUND);
-	// 	}
-	// }
 
 	/**
 	 * 이메일 인증 메일 작성
