@@ -175,7 +175,7 @@ public class MemberController {
 
 	//참여상태무관 전체조회
 	@GetMapping("/{member-id}/clubs")
-	public ResponseEntity clubMemberStatus(@Positive @PathVariable("member-id") Long memberId) {
+	public ResponseEntity attendedClub(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
@@ -185,14 +185,14 @@ public class MemberController {
 	}
 	// 참여상태별 조회
 	/** TODO 참여상태 넘버링 변경
-	// club-member-status 0 : CLUB_WAITING
-	// club-member-status 1 : CLUB_JOINED
-	// club-member-status 2 : 종료된 아지트
-	// club-member-status 3 : CLUB_REJECTED (미사용)
-	// club-member-status 4 : CLUB_KICKED (미사용)
+	// my-details-index 0 : CLUB_WAITING
+	// my-details-index 1 : CLUB_JOINED
+	// my-details-index 2 : 종료된 아지트
+	// my-details-index 3 : CLUB_REJECTED (미사용)
+	// my-details-index 4 : CLUB_KICKED (미사용)
 	**/
 	@GetMapping("/{member-id}/clubs/{my-details-index}")
-	public ResponseEntity clubMemberStatusWaiting(@Positive @PathVariable("member-id") Long memberId,
+	public ResponseEntity attendedClubByStatus(@Positive @PathVariable("member-id") Long memberId,
 		@PathVariable("my-details-index") int myDetailsIndex) {
 
 		Member member = memberService.getMemberById(memberId);
