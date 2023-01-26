@@ -80,6 +80,7 @@ public class SecurityConfig {
 
 				/*======follow======*/
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/following").permitAll() // 팔로잉 관련 조회
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follow-status").permitAll() // 팔로우 여부 확인
 
 				/*==========member==========*/
