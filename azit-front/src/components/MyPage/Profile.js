@@ -67,26 +67,28 @@ const FollowWrapper = styled.div`
   margin-top: 1rem;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  > .countWrap {
+    color: #777777;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    >.count {
+      color: #222222;
+      font-size: var(--main-font);
+    }
+  }
+  >.line {
+    display: inline-block;
+    width: 1px;
+    height: 3rem;
+    margin:0 1.5rem;
+    background-color: var(--border-color);
+  }
 `;
-const FollowingCount = styled.span`
-  display: flex;
-  justify-content: center;
-  color: #222222;
-  font-size: var(--main-font);
-`;
-const Following = styled.span`
-  color: #777777;
-  border-right: 1px solid #d9d9d9; ;
-`;
-const FolllowerCount = styled.span`
-  display: flex;
-  justify-content: center;
-  color: #222222;
-`;
-const Follower = styled.span`
-  color: #777777;
-`;
+
 const TempWrap = styled.div`
   position: absolute;
   right: 2rem;
@@ -166,16 +168,17 @@ const Profile = ({ myPage, id }) => {
             </ButtonWrapper>
             <Name>{userData.nickname}</Name>
             <Text>{userData.aboutMe}</Text>
-            <Link to="/userpage/followcheck" className="followCheck">
+            <Link to={`/userpage/followcheck/${id}`} className="followCheck">
               <FollowWrapper>
-                <Following>
-                  <FollowingCount>0</FollowingCount>
-                  팔로잉&nbsp;&nbsp;
-                </Following>
-                <Follower>
-                  <FolllowerCount>3</FolllowerCount>
-                  &nbsp;&nbsp; 팔로워
-                </Follower>
+                <div className="countWrap">
+                  <span className="count">0</span>
+                  팔로잉
+                </div>
+                <span className="line"/>
+                <div className="countWrap">
+                  <span className="count">0</span>
+                  팔로워
+                </div>
               </FollowWrapper>
             </Link>
           </InfoWrapper>
