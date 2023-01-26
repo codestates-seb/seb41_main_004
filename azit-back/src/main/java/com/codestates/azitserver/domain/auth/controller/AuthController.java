@@ -63,7 +63,7 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@GetMapping("/re-issue/{email:.+}")
+	@GetMapping("/re-issue/{email:.+}/")
 	@CrossOrigin(origins = {"http://localhost:3000",
 		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
