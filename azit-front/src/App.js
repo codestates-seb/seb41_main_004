@@ -88,7 +88,7 @@ function App() {
             ></Route>
             <Route path="/userpage/report/:id" element={<UserReport />}></Route>
             <Route
-              path="/userpage/followcheck"
+              path="/userpage/followcheck/:id"
               element={<FollowCheck />}
             ></Route>
             <Route

@@ -78,7 +78,9 @@ const CreateItem = ({ member, setPostData, postData, hostId, clubId }) => {
         </div>
         <div className="detailReviewWrap">
           <label htmlFor="body">자세한 리뷰 작성하기(선택)</label>
-          <textarea id="body" onChange={(e) => handleReview(e)} />
+          <textarea id="body" 
+          maxLength={128}
+          onChange={(e) => handleReview(e)} />
         </div>
       </div>
     </CreateCellWrap>

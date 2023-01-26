@@ -8,8 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../util/axios";
 import { useFirstRender } from "../util/useDidMountEffect";
 
-const accessToken = localStorage.getItem("accessToken");
-
 const ProfileEditForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -104,7 +102,8 @@ const UserProfileEdit = () => {
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
   const navigate = useNavigate();
-
+  const accessToken = localStorage.getItem("accessToken");
+  
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
@@ -182,6 +181,7 @@ const UserProfileEdit = () => {
             return categoryList.push(category);
           });
           setCheckedInputs(categoryList);
+          console.log(defaultName)
         })
         .catch((error) => {
           console.log("error : ", error);
