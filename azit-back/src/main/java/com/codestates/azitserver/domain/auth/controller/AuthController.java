@@ -67,7 +67,7 @@ public class AuthController {
 
 	@GetMapping("/re-issue/{email:.+}")
 	@CrossOrigin(origins = {"http://localhost:3000",
-		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)
+		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET, allowedHeaders = "*", exposedHeaders = "*")
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
 		@PathVariable("email") String memberEmail) {
 		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
