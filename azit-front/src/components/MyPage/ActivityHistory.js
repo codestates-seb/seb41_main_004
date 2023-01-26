@@ -93,14 +93,13 @@ const ActivityHistory = ({ myPage }) => {
   //console.log(data); 받아오는 데이터 확인하기
 
   const handleCheckInput = () => {
-    setHostCheck(!hostCheck);
+    setHostCheck(!hostCheck); // false <-> true
   };
-  //console.log(hostCheck);  false <-> true
 
   const handleCheckSelect = (e) => {
     setSelectCheck(e.target.value);
   };
-  //console.log(selectCheck);
+  console.log(selectCheck);
 
   // useEffect(() => {
   //   if (hostCheck === true && selectCheck === true) {
