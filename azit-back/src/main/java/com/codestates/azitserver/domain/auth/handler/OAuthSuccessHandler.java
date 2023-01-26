@@ -145,10 +145,13 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		queryParams.add("Authorization", "Bearer" + accessToken);
 		queryParams.add("Refresh", refreshToken);
 
+		log.info("===========================================");
+		log.info("createURI 들어옴");
+		log.info("===========================================");
+
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			// .host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
 			.host("localhost")
 			.port(3000)
 			.path("/oauth")
