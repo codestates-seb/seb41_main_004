@@ -175,7 +175,7 @@ public class MemberController {
 
 	//참여상태무관 전체조회
 	@GetMapping("/{member-id}/clubs")
-	public ResponseEntity attendedClub(@Positive @PathVariable("member-id") Long memberId) {
+	public ResponseEntity getAttendedClub(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
@@ -192,7 +192,7 @@ public class MemberController {
 	// my-details-index 4 : CLUB_KICKED (미사용)
 	**/
 	@GetMapping("/{member-id}/clubs/{my-details-index}")
-	public ResponseEntity attendedClubByStatus(@Positive @PathVariable("member-id") Long memberId,
+	public ResponseEntity getAttendedClubByStatus(@Positive @PathVariable("member-id") Long memberId,
 		@PathVariable("my-details-index") int myDetailsIndex) {
 
 		Member member = memberService.getMemberById(memberId);
