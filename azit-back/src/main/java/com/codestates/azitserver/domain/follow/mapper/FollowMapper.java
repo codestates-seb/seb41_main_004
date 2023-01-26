@@ -15,6 +15,7 @@ public interface FollowMapper {
 
 	List<FollowDto.Response> followToFollowDtoResponse(List<Follow> follow);
 
+	@Mapping(target = "matpal", expression = "java(follow.getMatpal())")
 	List<FollowDto.GetFollowerResponse> followToFollowDtoGetFollowerResponse(List<Follow> follows);
 
 	@Mapping(target = "matpal", expression = "java(follow.getMatpal())")
