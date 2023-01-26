@@ -212,12 +212,9 @@ public class authControllerTest {
 	@DisplayName("re-issueToken")
 	public void reIssueTokenTest() throws Exception {
 		// given
-		AuthDto.SendEmail dto = new AuthDto.SendEmail();
-		dto.setEmail("stubmember@naver.com");
-		String content = gson.toJson(dto);
-
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addHeader("Refresh", "Required JWT refresh token");
+		String memberEmail = "testMemberEmail@hello.com";
 
 		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
 		tokenResponse.setAccessToken("New JWT access token");
@@ -228,28 +225,67 @@ public class authControllerTest {
 		// when
 		ResultActions actions =
 			mockMvc.perform(
-				post("/api/auth/re-issue")
+				get("/api/auth/re-issue/{email:.+}", memberEmail)
 					.header("Refresh", "Required JWT refresh token")
-					.contentType(MediaType.APPLICATION_JSON)
-					.characterEncoding("UTF-8")
 					.with(csrf())
-					.content(content)
 			);
 
 		// then
 		actions
 			.andDo(print())
-			.andExpect(status().isCreated())
+			.andExpect(status().isOk())
 			.andDo(document("token-reIssue",
 				requestHeaders(
 					headerWithName("Refresh").description("Jwt Refresh Token")),
-				requestFields(List.of(
-					fieldWithPath("email").type(JsonFieldType.STRING).description("memberEmail"))),
+				pathParameters(List.of(
+					parameterWithName("email").description("Member Email"))),
 				responseHeaders(
 					headerWithName("Authorization").description("Jwt Access Token"),
 					headerWithName("Refresh").description("Jwt Refresh Token")
 				)));
 	}
+	// @Test
+	// @DisplayName("re-issueToken")
+	// public void reIssueTokenTest() throws Exception {
+	// 	// given
+	// 	AuthDto.SendEmail dto = new AuthDto.SendEmail();
+	// 	dto.setEmail("stubmember@naver.com");
+	// 	String content = gson.toJson(dto);
+	//
+	// 	MockHttpServletRequest request = new MockHttpServletRequest();
+	// 	request.addHeader("Refresh", "Required JWT refresh token");
+	//
+	// 	AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
+	// 	tokenResponse.setAccessToken("New JWT access token");
+	// 	tokenResponse.setRefreshToken("JWT Refresh Token");
+	//
+	// 	given(authService.reIssueToken(Mockito.any(), Mockito.any())).willReturn(tokenResponse);
+	//
+	// 	// when
+	// 	ResultActions actions =
+	// 		mockMvc.perform(
+	// 			post("/api/auth/re-issue")
+	// 				.header("Refresh", "Required JWT refresh token")
+	// 				.contentType(MediaType.APPLICATION_JSON)
+	// 				.characterEncoding("UTF-8")
+	// 				.with(csrf())
+	// 				.content(content)
+	// 		);
+	//
+	// 	// then
+	// 	actions
+	// 		.andDo(print())
+	// 		.andExpect(status().isCreated())
+	// 		.andDo(document("token-reIssue",
+	// 			requestHeaders(
+	// 				headerWithName("Refresh").description("Jwt Refresh Token")),
+	// 			requestFields(List.of(
+	// 				fieldWithPath("email").type(JsonFieldType.STRING).description("memberEmail"))),
+	// 			responseHeaders(
+	// 				headerWithName("Authorization").description("Jwt Access Token"),
+	// 				headerWithName("Refresh").description("Jwt Refresh Token")
+	// 			)));
+	// }
 	// @Test
 	// @DisplayName("re-issueToken")
 	// public void reIssueTokenTest() throws Exception {

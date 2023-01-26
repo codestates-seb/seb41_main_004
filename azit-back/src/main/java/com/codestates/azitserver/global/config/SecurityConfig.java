@@ -45,7 +45,6 @@ public class SecurityConfig {
 	private final RedisUtils redisUtils;
 	private final MemberDetailsService memberDetailsService;
 	private final RedisTemplate<String, String> redisTemplate;
-	private final AuthService authService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -124,14 +123,14 @@ public class SecurityConfig {
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
-				.antMatchers(HttpMethod.POST, "/api/auth/re-issue").permitAll()
-				// .antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
-				// .antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
+				// .antMatchers(HttpMethod.POST, "/api/auth/re-issue").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
 
 				.anyRequest().authenticated())
 
 			.oauth2Login(oauth2 -> oauth2
-				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils, authService)));
+				.successHandler(new OAuthSuccessHandler(jwtTokenizer, memberRepository, redisUtils)));
 
 		return http.build();
 	}
