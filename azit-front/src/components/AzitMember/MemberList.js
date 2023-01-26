@@ -94,6 +94,7 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
+      window.location.href = `/azit/member/${id}`;
       console.log("아지트 참가 수락 완료");
     } catch (e) {
       console.log("아지트 참가 수락 실패");
@@ -113,6 +114,7 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
+      window.location.href = `/azit/member/${id}`;
       console.log("아지트 참가 거절 완료");
     } catch (e) {
       console.log("아지트 참가 거절 실패");
@@ -131,6 +133,7 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
+      window.location.href = `/azit/member/${id}`;
       console.log("아지트 강퇴 완료");
     } catch (e) {
       console.log("아지트 강퇴 실패");
