@@ -122,6 +122,9 @@ public class FollowService {
 	 * @author cryoon
 	 */
 	public boolean verifyMemberAndMemberId(Member member, Long memberId) {
+		if (member == null) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
 		return member.getMemberId().equals(memberId);
 	}
 
