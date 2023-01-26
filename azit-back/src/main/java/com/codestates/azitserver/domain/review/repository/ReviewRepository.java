@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.review.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,4 +21,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	@Query("select r from Review r where r.reviewee.memberId = :revieweeId and r.reviewStatus is false")
 	Page<Review> findAllReviewsByRevieweeIdWithoutHide(Long revieweeId, PageRequest createdAt);
+
+	@Query("select r from Review r where r.reviewer = :reviewer and r.club = :club")
+	List<Review> findAllReviewsByReviewerAndClub(Member reviewer, Club club);
 }

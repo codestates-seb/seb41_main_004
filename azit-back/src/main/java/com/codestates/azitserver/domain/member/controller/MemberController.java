@@ -188,7 +188,7 @@ public class MemberController {
 	// club-member-status 1 : CLUB_JOINED
 	// club-member-status 2 : CLUB_REJECTED
 	// club-member-status 3 : CLUB_KICKED
-	@GetMapping("/{member-id}/clubs/participation/{club-member-status}")
+	@GetMapping("/{member-id}/clubs/details/{club-member-status}")
 	public ResponseEntity clubMemberStatusWaiting(@Positive @PathVariable("member-id") Long memberId,
 		@PathVariable("club-member-status") int clubMemberStatusNumber) {
 

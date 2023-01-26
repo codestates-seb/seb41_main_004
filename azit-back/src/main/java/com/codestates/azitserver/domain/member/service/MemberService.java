@@ -32,6 +32,8 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.repository.MemberCategoryRepository;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
+import com.codestates.azitserver.domain.review.entity.Review;
+import com.codestates.azitserver.domain.review.repository.ReviewRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -50,6 +52,7 @@ public class MemberService {
 	private final MemberCategoryRepository memberCategoryRepository;
 
 	private final ClubMemberMapper clubMemberMapper;
+	private final ReviewRepository reviewRepository;
 
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
@@ -288,11 +291,15 @@ public class MemberService {
 			// Host 여부
 			response.setIsHost(clubMember.getClub().getHost().getMemberId()==clubMember.getMember().getMemberId());
 			// 숨김상태인지
-
+			response.setIsHidden(false);
 			// 리뷰 작성 했는지
-			// TODO
-			//  response.setIsReviewed(clubMember.getClub);
-
+			Member member = clubMember.getMember();
+			Club club = clubMember.getClub();
+			List<Review> reviewList = reviewRepository.findAllReviewsByReviewerAndClub(member, club);
+			if ( reviewList != null && !reviewList.isEmpty()) {
+				response.setIsReviewed(true);
+			}
+			else response.setIsReviewed(false);
 
 			clubMemberStatusResponseList.add(response);
 		}
