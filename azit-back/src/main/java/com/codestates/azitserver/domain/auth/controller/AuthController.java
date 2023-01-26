@@ -6,6 +6,7 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,14 +61,14 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping("/re-issue")
+	@GetMapping("/re-issue/{email:.+}")
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
-		@RequestBody AuthDto.ReissueToken reissueInfo) {
-		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, reissueInfo);
+		@PathVariable("email") String memberEmail) {
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
 
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//로그아웃

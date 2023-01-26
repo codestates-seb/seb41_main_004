@@ -209,17 +209,12 @@ public class authControllerTest {
 	}
 
 	@Test
-	@DisplayName("reIssueToken")
+	@DisplayName("re-issueToken")
 	public void reIssueTokenTest() throws Exception {
 		// given
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addHeader("Refresh", "Required JWT refresh token");
-
-		AuthDto.ReissueToken reissueToken = new AuthDto.ReissueToken();
-		reissueToken.setEmail("Required user email");
-		reissueToken.setAccessToken("Required expired access token");
-
-		String content = gson.toJson(reissueToken);
+		String memberEmail = "testMemberEmail@hello.com";
 
 		AuthResponseDto.TokenResponse tokenResponse = new AuthResponseDto.TokenResponse();
 		tokenResponse.setAccessToken("New JWT access token");
@@ -230,24 +225,20 @@ public class authControllerTest {
 		// when
 		ResultActions actions =
 			mockMvc.perform(
-				post("/api/auth/re-issue")
+				get("/api/auth/re-issue/{email:.+}", memberEmail)
 					.header("Refresh", "Required JWT refresh token")
-					.contentType(MediaType.APPLICATION_JSON)
-					.characterEncoding("UTF-8")
 					.with(csrf())
-					.content(content)
 			);
 
 		// then
 		actions
 			.andDo(print())
-			.andExpect(status().isCreated())
+			.andExpect(status().isOk())
 			.andDo(document("token-reIssue",
 				requestHeaders(
 					headerWithName("Refresh").description("Jwt Refresh Token")),
-				requestFields(List.of(
-					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-					fieldWithPath("accessToken").type(JsonFieldType.STRING).description("만료된 accessToken"))),
+				pathParameters(List.of(
+					parameterWithName("email").description("Member Email"))),
 				responseHeaders(
 					headerWithName("Authorization").description("Jwt Access Token"),
 					headerWithName("Refresh").description("Jwt Refresh Token")
