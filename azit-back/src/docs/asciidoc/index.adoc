@@ -104,8 +104,8 @@ include::{snippets}/token-reIssue/curl-request.adoc[]
 .http-request
 include::{snippets}/token-reIssue/http-request.adoc[]
 
-.request-fields
-include::{snippets}/token-reIssue/request-fields.adoc[]
+.path-parameters
+include::{snippets}/token-reIssue/path-parameters.adoc[]
 
 .request-headers
 include::{snippets}/token-reIssue/request-headers.adoc[]
@@ -286,8 +286,8 @@ include::{snippets}/post-member-report/request-fields.adoc[]
 .http-response
 include::{snippets}/post-member-report/http-response.adoc[]
 
-.response-fields
-include::{snippets}/post-member-report/response-fields.adoc[]
+// .response-fields
+// include::{snippets}/post-member-report/response-fields.adoc[]
 
 == 아지트(모임)
 
