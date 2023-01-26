@@ -191,9 +191,9 @@ public class MemberController {
 	// club-member-status 3 : CLUB_REJECTED (미사용)
 	// club-member-status 4 : CLUB_KICKED (미사용)
 	**/
-	@GetMapping("/{member-id}/clubs/{club-member-status}")
+	@GetMapping("/{member-id}/clubs/{my-details-index}")
 	public ResponseEntity clubMemberStatusWaiting(@Positive @PathVariable("member-id") Long memberId,
-		@PathVariable("club-member-status") int myDetailsIndex) {
+		@PathVariable("my-details-index") int myDetailsIndex) {
 
 		Member member = memberService.getMemberById(memberId);
 		ClubMember.ClubMemberStatus status = memberService.numberToStatus(myDetailsIndex);
