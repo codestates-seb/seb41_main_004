@@ -264,7 +264,7 @@ public class MemberService {
 	}
 
 	public ClubMember.ClubMemberStatus numberToStatus(int clubMemberStatusNumber) {
-		if (clubMemberStatusNumber > 3 || clubMemberStatusNumber < 0) {
+		if (clubMemberStatusNumber > 4 || clubMemberStatusNumber < 0) {
 			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
 		}
 		ClubMember.ClubMemberStatus status = ClubMember.ClubMemberStatus.CLUB_WAITING;
@@ -272,13 +272,16 @@ public class MemberService {
 			case 0 : break;
 			case 1 : status = ClubMember.ClubMemberStatus.CLUB_JOINED;
 					break;
-			case 2 : status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
+			case 3 : status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
 					break;
-			case 3 : status = ClubMember.ClubMemberStatus.CLUB_KICKED;
+			case 4 : status = ClubMember.ClubMemberStatus.CLUB_KICKED;
 					break;
+
 		}
 		return status;
 	}
+
+
 
 	public List<ClubMemberDto.ClubMemberStatusResponse>
 	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
@@ -305,4 +308,6 @@ public class MemberService {
 		}
 		return clubMemberStatusResponseList;
 	}
+
+
 }

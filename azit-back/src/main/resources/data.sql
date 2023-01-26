@@ -230,7 +230,7 @@ VALUES ('색다른 아지트', '색다른 아지트 입니다! 모두들 어서 
         '23:59:00', 'offline', '서울시 강남구', '늦지말고 참여해주세요~', 'CLUB_ACTIVE', 34, 2, 1);
 INSERT INTO club (CLUB_NAME, CLUB_INFO, MEMBER_LIMIT, FEE, JOIN_METHOD, BIRTH_YEAR_MIN, BIRTH_YEAR_MAX, GENDER_RESTRICTION,
                   MEETING_DATE, MEETING_TIME, IS_ONLINE, LOCATION, JOIN_QUESTION, CLUB_STATUS,CATEGORY_SMALL_ID, FILE_INFO_ID, HOST_ID)
-VALUES ('맛있는 아지트', '맛있는 아지트 입니다! 모두들 어서 오세요.', 16, 5000, 'APPROVAL', '1990', '2010', 'MALE_ONLY', curdate()+4,
+VALUES ('맛있는 아지트', '맛있는 아지트 입니다! 모두들 어서 오세요.', 16, 5000, 'APPROVAL', '1990', '2010', 'MALE_ONLY', curdate()-1,
         '23:59:00', 'online', null, '늦지말고 참여해주세요~', 'CLUB_ACTIVE', 35, 1, 3);
 
 

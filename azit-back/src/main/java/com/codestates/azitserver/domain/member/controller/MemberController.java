@@ -184,36 +184,27 @@ public class MemberController {
 		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}
 	// 참여상태별 조회
+	/** TODO 참여상태 넘버링 변경
 	// club-member-status 0 : CLUB_WAITING
 	// club-member-status 1 : CLUB_JOINED
-	// club-member-status 2 : CLUB_REJECTED
-	// club-member-status 3 : CLUB_KICKED
-	@GetMapping("/{member-id}/clubs/details/{club-member-status}")
+	// club-member-status 2 : 종료된 아지트
+	// club-member-status 3 : CLUB_REJECTED (미사용)
+	// club-member-status 4 : CLUB_KICKED (미사용)
+	**/
+	@GetMapping("/{member-id}/clubs/{club-member-status}")
 	public ResponseEntity clubMemberStatusWaiting(@Positive @PathVariable("member-id") Long memberId,
-		@PathVariable("club-member-status") int clubMemberStatusNumber) {
+		@PathVariable("club-member-status") int myDetailsIndex) {
 
 		Member member = memberService.getMemberById(memberId);
+		ClubMember.ClubMemberStatus status = memberService.numberToStatus(myDetailsIndex);
+
 		List<ClubMember> filteredClubMemberList =
-			clubMemberService.getAllClubMemberByMemberIdAndStatus(memberId,
-				memberService.numberToStatus(clubMemberStatusNumber));
+			clubMemberService.getAllClubMemberByMemberIdAndMyDetailsIndex(memberId, myDetailsIndex);
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(filteredClubMemberList);
 
 		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}
-
-	//호스트 여부 표시하여 조회
-	@GetMapping("/{member-id}/clubs/is-host")
-	public ResponseEntity clubMemberIsHost(@Positive @PathVariable("member-id") Long memberId) {
-		Member member = memberService.getMemberById(memberId);
-		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
-		List<ClubMemberDto.ClubMemberStatusResponse> clubMemberStatusResponseList =
-			clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(clubMemberList);
-
-		return new ResponseEntity<>(clubMemberStatusResponseList, HttpStatus.OK);
-	}
-
-
 
 	//TODO 팔로우, 언팔로우
 	@PostMapping("/follows/{member-id}")

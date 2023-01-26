@@ -1,5 +1,8 @@
 package com.codestates.azitserver.domain.club.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -157,14 +160,27 @@ public class ClubMemberService {
 		return clubMemberRepository.findClubMembersByMember(member);
 	}
 
-	public List<ClubMember> getAllClubMemberByMemberIdAndStatus(Long memberId,
-		ClubMember.ClubMemberStatus clubMemberStatus) {
+	public List<ClubMember> getAllClubMemberByMemberIdAndMyDetailsIndex(Long memberId,
+		int myDetailsIndex) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
 		List<ClubMember> filteredClubMemberList = new ArrayList<>();
-		for (ClubMember clubMember : clubMemberList) {
-			if (clubMember.getClubMemberStatus() == clubMemberStatus) {
-				filteredClubMemberList.add(clubMember);
+		if (myDetailsIndex != 2) {
+			ClubMember.ClubMemberStatus status = memberService.numberToStatus(myDetailsIndex);
+			for (ClubMember clubMember : clubMemberList) {
+				if (clubMember.getClubMemberStatus() == status) {
+					filteredClubMemberList.add(clubMember);
+				}
+			}
+		}
+		else {
+			for (ClubMember clubMember : clubMemberList) {
+				LocalDate meetingDate = clubMember.getClub().getMeetingDate();
+				LocalTime meetingTime = clubMember.getClub().getMeetingTime();
+				LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingTime);
+				if (meetingDateTime.isBefore(LocalDateTime.now())) {
+					filteredClubMemberList.add(clubMember);
+				}
 			}
 		}
 		return filteredClubMemberList;
