@@ -95,7 +95,7 @@ const UserPageSetting = () => {
         navigate('/login');
       }
     } catch(e) {
-      console.log(e);
+      alert(e);
     }
   }
 

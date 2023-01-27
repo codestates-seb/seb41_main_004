@@ -300,7 +300,7 @@ const AzitPreview = () => {
       alert("아지트가 생성되었습니다.");
       navigate(`/azit/detail/${res.data.data.clubId}`, { replace: true });
     } catch (e) {
-      console.log("아지트 생성 실패");
+      alert("아지트 생성 실패");
     }
   };
 
