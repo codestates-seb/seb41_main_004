@@ -1,7 +1,6 @@
 package com.codestates.azitserver.domain.stub;
 
 import static com.codestates.azitserver.domain.stub.CategoryStubData.*;
-import static com.codestates.azitserver.domain.stub.MemberStubData.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -48,10 +47,10 @@ public class ClubStubData {
 		post.setClubInfo("재밌는 아지트입니다.");
 		post.setMemberLimit(4);
 		post.setFee(10000);
-		post.setJoinMethod(Club.JoinMethod.APPROVAL);
+		post.setJoinMethod(String.valueOf(Club.JoinMethod.APPROVAL));
 		post.setBirthYearMin("1990");
 		post.setBirthYearMax("2000");
-		post.setGenderRestriction(Club.GenderRestriction.ALL);
+		post.setGenderRestriction(String.valueOf(Club.GenderRestriction.ALL));
 		post.setMeetingDate(LocalDate.now().plusDays(1));
 		post.setMeetingTime(LocalTime.now().plusHours(1));
 		post.setIsOnline("offline");
@@ -71,7 +70,7 @@ public class ClubStubData {
 		patch.setFee(10000);
 		patch.setBirthYearMin("1990");
 		patch.setBirthYearMax("2000");
-		patch.setGenderRestriction(Club.GenderRestriction.ALL);
+		patch.setGenderRestriction(String.valueOf(Club.GenderRestriction.ALL));
 		patch.setMeetingDate(LocalDate.now().plusDays(1));
 		patch.setMeetingTime(LocalTime.now().plusHours(1));
 		patch.setIsOnline("offline");
@@ -98,7 +97,7 @@ public class ClubStubData {
 		response.setLocation("서울시 송파구");
 		response.setJoinQuestion("재밌는 아지트 맞을까요?");
 		response.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
-		response.setHost(stubMemberIdAndNickname());
+		response.setHost(MemberStubData.stubMemberIdAndNickname());
 		response.setCategorySmall(getSmallResponse());
 		response.setBannerImage(FileInfoStubData.getFileInfoDtoResponse());
 
@@ -126,9 +125,19 @@ public class ClubStubData {
 		reportClubResponse.setClubName("재밌는 아지트");
 		reportClubResponse.setClubInfo("재밌는 아지트입니다.");
 		reportClubResponse.setClubStatus(Club.ClubStatus.CLUB_ACTIVE);
-		reportClubResponse.setHost(stubMemberIdAndNickname());
+		reportClubResponse.setHost(MemberStubData.stubMemberIdAndNickname());
 		reportClubResponse.setCategorySmall(getSmallResponse());
 
 		return reportClubResponse;
+	}
+
+	public static ClubDto.ReviewClubResponse getClubDtoReviewClubResponse() {
+		ClubDto.ReviewClubResponse reviewClubResponse = new ClubDto.ReviewClubResponse();
+
+		reviewClubResponse.setClubId(1L);
+		reviewClubResponse.setClubName("재밌는 아지트");
+		reviewClubResponse.setMeetingDate(LocalDate.now().minusDays(1));
+
+		return reviewClubResponse;
 	}
 }

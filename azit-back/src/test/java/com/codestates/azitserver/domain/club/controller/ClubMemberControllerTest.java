@@ -25,8 +25,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.codestates.azitserver.domain.club.controller.descriptor.ClubMemberFieldDescriptor;
 import com.codestates.azitserver.domain.club.controller.helper.ClubMemberControllerTestHelper;
@@ -107,17 +105,12 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 	@Test
 	void getClubMember() throws Exception {
 		// given
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("page", "1");
-		queryParams.add("size", "10");
-
-		given(clubMemberService.getAllClubMemberByClubId(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
-			.willReturn(clubMemberPage);
+		given(clubMemberService.getAllClubMemberByClubId(Mockito.anyLong())).willReturn(List.of(clubMember));
 		given(mapper.clubMemberToClubMemberDtoResponse(Mockito.anyList())).willReturn(List.of(response));
 
 		// when
 		ResultActions actions = mockMvc.perform(
-			getRequestBuilder(getClubMemberUrl("signups"), queryParams, 1L)
+			getRequestBuilder(getClubMemberUrl("signups"), 1L)
 				.header("Authorization", "Required JWT access token"));
 
 		// then
@@ -125,11 +118,6 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument("get-club-member",
 				requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
-				requestParameters(
-					List.of(
-						parameterWithName("page").description("Page 번호"),
-						parameterWithName("size").description("Page 크기")
-					)),
 				pathParameters(List.of(
 					parameterWithName("club-id").description("아지트 고유 식별자"))),
 				ClubMemberFieldDescriptor.getMultiResponseFieldSnippet()
@@ -188,5 +176,32 @@ class ClubMemberControllerTest implements ClubMemberControllerTestHelper {
 					parameterWithName("member-id").description("회원 고유 식별자"))
 				)
 			));
+	}
+
+	@Test
+	void deleteClubMembers() throws Exception {
+		// given
+		Long clubId = 1L;
+		Long memberId = 1L;
+
+		doNothing().when(clubMemberService)
+			.deleteClubMember(Mockito.any(Member.class), Mockito.anyLong(), Mockito.anyLong());
+
+		// when
+		ResultActions actions = mockMvc.perform(
+			deleteRequestBuilder(getClubMemberUrl("signups", "{member-id}"), clubId, memberId)
+				.header("Authorization", "Required JWT access token"));
+
+		// then
+		actions.andDo(print())
+			.andExpect(status().isNoContent())
+			.andDo(getDefaultDocument("delete-club-members",
+					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+					pathParameters(List.of(
+						parameterWithName("club-id").description("아지트 고유 식별자"),
+						parameterWithName("member-id").description("회원 고유 식별자"))
+					)
+				)
+			);
 	}
 }

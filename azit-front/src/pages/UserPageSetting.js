@@ -5,48 +5,7 @@ import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { LogoutRequestModal } from "../components/Logout/LogoutRequestModal";
 import { useState } from "react";
 import { removeCookie } from "../util/cookie/cookie";
-
-
-const UserPageSetting = () => {
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const modalHandler = () => {
-  modalOpen ? setModalOpen(false) : setModalOpen(true);
-  }
-  const navigate = useNavigate();
-
-  const LogoutButtonClick = () => {
-    removeCookie('accessToken');
-    localStorage.clear();
-    navigate('/login');
-  }
-
-  return (
-    <AzitSettingWrap>
-      <Header title="설정" />
-      <SettingBar>
-        <Link to="/userpage/verifypw">
-          <span className="resetPw">비밀번호 재설정</span>
-          <div>
-            <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
-          </div>
-        </Link>
-      </SettingBar>
-      <SettingBar>
-        <div onClick={modalHandler}>
-          <span className="logout">로그아웃</span>
-          <div>
-            <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
-          </div>
-        </div>
-      </SettingBar>
-      {modalOpen && <LogoutRequestModal LogoutButtonClick={LogoutButtonClick} modalHandler={modalHandler} />}
-      <DeleteBtnWrap>
-        <button>회원탈퇴</button>
-      </DeleteBtnWrap>
-    </AzitSettingWrap>
-  );
-};
+import useAxios from "../util/useAxios";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -110,5 +69,66 @@ const DeleteBtnWrap = styled.div`
     cursor: pointer;
   }
 `;
+
+const UserPageSetting = () => {
+  const axiosInstance = useAxios();
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+  modalOpen ? setModalOpen(false) : setModalOpen(true);
+  }
+  const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem('accessToken');
+
+  const LogoutButtonClick = async() => {
+    try {
+      const res = await axiosInstance.post(
+        `/api/auth/logout`,
+        {"body" : ""},
+        {
+          headers: { Authorization: accessToken }
+        }
+      )
+      if(res.status === 200) {
+        removeCookie('refreshToken');
+        localStorage.clear();
+        navigate('/login');
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const withdrawlButtonClick = () => {
+    navigate('/userpage/withdrawl');
+  }
+
+  return (
+    <AzitSettingWrap>
+      <Header title="설정" />
+      <SettingBar>
+        <Link to="/userpage/verifypw">
+          <span className="resetPw">비밀번호 재설정</span>
+          <div>
+            <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
+          </div>
+        </Link>
+      </SettingBar>
+      <SettingBar>
+        <div onClick={modalHandler}>
+          <span className="logout">로그아웃</span>
+          <div>
+            <img alt="azitRevisionBarArrow" src={AzitSettingBarArrow} />
+          </div>
+        </div>
+      </SettingBar>
+      {modalOpen && <LogoutRequestModal LogoutButtonClick={LogoutButtonClick} modalHandler={modalHandler} />}
+      <DeleteBtnWrap>
+        <button onClick={withdrawlButtonClick}>회원탈퇴</button>
+      </DeleteBtnWrap>
+    </AzitSettingWrap>
+  );
+};
+
 
 export default UserPageSetting;

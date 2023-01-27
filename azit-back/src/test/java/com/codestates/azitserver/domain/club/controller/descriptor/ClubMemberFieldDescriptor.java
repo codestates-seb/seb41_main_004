@@ -32,7 +32,8 @@ public class ClubMemberFieldDescriptor {
 		).andWithPrefix("data.member.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개")
 		).and(
 			fieldWithPath("data.member.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
 		).andWithPrefix("data.member.fileInfo.",
@@ -54,20 +55,14 @@ public class ClubMemberFieldDescriptor {
 		).andWithPrefix("data[].member.",
 			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
 			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개")
 		).and(
 			fieldWithPath("data[].member.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
 		).andWithPrefix("data[].member.fileInfo.",
 			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("프로필 사진 고유 식별자"),
 			fieldWithPath("fileName").type(JsonFieldType.STRING).description("프로필 사진 파일명"),
 			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("프로핀 사진 파일 경로")
-		).and(
-			fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보")
-		).andWithPrefix("pageInfo.",
-			fieldWithPath("page").type(JsonFieldType.NUMBER).description("요청한 페이지"),
-			fieldWithPath("size").type(JsonFieldType.NUMBER).description("요청한 개수"),
-			fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-			fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 개수")
 		);
 	}
 }

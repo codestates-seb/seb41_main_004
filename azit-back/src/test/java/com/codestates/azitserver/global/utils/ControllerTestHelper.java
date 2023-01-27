@@ -30,8 +30,9 @@ public interface ControllerTestHelper {
 			.accept(MediaType.APPLICATION_JSON);
 	}
 
-	default MockHttpServletRequestBuilder postRequestBuilder(URI uri, String content) {
-		return post(uri)
+	default MockHttpServletRequestBuilder postRequestBuilder(String urlTemplate, String content,
+		Object... urlVariables) {
+		return post(urlTemplate, urlVariables)
 			.accept(MediaType.APPLICATION_JSON)
 			.contentType(MediaType.APPLICATION_JSON)
 			.characterEncoding(StandardCharsets.UTF_8)
@@ -43,7 +44,8 @@ public interface ControllerTestHelper {
 			.accept(MediaType.APPLICATION_JSON);
 	}
 
-	default MockHttpServletRequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams, Object... urlVariables) {
+	default MockHttpServletRequestBuilder getRequestBuilder(String url, MultiValueMap<String, String> queryParams,
+		Object... urlVariables) {
 		return get(url, urlVariables)
 			.queryParams(queryParams)
 			.accept(MediaType.APPLICATION_JSON);
@@ -63,8 +65,8 @@ public interface ControllerTestHelper {
 			.content(content);
 	}
 
-	default MockHttpServletRequestBuilder deleteRequestBuilder(String url, long resourceId) {
-		return delete(url, resourceId);
+	default MockHttpServletRequestBuilder deleteRequestBuilder(String url, Object... urlVariables) {
+		return delete(url, urlVariables);
 	}
 
 	default URI createURI(String url) {

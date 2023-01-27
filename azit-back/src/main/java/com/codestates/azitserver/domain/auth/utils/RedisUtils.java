@@ -17,24 +17,27 @@ import lombok.RequiredArgsConstructor;
 public class RedisUtils {
 	private final RedisTemplate<String, String> redisTemplate;
 
-	public void setData(String key, String email, Long expiration) {
-		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(email.getClass()));
-		redisTemplate.opsForValue().set(key, email, expiration, TimeUnit.MINUTES);
+	public void setData(String key, String token, Long expiration) {
+		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(token.getClass()));
+		redisTemplate.opsForValue().set(key, token, expiration, TimeUnit.MINUTES);
 	}
 
-	public Long getExpiration(String refreshToken) {
-		return redisTemplate.getExpire(refreshToken);
+	public void deleteData(String key) {
+		redisTemplate.delete(key);
 	}
 
-	public String getEmail(String refreshToken) {
-		if (!StringUtils.hasText(refreshToken)) {
+	public boolean isExists(String key) {
+		return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+	}
+
+	public String getValuebyKey(String key) {
+		if (!StringUtils.hasText(key)) {
 			throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 		}
-		String Email = redisTemplate.opsForValue().get(refreshToken);
-		if (Email.isEmpty()) {
+		String refreshToken = redisTemplate.opsForValue().get(key);
+		if (refreshToken.isEmpty()) {
 			throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 		}
-		return Email;
+		return refreshToken;
 	}
-
 }

@@ -35,7 +35,7 @@ public class MemberDto {
 
 		@NotBlank(message = "Password is required")
 
-		@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$",
+		@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()])[a-zA-Z0-9~!@#$%^&*()]{8,16}$",
 			message = "Password must be between 8 and 16 characters long with one letter, one number and one special symbol")
 		private String password;
 
@@ -90,6 +90,26 @@ public class MemberDto {
 
 	@Getter
 	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class NicknameCheck {
+		@NotBlank(message = "Nickname is required")
+		@Length(min = 2, max = 8, message = "Nickname must be between 2 and 8 characters long")
+		private String nickname;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class EmailCheck {
+		@NotBlank(message = "Email is required")
+		@Email(message = "Invalid email address")
+		private String email;
+	}
+
+	@Getter
+	@Setter
 	public static class Response {
 		private Long memberId;
 		private FileInfo fileInfo;
@@ -102,6 +122,9 @@ public class MemberDto {
 		private Integer reputation;
 		private Member.MemberStatus memberStatus;
 		private List<Long> categorySmallIdList;
+		private Integer follower;
+		private Integer following;
+
 	}
 
 	@Getter
@@ -111,6 +134,7 @@ public class MemberDto {
 		private Long memberId;
 		private String email;
 		private String nickname;
+		private String aboutMe;
 		private FileInfoDto.Response fileInfo;
 	}
 
@@ -120,6 +144,15 @@ public class MemberDto {
 	public static class ResponseEmailAndNickname {
 		private Long memberId;
 		private String email;
+		private String nickname;
+		private FileInfoDto.Response fileInfo;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ParticipantResponse {
+		private Long memberId;
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
 	}

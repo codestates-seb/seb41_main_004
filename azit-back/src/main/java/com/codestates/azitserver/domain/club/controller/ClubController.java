@@ -1,6 +1,8 @@
 package com.codestates.azitserver.domain.club.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,10 +37,6 @@ import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * TODO : Login 피트가 구현 되면 Member Principal을 받아와 요청의 주체와, 요청의 대상을 검증하는 로직 추가.
- * TODO : Member 파트가 구현 되면 관심 카테고리, 회원이 참여한 정보를 가져와 조회 api 완성.
- */
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -215,5 +213,20 @@ public class ClubController {
 		List<ClubDto.Response> responses = mapper.clubToClubDtoResponse(clubs);
 
 		return new ResponseEntity<>(new MultiResponseDto<>(responses, clubPage), HttpStatus.OK);
+	}
+
+	/**
+	 * 참여자 신청시 생성한 질문에 답할 수 있도록 질문 조회
+	 * @param clubId 조회할 아지트 고유 식별자
+	 * @return cludId와 joinQuestion을 담은 map
+	 */
+	@GetMapping("/{club-id}/join-question")
+	public ResponseEntity<?> getClubJoinQuestion(@Positive @PathVariable("club-id") Long clubId) {
+		String joinQuestion = clubService.getClubJoinQuestion(clubId);
+		Map<String, Object> response = new HashMap<>();
+		response.put("clubId", clubId);
+		response.put("joinQuestion", joinQuestion);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 }

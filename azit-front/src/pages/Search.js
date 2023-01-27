@@ -52,15 +52,24 @@ const FxiedHeader = styled.div`
 
 const Search = () => {
   const [value, setValue] = useState(null);
+  const [searchText, setSearchText] = useState(null); // input 입력 값을 그대로 저장하는 state
   const { ref, inView } = useInView();
 
+  // 검색어 저장
   const changeValue = (e) => {
     if (e.target.value.length === 0) {
-      setValue(null);
+      setSearchText(null);
     } else {
-      setValue(e.target.value);
+      setSearchText(e.target.value);
     }
   };
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      return setValue(searchText); // input 값을 저장한 state를 새로운 state에 담는다. 즉 마지막으로 호출될 때의 input value값을 넣는 것이다.
+    }, 300); // setTimeout 설정, 이와 같은 경우 최소 300밀리초마다 요청을 보낸다.
+    return () => clearTimeout(debounce); // clearTimeout 바로 타이머 제거
+  }, [searchText]); // 결국 마지막 이벤트에만 setTimeout이 실행된다.
 
   const fetchInfiniteList = async (pageParam, keyword) => {
     const res = await axiosInstance.get(
@@ -84,7 +93,9 @@ const Search = () => {
       ({ pageParam = 1 }) => fetchInfiniteList(pageParam, value),
       {
         enabled: !!value,
+        // 유통기한
         staleTime: 6 * 10 * 1000,
+        // 캐시에 저장할 기간
         cacheTime: 6 * 10 * 1000,
         getNextPageParam: (lastPage) =>
           !lastPage.isLast ? lastPage.nextPage : undefined,
@@ -92,7 +103,11 @@ const Search = () => {
     );
 
   useEffect(() => {
-    if (inView) fetchNextPage();
+    const debounce = setTimeout(() => {
+      if (inView) fetchNextPage();
+    }, 300); // setTimeout 설정, 이와 같은 경우 최소 300밀리초마다 요청을 보낸다.
+    return () => clearTimeout(debounce); // clearTimeout 바로 타이머 제거
+    // if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 

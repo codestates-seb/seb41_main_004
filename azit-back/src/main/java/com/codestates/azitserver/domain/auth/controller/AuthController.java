@@ -6,6 +6,7 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,44 +15,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.auth.dto.response.AuthResponseDto;
 import com.codestates.azitserver.domain.auth.service.AuthService;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 	private final AuthService authService;
 
-	// @PostMapping("/refresh/passwords/email")
-	// public ResponseEntity sendEmail (@RequestBody AuthDto.sendEmail request) {
-	// 	// request(email)을 service로 보낸다.
-	// 	// 200 OK만 보내기
-	// 	return null;
-	// }
-	//
-	// @PostMapping("/refresh/passwords")
-	// public ResponseEntity sendPassword (@RequestBody AuthDto.sendPassword request) {
-	// 	// request(email, authNumber)을 service로 보낸다.
-	// 	// 200 OK만 보내기
-	// 	return null;
-	// }
+	@PostMapping("/refresh/passwords/email")
+	public ResponseEntity sendAuthNum(@RequestBody AuthDto.SendEmail request) throws Exception {
+		authService.sendAuthEmail(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/refresh/passwords")
+	public ResponseEntity sendPassword(@RequestBody AuthDto.SendPWEmail request) throws Exception {
+		authService.resetPassword(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	// 비밀번호 인증(password 변경 페이지로 가기 전)
 	@PostMapping("/{member-id:[0-9]+}/passwords/matchers")
 	public ResponseEntity matchPassword(@Positive @PathVariable("member-id") Long memberId,
 		@RequestBody AuthDto.MatchPassword request) {
-		boolean result = authService.passwordMatcher(memberId, request);
+		authService.passwordMatcher(memberId, request);
 
-		if (result) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//비밀번호 변경
@@ -64,15 +63,20 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PostMapping("/reIssue")
-	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response) {
-		authService.reIssueToken(request, response);
-
+	@GetMapping("/re-issue/{email:.+}")
+	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
+		@PathVariable("email") String memberEmail) {
+		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
+		response.setHeader("Authorization", tokenResponse.getAccessToken());
+		response.setHeader("Refresh", tokenResponse.getRefreshToken());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// 	//로그아웃
-	// 	@PostMapping("/logout")
-	//
-	// }
+	//로그아웃
+	@PostMapping("/logout")
+	public ResponseEntity logout(HttpServletRequest request) {
+		authService.logout(request);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

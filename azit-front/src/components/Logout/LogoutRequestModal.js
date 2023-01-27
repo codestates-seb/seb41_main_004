@@ -1,24 +1,5 @@
 import styled from "styled-components";
 
-export const LogoutRequestModal = ({ modalHandler, LogoutButtonClick }) => {
-  return (
-    <>
-      <LogoutRequestModalWrap>
-        <div className="modal">
-          <div className="textWrap">
-            <span className="title">로그아웃 하시겠습니까?</span>
-          </div>
-          <div className="buttonWrap">
-            <button onClick={() => modalHandler()}>취소</button>
-            <button onClick={()=> LogoutButtonClick()} className="accept">확인</button>
-          </div>
-        </div>
-        <div className="background" onClick={() => modalHandler()} />
-      </LogoutRequestModalWrap>
-    </>
-  );
-};
-
 const LogoutRequestModalWrap = styled.div`
   position: fixed;
   z-index: 100;
@@ -42,9 +23,8 @@ const LogoutRequestModalWrap = styled.div`
     border-radius: 1rem;
     padding: 2rem;
     min-width: 35rem;
-    min-height: 17.5rem;
     > .buttonWrap {
-      margin-top: 1rem;
+      margin: 3rem 0;
       display: flex;
       justify-content: center;
       gap: 1rem;
@@ -98,3 +78,22 @@ const LogoutRequestModalWrap = styled.div`
     }
   }
 `;
+
+export const LogoutRequestModal = ({ modalHandler, LogoutButtonClick }) => {
+  return (
+    <>
+      <LogoutRequestModalWrap>
+        <div className="modal">
+          <div className="textWrap">
+            <span className="title">로그아웃 하시겠습니까?</span>
+          </div>
+          <div className="buttonWrap">
+            <button onClick={() => modalHandler()}>취소</button>
+            <button onClick={()=> LogoutButtonClick()} className="accept">확인</button>
+          </div>
+        </div>
+        <div className="background" onClick={() => modalHandler()} />
+      </LogoutRequestModalWrap>
+    </>
+  );
+};

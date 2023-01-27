@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
-import testProfileImg from "../images/testProfileImg.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useQuery } from "react-query";
 import {
   PriceFormat,
@@ -15,6 +14,7 @@ import {
   timeConvert,
 } from "../util/azitPreviewDateConvert";
 import Loading from "../components/common/Loading";
+import { useState, useEffect } from "react";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -73,8 +73,8 @@ const AzitDetailForm = styled.div`
     flex-direction: row;
     > span {
       text-align: center;
-      padding: 0.2rem 0;
-      width: 6rem;
+      padding: 0.2rem 1rem;
+      min-width: 6rem;
       line-height: 2rem;
       background-color: var(--point-color);
       color: var(--white-color);
@@ -118,6 +118,10 @@ const AzitDetailForm = styled.div`
         > a {
           position: relative;
           margin-right: 1rem;
+          > img:first-child {
+            width: 5rem;
+            border-radius: 70%;
+          }
           > .hostIcon {
             top: 0;
             right: 0;
@@ -195,7 +199,7 @@ const AzitDetailForm = styled.div`
         margin-right: 1rem;
         text-align: center;
         p {
-          width: 5rem;
+          min-width: 5rem;
         }
       }
       > li:last-child {
@@ -232,11 +236,6 @@ const AzitDetailForm = styled.div`
   }
 `;
 
-const TestImg = styled.img.attrs({ src: `${testProfileImg}` })`
-  width: 5rem;
-  border-radius: 70%;
-`;
-
 const UserImgWrap = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -245,6 +244,7 @@ const UserImgWrap = styled.div`
   border-radius: 50%;
   background-image: url(${(props) => props.userUrl});
   background-size: cover;
+  background-color: var(--background-color);
 `;
 
 const ImgWrap = styled.div`
@@ -267,6 +267,13 @@ const EtcWrap = styled.div`
 `;
 const AzitDetail = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
+  const [clubMember, setClubMember] = useState([]);
+  const [waitingMembers, setWaitingMembers] = useState([]);
+  const memberId = Number(localStorage.getItem("memberId"));
+  const navigate = useNavigate();
+
+  const [btnStatus, setBtnStatus] = useState("join");
 
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
@@ -278,7 +285,73 @@ const AzitDetail = () => {
     azitLookup
   );
 
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      setClubMember(
+        data.clubMembers.filter(
+          (member) => member.clubMemberStatus === "CLUB_JOINED"
+        )
+      );
+      setWaitingMembers(
+        data.clubMembers.filter(
+          (member) => member.clubMemberStatus === "CLUB_WAITING"
+        )
+      );
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      let joinId = clubMember.map((member) => member.member.memberId);
+      let waitingId = waitingMembers.map((member) => member.member.memberId);
+
+      if (data.clubStatus !== "CLUB_ACTIVE") {
+        setBtnStatus("close");
+        // 호스트가 아니고, 참가 신청을 하지 않고, 참가하지 않은 사람
+      } else if (data.memberLimit === joinId.length + 1) {
+        setBtnStatus("full");
+      } else if (
+        memberId !== data.host.memberId &&
+        !waitingId.includes(memberId) &&
+        !joinId.includes(memberId)
+      ) {
+        setBtnStatus("join");
+      } else if (memberId === data.host.memberId) {
+        setBtnStatus("edit");
+        // 호스트가 아니고, 신청 유저에 들어가있고, 참여 유저가 아닐 경우
+      } else if (
+        memberId !== data.host.memberId &&
+        waitingId.includes(memberId) &&
+        !joinId.includes(memberId)
+      ) {
+        setBtnStatus("wating");
+        // 호스트가 아니고, 신청 유저에 없고, 참여 유저에 들어와 있을 경우
+      } else if (
+        memberId !== data.host.memberId &&
+        !waitingId.includes(memberId) &&
+        joinId.includes(memberId)
+      ) {
+        setBtnStatus("joined");
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clubMember, waitingMembers]);
+
+  const AzitCancel = async () => {
+    try {
+      const res = await axiosInstance.delete(
+        `/api/clubs/${id}/signups/${memberId}`,
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      );
+      console.log(res);
+      alert("가입을 취소하였습니다.");
+      navigate(`/`);
+    } catch (e) {
+      console.log("가입 취소 실패");
+    }
+  };
 
   return (
     <AzitDetailWrap>
@@ -293,22 +366,28 @@ const AzitDetail = () => {
         <>
           <ImgWrap
             alt="exampleImg"
-            imgSrc={`${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`}
+            imgSrc={
+              data.bannerImage &&
+              `${process.env.REACT_APP_S3_URL}${data.bannerImage.fileUrl}/${data.bannerImage.fileName}`
+            }
           ></ImgWrap>
           <AzitDetailForm>
             <div className="azitTitle">{data.clubName}</div>
             <div className="desc">
               <span>{data.categorySmall.categoryName}</span>
               <p>
-                {data.clubMembers.length}/{data.memberLimit}명
+                {clubMember.length + 1}/{data.memberLimit}명
               </p>
             </div>
             <div className="azitInfo">
               <div className="hostInfo">
                 <label>아지트 정보</label>
                 <div>
-                  <Link to="/userpage">
-                    <TestImg />
+                  <Link to={`/userpage/${data.host.memberId}`}>
+                    <img
+                      alt="hostImg"
+                      src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                    />
                     <img alt="HostIcon" src={HostIcon} className="hostIcon" />
                   </Link>
                   <div>
@@ -337,11 +416,21 @@ const AzitDetail = () => {
             <div className="memberList">
               <h3>참여 멤버</h3>
               <ul className="selectWrap">
-                {data.clubMembers.map((profile, idx) => (
-                  <li key={idx}>
-                    <Link to="/userpage">
-                      <UserImgWrap userUrl={profile.userUrl} />
-                      <p>유저 네임</p>
+                <li>
+                  <Link to={`/userpage/${data.host.memberId}`}>
+                    <UserImgWrap
+                      userUrl={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                    />
+                    <p>{data.host.nickname}</p>
+                  </Link>
+                </li>
+                {clubMember.map((member) => (
+                  <li key={member.clubMemberId}>
+                    <Link to={`/userpage/${member.member.memberId}`}>
+                      <UserImgWrap
+                        userUrl={`${process.env.REACT_APP_S3_URL}${member.member.fileInfo.fileUrl}/${member.member.fileInfo.fileName}`}
+                      />
+                      <p>{member.member.nickname}</p>
                     </Link>
                   </li>
                 ))}
@@ -364,11 +453,42 @@ const AzitDetail = () => {
                 </li>
               </ul>
             </div>
-            {data.clubStatus === "CLUB_ACTIVE" ? (
-              <button className="active">아지트 가입하기</button>
-            ) : (
-              <button className="disabled">이미 종료된 아지트입니다</button>
-            )}
+            <button
+              className={
+                btnStatus === "join" ||
+                btnStatus === "edit" ||
+                btnStatus === "wating" ||
+                btnStatus === "joined"
+                  ? "active"
+                  : "disabled"
+              }
+              onClick={
+                btnStatus === "wating" || btnStatus === "joined"
+                  ? () => {
+                      AzitCancel();
+                    }
+                  : () =>
+                      navigate(
+                        btnStatus === "join"
+                          ? `/azit/join/${id}`
+                          : btnStatus === "edit"
+                          ? `/azit/edit/${id}`
+                          : ""
+                      )
+              }
+            >
+              {btnStatus === "join"
+                ? "아지트 가입하기"
+                : btnStatus === "edit"
+                ? "아지트 수정하기"
+                : btnStatus === "wating"
+                ? "가입 신청 취소하기"
+                : btnStatus === "joined"
+                ? "가입 신청 취소하기"
+                : btnStatus === "close"
+                ? "이미 종료된 아지트입니다."
+                : "이미 마감된 아지트입니다."}
+            </button>
           </AzitDetailForm>
         </>
       )}

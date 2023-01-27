@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
+import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
@@ -30,6 +34,8 @@ import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
+import com.codestates.azitserver.global.exception.BusinessLogicException;
+import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
 @RestController
 @RequestMapping(value = "/api/members", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -39,12 +45,17 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MemberMapper memberMapper;
 	private final MemberCategoryService memberCategoryService;
+	private final ClubMemberService clubMemberService;
+	private final ClubMemberMapper clubMemberMapper;
 
 	public MemberController(MemberService memberService, MemberMapper memberMapper,
-		MemberCategoryService memberCategoryService) {
+		MemberCategoryService memberCategoryService, ClubMemberService clubMemberService,
+		ClubMemberMapper clubMemberMapper) {
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.memberCategoryService = memberCategoryService;
+		this.clubMemberService = clubMemberService;
+		this.clubMemberMapper = clubMemberMapper;
 	}
 
 	//회원 생성
@@ -118,6 +129,24 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
+	// 닉네임 중복 확인
+	@GetMapping("/nickname")
+	public ResponseEntity nicknameCheck(@RequestBody MemberDto.NicknameCheck memberNickCheckDto) {
+
+
+		memberService.verifyExistNickname(memberNickCheckDto.getNickname());
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity emailCheck(@RequestBody MemberDto.EmailCheck memberEmailCheckDto) {
+		memberService.verifyExistEmail(memberEmailCheckDto.getEmail());
+
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	//회원 수정
 	@PatchMapping("/{member-id}")
 	public ResponseEntity patchMember(@Positive @PathVariable("member-id") Long memberId,
@@ -143,15 +172,43 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.ACCEPTED);
 	}
 
+
+	//참여상태무관 전체조회
+	@GetMapping("/{member-id}/clubs")
+	public ResponseEntity getAttendedClub(@Positive @PathVariable("member-id") Long memberId) {
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
+		List<ClubMemberDto.ClubMemberStatusResponse> responses =
+			memberService.responseWithInfoGenerator(clubMemberList);
+
+		return new ResponseEntity<>(responses, HttpStatus.OK);
+	}
+	// 참여상태별 조회
+	/** TODO 참여상태 넘버링 변경
+	// my-details-index 0 : CLUB_WAITING
+	// my-details-index 1 : CLUB_JOINED
+	// my-details-index 2 : 종료된 아지트
+	// my-details-index 3 : CLUB_REJECTED (미사용)
+	// my-details-index 4 : CLUB_KICKED (미사용)
+	**/
+	@GetMapping("/{member-id}/clubs/{my-details-index}")
+	public ResponseEntity getAttendedClubByStatus(@Positive @PathVariable("member-id") Long memberId,
+		@PathVariable("my-details-index") int myDetailsIndex) {
+
+		Member member = memberService.getMemberById(memberId);
+		ClubMember.ClubMemberStatus status = memberService.numberToStatus(myDetailsIndex);
+
+		List<ClubMember> filteredClubMemberList =
+			clubMemberService.getAllClubMemberByMemberIdAndMyDetailsIndex(memberId, myDetailsIndex);
+		List<ClubMemberDto.ClubMemberStatusResponse> responses =
+			memberService.responseWithInfoGenerator(filteredClubMemberList);
+
+		return new ResponseEntity<>(responses, HttpStatus.OK);
+	}
+
 	//TODO 팔로우, 언팔로우
 	@PostMapping("/follows/{member-id}")
 	public ResponseEntity followMember() {
-		return ResponseEntity.created(null).build();
-	}
-
-	//TODO 회원 신고
-	@PostMapping("/reports/{member-id}")
-	public ResponseEntity reportMember() {
 		return ResponseEntity.created(null).build();
 	}
 

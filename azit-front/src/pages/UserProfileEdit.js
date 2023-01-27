@@ -2,15 +2,11 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import ImgAddIcon from "../images/imgAddIcon.png";
-// import { Link, useParams } from "react-router-dom";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
-import {useFirstRender} from "../util/useDidMountEffect";
-
-//import { useSelector } from "react-redux";
-const accessToken = localStorage.getItem("accessToken");
+import { useNavigate, useParams } from "react-router-dom";
+import useAxios from "../util/useAxios";
+import { useFirstRender } from "../util/useDidMountEffect";
 
 const ProfileEditForm = styled.form`
   display: flex;
@@ -98,13 +94,16 @@ const ProfileImage = styled.div`
 `;
 
 const UserProfileEdit = () => {
+  const { id } = useParams();
+  const axiosInstance = useAxios();
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [imgFile, setImgFile] = useState("");
   const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
-  const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
+  const [defaultName, setDefaultName] = useState(""); //이름 get으로 받아오는것
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
   const navigate = useNavigate();
+  const accessToken = localStorage.getItem("accessToken");
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -137,60 +136,76 @@ const UserProfileEdit = () => {
 
   const firstRender = useFirstRender();
   useEffect(() => {
-    if(!firstRender && imgFile) {
+    if (!firstRender && imgFile) {
       let file = dataURLtoFile(imgFile, "sendImg");
       const formData = new FormData();
       formData.append("image", file);
       const postFile = async () => {
         try {
-          await axiosInstance.post("api/members/", formData, {
-            headers: { Authorization: accessToken },
-            "Content-Type": "multipart/form-data",
+          const res = await axiosInstance.post(`api/members/${id}`, formData, {
+            headers: {
+              Authorization: accessToken,
+              "Content-Type": "multipart/form-data",
+            },
           });
+          localStorage.setItem("profileUrl", res.data.data.fileInfo.fileUrl);
+          localStorage.setItem("profileName", res.data.data.fileInfo.fileName);
 
-          alert("프로필 이미지가 수정이 완료되었습니다.");
+          alert("프로필 이미지 수정이 완료되었습니다.");
         } catch (e) {
-          console.log("프로필 이미지 수정 실패");
+          alert("프로필 이미지 수정이 실패되었습니다.");
         }
       };
       postFile();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstRender, imgFile]);
 
   useEffect(() => {
-    axiosInstance
-      .get("api/members/3", {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
+    const startGet = async () => {
+      await axiosInstance
+        .get(`api/members/${id}`, {
+          headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setDefaultName(res.data.data.nickname);
+          setIntro(res.data.data.aboutMe);
+          setGetImgFile(
+            `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
+          );
 
-        SetdefaultName(res.data.data.nickname);
-        setIntro(res.data.data.aboutMe);
-        setGetImgFile(
-          `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
-        );
-
-        let categoryList = [];
-        res.data.data.categorySmallIdList.map((category) => {
-          return categoryList.push(category);
+          let categoryList = [];
+          res.data.data.categorySmallIdList.map((category) => {
+            return categoryList.push(category);
+          });
+          setCheckedInputs(categoryList);
+        })
+        .catch((error) => {
+          console.log("error : ", error);
         });
-        setCheckedInputs(categoryList);
-      })
-      .catch((error) => {
-        console.log("error : ", error);
-      });
+    };
+    startGet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (checked, id) => {
-    //console.log(checked, id); //true , '전시'
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else {
-      // 체크 해제
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    if (checkedInputs.length < 12) {
+      if (checked) {
+        setCheckedInputs([...checkedInputs, id]);
+      } else if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      }
+    } else if (checkedInputs.length >= 12) {
+      if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      } else {
+        alert("관심사는 최대 12개까지 선택 가능합니다.");
+      }
     }
   };
 
@@ -204,22 +219,19 @@ const UserProfileEdit = () => {
     };
 
     axiosInstance
-      .patch("api/members/3", body, {
+      .patch(`api/members/${id}`, body, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-
         if (res.status >= 200 && res.status < 300) {
-          navigate("/userpage");
+          navigate(`/userpage/${id}`);
         }
       })
       .catch((error) => {
-        console.log(error);
-        //alert("중복된 닉네임입니다. 다시 시도하세요.");
-        //alert창은 axios patch에서 에러뜨면 해야됨
+        alert("닉네임이 중복되었습니다. 다시 시도하세요.");
       });
   };
 
@@ -230,7 +242,8 @@ const UserProfileEdit = () => {
         <ProfileImageWrap>
           <input
             type="file"
-            accept="jpg, jpeg, png"
+            accept="image/jpg,image/jpeg,image/png"
+            //리액트에서는 image/를 해줘야 특정 파일형식만 업로드되게 적용됨
             id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
@@ -241,25 +254,25 @@ const UserProfileEdit = () => {
           <label className="profileImgLabel" htmlFor="profileImg">
             <img alt="imgEditBtn" src={ImgAddIcon} />
           </label>
-          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
         </ProfileImageWrap>
         <article>
           <label>닉네임</label>
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
           <input
             onChange={(e) => {
-              SetdefaultName(e.target.value);
+              setDefaultName(e.target.value);
             }}
             defaultValue={defaultName}
           ></input>
         </article>
         <article>
-          <label>자기소개를 입력해주세요.</label>
+          <label>자기소개를 입력해주세요. (128자 이내)</label>
           <textarea
             onChange={(e) => {
               setIntro(e.target.value);
             }}
             placeholder="텍스트를 입력해 주세요."
+            maxLength={128}
             defaultValue={intro}
           ></textarea>
         </article>
@@ -295,10 +308,7 @@ const UserProfileEdit = () => {
             );
           })}
         </article>
-        {/*Link -> useNavigate 로 변환 필요 / */}
-        {/* <Link to="/"> */}
         <Button type="submit" title="수정 완료" state="active"></Button>
-        {/* </Link> */}
       </ProfileEditForm>
     </>
   );

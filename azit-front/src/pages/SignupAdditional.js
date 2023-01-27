@@ -3,18 +3,28 @@ import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import BasicProfileImgIcon from "../images/basicProfileImgIcon.png";
 import ImgAddIcon from "../images/imgAddIcon.png";
-import { Link } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import { interests } from "../dummyData/Category";
+import { SignupYear } from "../dummyData/SignupYear";
+import { axiosInstance } from "../util/axios";
 
 
 
 const SignupAdditional = () => {
-
+  const navigate = useNavigate()
+  const {state} = useLocation()
+  const [data, setData] = useState(state)
   const [checkedInputs, setCheckedInputs] = useState([]);
-  // eslint-disable-next-line
+  const [aboutMe, setAboutMe] = useState("");
   const [imgFile, setImgFile] = useState("");
+  const [birthYear, setBirthYear] = useState(SignupYear()[0])
+  const [gender, setGender] = useState("MALE")
   const imgRef = useRef();
+  
+  useEffect(() => {
+    setData((data) => ({...data, categorySmallId: checkedInputs, aboutMe, birthYear, gender}))
+  },[checkedInputs, aboutMe, birthYear, gender])
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -25,53 +35,121 @@ const SignupAdditional = () => {
       setImgFile(reader.result);
     };
   };
-
-
-  const changeHandler = (checked, id) => {
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else {
-      // 체크 해제
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+  
+  const changeCategoryHandler = (checked, id) => {
+    if (checkedInputs.length < 12) {
+      if (checked) {
+        setCheckedInputs([...checkedInputs, id]);
+      } else if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      }
+    } else if (checkedInputs.length >= 12) {
+      if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      } else {
+        alert("관심사는 최대 12개까지 선택 가능합니다.");
+      }
     }
   };
 
+  const handleData = (e) => {
+    // console.log(e.target.id)
+    if(e.target.id === "aboutMe") {
+      setAboutMe(e.target.value);
+    } else if(e.target.id === "birthYear") {
+      setBirthYear(e.target.value);
+    } else if(e.target.id === "gender") {
+      setGender(e.target.value);
+    }
+  }
+  
+  // 이미지 base 64 를 image.file로 변환하는 함수
+  function dataURLtoFile(dataurl, filename) {
+    if (!dataurl) {
+      return;
+    } else {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+  }
+
+  const signUp = async (e) => {
+    e.preventDefault()
+    const formData = new FormData();
+    let postImgFile = dataURLtoFile(imgFile, "sendImg");
+    formData.append("image", postImgFile);
+    formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json"}))
+    try {
+      // const res =  
+      await axiosInstance.post(`/api/members`, formData, {
+        "Content-Type": "multipart/form-data",
+      });
+
+      alert("회원가입을 성공하였습니다.")
+      navigate("/login", { replace: true })
+      // console.log(res)
+    } catch (e) {
+      // console.log("회원가입을 실패하였습니다.")
+      alert(e.response.data.message)
+    }
+  }
   return (
     <>
       <Header title="회원가입" />
-      <SignupForm>
+      <SignupForm onSubmit={signUp}>
         <ProfileImageWrap>
-          <ProfileImage src={BasicProfileImgIcon}></ProfileImage>
-          <ImageAddIcon src={ImgAddIcon}>
             <input
             type="file"
-            accept="jpg, jpeg, png"
-            id="bannerImg"
+            accept="image/jpg, image/jpeg, image/png"
+            id="profileImg"
             onChange={saveImgFile}
             ref={imgRef}
             />
-          </ImageAddIcon>
-          {/* {modalOpen && <ImgModal modalHandler={modalHandler} />} */}
+          <ProfileImage imgSrc={imgFile ? imgFile : BasicProfileImgIcon} />
+          <label className="profileImgLabel" htmlFor="profileImg">
+            <img alt="imgEditBtn" src={ImgAddIcon} />
+          </label>
         </ProfileImageWrap>
         <article>
           <label>자기소개를 입력해주세요.</label>
-          <textarea placeholder="텍스트를 입력해 주세요."></textarea>
+          <textarea 
+          id="aboutMe"
+          onChange={(e) => handleData(e)} value={aboutMe} maxLength={128} placeholder="텍스트를 입력해 주세요."></textarea>
         </article>
         <article className="genderAge">
           <label>나이 및 성별</label>
           <div className="selectWrap">
             <div className="selectBox">
-              <select>
-                <option>2023</option>
-                {/*생년 구하는 함수 필요*/}
+              <select
+              id="birthYear"
+                onChange={(e) => handleData(e)}
+                value={birthYear}
+              >
+                {SignupYear().map((item) => (
+                <option key={item}>{item}</option>
+                ))}
               </select>
               <span className="selectArrow" />
             </div>
             <div className="selectBox">
-              <select>
-                <option>남</option>
-                <option>여</option>
-                <option>제한 없음</option>
+              <select
+              id="gender"
+              onChange={(e) => handleData(e)}
+              value={gender}
+              >
+                <option value="MALE">남</option>
+                <option value="FEMALE">여</option>
               </select>
               <span className="selectArrow" />
             </div>
@@ -84,19 +162,19 @@ const SignupAdditional = () => {
               <div className="interestContainer" key={interest.id}>
                 <div className="subtitle">{interest.subtitle}</div>
                 <div className="tagContainer">
-                  {interest.tags.map((tag, idx) => {
+                  {interest.tags.map((tag) => {
                     return (
-                      <span className="tag" key={idx}>
+                      <span className="tag" key={tag.tagId}>
                         <input
-                          id={tag}
+                          id={tag.tagId}
                           type="checkbox"
                           onChange={(e) => {
-                            changeHandler(e.currentTarget.checked, tag);
+                            changeCategoryHandler(e.currentTarget.checked, tag.tagId);
                           }}
-                          checked={checkedInputs.includes(tag) ? true : false}
+                          checked={checkedInputs.includes(tag.tagId) ? true : false}
                           name={tag}
                         ></input>
-                        <label htmlFor={tag}>{tag}</label>
+                        <label htmlFor={tag.tagId}>{tag.tagName}</label>
                       </span>
                     );
                   })}
@@ -105,25 +183,27 @@ const SignupAdditional = () => {
             );
           })}
         </article>
-        <div className="buttonWrap">
+            <Button title="회원가입" state={imgFile && aboutMe && checkedInputs.length > 0 ? "active" : "disabled"}></Button>
+        {/* <div className="buttonWrap">
           <Link to="/login">
-            <Button title="회원가입" state="active"></Button>
           </Link>
-        </div>
+        </div> */}
       </SignupForm>
     </>
   );
 };
 
-const SignupForm = styled.div`
+const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
+  align-items:center;
   padding: 2rem;
   margin-top: 5.5rem;
   min-height: calc(100vh - 5.5rem);
   position: relative;
   /* justify-content: space-between; */
   > .genderAge {
+    margin-right:auto;
     width: 40%;
     > .selectWrap {
       display: flex;
@@ -136,6 +216,7 @@ const SignupForm = styled.div`
     }
   }
   & > article {
+    width:100%;
     margin-top: 2rem;
     & > .selectBox {
       margin-bottom: 1rem;
@@ -181,31 +262,36 @@ const SignupForm = styled.div`
       }
     }
   }
-  & > .buttonWrap {
+  & button {
     margin-top: 3rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: flex-end;
   }
 `;
 
 const ProfileImageWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position:relative;
+  > input {
+    display:none;
+  }
+  > label {
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+    height:2.7 rem;
+    cursor:pointer;
+  }
 `;
 
-const ProfileImage = styled.img`
+const ProfileImage = styled.div`
+  background-image: url(${(props) => props.imgSrc});
+  background-size:cover;
+  background-position: center center;
+  background-repeat : no-repeat;
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
 `;
 
-const ImageAddIcon = styled.img`
-  cursor: pointer;
-  margin-top: -2.7rem;
-  margin-left: 5rem;
-`;
+
 
 export default SignupAdditional;

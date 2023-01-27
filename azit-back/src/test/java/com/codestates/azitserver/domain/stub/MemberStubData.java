@@ -97,6 +97,8 @@ public class MemberStubData {
         response.setCategorySmallIdList(
             List.of(8L, 13L)
         );
+        response.setFollower(123);
+        response.setFollowing(456);
 
         return response;
     }
@@ -137,6 +139,7 @@ public class MemberStubData {
         response.setFileInfo(FileInfoStubData.getFileInfoDtoResponse());
         response.setEmail("stubmember@naver.com");
         response.setNickname("김스텁");
+        response.setAboutMe("김스텁의 자기소개");
 
         return response;
     }

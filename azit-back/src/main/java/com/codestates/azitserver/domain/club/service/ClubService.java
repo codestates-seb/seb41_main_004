@@ -1,6 +1,7 @@
 package com.codestates.azitserver.domain.club.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
 import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
@@ -34,6 +37,8 @@ public class ClubService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Club> beanUtils;
 	private final StorageService storageService;
+
+	private final ClubMemberRepository clubMemberRepository;
 
 	public Club createClub(Club toClub, MultipartFile bannerImage) {
 		// online offline 외 문자열이 들어올 경우 예외처리
@@ -63,6 +68,11 @@ public class ClubService {
 
 		// TODO : 수정제한 항목에 대한 조건 검사를 해야합니다.
 
+		// 생년 제한은 제한 없음으로 올 경우 null로 저장합니다.
+		// 다음부턴 입력값을 null로 받지 말자ㅠㅠ
+		club.setBirthYearMax(toClub.getBirthYearMax());
+		club.setBirthYearMin(toClub.getBirthYearMin());
+
 		beanUtils.copyNonNullProperties(toClub, club);
 
 		return clubRepository.save(club);
@@ -72,7 +82,7 @@ public class ClubService {
 		Club club = findClubById(clubId);
 
 		// banner image 저장
-		String prefix = "images/club_banner";
+		String prefix = "/images/club_banner";
 		Map<String, String> map = storageService.upload(prefix, bannerImage);
 
 		FileInfo fileInfo = new FileInfo();
@@ -93,7 +103,7 @@ public class ClubService {
 	}
 
 	public Page<Club> findClubs(int page, int size) {
-		return clubRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
+		return clubRepository.findAllWithoutCanceled(PageRequest.of(page, size, Sort.by("createdAt").descending()));
 	}
 
 	public Club findClubById(Long clubId) {
@@ -158,5 +168,20 @@ public class ClubService {
 
 	public boolean verifyOrFindAll(Member member, Long memberId) {
 		return member == null || !memberId.equals(member.getMemberId());
+	}
+
+	public String getClubJoinQuestion(Long clubId) {
+		Club club = findClubById(clubId);
+		return club.getJoinQuestion();
+	}
+
+	public List<ClubMember.ClubMemberStatus> getClubMemberStatusList(Member member) {
+		List<ClubMember> clubMemberList =  clubMemberRepository.findClubMembersByMember(member);
+		List<ClubMember.ClubMemberStatus> clubMemberStatusList = new ArrayList<>();
+
+		for (ClubMember clubMember : clubMemberList) {
+			clubMemberStatusList.add(clubMember.getClubMemberStatus());
+		}
+		return clubMemberStatusList;
 	}
 }

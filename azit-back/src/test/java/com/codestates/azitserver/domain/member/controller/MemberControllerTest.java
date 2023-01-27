@@ -29,12 +29,18 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.service.ClubMemberService;
+import com.codestates.azitserver.domain.member.controller.descriptor.MemberFieldDescriptor;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
+import com.codestates.azitserver.domain.stub.ClubMemberStubData;
 import com.codestates.azitserver.domain.stub.MemberStubData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -55,8 +61,13 @@ class MemberControllerTest {
 
 	@MockBean
 	private MemberCategoryService memberCategoryService;
+
+	@MockBean
+	private ClubMemberService clubMemberService;
 	@MockBean
 	private MemberMapper memberMapper;
+	@MockBean
+	private ClubMemberMapper clubMemberMapper;
 	@Autowired
 	private Gson gson;
 
@@ -67,8 +78,11 @@ class MemberControllerTest {
 	MemberDto.Patch patch;
 	MemberDto.Response response;
 	Page<Member> memberPage;
-
+	List<ClubMember> clubMemberList;
 	MockMultipartFile image;
+
+	ClubMemberDto.ClubMemberStatusResponse clubMemberStatusResponse_1;
+	ClubMemberDto.ClubMemberStatusResponse clubMemberStatusResponse_2;
 
 	@BeforeEach
 	void beforeEach() {
@@ -83,6 +97,10 @@ class MemberControllerTest {
 			MediaType.MULTIPART_FORM_DATA_VALUE,
 			"".getBytes()
 		);
+		clubMemberList = List.of(ClubMemberStubData.getDefaultClubMember(), ClubMemberStubData.getDefaultClubMember());
+		clubMemberStatusResponse_1 = ClubMemberStubData.getClubMemberStatusDtoResponse(1L);
+		clubMemberStatusResponse_2 = ClubMemberStubData.getClubMemberStatusDtoResponse(2L);
+
 	}
 
 	@Test
@@ -112,7 +130,6 @@ class MemberControllerTest {
 			.andExpect(jsonPath("$.data.memberId").value(1))
 			.andDo(getDefaultDocument(
 					"post-member",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					requestParts(List.of(
 						partWithName("data").description("이미지를 제외한 데이터"),
 						partWithName("image").description("이미지").optional()
@@ -201,14 +218,13 @@ class MemberControllerTest {
 		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
 
-		String content = gson.toJson(patch);
+
 		// when
 		ResultActions getActions =
 			mockMvc.perform(
 				RestDocumentationRequestBuilders.get("/api/members/{memberId}", 1L)
 					.accept(MediaType.APPLICATION_JSON)
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
 					.header("Authorization", "Required JWT access token")
 			);
 		// then
@@ -219,8 +235,87 @@ class MemberControllerTest {
 			.andDo(getDefaultDocument(
 					"get-member-by-id",
 					pathParameters(List.of(parameterWithName("memberId")
-						.description("The id of the member to update"))),
+						.description("The id of the member"))),
 					MemberFieldDescriptor.getSingleResponseSnippet()
+				)
+			);
+	}
+
+	@Test
+	void nickCheckTest() throws Exception {
+		// given
+		MemberDto.NicknameCheck nicknameCheck = new MemberDto.NicknameCheck("닉네임");
+		String content = gson.toJson(nicknameCheck);
+		// when
+		ResultActions getActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/members/nickname")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(content)
+			);
+		// then
+		getActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"nickname-check",
+				MemberFieldDescriptor.getNickCheckFieldsSnippet()
+				)
+			);
+	}
+
+	@Test
+	void emailCheckTest() throws Exception {
+		// given
+		MemberDto.EmailCheck emailCheck = new MemberDto.EmailCheck("kimstub@naver.com");
+		String content = gson.toJson(emailCheck);
+		// when
+		ResultActions getActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/members/email")
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(content)
+			);
+		// then
+		getActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andDo(getDefaultDocument(
+					"email-check",
+					MemberFieldDescriptor.getEmailCheckFieldsSnippet()
+				)
+			);
+	}
+
+	@Test
+	void getAllAttendedClubTest() throws Exception {
+		// given
+		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
+		given(clubMemberService.getAllClubMemberByClubId(Mockito.anyLong())).willReturn(clubMemberList);
+		given(memberService.responseWithInfoGenerator(anyList()))
+			.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
+		given(clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(Mockito.anyList()))
+			.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
+
+		// when
+		ResultActions getActions =
+			mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/api/members/{member-id}/clubs", 1L)
+					.accept(MediaType.APPLICATION_JSON)
+					.contentType(MediaType.APPLICATION_JSON)
+					.characterEncoding(StandardCharsets.UTF_8)
+					.header("Authorization", "Required JWT access token")
+			);
+		// then
+		getActions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.[0].clubMemberId").value(1L))
+			.andDo(getDefaultDocument(
+					"get-all-attended-club",
+					MemberFieldDescriptor.getMultiMyDetailsResponseSnippet()
 				)
 			);
 	}

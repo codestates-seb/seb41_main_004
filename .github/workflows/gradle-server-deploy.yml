@@ -8,9 +8,9 @@
 name: Java CI with Gradle
 
 on:
-  push:  # dev branch로 push 이벤트 발생시 aws에 자동 배포를 실시합니다.
-    branches: [ "dev" ]
-    paths: [ "azit-back/**" ] # azit-back 폴더의 변경사항만 적용
+  push: # dev branch로 push 이벤트 발생시 aws에 자동 배포를 실시합니다.
+    branches: ["dev", "main"]
+    paths: ["azit-back/**"] # azit-back 폴더의 변경사항만 적용
 
 permissions:
   contents: read

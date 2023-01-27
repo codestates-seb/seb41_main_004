@@ -1,16 +1,19 @@
 package com.codestates.azitserver.domain.club.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
 import com.codestates.azitserver.domain.member.entity.Member;
+import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -21,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class ClubMemberService {
 	private final ClubMemberRepository clubMemberRepository;
 	private final ClubService clubService;
+
+	private final MemberService memberService;
 
 	public ClubMember signup(Member member, Long clubId, String joinAnswer) {
 		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
@@ -42,15 +47,12 @@ public class ClubMemberService {
 	/**
 	 * 특정 아지트에 참여신청을 보낸 사용자를 전체 조회합니다.
 	 * @param clubId 조회할 아지트 고유 식별자
-	 * @param page 페이지 번호
-	 * @param size 페이지에 들어갈 크기
 	 * @return 해당 아지트에 참여 신청을 보낸 사용자를 담은 pagenation 배열을 반환합니다.
 	 * @author cryoon
 	 */
-	public Page<ClubMember> getAllClubMemberByClubId(Long clubId, int page, int size) {
+	public List<ClubMember> getAllClubMemberByClubId(Long clubId) {
 		Club club = clubService.findClubById(clubId);
-		return clubMemberRepository.findClubMembersByClub(club,
-			PageRequest.of(page, size, Sort.by("clubMemberId").descending()));
+		return clubMemberRepository.findClubMembersByClub(club);
 	}
 
 	/**
@@ -108,6 +110,28 @@ public class ClubMemberService {
 		clubMemberRepository.save(clubMember);
 	}
 
+	/**
+	 * 회원은 본인이 신청한 아지트를 신청 취소 할 수 있다.
+	 * @param member 요청을 보낸 회원
+	 * @param clubId 취소할 아지트 고유 식별자
+	 * @param memberId 취소할 아지트의 회원 고유 식볋자
+	 */
+	public void deleteClubMember(Member member, Long clubId, Long memberId) {
+		verifyMember(member, memberId);
+
+		// 참여하려는 클럽이 존재하는 클럽이거나, 취소된 클럽인지 확인힙니다.
+		clubService.findClubById(clubId);
+
+		// 취소하려는 사용자가 아지트에 신청한 회원이 맞고, 상태가 신청 대기, 승인됨이 맞는지 확인합니다.
+		ClubMember clubMember = findClubMemberByMemberIdAndClubId(memberId, clubId);
+		if (clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_JOINED
+			& clubMember.getClubMemberStatus() != ClubMember.ClubMemberStatus.CLUB_WAITING) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+
+		clubMemberRepository.deleteById(clubMember.getClubMemberId());
+	}
+
 	// *** verification ***
 	public void verifyMember(Member member, Long memberId) {
 		if (!member.getMemberId().equals(memberId)) {
@@ -130,4 +154,36 @@ public class ClubMemberService {
 	public boolean verifyMemberIfClubHost(Club club, Long memberId) {
 		return club.getHost().getMemberId().equals(memberId);
 	}
+
+	public List<ClubMember> getAllClubMemberByMemberId(Long memberId) {
+		Member member = memberService.getMemberById(memberId);
+		return clubMemberRepository.findClubMembersByMember(member);
+	}
+
+	public List<ClubMember> getAllClubMemberByMemberIdAndMyDetailsIndex(Long memberId,
+		int myDetailsIndex) {
+		Member member = memberService.getMemberById(memberId);
+		List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
+		List<ClubMember> filteredClubMemberList = new ArrayList<>();
+		if (myDetailsIndex != 2) {
+			ClubMember.ClubMemberStatus status = memberService.numberToStatus(myDetailsIndex);
+			for (ClubMember clubMember : clubMemberList) {
+				if (clubMember.getClubMemberStatus() == status) {
+					filteredClubMemberList.add(clubMember);
+				}
+			}
+		}
+		else {
+			for (ClubMember clubMember : clubMemberList) {
+				LocalDate meetingDate = clubMember.getClub().getMeetingDate();
+				LocalTime meetingTime = clubMember.getClub().getMeetingTime();
+				LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingTime);
+				if (meetingDate.isBefore(LocalDate.now())) {
+					filteredClubMemberList.add(clubMember);
+				}
+			}
+		}
+		return filteredClubMemberList;
+	}
+
 }

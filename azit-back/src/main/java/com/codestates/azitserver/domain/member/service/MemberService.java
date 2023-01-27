@@ -17,15 +17,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.category.service.CategoryService;
+import com.codestates.azitserver.domain.club.dto.ClubDto;
+import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMapper;
+import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
+import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
+import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.repository.MemberCategoryRepository;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
+import com.codestates.azitserver.domain.review.entity.Review;
+import com.codestates.azitserver.domain.review.repository.ReviewRepository;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
@@ -43,12 +54,17 @@ public class MemberService {
 
 	private final MemberCategoryRepository memberCategoryRepository;
 
+	private final ClubMemberMapper clubMemberMapper;
+	private final ReviewRepository reviewRepository;
+
+	private final ClubMapper clubMapper;
+	private final MemberMapper memberMapper;
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
-		verifyExistNickname(tempMember.getNickname());
+		verifyExistNickname(tempMember);
 		// 이메일 중복 확인
-		verifyExistEmail(tempMember.getEmail());
+		verifyExistEmail(tempMember);
 		// password 암호화
 		String encryptedPassword = passwordEncoder.encode(tempMember.getPassword());
 
@@ -75,13 +91,13 @@ public class MemberService {
 			member.addMemberCategorySmallList(memberCategoryList);
 		}
 
-		return profileImageCombiner(member.getMemberId(), profileImage);
+		return profileImageCombiner(member, profileImage);
 	}
 
-	public Member profileImageCombiner(Long memberId, MultipartFile profileImage) {
-		Member member = getMemberById(memberId);
+	public Member profileImageCombiner(Member member, MultipartFile profileImage) {
 
-		String prefix = "images/member_profileImg";
+
+		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
@@ -121,16 +137,16 @@ public class MemberService {
 		// 닉네임 변경하지 않는 경우( = 쓰던 닉네임 그대로 patch 요청 보내는 경우 닉중복첵을 하지않는다)
 		if (!existingMember.getNickname().equals(member.getNickname())) {
 			// 닉네임 변경하는 경우 닉네임 중복 확인
-			verifyExistNickname(member.getNickname());
+			verifyExistNickname(member);
 		}
 
 		// 업데이트 해
 		Member updatedMember = beanUtils.copyNonNullProperties(member, existingMember);
 		updatedMember.setMemberCategoryList(null);
 
-		// password 암호화
-		String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
-		updatedMember.setPassword(encryptedPassword);
+		// // password 암호화
+		// String encryptedPassword = passwordEncoder.encode(updatedMember.getPassword());
+		// updatedMember.setPassword(encryptedPassword);
 
 		// MemberCategory 기존 데이터 테이블 삭제
 		memberCategoryRepository.deleteAllByMember(member);
@@ -185,6 +201,7 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
+
 	//팔로우, 언팔로우
 	public Member followMember(Member member) {
 		return null; //TODO
@@ -200,18 +217,35 @@ public class MemberService {
 		return null; //TODO
 	}
 
-	// 닉네임 중복 확인
+	// 닉네임 중복 확인 when just check nickname
 	public void verifyExistNickname(String nickname) {
 		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
 		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
 		}
 	}
-
+	// 닉네임 중복 확인 when sign-up
+	public void verifyExistNickname(Member member) {
+		String nickname = member.getNickname();
+		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+		if (optionalMember.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
+		}
+	}
+	// 닉네임 중복 확인 when just check nickname
 	public void verifyExistEmail(String email) {
 		Optional<Member> optionalMember = memberRepository.findByEmail(email);
 		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
+		}
+	}
+
+	// 닉네임 중복 확인 when sign-up
+	public void verifyExistEmail(Member member) {
+		String email = member.getEmail();
+		Optional<Member> optionalMember = memberRepository.findByEmail(email);
+		if (optionalMember.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_SIGNUP);
 		}
 	}
 
@@ -233,5 +267,64 @@ public class MemberService {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 	}
+
+	public ClubMember.ClubMemberStatus numberToStatus(int clubMemberStatusNumber) {
+		if (clubMemberStatusNumber > 4 || clubMemberStatusNumber < 0) {
+			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
+		}
+		ClubMember.ClubMemberStatus status = ClubMember.ClubMemberStatus.CLUB_WAITING;
+		switch (clubMemberStatusNumber) {
+			case 0 : break;
+			case 1 : status = ClubMember.ClubMemberStatus.CLUB_JOINED;
+					break;
+			case 3 : status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
+					break;
+			case 4 : status = ClubMember.ClubMemberStatus.CLUB_KICKED;
+					break;
+
+		}
+		return status;
+	}
+
+
+
+	public List<ClubMemberDto.ClubMemberStatusResponse>
+	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
+		List<ClubMemberDto.ClubMemberStatusResponse> clubMemberStatusResponseList = new ArrayList<>();
+		for (ClubMember clubMember : clubMemberList) {
+			ClubMemberDto.ClubMemberStatusResponse response =
+				clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(clubMember);
+			Club club = clubMember.getClub();
+			// Club Info
+			ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse
+				= clubMapper.clubToClubMemberStatusClubInfoResponse(club);
+				// Club Info 에 참여자들 정보 넣기
+			List<ClubMember> preParticipants = club.getClubMembers();
+			List<MemberDto.ParticipantResponse> participantResponses= new ArrayList<>();
+			for (ClubMember pre : preParticipants) {
+				participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+			}
+			clubInfoResponse.setParticipantList(participantResponses);
+				// 참여자 정보넣기 끗
+
+			response.setClubInfoResponse(clubInfoResponse);
+
+			// Host 여부
+			response.setIsHost(clubMember.getClub().getHost().getMemberId()==clubMember.getMember().getMemberId());
+			// 숨김상태인지
+			response.setIsHidden(false);
+			// 리뷰 작성 했는지
+			Member member = clubMember.getMember();
+			List<Review> reviewList = reviewRepository.findAllReviewsByReviewerAndClub(member, club);
+			if ( reviewList != null && !reviewList.isEmpty()) {
+				response.setIsReviewed(true);
+			}
+			else response.setIsReviewed(false);
+
+			clubMemberStatusResponseList.add(response);
+		}
+		return clubMemberStatusResponseList;
+	}
+
 
 }

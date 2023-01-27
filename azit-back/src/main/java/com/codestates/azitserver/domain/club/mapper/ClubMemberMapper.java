@@ -13,4 +13,8 @@ public interface ClubMemberMapper {
 	ClubMemberDto.Response clubMemberToClubMemberDtoResponse(ClubMember clubMember);
 
 	List<ClubMemberDto.Response> clubMemberToClubMemberDtoResponse(List<ClubMember> clubMembers);
+
+	ClubMemberDto.ClubMemberStatusResponse clubMemberToClubMemberDtoClubMemberStatusResponse(ClubMember clubMember);
+
+	List<ClubMemberDto.ClubMemberStatusResponse> clubMemberToClubMemberDtoClubMemberStatusResponse(List<ClubMember> clubMemberList);
 }

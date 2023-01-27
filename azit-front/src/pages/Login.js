@@ -6,106 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginStatusSlice } from "../redux/loginSlice";
 import { setCookie } from "../util/cookie/cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { googleLogin } from "../util/oauthGoogle";
 import { axiosInstance } from "../util/axios";
-// eslint-disable-next-line
-import { useEffect } from "react";
-
-
-
-const Login = () => {
-  // eslint-disable-next-line
-  const isLogin = useSelector(state => state.loginStatus.status)
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // useForm의 isSubmitting으로 로그인 로딩 구현
-  const { register, handleSubmit, formState: { errors } } = useForm({mode: "onchange"});
-
-  const oAuthHandler = () => {
-    window.location.assign('http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
-  }
-
-  const loginButtonClick = async (data) => {
-    // eslint-disable-next-line
-    const { email, password } = data;
-      try {
-        const res = await axiosInstance.post(
-          `/api/auth/login`,
-          data
-        );
-        const accessToken = res.headers.get('Authorization');
-        const refreshToken = res.headers.get('Refresh');
-        const nickname = res.data.nickname;
-        const email = res.data.email;
-        const profileUrl = res.data.profileUrl;
-        const memberId = res.data.memberId;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('email', email);
-        localStorage.setItem('nickname', nickname);
-        localStorage.setItem('profileUrl', profileUrl);
-        localStorage.setItem('memberId', memberId);
-        setCookie('accessToken', accessToken);
-        navigate('/');
-        dispatch(loginStatusSlice.actions.login());
-      } catch (e) {
-        // error handling 하기
-        console.log(e.response.status);
-        if (e.response.status === 401) {
-          alert("유효하지 않은 유저 정보입니다.");
-        } else if(e.response.status === 500) {
-          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
-        }
-      }
-    };
-
-  return (
-    <LoginContainer>
-      <LoginFormWrap onSubmit={handleSubmit(data => loginButtonClick(data))}>
-        <LogoImage alt="LogoImg" src={Logo} />
-        <InputWrap>
-          <label htmlFor="email">이메일</label>
-          <input 
-            id="email" 
-            type='text' 
-            autoComplete="off"
-            placeholder="이메일 입력" 
-            {...register("email", {
-              required: true,
-            })}
-          />
-          {errors.email?.type === 'required' && <div className="errorMessage">이메일을 입력해주세요.</div>}
-        </InputWrap>
-        <InputWrap>
-          <label htmlFor="password">비밀번호</label>
-          <input 
-            id="password" 
-            type='password' 
-            autoComplete="off"
-            placeholder="비밀번호 입력"
-            {...register("password", {
-              required: true,
-            })}
-          />
-          {errors.password?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
-        </InputWrap>
-        {/* <Link to="/"> */}
-          <Button type="submit" title="로그인" state="active"></Button>
-        {/* </Link> */}
-      </LoginFormWrap>
-      <LoginFooter>
-        <Link to="/findpw">비밀번호를 잊으셨나요?</Link>
-        <Link to="/signup">회원가입하기</Link>
-      </LoginFooter>
-      <Line />
-      {/* <Link to="/" className="snsWrap"> */}
-        <SnsLoginButton onClick={oAuthHandler}>Sign in with Google</SnsLoginButton>
-        {/* <SnsLoginButton src={Kakao}>카카오 로그인</SnsLoginButton> */}
-      {/* </Link> */}
-    </LoginContainer>
-  );
-};
 
 
 const LoginContainer = styled.div`
@@ -114,7 +17,7 @@ const LoginContainer = styled.div`
   align-items: center;
   padding: 0rem 2rem 0rem 2rem;
   height: 100vh;
-  > .snsWrap {
+  > a {
     width: 100%;
   }
 `;
@@ -188,5 +91,98 @@ const Line = styled.hr`
   margin: 2rem 0rem 2rem 0rem;
   border: solid 0.05rem var(--border-color);
 `;
+
+
+const Login = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // useForm의 isSubmitting으로 로그인 로딩 구현
+  const { register, handleSubmit, formState: { errors } } = useForm({mode: "onchange"});
+
+  // const oAuthHandler = () => {
+  //   window.location.assign('http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
+  // }
+
+  const loginButtonClick = async (data) => {
+    // eslint-disable-next-line
+    const { email, password } = data;
+      try {
+        const res = await axiosInstance.post(
+          `api/auth/login`,
+          data
+        );
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('Refresh');
+        const nickname = res.data.nickname;
+        const email = res.data.email;
+        const profileUrl = res.data.profileUrl;
+        const memberId = res.data.memberId;
+        const profileName = res.data.profileImageName;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('email', email);
+        localStorage.setItem('nickname', nickname);
+        localStorage.setItem('profileUrl', profileUrl);
+        localStorage.setItem('memberId', memberId);
+        localStorage.setItem('profileName', profileName);
+        setCookie('refreshToken', refreshToken);
+        dispatch(loginStatusSlice.actions.login());
+        navigate('/');
+      } catch (e) {
+        // error handling 하기
+        console.log(e);
+        if (e.response.status === 401) {
+          alert("유효하지 않은 유저 정보입니다.");
+        } else if(e.response.status === 500) {
+          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+        }
+      }
+    };
+
+  return (
+    <LoginContainer>
+      <LoginFormWrap onSubmit={handleSubmit(data => loginButtonClick(data))}>
+        <LogoImage alt="LogoImg" src={Logo} />
+        <InputWrap>
+          <label htmlFor="email">이메일</label>
+          <input 
+            id="email" 
+            type='text' 
+            autoComplete="off"
+            placeholder="이메일 입력" 
+            {...register("email", {
+              required: true,
+            })}
+          />
+          {errors.email?.type === 'required' && <div className="errorMessage">이메일을 입력해주세요.</div>}
+        </InputWrap>
+        <InputWrap>
+          <label htmlFor="password">비밀번호</label>
+          <input 
+            id="password" 
+            type='password' 
+            autoComplete="off"
+            placeholder="비밀번호 입력"
+            {...register("password", {
+              required: true,
+            })}
+          />
+          {errors.password?.type === 'required' && <div className="errorMessage">비밀번호를 입력해주세요.</div>}
+        </InputWrap>
+        {/* <Link to="/"> */}
+          <Button type="submit" title="로그인" state="active"></Button>
+        {/* </Link> */}
+      </LoginFormWrap>
+      <LoginFooter>
+        <Link to="/findpw">비밀번호를 잊으셨나요?</Link>
+        <Link to="/signup">회원가입하기</Link>
+      </LoginFooter>
+      <Line />
+      <a href={googleLogin}>
+        <SnsLoginButton>Sign in with Google</SnsLoginButton>
+      </a>
+    </LoginContainer>
+  );
+};
 
 export default Login;

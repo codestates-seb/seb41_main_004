@@ -21,7 +21,7 @@ public interface StorageService {
 	 * @return file의 확장자
 	 */
 	default String getFileExt(MultipartFile file) {
-		if (file.isEmpty()) {
+		if (file == null || file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");
 		}
 

@@ -10,7 +10,7 @@ public class ClubReportStubData {
 	public static ClubReportDto.Post getClubReportPost() {
 		ClubReportDto.Post post = new ClubReportDto.Post();
 
-		post.setReportCategory(ClubReport.Category.ETC);
+		post.setReportCategory(String.valueOf(ClubReport.Category.ETC));
 		post.setReportReason("내 맘에 안 듬ㅋㅋ");
 
 		return post;

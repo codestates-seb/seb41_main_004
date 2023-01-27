@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 
 const FormContainer = styled.form`
   display: flex;
@@ -26,8 +26,9 @@ const FormContainer = styled.form`
 `;
 
 const UserVerifyPassword = () => {
+  const axiosInstance = useAxios();
 
-  const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[0-9a-zA-Z!@#$%^&*()]{8,16}$/i;
+  const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
 
   const { register, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const navigate = useNavigate();
@@ -36,22 +37,24 @@ const UserVerifyPassword = () => {
   const memberId = localStorage.getItem("memberId");
 
   const verifyButtonClick = async(data) => {
-    console.log(data);
     try {
       const res = await axiosInstance.post(
-        `/api/auth/1/passwords/matchers?`,
+        `/api/auth/${memberId}/passwords/matchers`,
         data,
         {
           headers: { Authorization: accessToken }
         }
       );
-      console.log(res);
       if (res.status === 200) {
         navigate("/userpage/resetpw")
       }
     } catch (e) {
       console.log(e)
-      alert("비밀번호 정보가 없습니다.")
+      if (e.response.status === 500) {
+        alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.");
+      } else {
+        alert("사용자 정보가 일치하지 않습니다.")
+      }
     }
   };
 

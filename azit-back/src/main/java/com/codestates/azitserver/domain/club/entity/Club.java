@@ -91,7 +91,7 @@ public class Club extends Auditable {
 	@JoinColumn(name = "HOST_ID", updatable = false)
 	private Member host;
 
-	@OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
 	private List<ClubMember> clubMembers = new ArrayList<>();
 
 	public ClubMember addClubMember(ClubMember clubMember) {
@@ -102,8 +102,6 @@ public class Club extends Auditable {
 
 		return clubMember;
 	}
-
-	// TODO: banner_image, host_id, club_members
 
 	public enum JoinMethod {
 		APPROVAL("승인제"),

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { AzitMemberData } from "../../dummyData/AzitMemberData";
 import MemberList from "./MemberList";
 
 const WaitingWrap = styled.article`
@@ -15,7 +14,7 @@ const WaitingWrap = styled.article`
       font-size: var(--big-font);
       font-weight: var(--bold-weight);
       color: var(--point-color);
-    } 
+    }
   }
   > .list {
     padding: 0 2rem 2rem;
@@ -25,21 +24,27 @@ const WaitingWrap = styled.article`
 
 const Null = styled.div`
   text-align: center;
-  padding:2rem 0;
-  color:var(--sub-font-color);
+  padding: 2rem 0;
+  color: var(--sub-font-color);
 `;
 
-const WaitingMember = () => {
+const WaitingMember = ({ joinMembers }) => {
   return (
     <WaitingWrap>
       <div className="title">
         <h3>가입 멤버</h3>
-        <span className="count">{AzitMemberData.length}</span>
+        <span className="count">{joinMembers.length}</span>
       </div>
       <ul className="list">
-        {AzitMemberData.length > 0 && AzitMemberData ? (
-          AzitMemberData?.map((data) => {
-            return <MemberList key={data.userId} data={data} state="member" />;
+        {joinMembers.length > 0 && joinMembers ? (
+          joinMembers?.map((data) => {
+            return (
+              <MemberList
+                key={data.member.memberId}
+                data={data}
+                state={data.clubMemberStatus}
+              />
+            );
           })
         ) : (
           <Null>아지트 멤버가 없습니다.</Null>

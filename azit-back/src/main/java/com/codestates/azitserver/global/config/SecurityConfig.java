@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,6 +43,7 @@ public class SecurityConfig {
 	private final MemberRepository memberRepository;
 	private final RedisUtils redisUtils;
 	private final MemberDetailsService memberDetailsService;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,6 +66,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
 				/*======h2, docs======*/
 				.antMatchers("/h2/**").permitAll() // h2
+				.antMatchers("/h2").permitAll() // h2
 				.antMatchers("/docs/index.html").permitAll() // docs
 				.antMatchers(HttpMethod.GET, "/api/errors").permitAll() // error
 				.antMatchers(HttpMethod.GET, "/health-check").permitAll()  // health-check
@@ -75,7 +78,22 @@ public class SecurityConfig {
 				.antMatchers("/api/clubs/reports/**").permitAll()  // 아지트 신고
 				.antMatchers(HttpMethod.GET, "/api/clubs/**").permitAll()  // 그 외 아지트 조회
 
+				/*======follow======*/
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/following").permitAll() // 팔로잉 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follow-status").permitAll() // 팔로우 여부 확인
+
 				/*==========member==========*/
+				.antMatchers(HttpMethod.GET, "/api/members/clubs").authenticated()  // 활동내역 관련
+				.antMatchers(HttpMethod.GET, "/api/members/clubs/**").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/members/clubs/**/**").authenticated()
+
+				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
+				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/nickname").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/email").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/**/clubs").permitAll()
+
 				.antMatchers(HttpMethod.GET, "/api/members/**").authenticated() //특정 회원 조회
 				.antMatchers(HttpMethod.PATCH, "/api/members/**").authenticated() // 회원 정보 수정
 				.antMatchers(HttpMethod.DELETE, "/api/members/**").authenticated() // 회원 탈퇴(삭제)
@@ -83,14 +101,30 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.POST, "/api/members").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/members/**").permitAll()
 
+
+
+				.antMatchers(HttpMethod.GET, "/api/members/reports").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/members/reports/**").authenticated()
+
+
 				/*==========category==========*/
+				.antMatchers(HttpMethod.GET, "/api/member/reports/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/member/reports").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/member/reports").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/members/reports/**").permitAll()
+
+				/*==========report==========*/
 				.antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/categories").permitAll()
 
+				/*==========review==========*/
+				.antMatchers(HttpMethod.GET, "/api/reviews").permitAll()  // 회원에 대한 리뷰 조회
 
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
-				.antMatchers(HttpMethod.POST, "/api/auth/*/passwords").permitAll() // 비밀번호 찾기
+				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
 
 				.anyRequest().authenticated())
 
@@ -113,10 +147,13 @@ public class SecurityConfig {
 			"http://localhost:3000",
 			"https://localhost:3000",
 			"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com",
-			"https://azit-server-s3.s3.ap-northeast-2.amazonaws.com"));
+			"https://azit-server-s3.s3.ap-northeast-2.amazonaws.com",
+			"http://azit-front.s3-website.ap-northeast-2.amazonaws.com",
+			"https://azit-front.s3-website.ap-northeast-2.amazonaws.com"));
 		configuration.setAllowedMethods(List.of("POST", "GET", "PATCH", "DELETE", "OPTIONS", "HEAD"));
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setExposedHeaders(List.of("Authorization", "Refresh"));  // https://ahndding.tistory.com/4
+		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
@@ -136,7 +173,7 @@ public class SecurityConfig {
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService);
+			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService, redisTemplate);
 
 			builder.addFilter(jwtAuthenticationFilter)
 				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
