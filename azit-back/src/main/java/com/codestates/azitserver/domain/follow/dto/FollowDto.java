@@ -29,6 +29,7 @@ public class FollowDto {
 	public static class GetFollowerResponse {
 		private Long followId;
 		private MemberDto.ClubMemberMemberResponse follower;
+		private Boolean matpal;
 	}
 
 	@Getter

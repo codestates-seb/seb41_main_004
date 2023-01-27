@@ -17,6 +17,18 @@ public class AuthResponseDto {
 		private String profileImageName;
 	}
 
+	/**
+	 * 소셜 첫 로그인 응답(회원가입 추가정보 페이지로 이동)
+	 */
+	@Getter
+	@Setter
+	public static class ResponseSocialFirst {
+		private String email;
+		private String nickname;
+		private String password;
+		private String passwordCheck;
+	}
+
 	@Getter
 	@Setter
 	public static class TokenResponse {

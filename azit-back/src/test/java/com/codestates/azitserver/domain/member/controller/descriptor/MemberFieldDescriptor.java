@@ -26,10 +26,6 @@ public class MemberFieldDescriptor {
 				.description("카테고리(소) 고유 식별자")
 
 		);
-
-
-
-
 	}
 
 	public static RequestFieldsSnippet getPatchRequestFieldsSnippet() {
@@ -47,28 +43,30 @@ public class MemberFieldDescriptor {
 		return responseFields(
 			fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터")
 		).andWithPrefix("data.",
-				fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
-				fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-				fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-				//	fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-				fieldWithPath("gender").type(JsonFieldType.STRING).description("성별")
-					.attributes(key("constraints").value("MALE | FEMALE")),
-				fieldWithPath("birthYear").type(JsonFieldType.STRING).description("출생년도"),
-				fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional(),
-				fieldWithPath("reputation").type(JsonFieldType.NUMBER).description("평판 점수")
-					.attributes(key("constraints").value("기본값 10")),
-				fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태")
-					.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴")),
-				// subsectionWithPath("categorySmallIdList").type(JsonFieldType.ARRAY)
-				// 	.description("카테고리(소) 리스트 섹션"),
-				fieldWithPath("categorySmallIdList").type(JsonFieldType.ARRAY)
-					.description("카테고리(소) 고유 식별자"))
-			.and(fieldWithPath("data.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
-			).andWithPrefix("data.fileInfo.",
-				fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("프로필 사진 고유 식별자"),
-				fieldWithPath("fileName").type(JsonFieldType.STRING).description("프로필 사진 파일명"),
-				fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("프로핀 사진 파일 경로")
-			);
+			fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
+			fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
+			fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+			//	fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+			fieldWithPath("gender").type(JsonFieldType.STRING).description("성별")
+				.attributes(key("constraints").value("MALE | FEMALE")),
+			fieldWithPath("birthYear").type(JsonFieldType.STRING).description("출생년도"),
+			fieldWithPath("aboutMe").type(JsonFieldType.STRING).description("자기소개").optional(),
+			fieldWithPath("reputation").type(JsonFieldType.NUMBER).description("평판 점수")
+				.attributes(key("constraints").value("기본값 10")),
+			fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태")
+				.attributes(key("constraints").value("ACTIVE: 활성 | DELETED: 탈퇴")),
+			// subsectionWithPath("categorySmallIdList").type(JsonFieldType.ARRAY)
+			// 	.description("카테고리(소) 리스트 섹션"),
+			fieldWithPath("categorySmallIdList").type(JsonFieldType.ARRAY).description("카테고리(소) 고유 식별자"),
+			fieldWithPath("follower").type(JsonFieldType.NUMBER).description("나를 팔로우하고있는 사람 수"),
+			fieldWithPath("following").type(JsonFieldType.NUMBER).description("내가 팔로우하고있는 사람 수")
+		).and(
+			fieldWithPath("data.fileInfo").type(JsonFieldType.OBJECT).description("프로필 사진")
+		).andWithPrefix("data.fileInfo.",
+			fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("프로필 사진 고유 식별자"),
+			fieldWithPath("fileName").type(JsonFieldType.STRING).description("프로필 사진 파일명"),
+			fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("프로핀 사진 파일 경로")
+		);
 	}
 
 	public static ResponseFieldsSnippet getMultiResponseSnippet() {

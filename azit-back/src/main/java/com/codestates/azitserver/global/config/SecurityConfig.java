@@ -80,6 +80,7 @@ public class SecurityConfig {
 
 				/*======follow======*/
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/following").permitAll() // 팔로잉 관련 조회
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follow-status").permitAll() // 팔로우 여부 확인
 
 				/*==========member==========*/
@@ -122,7 +123,9 @@ public class SecurityConfig {
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
+				// .antMatchers(HttpMethod.POST, "/api/auth/re-issue").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
 
 				.anyRequest().authenticated())
 

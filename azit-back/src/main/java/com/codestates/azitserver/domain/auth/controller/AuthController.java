@@ -23,7 +23,9 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -71,9 +73,34 @@ public class AuthController {
 		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
-
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	// @PostMapping("/re-issue")
+	// @CrossOrigin(origins = {"http://localhost:3000",
+	// 	"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.POST)
+	// public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
+	// 	@RequestBody AuthDto.SendEmail memberEmail) {
+	// 	log.info("controller 요청 들어옴");
+	// 	AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
+	// 	response.setHeader("Authorization", tokenResponse.getAccessToken());
+	// 	response.setHeader("Refresh", tokenResponse.getRefreshToken());
+	//
+	// 	log.info("리스폰스 헤더로 담음");
+	// 	return new ResponseEntity<>(HttpStatus.CREATED);
+	// }
+	// @GetMapping("/re-issue")
+	// @CrossOrigin(origins = {"http://localhost:3000",
+	// 	"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = RequestMethod.GET)
+	// public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
+	// 	@RequestParam("email") String email) {
+	// 	log.info("controller 요청 들어옴");
+	// 	AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, email);
+	// 	response.setHeader("Authorization", tokenResponse.getAccessToken());
+	// 	response.setHeader("Refresh", tokenResponse.getRefreshToken());
+	//
+	// 	log.info("리스폰스 헤더로 담음");
+	// 	return new ResponseEntity<>(HttpStatus.OK);
+	// }
 
 	//로그아웃
 	@PostMapping("/logout")
