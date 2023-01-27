@@ -750,7 +750,17 @@ const AzitCreateForm = ({ croppedImage }) => {
       </form>
       <div className="buttonWrap">
         <button
-          className={croppedImage && question && fee ? "nextBtn" : "disabled"}
+          className={
+            croppedImage &&
+            clubName &&
+            clubInfo &&
+            question &&
+            fee &&
+            meetingDate &&
+            meetingTime
+              ? "nextBtn"
+              : "disabled"
+          }
           onClick={move}
         >
           모임 미리보기
