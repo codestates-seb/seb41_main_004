@@ -204,6 +204,7 @@ public class ClubDto {
 		private String location;
 		private Club.ClubStatus clubStatus;
 		private MemberDto.ResponseEmailAndNickname host;
+		private List<MemberDto.ParticipantResponse> participantList;
 		private CategoryDto.SmallResponse categorySmall;
 		private FileInfoDto.Response bannerImage;
 	}

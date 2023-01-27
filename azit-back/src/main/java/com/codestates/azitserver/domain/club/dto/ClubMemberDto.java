@@ -56,9 +56,9 @@ public class ClubMemberDto {
 	@Setter
 	@NoArgsConstructor
 	public static class ClubMemberStatusResponse {
-		private ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse;
 		private Long clubMemberId;
-		private List<ClubMemberDto.Response> clubMembers;
+		private ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse;
+		// private List<ClubMemberDto.Response> clubMembers;
 		private ClubMember.ClubMemberStatus clubMemberStatus;
 		private Boolean isHost;
 		private Boolean isHidden;
