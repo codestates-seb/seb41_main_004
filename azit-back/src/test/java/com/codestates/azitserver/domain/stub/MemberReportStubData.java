@@ -43,8 +43,6 @@ public class MemberReportStubData {
 	public static MemberReportDto.Post stubMemberReportDtoPost() {
 		MemberReportDto.Post post = new MemberReportDto.Post();
 
-		post.setReporterId(4L);
-		post.setReporteeId(5L);
 		post.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
 		post.setReportReason("불법도박광고했어요");
 
@@ -55,8 +53,6 @@ public class MemberReportStubData {
 		MemberReportDto.Response response = new MemberReportDto.Response();
 
 		response.setReportId(1L);
-		response.setReporterId(4L);
-		response.setReporteeId(5L);
 		response.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
 		response.setReportReason("불법도박광고했어요");
 

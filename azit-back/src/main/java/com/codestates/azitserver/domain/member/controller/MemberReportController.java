@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.member.dto.MemberReportDto;
+import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberReport;
+import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.mapper.MemberReportMapper;
 import com.codestates.azitserver.domain.member.service.MemberMemberReportService;
 import com.codestates.azitserver.domain.member.service.MemberReportService;
+import com.codestates.azitserver.domain.member.service.MemberService;
+import com.codestates.azitserver.global.annotation.LoginMember;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 
 @RestController
@@ -33,24 +37,34 @@ public class MemberReportController {
 
 	private final MemberReportMapper memberReportMapper;
 
+	private final MemberService memberService;
+	private final MemberMapper memberMapper;
 
 	public MemberReportController(
 		MemberReportService memberReportService,
-		MemberReportMapper memberReportMapper
+		MemberReportMapper memberReportMapper,
+		MemberService memberService,
+		MemberMapper memberMapper
 	) {
 		this.memberReportService = memberReportService;
 		this.memberReportMapper = memberReportMapper;
+		this.memberService = memberService;
+		this.memberMapper = memberMapper;
 	}
 
 	// 신고 생성
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> postMemberReport(@RequestBody @Valid MemberReportDto.Post reportPostDto) {
+	@PostMapping(value = "/{reportee-id:[0-9]+}",consumes = {MediaType.APPLICATION_JSON_VALUE},
+		produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> postMemberReport(@Positive @PathVariable("reportee-id") Long reporteeId,
+		@RequestBody @Valid MemberReportDto.Post reportPostDto, @LoginMember Member reporter) {
 
 		// TODO 중복 신고 불가한지 확인
 		// memberReportService.verifyExistingReport(reportPostDto.getReporterId(), reportPostDto.getReporterId())
 
 		MemberReport tempMemberReport = memberReportMapper.reportPostDtoToReport(reportPostDto);
 		MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(tempMemberReport);
+		response.setReporter(memberMapper.memberToMemberResponseDto(reporter));
+		response.setReportee(memberMapper.memberToMemberResponseDto(memberService.getMemberById(reporteeId)));
 		memberReportService.createMemberReport(tempMemberReport);
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
