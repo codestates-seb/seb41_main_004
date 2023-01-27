@@ -3,7 +3,7 @@ import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
 import { Link, useNavigate } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useQuery } from "react-query";
 import {
   PriceFormat,
@@ -267,6 +267,7 @@ const EtcWrap = styled.div`
 `;
 const AzitDetail = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const [clubMember, setClubMember] = useState([]);
   const [waitingMembers, setWaitingMembers] = useState([]);
   const memberId = Number(localStorage.getItem("memberId"));
@@ -333,6 +334,7 @@ const AzitDetail = () => {
         setBtnStatus("joined");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clubMember, waitingMembers]);
 
   const AzitCancel = async () => {

@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
-import { axiosInstance } from "../../util/axios";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import Loading from "../common/Loading";
 import { PriceFormat } from "../../util/azitPreviewDateConvert";
 import Button from "../common/Button";
 import { useNavigate } from "react-router-dom";
+import useAxios from "../../util/useAxios";
 
 const EditFormWrap = styled.div`
   flex: 1;
@@ -137,6 +137,7 @@ const EtcWrap = styled.div`
 
 const AzitEditForm = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import CreateItem from "../components/ReviewCreate/CreateItem";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 
 const CreateWrap = styled.form`
   padding: 7.5rem 2rem 2rem;
@@ -80,6 +80,7 @@ const Null = styled.article`
   padding: 8rem 0;
 `;
 const ReviewCreate = () => {
+  const axiosInstance = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
   const hostId = JSON.parse(window.localStorage.getItem("memberId"));

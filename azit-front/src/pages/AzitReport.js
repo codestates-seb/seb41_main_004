@@ -3,7 +3,7 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
 import { ReportData } from "../dummyData/ReportData";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 
@@ -41,7 +41,9 @@ const ReportWrap = styled.form`
 const Select = styled.select`
   color:${(props) => props.status !== "" ? 'var(--font-color)' : `var(--light-font-color)` };
 `
+
 const AzitReport = () => {
+  const axiosInstance = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
   const [reportCategory, setReportCategory] = useState(ReportData[0].value);
