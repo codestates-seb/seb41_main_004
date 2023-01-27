@@ -6,14 +6,12 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
@@ -66,9 +64,6 @@ public class AuthController {
 	}
 
 	@GetMapping("/re-issue/{email:.+}")
-	@CrossOrigin(origins = {"http://localhost:3000",
-		"http://azit-server-s3.s3.ap-northeast-2.amazonaws.com"}, methods = {RequestMethod.GET,
-		RequestMethod.OPTIONS}, allowedHeaders = "*", exposedHeaders = "*")
 	public ResponseEntity reIssueToken(HttpServletRequest request, HttpServletResponse response,
 		@PathVariable("email") String memberEmail) {
 		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
