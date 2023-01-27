@@ -1,14 +1,44 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import { axiosInstance } from "../util/axios";
 import { useRef } from "react";
 import { useForm } from 'react-hook-form'; 
+import useAxios from "../util/useAxios";
 import { useNavigate } from "react-router-dom";
 
 
+const ResetForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  margin-top: 5.5rem;
+  min-height: calc(100vh - 5.5rem);
+  justify-content: space-between;
+`
+
+const ResetInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const ResetInputWrap = styled.div`
+  margin-bottom: 2rem;
+  & > label {
+    color: var(--sub-font-color);
+  }
+  & > input {
+    ::placeholder{
+      color: var(--light-font-color);
+    }
+  }
+  & > .errorMessage {
+    font-size: var(--caption-font);
+    color: var(--point-color);
+  }
+`
 
 const UserResetPassword = () => {
+  const axiosInstance = useAxios();
 
   const newPasswordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
   // eslint-disable-next-line
@@ -22,18 +52,14 @@ const UserResetPassword = () => {
   const memberId = localStorage.getItem("memberId");
 
   const ResetButtonClick = async(data) => {
-    // eslint-disable-next-line
-    const { newPassword, newPasswordCheck } = data;  
-    console.log(data);
     try {
-      const res = await axiosInstance.patch(
+      await axiosInstance.patch(
         `/api/auth/${memberId}/passwords`,
         data,
         {
           headers: { Authorization: accessToken }
         }
       );
-      console.log(res);
       navigate("/login", { replace: true });
     } catch (e) {
       console.log(e);
@@ -83,34 +109,5 @@ const UserResetPassword = () => {
   )
 };
 
-const ResetForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  margin-top: 5.5rem;
-  min-height: calc(100vh - 5.5rem);
-  justify-content: space-between;
-`
-
-const ResetInputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const ResetInputWrap = styled.div`
-  margin-bottom: 2rem;
-  & > label {
-    color: var(--sub-font-color);
-  }
-  & > input {
-    ::placeholder{
-      color: var(--light-font-color);
-    }
-  }
-  & > .errorMessage {
-    font-size: var(--caption-font);
-    color: var(--point-color);
-  }
-`
 
 export default UserResetPassword;

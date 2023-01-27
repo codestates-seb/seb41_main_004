@@ -6,18 +6,94 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginStatusSlice } from "../redux/loginSlice";
 import { setCookie } from "../util/cookie/cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { axiosInstance } from "../util/axios";
-// eslint-disable-next-line
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { googleLogin } from "../util/oauthGoogle";
-import axios from "axios";
+import { axiosInstance } from "../util/axios";
 
+
+const LoginContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem 2rem 0rem 2rem;
+  height: 100vh;
+  > a {
+    width: 100%;
+  }
+`;
+
+const LoginFormWrap = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > a {
+    width: 100%;
+  }
+`;
+
+const InputWrap = styled.div`
+  margin: 0rem 0rem 2rem 0rem;
+  width: 100%;
+  & > label {
+    color: var(--sub-font-color);
+  }
+  & > input {
+    ::placeholder {
+      color: var(--light-font-color);
+    }
+  }
+  & > .errorMessage {
+    color: var(--point-color);
+  }
+`;
+
+const LogoImage = styled.img`
+  margin: 12rem auto 5rem;
+  height: 7rem;
+`;
+const LoginFooter = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 1rem;
+  & > a {
+    cursor: pointer;
+    color: var(--sub-font-color);
+  }
+`;
+
+const SnsLoginButton = styled.button`
+  width: 100%;
+  height: 5.5rem;
+  border: none;
+  border-radius: 5px;
+  /* 카카오 버튼 디자인 */
+  /* background-color: #fee500;
+  color: #181600; */
+  border:1px solid var(--border-color);
+  background-color: #fff;
+  color: #181600;
+  font-size: var(--big-font);
+  background-image: url(${google});
+  background-repeat: no-repeat;
+  background-position: 2.5rem center;
+  background-size: 2.5rem;
+  cursor: pointer;
+  transition: 0.3s all;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+const Line = styled.hr`
+  width: 100%;
+  margin: 2rem 0rem 2rem 0rem;
+  border: solid 0.05rem var(--border-color);
+`;
 
 
 const Login = () => {
-  // eslint-disable-next-line
-  const isLogin = useSelector(state => state.loginStatus.status)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -108,87 +184,5 @@ const Login = () => {
     </LoginContainer>
   );
 };
-
-
-const LoginContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0rem 2rem 0rem 2rem;
-  height: 100vh;
-  > a {
-    width: 100%;
-  }
-`;
-
-const LoginFormWrap = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  > a {
-    width: 100%;
-  }
-`;
-
-const InputWrap = styled.div`
-  margin: 0rem 0rem 2rem 0rem;
-  width: 100%;
-  & > label {
-    color: var(--sub-font-color);
-  }
-  & > input {
-    ::placeholder {
-      color: var(--light-font-color);
-    }
-  }
-  & > .errorMessage {
-    color: var(--point-color);
-  }
-`;
-
-const LogoImage = styled.img`
-  margin: 12rem auto 5rem;
-  height: 7rem;
-`;
-const LoginFooter = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 1rem;
-  & > a {
-    cursor: pointer;
-    color: var(--sub-font-color);
-  }
-`;
-
-const SnsLoginButton = styled.button`
-  width: 100%;
-  height: 5.5rem;
-  border: none;
-  border-radius: 5px;
-  /* 카카오 버튼 디자인 */
-  /* background-color: #fee500;
-  color: #181600; */
-  border:1px solid var(--border-color);
-  background-color: #fff;
-  color: #181600;
-  font-size: var(--big-font);
-  background-image: url(${google});
-  background-repeat: no-repeat;
-  background-position: 2.5rem center;
-  background-size: 2.5rem;
-  cursor: pointer;
-  transition: 0.3s all;
-  :hover {
-    opacity: 0.7;
-  }
-`;
-
-const Line = styled.hr`
-  width: 100%;
-  margin: 2rem 0rem 2rem 0rem;
-  border: solid 0.05rem var(--border-color);
-`;
 
 export default Login;

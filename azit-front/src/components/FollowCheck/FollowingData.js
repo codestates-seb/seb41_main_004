@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from "../../util/axios";
+import useAxios from "../../util/useAxios";
 import Loading from "../common/Loading";
 import Null from "../Home/Null";
 import DataList from "./DataList";
@@ -11,6 +11,7 @@ import DataList from "./DataList";
 const FollowingData = () => {
   const { ref, inView } = useInView();
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const fetchInfiniteList = async (pageParam, id) => {
     const res = await axiosInstance.get(
       `/api/members/${id}/follower?page=${pageParam}&size=15`,

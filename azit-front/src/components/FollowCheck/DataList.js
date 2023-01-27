@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../util/axios";
+import useAxios from "../../util/useAxios";
 
 const Container = styled.li`
   width: 100%;
@@ -69,6 +69,7 @@ const ButtonBox = styled.div`
 
 const DataList = ({ follow, follower }) => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const myId = window.localStorage.getItem("memberId");
   // 마이페이지 여부
   const [myPage, setMyPage] = useState(false);

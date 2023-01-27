@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../../util/axios";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import Category from "./Category";
 import Tab from "./Tab";
 import Loading from "../common/Loading";
 import { useMutation } from "react-query";
+import useAxios from "../../util/useAxios";
 
 const ProfileWrapper = styled.div`
   margin: 2rem 0 0;
@@ -131,6 +131,7 @@ const EtcWrap = styled.article`
   justify-content: center;
 `;
 const Profile = ({ myPage, id }) => {
+  const axiosInstance = useAxios();
   // 유저 데이터를 받아오는 함수
   const userDataGet = async () => {
     const res = await axiosInstance.get(`/api/members/${id}`, {

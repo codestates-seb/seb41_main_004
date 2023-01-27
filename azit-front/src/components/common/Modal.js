@@ -4,97 +4,6 @@ import ImgIcon from "../../images/imgIcon.png"
 import SearchIcon from "../../images/searchIcon.png"
 import { Link } from 'react-router-dom';
 
-// 모달 사용 시 react component 안에 아래 코드를 붙여넣어서 사용해주세요.
-
-// const [modalOpen, setModalOpen] = useState(false);
-// const modalHandler = () => {
-//   modalOpen ? setModalOpen(false) : setModalOpen(true);
-// }
-
-
-export const ImgModal = ( {modalHandler} ) => {
-  return (
-  <>
-    <ImgModalWrap>
-      <div className='modal'>
-        <div className='buttonWrap'>
-          <button onClick={() => modalHandler()}>
-            <img alt="closeIcon" src={CloseIcon} />
-          </button>
-        </div>
-        <input placeholder='jpg, jpeg, png / 8MB 이내의 파일'></input>
-        <img alt="imgIcon" src={ImgIcon} />
-        <div className='textWrap'>
-          <span className='title'>이미지를 선택해주세요.</span>
-          <span className='caption'>jpg, jpeg, png / 8MB 이내의 파일</span>
-        </div>
-      </div>
-      <div className='background' onClick={() => modalHandler()}/>
-    </ImgModalWrap>
-  </>
-  )
-};
-
-export const LocationModal = ( {modalHandler} ) => {
-  return (
-    <>
-      <LocationModalWrap>
-        <div className='modal'>
-          <div className='buttonWrap'>
-            <button onClick={() => modalHandler()}>
-              <img alt="closeIcon" src={CloseIcon} />
-            </button>
-          </div>
-          <input placeholder='장소를 입력해 주세요.'></input>
-          <img alt="searchIcon" src={SearchIcon} />
-          <div className='textWrap'>
-            <span className='title'>장소 또는 지역을 검색해보세요.</span>
-          </div>
-        </div>
-        <div className='background' onClick={() => modalHandler()}/>
-      </LocationModalWrap>
-    </>
-  )
-}
-
-export const LoginRequestModal = ({ modalHandler }) => {
-  return (
-    <>
-      <LoginRequestModalWrap>
-        <div className="modal">
-          <div className="textWrap">
-            <span className="title">로그인이 필요한 서비스입니다.</span>
-            <span className="title">로그인을 하시겠습니까?</span>
-          </div>
-          <div className="buttonWrap">
-            <button onClick={() => modalHandler()}>취소</button>
-            <Link to="/login"><button>로그인하기</button></Link>
-          </div>
-        </div>
-        <div className="background" onClick={() => modalHandler()} />
-      </LoginRequestModalWrap>
-    </>
-  );
-};
-
-export const IncompleteModal = ({ modalHandler }) => {
-  return (
-    <>
-      <IncompleteModalWrap>
-        <div className="modal">
-          <div className="textWrap">
-            <span className="title">아직 미완성 된 기능입니다.</span>
-          </div>
-          <div className="buttonWrap">
-            <button onClick={() => modalHandler()}>취소</button>
-          </div>
-        </div>
-        <div className="background" onClick={() => modalHandler()} />
-      </IncompleteModalWrap>
-    </>
-  );
-};
-
 const ImgModalWrap = styled.div`
   position: fixed;
   z-index:100;
@@ -391,3 +300,95 @@ const IncompleteModalWrap = styled.div`
     }
   }
 `;
+
+// 모달 사용 시 react component 안에 아래 코드를 붙여넣어서 사용해주세요.
+
+// const [modalOpen, setModalOpen] = useState(false);
+// const modalHandler = () => {
+//   modalOpen ? setModalOpen(false) : setModalOpen(true);
+// }
+
+
+export const ImgModal = ( {modalHandler} ) => {
+  return (
+  <>
+    <ImgModalWrap>
+      <div className='modal'>
+        <div className='buttonWrap'>
+          <button onClick={() => modalHandler()}>
+            <img alt="closeIcon" src={CloseIcon} />
+          </button>
+        </div>
+        <input placeholder='jpg, jpeg, png / 8MB 이내의 파일'></input>
+        <img alt="imgIcon" src={ImgIcon} />
+        <div className='textWrap'>
+          <span className='title'>이미지를 선택해주세요.</span>
+          <span className='caption'>jpg, jpeg, png / 8MB 이내의 파일</span>
+        </div>
+      </div>
+      <div className='background' onClick={() => modalHandler()}/>
+    </ImgModalWrap>
+  </>
+  )
+};
+
+export const LocationModal = ( {modalHandler} ) => {
+  return (
+    <>
+      <LocationModalWrap>
+        <div className='modal'>
+          <div className='buttonWrap'>
+            <button onClick={() => modalHandler()}>
+              <img alt="closeIcon" src={CloseIcon} />
+            </button>
+          </div>
+          <input placeholder='장소를 입력해 주세요.'></input>
+          <img alt="searchIcon" src={SearchIcon} />
+          <div className='textWrap'>
+            <span className='title'>장소 또는 지역을 검색해보세요.</span>
+          </div>
+        </div>
+        <div className='background' onClick={() => modalHandler()}/>
+      </LocationModalWrap>
+    </>
+  )
+}
+
+export const LoginRequestModal = ({ modalHandler }) => {
+  return (
+    <>
+      <LoginRequestModalWrap>
+        <div className="modal">
+          <div className="textWrap">
+            <span className="title">로그인이 필요한 서비스입니다.</span>
+            <span className="title">로그인을 하시겠습니까?</span>
+          </div>
+          <div className="buttonWrap">
+            <button onClick={() => modalHandler()}>취소</button>
+            <Link to="/login"><button>로그인하기</button></Link>
+          </div>
+        </div>
+        <div className="background" onClick={() => modalHandler()} />
+      </LoginRequestModalWrap>
+    </>
+  );
+};
+
+export const IncompleteModal = ({ modalHandler }) => {
+  return (
+    <>
+      <IncompleteModalWrap>
+        <div className="modal">
+          <div className="textWrap">
+            <span className="title">아직 미완성 된 기능입니다.</span>
+          </div>
+          <div className="buttonWrap">
+            <button onClick={() => modalHandler()}>취소</button>
+          </div>
+        </div>
+        <div className="background" onClick={() => modalHandler()} />
+      </IncompleteModalWrap>
+    </>
+  );
+};
+

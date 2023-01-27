@@ -2,13 +2,12 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
-import { axiosInstance } from "../util/axios";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../util/axios";
 
 
 
 const FindPassword = () => {
-
   const navigate = useNavigate();
 
   const [isClicked, setClick] = useState(false);
