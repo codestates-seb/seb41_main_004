@@ -2,7 +2,7 @@ import Header from "../components/common/Header";
 import WaitingMember from "../components/AzitMember/WaitingMember";
 import styled from "styled-components";
 import Member from "../components/AzitMember/Member";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useQuery } from "react-query";
 import Loading from "../components/common/Loading";
 import { useParams } from "react-router-dom";
@@ -26,6 +26,7 @@ const EtcWrap = styled.div`
 
 const AzitMember = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const [waitingMembers, setWaitingMembers] = useState([]);
   const [joinMembers, setJoinMembers] = useState([]);
 

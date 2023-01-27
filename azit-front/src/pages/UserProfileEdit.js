@@ -5,7 +5,7 @@ import ImgAddIcon from "../images/imgAddIcon.png";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useFirstRender } from "../util/useDidMountEffect";
 
 const ProfileEditForm = styled.form`
@@ -95,15 +95,16 @@ const ProfileImage = styled.div`
 
 const UserProfileEdit = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [imgFile, setImgFile] = useState("");
   const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
-  const [defaultName, SetdefaultName] = useState(""); //이름 get으로 받아오는것
+  const [defaultName, setDefaultName] = useState(""); //이름 get으로 받아오는것
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
   const navigate = useNavigate();
   const accessToken = localStorage.getItem("accessToken");
-  
+
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
@@ -170,7 +171,7 @@ const UserProfileEdit = () => {
           },
         })
         .then((res) => {
-          SetdefaultName(res.data.data.nickname);
+          setDefaultName(res.data.data.nickname);
           setIntro(res.data.data.aboutMe);
           setGetImgFile(
             `${process.env.REACT_APP_S3_URL}${res.data.data.fileInfo.fileUrl}/${res.data.data.fileInfo.fileName}`
@@ -181,7 +182,6 @@ const UserProfileEdit = () => {
             return categoryList.push(category);
           });
           setCheckedInputs(categoryList);
-          console.log(defaultName)
         })
         .catch((error) => {
           console.log("error : ", error);
@@ -192,17 +192,20 @@ const UserProfileEdit = () => {
   }, []);
 
   const changeHandler = (checked, id) => {
-    //console.log(checked, id); //true , '전시'
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else if (!checked) {
-      // 체크 해제
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-    }
-    if (checkedInputs.length >= 12) {
-      alert("관심사는 최대 12개까지 선택 가능합니다.");
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-      checked = false;
+    if (checkedInputs.length < 12) {
+      if (checked) {
+        setCheckedInputs([...checkedInputs, id]);
+      } else if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      }
+    } else if (checkedInputs.length >= 12) {
+      if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      } else {
+        alert("관심사는 최대 12개까지 선택 가능합니다.");
+      }
     }
   };
 
@@ -225,7 +228,6 @@ const UserProfileEdit = () => {
         if (res.status >= 200 && res.status < 300) {
           navigate(`/userpage/${id}`);
         }
-        console.log(res);
       })
       .catch((error) => {
         alert("닉네임이 중복되었습니다. 다시 시도하세요.");
@@ -257,7 +259,7 @@ const UserProfileEdit = () => {
           {/*input에 onChange 이벤트 적용 필요 / 서버 데이터에서 닉네임 불러오기 필요*/}
           <input
             onChange={(e) => {
-              SetdefaultName(e.target.value);
+              setDefaultName(e.target.value);
             }}
             defaultValue={defaultName}
           ></input>

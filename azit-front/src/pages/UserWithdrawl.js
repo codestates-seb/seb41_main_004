@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useState } from "react";
 
 
@@ -41,6 +41,7 @@ const FormContainer = styled.form`
 `;
 
 const UserWithdrawl = () => {
+  const axiosInstance = useAxios();
 
   const navigate = useNavigate();
 

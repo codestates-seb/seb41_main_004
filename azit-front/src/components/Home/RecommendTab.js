@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
-import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
 import Null from "./Null";
 import Loading from "../common/Loading";
@@ -10,7 +9,7 @@ import useAxios from "../../util/useAxios";
 const RecommendTab = () => {
   const { ref, inView } = useInView();
   const [memberId, setMemberId] = useState(0);
-  const axiosPrivate = useAxios();
+  const axiosInstance = useAxios();
   useEffect(() => {
     if (localStorage.getItem("memberId")) {
       setMemberId(localStorage.getItem("memberId"));
@@ -19,7 +18,7 @@ const RecommendTab = () => {
   // 무한스크롤 함수 0번이 guest
 
   const fetchInfiniteList = async (pageParam, memberId) => {
-    const res = await axiosPrivate.get(
+    const res = await axiosInstance.get(
       `/api/clubs/recommend/${memberId}?page=${pageParam}&size=5`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },

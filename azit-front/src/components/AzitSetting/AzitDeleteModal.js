@@ -1,26 +1,5 @@
 import styled from "styled-components";
 
-export const AzitDeleteModal = ({ modalHandler, DeleteButtonClick }) => {
-  return (
-    <>
-      <AzitDeleteModalWrap>
-        <div className="modal">
-          <div className="textWrap">
-            <span className="title">아지트를 닫으시겠습니까?</span>
-          </div>
-          <div className="buttonWrap">
-            <button onClick={() => modalHandler()}>취소</button>
-            <button onClick={() => DeleteButtonClick()} className="accept">
-              확인
-            </button>
-          </div>
-        </div>
-        <div className="background" onClick={() => modalHandler()} />
-      </AzitDeleteModalWrap>
-    </>
-  );
-};
-
 const AzitDeleteModalWrap = styled.div`
   position: fixed;
   z-index: 100;
@@ -99,3 +78,24 @@ const AzitDeleteModalWrap = styled.div`
     }
   }
 `;
+
+export const AzitDeleteModal = ({ modalHandler, DeleteButtonClick }) => {
+  return (
+    <>
+      <AzitDeleteModalWrap>
+        <div className="modal">
+          <div className="textWrap">
+            <span className="title">아지트를 닫으시겠습니까?</span>
+          </div>
+          <div className="buttonWrap">
+            <button onClick={() => modalHandler()}>취소</button>
+            <button onClick={() => DeleteButtonClick()} className="accept">
+              확인
+            </button>
+          </div>
+        </div>
+        <div className="background" onClick={() => modalHandler()} />
+      </AzitDeleteModalWrap>
+    </>
+  );
+};

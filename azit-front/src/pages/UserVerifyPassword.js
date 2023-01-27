@@ -3,7 +3,7 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 
 const FormContainer = styled.form`
   display: flex;
@@ -26,6 +26,7 @@ const FormContainer = styled.form`
 `;
 
 const UserVerifyPassword = () => {
+  const axiosInstance = useAxios();
 
   const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
 
@@ -36,7 +37,6 @@ const UserVerifyPassword = () => {
   const memberId = localStorage.getItem("memberId");
 
   const verifyButtonClick = async(data) => {
-    console.log(data);
     try {
       const res = await axiosInstance.post(
         `/api/auth/${memberId}/passwords/matchers`,
@@ -45,7 +45,6 @@ const UserVerifyPassword = () => {
           headers: { Authorization: accessToken }
         }
       );
-      console.log(res);
       if (res.status === 200) {
         navigate("/userpage/resetpw")
       }

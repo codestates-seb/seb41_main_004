@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
-import { axiosInstance } from "../../util/axios";
 import { useParams } from "react-router-dom";
+import useAxios from "../../util/useAxios";
 
 const ListWrap = styled.li`
   margin-top: 1rem;
@@ -80,7 +80,8 @@ const ListWrap = styled.li`
 
 const MemberList = ({ data, state }) => {
   const { id } = useParams();
-
+  const axiosInstance = useAxios();
+  
   const azitMemberAccept = async () => {
     try {
       const payload = { status: "CLUB_JOINED" };

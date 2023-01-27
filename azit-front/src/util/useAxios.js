@@ -25,7 +25,7 @@ const useAxios = () => {
         },
         { withCredentials: true }
       );
-      console.log(res);
+      // console.log(res);
 
       localStorage.setItem("accessToken", res.headers.get("Authorization"));
     } catch (e) {
