@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserListIcon from "../../images/userListIcon.png";
 import { toDateFormatOfMonthDay } from "../../util/toDateFormatOfKR";
-
+import hostIcon from "../../images/ActivityListHostIcon.png";
 const ListWrap = styled.article`
   margin-bottom: 1rem;
 `;
@@ -12,6 +12,12 @@ const DetailWrap = styled.div`
   padding: 1rem;
   border-radius: 5px;
   background-color: var(--white-color);
+  > .hostIcon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+  }
   > a {
     display: flex;
     flex-direction: row;
@@ -86,7 +92,6 @@ const DetailWrap = styled.div`
 `;
 const ImgWrap = styled.div`
   width: 8.5rem;
-
   margin-right: 10px;
   border-radius: 10px;
   background-color: var(--background-color);
@@ -134,7 +139,7 @@ const Status = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const AzitList = ({ data, myPage }) => {
+const AzitList = ({ data, myPage, activityData }) => {
   // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
@@ -142,17 +147,28 @@ const AzitList = ({ data, myPage }) => {
   // eslint-disable-next-line no-unused-vars
   const [userStatus, setUserStatus] = useState("종료됨");
 
+  useEffect(() => {
+    setUserStatus(
+      activityData?.clubMemberStatus === "CLUB_WAITING"
+        ? "신청중"
+        : activityData?.isClosed
+        ? "종료됨"
+        : "참여중"
+    );
+  }, [activityData]);
   const handleActiveHide = () => {
     setActiveHide(!activeHide);
   };
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
-    let filterMember = data.clubMembers.filter((member) => {
-      return member.clubMemberStatus === "CLUB_JOINED";
-    });
+    let filterMember = data.clubMembers
+      ? data.clubMembers.filter((member) => {
+          return member.clubMemberStatus === "CLUB_JOINED";
+        })
+      : data.participantList;
     setClubMember(filterMember);
   }, [data]);
-  // console.log(clubMember);
+  // console.log(activityData);
   //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
@@ -161,13 +177,23 @@ const AzitList = ({ data, myPage }) => {
 
   const repeatAvatar = (data) => {
     let result = [];
+    // console.log(data);
     if (data.length >= 4) {
       for (let i = 0; i < 4; i++) {
         result.push(
-          <div key={data[i].clubMemberId} className="imgWrap">
+          <div
+            key={
+              data[i]?.clubMemberId ? data[i].clubMemberId : data[i].memberId
+            }
+            className="imgWrap"
+          >
             <img
-              alt={data[i].member.nickname}
-              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+              alt={data[i]?.member ? data[i].member.nickname : data[i].nickname}
+              src={
+                data[i]?.member
+                  ? `${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`
+                  : `${process.env.REACT_APP_S3_URL}${data[i].fileInfo.fileUrl}/${data[i].fileInfo.fileName}`
+              }
             />
           </div>
         );
@@ -175,10 +201,19 @@ const AzitList = ({ data, myPage }) => {
     } else {
       for (let i = 0; i < data.length; i++) {
         result.push(
-          <div key={data[i].clubMemberId} className="imgWrap">
+          <div
+            key={
+              data[i]?.clubMemberId ? data[i].clubMemberId : data[i].memberId
+            }
+            className="imgWrap"
+          >
             <img
-              alt={data[i].member.nickname}
-              src={`${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`}
+              alt={data[i]?.member ? data[i].member.nickname : data[i].nickname}
+              src={
+                data[i]?.member
+                  ? `${process.env.REACT_APP_S3_URL}${data[i].member.fileInfo.fileUrl}/${data[i].member.fileInfo.fileName}`
+                  : `${process.env.REACT_APP_S3_URL}${data[i].fileInfo.fileUrl}/${data[i].fileInfo.fileName}`
+              }
             />
           </div>
         );
@@ -191,6 +226,9 @@ const AzitList = ({ data, myPage }) => {
   return (
     <ListWrap>
       <DetailWrap>
+        {activityData?.isHost && (
+          <img className="hostIcon" src={hostIcon} alt="isHost" />
+        )}
         <Link to={`/azit/detail/${data.clubId}`}>
           {/* 마이페이지의 활동내역일 경우에만 보이게 수정 필요 display none 상태*/}
           {/* useState로 참여중 상태 받아와서 내려주면 될듯 */}
@@ -253,11 +291,13 @@ const AzitList = ({ data, myPage }) => {
             </button>
           </div>
           {/* 리뷰를 쓰지 않은 모임만 보이게 해야함 */}
-          <div className="ActivityReview">
-            <Link to={`/review/create/${data.clubId}`}>
-              리뷰 작성하러 가기 〉
-            </Link>
-          </div>
+          {!activityData?.isReviewed && activityData?.isClosed && (
+            <div className="ActivityReview">
+              <Link to={`/review/create/${data.clubId}`}>
+                리뷰 작성하러 가기 〉
+              </Link>
+            </div>
+          )}
         </EtcWrap>
       )}
     </ListWrap>

@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { ClubData } from "../../dummyData/ClubData";
 import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
+import Null from "../Home/Null";
 
 const Container = styled.div`
   div.Box {
@@ -64,19 +64,12 @@ const Container = styled.div`
     font-size: var(--caption-font);
   }
 `;
-const EtcWrap = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-`;
 
 const ActivityHistory = ({ myPage }) => {
   const [hostCheck, setHostCheck] = useState(false); //host 체크될때
   const [selectCheck, setSelectCheck] = useState("전체보기"); //select 박스 선택한값 가져오기
   const [getData, setGetData] = useState([]);
-  const [filterList, setFilterList] = useState("");
+  const [getFilterData, setGetFilterData] = useState([]);
   const [closedClubId, setClosedClubId] = useState([]);
 
   const { id } = useParams();
@@ -99,16 +92,21 @@ const ActivityHistory = ({ myPage }) => {
           },
         })
         .then((res) => {
-          setClosedClubId(res.data.map((data) => data.clubId));
+          setClosedClubId(res.data.map((data) => data.clubMemberId));
         })
         .catch((error) => {
           console.log("error : ", error);
         });
     };
     isClosedData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    let filterList = [];
+    const setFilterList = (arr) => {
+      filterList = [...arr];
+    };
     const isClosed = {
       isClosed: true,
     };
@@ -121,10 +119,9 @@ const ActivityHistory = ({ myPage }) => {
           },
         })
         .then((res) => {
-          console.log(res);
           setGetData(
             res.data.map((data) =>
-              closedClubId.includes(data.clubId)
+              closedClubId.includes(data.clubMemberId)
                 ? Object.assign(data, isClosed)
                 : data
             )
@@ -142,7 +139,6 @@ const ActivityHistory = ({ myPage }) => {
           },
         })
         .then((res) => {
-          console.log(res);
           setGetData(res.data);
         })
         .catch((error) => {
@@ -191,8 +187,8 @@ const ActivityHistory = ({ myPage }) => {
             })
           );
           setGetData(
-            filterList.data.map((data) =>
-              closedClubId.includes(data.clubId)
+            filterList.map((data) =>
+              closedClubId.includes(data.clubMemberId)
                 ? Object.assign(data, isClosed)
                 : data
             )
@@ -262,19 +258,18 @@ const ActivityHistory = ({ myPage }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectCheck, hostCheck, closedClubId]);
-  //console.log(getData);
 
+  useEffect(() => {
+    setGetFilterData(
+      getData.filter(
+        (data) =>
+          data.clubMemberStatus !== "CLUB_KICKED" &&
+          data.clubMemberStatus !== "CLUB_REJECTED"
+      )
+    );
+  }, [getData]);
   return (
     <Container>
-      {/* {isLoading ? (
-        <EtcWrap>
-          <Loading />
-        </EtcWrap>
-      ) : isError ? (
-        <EtcWrap>
-          <p>{error.message}</p>
-        </EtcWrap>
-      ) : ( */}
       <>
         {myPage ? (
           <div className="Box">
@@ -293,12 +288,17 @@ const ActivityHistory = ({ myPage }) => {
             </div>
           </div>
         ) : null}
-        {ClubData ? (
-          ClubData.map((data) => (
-            <AzitList key={data.clubId} data={data} myPage={myPage} />
+        {getFilterData?.length > 0 ? (
+          getFilterData.map((data) => (
+            <AzitList
+              key={data.clubInfoResponse.clubId}
+              data={data.clubInfoResponse}
+              myPage={myPage}
+              activityData={data}
+            />
           ))
         ) : (
-          <></>
+          <Null text={"참여내역이 없습니다."} />
         )}
       </>
       {/* )} */}
