@@ -147,4 +147,13 @@ public class MemberDto {
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ParticipantResponse {
+		private Long memberId;
+		private String nickname;
+		private FileInfoDto.Response fileInfo;
+	}
 }
