@@ -20,7 +20,7 @@ const useAxios = () => {
 
     try {
       const res = await axios.get(
-        `api/auth/re-issue/${email}`,
+        `${process.env.REACT_APP_BASE_URL}api/auth/re-issue/${email}`,
         {
           headers: {
             Refresh: refreshToken,
