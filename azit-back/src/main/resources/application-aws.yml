@@ -1,0 +1,12 @@
+spring:
+  config:
+    import: 'aws-parameterstore:'
+
+aws:
+  # parameter store
+  paramstore:
+    enabled: true
+    prefix: /spring-boot-aws
+    name: azit-server
+    profileSeparator: _
+    fail-fast: false
