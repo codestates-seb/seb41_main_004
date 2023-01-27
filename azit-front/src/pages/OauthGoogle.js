@@ -17,6 +17,7 @@ export default function OauthGoogle() {
 
     googleCallback(accesstoken, refreshToken);
     dispatch(loginStatusSlice.actions.login());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

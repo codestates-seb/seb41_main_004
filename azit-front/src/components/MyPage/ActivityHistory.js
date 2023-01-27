@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../util/axios";
+import useAxios from "../../util/useAxios";
 import AzitList from "../common/AzitList";
 import Null from "../Home/Null";
 
@@ -66,6 +66,7 @@ const Container = styled.div`
 `;
 
 const ActivityHistory = ({ myPage }) => {
+  const axiosInstance = useAxios();
   const [hostCheck, setHostCheck] = useState(false); //host 체크될때
   const [selectCheck, setSelectCheck] = useState("전체보기"); //select 박스 선택한값 가져오기
   const [getData, setGetData] = useState([]);
@@ -153,7 +154,7 @@ const ActivityHistory = ({ myPage }) => {
           },
         })
         .then((res) => {
-          setGetData(res.data);
+          setGetData(res.data.filter((data) => !closedClubId.includes(data.clubMemberId)));
         })
         .catch((error) => {
           console.log("error : ", error);
@@ -268,6 +269,7 @@ const ActivityHistory = ({ myPage }) => {
       )
     );
   }, [getData]);
+
   return (
     <Container>
       <>
