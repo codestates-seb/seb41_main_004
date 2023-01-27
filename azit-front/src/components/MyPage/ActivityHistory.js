@@ -114,13 +114,14 @@ const ActivityHistory = ({ myPage }) => {
     };
     if (hostCheck === false && selectCheck === "전체보기") {
       axiosInstance
-        .get(`api/members/${id}/clubs/`, {
+        .get(`api/members/${id}/clubs`, {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
             "Content-Type": "application/json",
           },
         })
         .then((res) => {
+          console.log(res);
           setGetData(
             res.data.map((data) =>
               closedClubId.includes(data.clubId)
@@ -141,6 +142,7 @@ const ActivityHistory = ({ myPage }) => {
           },
         })
         .then((res) => {
+          console.log(res);
           setGetData(res.data);
         })
         .catch((error) => {
@@ -260,7 +262,7 @@ const ActivityHistory = ({ myPage }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectCheck, hostCheck, closedClubId]);
-  console.log(getData);
+  //console.log(getData);
 
   return (
     <Container>
