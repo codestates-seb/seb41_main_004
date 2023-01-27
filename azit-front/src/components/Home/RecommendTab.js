@@ -13,9 +13,9 @@ const RecommendTab = () => {
   const axiosPrivate = useAxios();
   useEffect(() => {
     if (localStorage.getItem("memberId")) {
-      setMemberId(localStorage.getItem("memberId"))
+      setMemberId(localStorage.getItem("memberId"));
     }
-  },[]);
+  }, []);
   // 무한스크롤 함수 0번이 guest
 
   const fetchInfiniteList = async (pageParam, memberId) => {
@@ -41,8 +41,8 @@ const RecommendTab = () => {
       ["recommend", memberId],
       ({ pageParam = 1 }) => fetchInfiniteList(pageParam, memberId),
       {
-        // staleTime: 6 * 10 * 1000,
-        // cacheTime: 6 * 10 * 1000,
+        staleTime: 6 * 10 * 1000,
+        cacheTime: 6 * 10 * 1000,
         getNextPageParam: (lastPage) =>
           !lastPage.isLast ? lastPage.nextPage : undefined,
       }

@@ -8,10 +8,9 @@ import Loading from "../common/Loading";
 import Null from "../Home/Null";
 import DataList from "./DataList";
 
-
 const FollowingData = () => {
   const { ref, inView } = useInView();
-  const {id} = useParams();
+  const { id } = useParams();
   const fetchInfiniteList = async (pageParam, id) => {
     const res = await axiosInstance.get(
       `/api/members/${id}/follower?page=${pageParam}&size=15`,
@@ -29,16 +28,21 @@ const FollowingData = () => {
           : true,
     };
   };
-  
-  const { data:followerData, status, fetchNextPage, isFetchingNextPage, error } =
-    useInfiniteQuery(
-      ["followerList", id],
-      ({ pageParam = 1 }) => fetchInfiniteList(pageParam, id),
-      {
-        getNextPageParam: (lastPage) =>
-          !lastPage.isLast ? lastPage.nextPage : undefined,
-      }
-    );
+
+  const {
+    data: followerData,
+    status,
+    fetchNextPage,
+    isFetchingNextPage,
+    error,
+  } = useInfiniteQuery(
+    ["followerList", id],
+    ({ pageParam = 1 }) => fetchInfiniteList(pageParam, id),
+    {
+      getNextPageParam: (lastPage) =>
+        !lastPage.isLast ? lastPage.nextPage : undefined,
+    }
+  );
 
   // 맨 밑에 도달했을 시 함수호출
   useEffect(() => {
@@ -47,34 +51,34 @@ const FollowingData = () => {
   }, [inView]);
 
   return (
-        <>
-        {status === "loading" ? (
+    <>
+      {status === "loading" ? (
+        <Loading />
+      ) : status === "error" ? (
+        <Null text={error.message} />
+      ) : (
+        followerData.pages.map((page, index) => (
+          <React.Fragment key={index}>
+            {page.board_page.length > 0 ? (
+              page.board_page.map((follower) => (
+                <DataList key={follower.followId} follower={follower} />
+              ))
+            ) : (
+              <Null text="팔로워가 없습니다." />
+            )}
+          </React.Fragment>
+        ))
+      )}
+      {status !== "error" && status === "success" ? (
+        isFetchingNextPage ? (
           <Loading />
-        ) : status === "error" ? (
-          <Null text={error.message} />
         ) : (
-          followerData.pages.map((page, index) => (
-            <React.Fragment key={index}>
-              {page.board_page.length > 0 ? (
-                page.board_page.map((follower) => (
-                  <DataList key={follower.followId} follower={follower} />
-                ))
-              ) : (
-                <Null text="팔로워가 없습니다." />
-              )}
-            </React.Fragment>
-          ))
-        )}
-        {status !== "error" && status === "success" ? (
-          isFetchingNextPage ? (
-            <Loading />
-          ) : (
-            <div ref={ref} />
-          )
-        ) : (
-          <></>
-        )}
-      </>
+          <div ref={ref} />
+        )
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
