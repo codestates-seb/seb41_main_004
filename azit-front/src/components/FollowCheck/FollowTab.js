@@ -38,8 +38,8 @@ const FollowTab = () => {
   const [currentTab, clickTab] = useState(0);
 
   const menuArr = [
-    { name: "팔로우", content: <FollowData /> },
     { name: "팔로워", content: <FollowingData /> },
+    { name: "팔로우", content: <FollowData /> },
   ];
 
   const selectMenuHandler = (index) => {

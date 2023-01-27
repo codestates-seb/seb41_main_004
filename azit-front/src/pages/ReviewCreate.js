@@ -86,6 +86,7 @@ const ReviewCreate = () => {
   const [profileArr, setProfileArr] = useState([]);
   const [selectMember, setSelectMember] = useState([]);
   const [postData, setPostData] = useState([]);
+
   const azitLookup = async () => {
     const res = await axiosInstance.get(`/api/clubs/${id}`);
     return res.data.data;
@@ -136,7 +137,7 @@ const ReviewCreate = () => {
   const { mutate } = useMutation(posting);
   return (
     <CreateWrap onSubmit={mutate}>
-      <Header title="리뷰 작성하기"/>
+      <Header title="리뷰 작성하기" toLink={`/userpage/${1}`}/>
       <div className="createCell">
         {/* SelectCell */}
         <div className="selectCell">
