@@ -13,9 +13,6 @@ const useAxios = () => {
   axiosInstance.interceptors.request.use(async (req) => {
     const expired = Date.now() >= jwtDecode(accessToken).exp * 1000;
 
-    // console.log(refreshToken);
-    // console.log(expired);
-
     if (!expired) return req;
 
     try {
