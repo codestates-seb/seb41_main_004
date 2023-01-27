@@ -23,14 +23,14 @@ const useAxios = () => {
         email: email,
         accessToken: accessToken,
       };
-      const res = await axios.post(
+      const res = await axios.get(
         `${process.env.REACT_APP_BASE_URL}api/auth/re-issue`,
-        body,
+        {params: {email: email}},
         {
           headers: {
             Refresh: refreshToken,
           },
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
         }
       );
       console.log(res);
