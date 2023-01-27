@@ -84,7 +84,7 @@ const WaitingMember = ({ waitingMembers }) => {
           waitingMembers?.map((data) => {
             return (
               <MemberList
-                key={data.memberId}
+                key={data.member.memberId}
                 data={data}
                 state={data.clubMemberStatus}
               />

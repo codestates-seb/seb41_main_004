@@ -79,7 +79,7 @@ class ReviewControllerTest implements ReviewControllerTestHelper {
 		String content = objectMapper.writeValueAsString(List.of(post));
 
 		// when
-		ResultActions actions = mockMvc.perform(postRequestBuilder(createURI(getReviewUrl()), content)
+		ResultActions actions = mockMvc.perform(postRequestBuilder(getReviewUrl(), content)
 			.header("Authorization", "Required JWT access token").characterEncoding(StandardCharsets.UTF_8));
 
 		// then

@@ -167,9 +167,9 @@ public class AuthService {
 
 	/**
 	 * 토큰 재발급
-	 * @param request RefreshToken
-	 * @param memberEmail memberEmail (만료된 accessToken 재발급 위함)
-	 * @return 새로운 AccessToken 정보가 담긴 Dto
+	 * @param request refreshToken
+	 * @param memberEmail email
+	 * @return NewAccessToken, refreshToken
 	 */
 	@Transactional
 	public AuthResponseDto.TokenResponse reIssueToken(HttpServletRequest request, String memberEmail) {

@@ -21,7 +21,9 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.global.annotation.LoginMember;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -67,7 +69,6 @@ public class AuthController {
 		AuthResponseDto.TokenResponse tokenResponse = authService.reIssueToken(request, memberEmail);
 		response.setHeader("Authorization", tokenResponse.getAccessToken());
 		response.setHeader("Refresh", tokenResponse.getRefreshToken());
-
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

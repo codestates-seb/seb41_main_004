@@ -82,10 +82,19 @@ public class FollowController {
 	 */
 	@GetMapping("/follower")
 	public ResponseEntity<?> getFollowers(@Positive @PathVariable("member-id") Long memberId,
-		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size) {
+		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size,
+		@LoginMember Member member) {
 		Page<Follow> followPage = followService.findAllMemberFollower(memberId, page - 1, size);
 		List<Follow> follows = followPage.getContent();
-		List<FollowDto.Response> responses = mapper.followToFollowDtoResponse(follows);
+
+		List<FollowDto.GetFollowerResponse> responses = mapper.followToFollowDtoGetFollowerResponse(follows);
+
+		// 본인이 아닐경우 모든 matpal값을 false로 합니다.
+		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
+			for (FollowDto.GetFollowerResponse response : responses) {
+				response.setMatpal(false);
+			}
+		}
 
 		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}
@@ -97,10 +106,39 @@ public class FollowController {
 	 * @author cryoon
 	 */
 	@GetMapping("/following")
-	public ResponseEntity<?> getFollowings(@Positive @PathVariable("member-id") Long memberId) {
-		// TODO : 단순한 조회가 아닌 리스트 중에 나와의 팔로우 상태값까지 가져와야 합니다.
+	public ResponseEntity<?> getFollowings(@Positive @PathVariable("member-id") Long memberId,
+		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size,
+		@LoginMember Member member) {
+		Page<Follow> followPage = followService.findAllMemberFollowing(memberId, page - 1, size);
+		List<Follow> follows = followPage.getContent();
+		List<FollowDto.GetFollowingResponse> responses = mapper.followToFollowDtoFollowingResponse(follows);
 
-		return null;
+		// 본인이 아닐경우 모든 matpal값을 false 합니다.
+		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
+			for (FollowDto.GetFollowingResponse response : responses) {
+				response.setMatpal(false);
+			}
+		}
+
+		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
+	}
+
+	/**
+	 * 팔로우 정보를 조회해서 현재 로그인한 유저가 이 사람을 팔로우했는지 확인합니다.
+	 * @param memberId 팔로우 했는지 확인하고싶은 회원 고유 식별자
+	 * @param member 현재 로그인한 유저
+	 * @return 팔로우를 했는지 하지 않았는지 boolean 결과값을 응답으로 전달합니다.
+	 */
+	@GetMapping("follow-status")
+	public ResponseEntity<?> getFollowStatus(@Positive @PathVariable("member-id") Long memberId,
+		@LoginMember Member member) {
+		boolean result = false;
+		if (member != null) {
+			result = followService.isExistFollowByIds(member.getMemberId(), memberId);
+		}
+		FollowDto.FollowStatus response = mapper.getFollowStatus(result);
+
+		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
 	}
 
 	/**
@@ -111,8 +149,15 @@ public class FollowController {
 	 * @author cryoon
 	 */
 	@DeleteMapping("/follower/{follow-id:[0-9]+}")
-	public void deleteFollowers(@Positive @PathVariable("member-id") Long memberId,
+	public ResponseEntity<?> deleteFollowers(@Positive @PathVariable("member-id") Long memberId,
 		@Positive @PathVariable("follow-id") Long followId, @LoginMember Member member) {
+		if (!followService.verifyMemberAndMemberId(member, memberId)) {
+			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
+		}
+
+		followService.deleteFollowByFollowId(followId);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

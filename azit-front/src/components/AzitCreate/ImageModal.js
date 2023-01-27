@@ -26,13 +26,16 @@ export const ImageModal = ({
               src={imgFile}
               crop={onCrop}
               ref={imgRef}
+              initialAspectRatio={3 / 1}
               style={{ height: 300, width: "100%" }}
             />
           ) : (
-            <label className="bannerImgLabel" htmlFor="bannerImg" />
+            <label className="bannerImgLabel" htmlFor="bannerImg">
+              이미지를 첨부해주세요
+            </label>
           )}
           <div className="buttonWrap">
-            <button onClick={() => modalHandler()}>취소</button>
+            <button onClick={resetImgFile}>취소</button>
             <button className="accept" onClick={resetImgFile}>
               확인
             </button>
@@ -105,6 +108,9 @@ const ImageModalWrap = styled.div`
       display: none;
     }
     > label {
+      padding-top: 9rem;
+      padding-bottom: 8.7rem;
+      text-align: center;
       width: 50rem;
       height: 20rem;
       border: 1px dashed var(--border-color);

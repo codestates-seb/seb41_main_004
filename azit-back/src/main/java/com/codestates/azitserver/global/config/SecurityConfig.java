@@ -80,8 +80,13 @@ public class SecurityConfig {
 
 				/*======follow======*/
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follower").permitAll() // 팔로우 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/following").permitAll() // 팔로잉 관련 조회
+				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follow-status").permitAll() // 팔로우 여부 확인
 
 				/*==========member==========*/
+				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**").permitAll()  // 활동내역 관련
+				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**/**").permitAll()
+
 				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
 				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/members/nickname").permitAll()
@@ -94,6 +99,8 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/members").authenticated() // 전체 회원 조회 //TODO (미구현(error))
 				.antMatchers(HttpMethod.POST, "/api/members").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/members/**").permitAll()
+
+
 
 				.antMatchers(HttpMethod.GET, "/api/members/reports").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/members/reports/**").authenticated()
@@ -116,6 +123,7 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
 				.antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
+				.antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
 
 				.anyRequest().authenticated())
 
@@ -144,6 +152,7 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(List.of("POST", "GET", "PATCH", "DELETE", "OPTIONS", "HEAD"));
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setExposedHeaders(List.of("Authorization", "Refresh"));  // https://ahndding.tistory.com/4
+		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

@@ -3,6 +3,8 @@ import jwtDecode from "jwt-decode";
 import { axiosInstance } from "./axios";
 import { getCookie } from "./cookie/cookie";
 
+// axios.defaults.withCredentials = true;
+
 const useAxios = () => {
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = getCookie("refreshToken");
@@ -17,28 +19,20 @@ const useAxios = () => {
     if (!expired) return req;
 
     try {
-      console.log("intercept");
-
-      const body = {
-        email: email,
-        accessToken: accessToken,
-      };
       const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}api/auth/re-issue`,
-        {params: {email: email}},
+        `api/auth/re-issue/${email}`,
         {
           headers: {
             Refresh: refreshToken,
           },
-          // "Content-Type": "application/json",
-        }
+        },
+        { withCredentials : true }
       );
       console.log(res);
 
       localStorage.setItem("accessToken", res.headers.get("Authorization"));
     } catch (e) {
-      console.log(e.response.data);
-      console.log("에러");
+      console.dir("에러" , e);
     }
 
     return req;

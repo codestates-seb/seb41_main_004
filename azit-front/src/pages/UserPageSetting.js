@@ -5,6 +5,7 @@ import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { LogoutRequestModal } from "../components/Logout/LogoutRequestModal";
 import { useState } from "react";
 import { removeCookie } from "../util/cookie/cookie";
+import { axiosInstance } from "../util/axios";
 
 
 const UserPageSetting = () => {
@@ -15,22 +16,25 @@ const UserPageSetting = () => {
   }
   const navigate = useNavigate();
 
-  const LogoutButtonClick = () => {
-    fetch(`http://ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout`, {
-      method: 'POST',
-      headers: {
-        Authorization: localStorage.getItem("accessToken"),
-        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      },
-    })
-      .then((response) => {
-        if(response.status === 200) {
-          removeCookie('refreshToken');
-          localStorage.clear();
-          navigate('/login');
+  const accessToken = localStorage.getItem('accessToken');
+
+  const LogoutButtonClick = async() => {
+    try {
+      const res = await axiosInstance.post(
+        `/api/auth/logout`,
+        {"body" : ""},
+        {
+          headers: { Authorization: accessToken }
         }
+      )
+      if(res.status === 200) {
+        removeCookie('refreshToken');
+        localStorage.clear();
+        navigate('/login');
       }
-    )
+    } catch(e) {
+      console.log(e);
+    }
   }
 
   const withdrawlButtonClick = () => {
