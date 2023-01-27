@@ -83,8 +83,9 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/members/{\\d+}/follow-status").permitAll() // 팔로우 여부 확인
 
 				/*==========member==========*/
-				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**").permitAll()  // 활동내역 관련
-				.antMatchers(HttpMethod.GET, "/api/members/**/clubs/**/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/clubs").authenticated()  // 활동내역 관련
+				.antMatchers(HttpMethod.GET, "/api/members/clubs/**").authenticated()
+				.antMatchers(HttpMethod.GET, "/api/members/clubs/**/**").authenticated()
 
 				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
 				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()

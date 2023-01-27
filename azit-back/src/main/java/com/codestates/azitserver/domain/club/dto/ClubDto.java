@@ -189,5 +189,24 @@ public class ClubDto {
 		private Boolean isHidden;
 		private Boolean isReviewSummited;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class ClubMemberStatusClubInfoResponse {
+		private Long clubId;
+		private String clubName;
+		private String clubInfo;
+		private Integer memberLimit;
+		private LocalDate meetingDate;
+		private LocalTime meetingTime;
+		private String isOnline;
+		private String location;
+		private Club.ClubStatus clubStatus;
+		private MemberDto.ResponseEmailAndNickname host;
+		private CategoryDto.SmallResponse categorySmall;
+		private FileInfoDto.Response bannerImage;
+	}
+
 }
 

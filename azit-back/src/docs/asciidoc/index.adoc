@@ -289,6 +289,23 @@ include::{snippets}/post-member-report/http-response.adoc[]
 // .response-fields
 // include::{snippets}/post-member-report/response-fields.adoc[]
 
+=== 활동 내역 전체 조회
+
+.curl-request
+include::{snippets}/get-all-attended-club/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-all-attended-club/http-request.adoc[]
+
+.http-response
+include::{snippets}/get-all-attended-club/http-response.adoc[]
+
+.path-parameters
+include::{snippets}/get-all-attended-club/path-parameters.adoc[]
+
+.response-fields
+include::{snippets}/get-all-attended-club/response-fields.adoc[]
+
 == 아지트(모임)
 
 === 아지트 생성

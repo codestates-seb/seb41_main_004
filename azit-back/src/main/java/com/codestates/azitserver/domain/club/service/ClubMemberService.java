@@ -178,7 +178,7 @@ public class ClubMemberService {
 				LocalDate meetingDate = clubMember.getClub().getMeetingDate();
 				LocalTime meetingTime = clubMember.getClub().getMeetingTime();
 				LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingTime);
-				if (meetingDateTime.isBefore(LocalDateTime.now())) {
+				if (meetingDate.isBefore(LocalDate.now())) {
 					filteredClubMemberList.add(clubMember);
 				}
 			}
@@ -186,17 +186,4 @@ public class ClubMemberService {
 		return filteredClubMemberList;
 	}
 
-	// TODO 진행중(호스트 여부, 아지트 숨김여부, 리뷰작성 여부)
-	// public List<ClubMember> getAllClubMemberByMemberIdWithQuestion(Long memberId,
-	// 	int question) {
-	// 	Member member = memberService.getMemberById(memberId);
-	// 	List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
-	// 	List<ClubMember> filteredClubMemberList = new ArrayList<>();
-	// 	for (ClubMember clubMember : clubMemberList) {
-	// 		if (clubMember.getClubMemberStatus() == clubMemberStatus) {
-	// 			filteredClubMemberList.add(clubMember);
-	// 		}
-	// 	}
-	// 	return filteredClubMemberList;
-	// }
 }

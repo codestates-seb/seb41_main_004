@@ -114,4 +114,16 @@ public class MemberFieldDescriptor {
 			fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
 		);
 	}
+
+	public static ResponseFieldsSnippet getMultiMyDetailsResponseSnippet() {
+		return responseFields(
+				fieldWithPath("[].clubMemberId").type(JsonFieldType.NUMBER)
+					.description("아지트-회원 연관 테이블 엔티티 고유 식별자"),
+				fieldWithPath("[].clubId").type(JsonFieldType.NUMBER).description("아지트 고유 식별자"),
+				fieldWithPath("[].clubMemberStatus").type(JsonFieldType.STRING).description("참여 상태"),
+				fieldWithPath("[].isHost").type(JsonFieldType.BOOLEAN).description("호스트 여부"),
+				fieldWithPath("[].isHidden").type(JsonFieldType.BOOLEAN).description("해당 아지트 활동 내역 숨김 여부"),
+				fieldWithPath("[].isReviewed").type(JsonFieldType.BOOLEAN).description("해당 아지트에 리뷰 작성 여부")
+			);
+	}
 }

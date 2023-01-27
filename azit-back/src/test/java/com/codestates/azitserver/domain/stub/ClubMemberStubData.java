@@ -57,4 +57,17 @@ public class ClubMemberStubData {
 			Sort.by("createdAt").descending()), 1);
 	}
 
+	public static ClubMemberDto.ClubMemberStatusResponse getClubMemberStatusDtoResponse(Long index) {
+		ClubMemberDto.ClubMemberStatusResponse response = new ClubMemberDto.ClubMemberStatusResponse();
+
+		response.setClubMemberId(index);
+		response.setClubId(1L);
+		response.setClubMemberStatus(ClubMember.ClubMemberStatus.CLUB_WAITING);
+		response.setIsHost(false);
+		response.setIsHidden(false);
+		response.setIsReviewed(false);
+
+		return response;
+	}
+
 }
