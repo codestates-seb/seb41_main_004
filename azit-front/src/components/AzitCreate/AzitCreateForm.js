@@ -757,7 +757,8 @@ const AzitCreateForm = ({ croppedImage }) => {
             question &&
             fee &&
             meetingDate &&
-            meetingTime
+            meetingTime &&
+            (checked === true || (minYearSelected && maxYearSelected))
               ? "nextBtn"
               : "disabled"
           }
