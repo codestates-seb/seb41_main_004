@@ -49,15 +49,8 @@ const FollowingData = () => {
     if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-  console.log(followerData);
+
   return (
-    // <>
-    //   {ClubData ? (
-    //     ClubData.map((data) => <DataList key={data.clubId} data={data} />)
-    //   ) : (
-    //     <Null>팔로우 한 사람이 없습니다.</Null>
-    //   )}
-    // </>
     <>
       {status === "loading" ? (
         <Loading />
@@ -71,7 +64,7 @@ const FollowingData = () => {
                 <DataList key={follower.followId} follower={follower} />
               ))
             ) : (
-              <Null text="팔로우 한 사람이 없습니다." />
+              <Null text="팔로워가 없습니다." />
             )}
           </React.Fragment>
         ))
