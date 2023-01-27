@@ -77,7 +77,7 @@ const DataList = ({ follow, follower }) => {
   const followerData = follower?.follower;
   const followId = follow?.memberId;
   const followerId = follower?.followId;
-  console.log(follower);
+
   useEffect(() => {
     if (follower) {
       setIsFollow(false);
