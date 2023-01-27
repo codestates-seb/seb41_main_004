@@ -339,17 +339,16 @@ const AzitDetail = () => {
 
   const AzitCancel = async () => {
     try {
-      const res = await axiosInstance.delete(
+      await axiosInstance.delete(
         `/api/clubs/${id}/signups/${memberId}`,
         {
           headers: { Authorization: localStorage.getItem("accessToken") },
         }
       );
-      console.log(res);
       alert("가입을 취소하였습니다.");
       navigate(`/`);
     } catch (e) {
-      console.log("가입 취소 실패");
+      alert(e);
     }
   };
 
