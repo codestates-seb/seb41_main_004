@@ -123,7 +123,6 @@ public class SecurityConfig {
 				/*======auth======*/
 				.antMatchers(HttpMethod.POST, "/api/auth/login").permitAll() // 로그인
 				.antMatchers(HttpMethod.POST, "/api/auth/refresh/**").permitAll() // 비밀번호 찾기
-				// .antMatchers(HttpMethod.POST, "/api/auth/re-issue").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/auth/re-issue/**").permitAll() // 토큰 재발급
 				.antMatchers(HttpMethod.GET, "/api/auth/re-issue").permitAll()
 
@@ -154,6 +153,7 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(List.of("POST", "GET", "PATCH", "DELETE", "OPTIONS", "HEAD"));
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setExposedHeaders(List.of("Authorization", "Refresh"));  // https://ahndding.tistory.com/4
+		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
