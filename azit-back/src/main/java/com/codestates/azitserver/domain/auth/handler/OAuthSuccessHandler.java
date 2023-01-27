@@ -1,9 +1,13 @@
 package com.codestates.azitserver.domain.auth.handler;
 
+import static java.util.stream.Collectors.*;
+
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -11,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -52,15 +57,20 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 			delegateTokens(member, request, response);
 		}
-		// 존재하지 않는 회원이면 회원 email, nickname 정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
+		// 존재하지 않는 회원이면 회원정보 response로 담아서 보내기 -> 회원 추가정보 페이지로 가서 가입 진행
 		else {
-			AuthResponseDto.ResponseWithProfile responseWithProfileDto = new AuthResponseDto.ResponseWithProfile();
+			// 회원가입 시, 유효성 평가를 피하기 위해 랜덤 비밀번호 생성하여 부여
+			String randomPW = createTempPassword();
 
-			responseWithProfileDto.setEmail(email);
-			responseWithProfileDto.setNickname(nickname);
+			AuthResponseDto.ResponseSocialFirst responseSocialFirst = new AuthResponseDto.ResponseSocialFirst();
+
+			responseSocialFirst.setEmail(email);
+			responseSocialFirst.setNickname(nickname);
+			responseSocialFirst.setPassword(randomPW);
+			responseSocialFirst.setPasswordCheck(randomPW);
 
 			ObjectMapper objectMapper = new ObjectMapper();
-			String info = objectMapper.writeValueAsString(responseWithProfileDto);
+			String info = objectMapper.writeValueAsString(responseSocialFirst);
 
 			response.getWriter().write(info);
 		}
@@ -144,11 +154,54 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("ec2-13-209-243-35.ap-northeast-2.compute.amazonaws.com")
-			.port(8080)
+			.host("localhost") // TODO : 프런트 배포하면 변경 필요!
+			.port(3000)
 			.path("/oauth")
 			.queryParams(queryParams)
 			.build()
 			.toUri();
+	}
+
+	/**
+	 * 임시 비밀번호 생성
+	 * @return 12자리 랜덤 비밀번호 생성
+	 */
+	public String createTempPassword() {
+		return randomGenerater(3, 3, 4, 2);
+	}
+
+	/**
+	 * 랜덤 문자열 만드는 메서드
+	 * @param numberOfUpperCaseLetters 대문자 수
+	 * @param numberOfLowerCaseLetters 소문자 수
+	 * @param numberOfNumeric 숫자 수
+	 * @param numberOfSpecialChars 특수문자 수 (#, $, %, &)
+	 * @return 랜덤 문자열
+	 */
+	public String randomGenerater(int numberOfUpperCaseLetters,
+		int numberOfLowerCaseLetters,
+		int numberOfNumeric,
+		int numberOfSpecialChars) {
+		String upperCaseLetters = RandomStringUtils.random(numberOfUpperCaseLetters, 65, 90, true, false);
+		String lowerCaseLetters = RandomStringUtils.random(numberOfLowerCaseLetters, 97, 122, true, false);
+		String numbers = RandomStringUtils.randomNumeric(numberOfNumeric);
+		String specialChars = RandomStringUtils.random(numberOfSpecialChars, 35, 38, false, false);
+
+		String combinedLetters = combineLetters(upperCaseLetters, lowerCaseLetters, numbers, specialChars);
+		List<Character> shuffledLetters = shuffleLetters(combinedLetters);
+		return shuffledLetters.stream()
+			.collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+			.toString();
+	}
+
+	private static List<Character> shuffleLetters(String combinedLetters) {
+		List<Character> shuffledLetters = combinedLetters.chars().mapToObj(c -> (char)c).collect(toList());
+		Collections.shuffle(shuffledLetters);
+		return shuffledLetters;
+	}
+
+	private static String combineLetters(String upperCaseLetters, String lowerCaseLetters, String numbers,
+		String specialChars) {
+		return upperCaseLetters.concat(lowerCaseLetters).concat(numbers).concat(specialChars);
 	}
 }

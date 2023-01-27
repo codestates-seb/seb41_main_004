@@ -106,6 +106,10 @@ include::{snippets}/token-reIssue/http-request.adoc[]
 
 .path-parameters
 include::{snippets}/token-reIssue/path-parameters.adoc[]
+// .request-fields
+// include::{snippets}/token-reIssue/request-fields.adoc[]
+// .request-parameters
+// include::{snippets}/token-reIssue/request-parameters.adoc[]
 
 .request-headers
 include::{snippets}/token-reIssue/request-headers.adoc[]
@@ -288,6 +292,128 @@ include::{snippets}/post-member-report/http-response.adoc[]
 
 // .response-fields
 // include::{snippets}/post-member-report/response-fields.adoc[]
+
+== 회원 팔로우
+
+=== 팔로우
+
+.curl-request
+include::{snippets}/post-follow/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-follow/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-follow/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/post-follow/request-headers.adoc[]
+
+.http-response
+include::{snippets}/post-follow/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-follow/response-fields.adoc[]
+
+=== 언팔로우
+
+.curl-request
+include::{snippets}/post-unfollow/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-unfollow/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-unfollow/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/post-unfollow/request-headers.adoc[]
+
+.http-response
+include::{snippets}/post-unfollow/http-response.adoc[]
+
+=== 나를 팔로우한 회원 리스트 조회
+
+.curl-request
+include::{snippets}/get-followers/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-followers/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-followers/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/get-followers/request-headers.adoc[]
+
+.request-parameters
+include::{snippets}/get-followers/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-followers/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-followers/response-fields.adoc[]
+
+=== 내가 팔로우한 사람들의 리스트 조회
+
+.curl-request
+include::{snippets}/get-followings/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-followings/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-followings/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/get-followings/request-headers.adoc[]
+
+.request-parameters
+include::{snippets}/get-followings/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-followings/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-followings/response-fields.adoc[]
+
+=== 맞팔로우 여부 확인
+
+.curl-request
+include::{snippets}/get-follow-status/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-follow-status/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-follow-status/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/get-follow-status/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-follow-status/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-follow-status/response-fields.adoc[]
+
+=== 강제 팔로우 해제
+
+.curl-request
+include::{snippets}/delete-followers/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-followers/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-followers/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/delete-followers/request-headers.adoc[]
+
+.http-response
+include::{snippets}/delete-followers/http-response.adoc[]
 
 == 아지트(모임)
 

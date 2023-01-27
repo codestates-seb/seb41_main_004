@@ -1,11 +1,10 @@
+import { useEffect } from "react";
 import { useState } from "react";
-import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ClubData } from "../../dummyData/ClubData";
 import { axiosInstance } from "../../util/axios";
 import AzitList from "../common/AzitList";
-import Loading from "../common/Loading";
 
 const Container = styled.div`
   div.Box {
@@ -74,23 +73,13 @@ const EtcWrap = styled.div`
 `;
 
 const ActivityHistory = ({ myPage }) => {
-  const [hostCheck, setHostCheck] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [selectCheck, setSelectCheck] = useState(0);
-  //const [filterList, setFilterList] = useState("");
+  const [hostCheck, setHostCheck] = useState(false); //host 체크될때
+  const [selectCheck, setSelectCheck] = useState("전체보기"); //select 박스 선택한값 가져오기
+  const [getData, setGetData] = useState([]);
+  const [filterList, setFilterList] = useState("");
+  const [closedClubId, setClosedClubId] = useState([]);
 
   const { id } = useParams();
-  //data = axios.get(api/club/usePage/1)
-  const activeData = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}`);
-    return res.data.data;
-  };
-
-  const { data, isError, isLoading, error } = useQuery("userActivityData", () =>
-    activeData()
-  );
-
-  //console.log(data); 받아오는 데이터 확인하기
 
   const handleCheckInput = () => {
     setHostCheck(!hostCheck); // false <-> true
@@ -99,33 +88,183 @@ const ActivityHistory = ({ myPage }) => {
   const handleCheckSelect = (e) => {
     setSelectCheck(e.target.value);
   };
-  console.log(selectCheck);
 
-  // useEffect(() => {
-  //   if (hostCheck === true && selectCheck === true) {
-  //     setFilterList(
-  //       data.filter((data) => {
-  //         data.host.memberId === id && data.data.selectValue === selectCheck;
-  //       })
-  //     );
-  //   } else if (hostCheck === true) {
-  //     setFilterList(
-  //       data.filter((data) => {
-  //         data.data.hostId === id;
-  //       })
-  //     );
-  //   } else if (selectCheck) {
-  //     setFilterList(
-  //       data.filter((data) => {
-  //         data.data.selectValue === selectCheck;
-  //       })
-  //     );
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    const isClosedData = async () => {
+      await axiosInstance
+        .get(`api/members/${id}/clubs/2`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setClosedClubId(res.data.map((data) => data.clubId));
+        })
+        .catch((error) => {
+          console.log("error : ", error);
+        });
+    };
+    isClosedData();
+  }, []);
+
+  useEffect(() => {
+    const isClosed = {
+      isClosed: true,
+    };
+    if (hostCheck === false && selectCheck === "전체보기") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setGetData(
+            res.data.map((data) =>
+              closedClubId.includes(data.clubId)
+                ? Object.assign(data, isClosed)
+                : data
+            )
+          );
+        })
+        .catch((error) => {
+          console.log("error : ", error);
+        });
+    } else if (hostCheck === false && selectCheck === "신청한 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/0`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setGetData(res.data);
+        })
+        .catch((error) => {
+          console.log("error : ", error);
+        });
+    } else if (hostCheck === false && selectCheck === "참여중인 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/1`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setGetData(res.data);
+        })
+        .catch((error) => {
+          console.log("error : ", error);
+        });
+    } else if (hostCheck === false && selectCheck === "종료된 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/2`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setGetData(res.data.map((data) => Object.assign(data, isClosed)));
+        })
+        .catch((error) => {
+          console.log("error : ", error);
+        });
+    } else if (hostCheck === true && selectCheck === "전체보기") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setFilterList(
+            res.data.filter((member) => {
+              return member.isHost === true;
+            })
+          );
+          setGetData(
+            filterList.data.map((data) =>
+              closedClubId.includes(data.clubId)
+                ? Object.assign(data, isClosed)
+                : data
+            )
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (hostCheck === true && selectCheck === "신청한 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/0`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setFilterList(
+            res.data.filter((member) => {
+              return member.isHost === true;
+            })
+          );
+          setGetData(filterList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (hostCheck === true && selectCheck === "참여중인 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/1`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setFilterList(
+            res.data.filter((member) => {
+              return member.isHost === true;
+            })
+          );
+          setGetData(filterList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (hostCheck === true && selectCheck === "종료된 모임") {
+      axiosInstance
+        .get(`api/members/${id}/clubs/2`, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setGetData(res.data);
+          setFilterList(
+            res.data.filter((member) => {
+              return member.isHost === true;
+            })
+          );
+          setGetData(filterList.map((data) => Object.assign(data, isClosed)));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectCheck, hostCheck, closedClubId]);
+  console.log(getData);
 
   return (
     <Container>
-      {isLoading ? (
+      {/* {isLoading ? (
         <EtcWrap>
           <Loading />
         </EtcWrap>
@@ -133,34 +272,34 @@ const ActivityHistory = ({ myPage }) => {
         <EtcWrap>
           <p>{error.message}</p>
         </EtcWrap>
-      ) : (
-        <>
-          {myPage ? (
-            <div className="Box">
-              <label className="checkContainer">
-                호스트인 아지트만 보기
-                <input type="checkbox" onChange={handleCheckInput} />
-                <span className="checkmark" />
-              </label>
-              <div className="selectWrapper">
-                <select onChange={handleCheckSelect}>
-                  <option value="전체보기">전체보기</option>
-                  <option value="참여중인 모임">참여중인 모임</option>
-                  <option value="신청한 모임">신청한 모임</option>
-                  <option value="종료된 모임">종료된 모임</option>
-                </select>
-              </div>
+      ) : ( */}
+      <>
+        {myPage ? (
+          <div className="Box">
+            <label className="checkContainer">
+              호스트인 아지트만 보기
+              <input type="checkbox" onChange={handleCheckInput} />
+              <span className="checkmark" />
+            </label>
+            <div className="selectWrapper">
+              <select onChange={handleCheckSelect}>
+                <option value="전체보기">전체보기</option>
+                <option value="신청한 모임">신청한 모임</option>
+                <option value="참여중인 모임">참여중인 모임</option>
+                <option value="종료된 모임">종료된 모임</option>
+              </select>
             </div>
-          ) : null}
-          {ClubData ? (
-            ClubData.map((data) => (
-              <AzitList key={data.clubId} data={data} myPage={myPage} />
-            ))
-          ) : (
-            <></>
-          )}
-        </>
-      )}
+          </div>
+        ) : null}
+        {ClubData ? (
+          ClubData.map((data) => (
+            <AzitList key={data.clubId} data={data} myPage={myPage} />
+          ))
+        ) : (
+          <></>
+        )}
+      </>
+      {/* )} */}
     </Container>
   );
 };

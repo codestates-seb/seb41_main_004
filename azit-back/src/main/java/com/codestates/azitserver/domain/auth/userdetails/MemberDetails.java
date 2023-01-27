@@ -30,7 +30,6 @@ public class MemberDetails implements UserDetails, OAuth2User {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// return authorityUtils.createAuthorities(this.getRoles());
 		return member.getRoles().stream()
 			.map(role -> (GrantedAuthority)() -> "ROLE_" + role)
 			.collect(Collectors.toList());

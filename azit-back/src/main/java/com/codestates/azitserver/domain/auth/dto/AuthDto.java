@@ -41,7 +41,7 @@ public class AuthDto {
 	}
 
 	/**
-	 * 인증번호 이메일 발송
+	 * 인증번호 이메일 발송, 토큰 재발급
 	 */
 	@Getter
 	@Setter

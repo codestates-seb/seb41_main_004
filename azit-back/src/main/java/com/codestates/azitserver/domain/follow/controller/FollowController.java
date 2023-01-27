@@ -82,10 +82,19 @@ public class FollowController {
 	 */
 	@GetMapping("/follower")
 	public ResponseEntity<?> getFollowers(@Positive @PathVariable("member-id") Long memberId,
-		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size) {
+		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size,
+		@LoginMember Member member) {
 		Page<Follow> followPage = followService.findAllMemberFollower(memberId, page - 1, size);
 		List<Follow> follows = followPage.getContent();
+
 		List<FollowDto.GetFollowerResponse> responses = mapper.followToFollowDtoGetFollowerResponse(follows);
+
+		// 본인이 아닐경우 모든 matpal값을 false로 합니다.
+		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
+			for (FollowDto.GetFollowerResponse response : responses) {
+				response.setMatpal(false);
+			}
+		}
 
 		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}
@@ -100,14 +109,16 @@ public class FollowController {
 	public ResponseEntity<?> getFollowings(@Positive @PathVariable("member-id") Long memberId,
 		@Positive @RequestParam("page") int page, @Positive @RequestParam("size") int size,
 		@LoginMember Member member) {
-		// 본인만 팔로우한 사람들을 볼 수 있습니다.
-		if (!followService.verifyMemberAndMemberId(member, memberId)) {
-			throw new BusinessLogicException(ExceptionCode.MEMBER_VERIFICATION_FAILED);
-		}
-
 		Page<Follow> followPage = followService.findAllMemberFollowing(memberId, page - 1, size);
 		List<Follow> follows = followPage.getContent();
 		List<FollowDto.GetFollowingResponse> responses = mapper.followToFollowDtoFollowingResponse(follows);
+
+		// 본인이 아닐경우 모든 matpal값을 false 합니다.
+		if (member == null || !followService.verifyMemberAndMemberId(member, memberId)) {
+			for (FollowDto.GetFollowingResponse response : responses) {
+				response.setMatpal(false);
+			}
+		}
 
 		return new ResponseEntity<>(new MultiResponseDto<>(responses, followPage), HttpStatus.OK);
 	}

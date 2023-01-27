@@ -135,7 +135,7 @@ const Status = styled.div`
   }
 `;
 const AzitList = ({ data, myPage }) => {
-  //console.log(data); //console.log 지우지 말아주세요.
+  // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
   const [activeHide, setActiveHide] = useState(false);

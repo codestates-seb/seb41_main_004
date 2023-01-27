@@ -125,7 +125,6 @@ const EtcWrap = styled.article`
   justify-content: center;
 `;
 const Profile = ({ myPage, id }) => {
-
   // 유저 데이터를 받아오는 함수
   const userDataGet = async () => {
     const res = await axiosInstance.get(`/api/members/${id}`, {
@@ -155,10 +154,10 @@ const Profile = ({ myPage, id }) => {
     isLoading: followIsLoading,
     error: followError,
   } = useQuery(["followStatus", id], () => followStatusGet(id), {
-    enabled: id !== window.localStorage.getItem('memberId')
+    enabled: id !== window.localStorage.getItem("memberId"),
   });
-  console.log(followStatus,followIsError, followIsLoading, followError);
-  
+  //console.log(followStatus,followIsError, followIsLoading, followError);
+
   // 팔로우 기능 함수
   const followPost = async (id) => {
     try {
@@ -183,7 +182,7 @@ const Profile = ({ myPage, id }) => {
     // })
     // return res
   };
-  const { mutate:followMutate } = useMutation(() => followPost(id));
+  const { mutate: followMutate } = useMutation(() => followPost(id));
 
   return (
     <ProfileWrapper>
