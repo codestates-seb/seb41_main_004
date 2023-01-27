@@ -105,7 +105,7 @@ const DataList = ({ follow, follower }) => {
       console.log(error.message);
     }
   };
-  const { mutate: followMutate } = useMutation(() => followPost(followerId));
+  const { mutate: followMutate } = useMutation(() => followPost(follower?.follower.memberId));
 
   // 언팔로우 기능 함수
   const unfollowPost = async (followId) => {
