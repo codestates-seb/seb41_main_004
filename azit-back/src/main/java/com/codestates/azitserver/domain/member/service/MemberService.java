@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.category.service.CategoryService;
+import com.codestates.azitserver.domain.club.dto.ClubDto;
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
 import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
 import com.codestates.azitserver.domain.club.repository.ClubRepository;
@@ -30,6 +32,7 @@ import com.codestates.azitserver.domain.fileInfo.service.StorageService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
+import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.repository.MemberCategoryRepository;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
 import com.codestates.azitserver.domain.review.entity.Review;
@@ -54,6 +57,8 @@ public class MemberService {
 	private final ClubMemberMapper clubMemberMapper;
 	private final ReviewRepository reviewRepository;
 
+	private final ClubMapper clubMapper;
+	private final MemberMapper memberMapper;
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
@@ -289,15 +294,27 @@ public class MemberService {
 		for (ClubMember clubMember : clubMemberList) {
 			ClubMemberDto.ClubMemberStatusResponse response =
 				clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(clubMember);
-			// Club Id
-			response.setClubId(clubMember.getClub().getClubId());
+			Club club = clubMember.getClub();
+			// Club Info
+			ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse
+				= clubMapper.clubToClubMemberStatusClubInfoResponse(club);
+				// Club Info 에 참여자들 정보 넣기
+			List<ClubMember> preParticipants = club.getClubMembers();
+			List<MemberDto.ParticipantResponse> participantResponses= new ArrayList<>();
+			for (ClubMember pre : preParticipants) {
+				participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+			}
+			clubInfoResponse.setParticipantList(participantResponses);
+				// 참여자 정보넣기 끗
+
+			response.setClubInfoResponse(clubInfoResponse);
+
 			// Host 여부
 			response.setIsHost(clubMember.getClub().getHost().getMemberId()==clubMember.getMember().getMemberId());
 			// 숨김상태인지
 			response.setIsHidden(false);
 			// 리뷰 작성 했는지
 			Member member = clubMember.getMember();
-			Club club = clubMember.getClub();
 			List<Review> reviewList = reviewRepository.findAllReviewsByReviewerAndClub(member, club);
 			if ( reviewList != null && !reviewList.isEmpty()) {
 				response.setIsReviewed(true);
