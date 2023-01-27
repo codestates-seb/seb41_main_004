@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../util/axios";
 import { useQuery } from "react-query";
@@ -36,16 +35,23 @@ const ButtonWrapper = styled.span`
   /* position: relative; */
 `;
 const Button = styled.button`
-  background-color: #bb2649;
   border-radius: 0.5rem;
   border: none;
-  color: white;
   /* position: absolute; */
   margin-top: -1rem;
   font-size: var(--caption-font);
   width: 5.5rem;
   height: 2rem;
   cursor: pointer;
+  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.3);
+  &.active {
+    background-color: #bb2649;
+    color: white;
+  }
+  &.disabled {
+    background-color: var(--background-color);
+    color: var(--sub-font-color);
+  }
 `;
 const InfoWrapper = styled.div`
   display: flex;
@@ -125,7 +131,6 @@ const EtcWrap = styled.article`
   justify-content: center;
 `;
 const Profile = ({ myPage, id }) => {
-
   // 유저 데이터를 받아오는 함수
   const userDataGet = async () => {
     const res = await axiosInstance.get(`/api/members/${id}`, {
@@ -146,19 +151,13 @@ const Profile = ({ myPage, id }) => {
     const res = await axiosInstance.get(`api/members/${id}/follow-status`, {
       headers: { Authorization: localStorage.getItem("accessToken") },
     });
-    return res;
+    return res.data.data.result;
   };
 
-  const {
-    data: followStatus,
-    isError: followIsError,
-    isLoading: followIsLoading,
-    error: followError,
-  } = useQuery(["followStatus", id], () => followStatusGet(id), {
-    enabled: id !== window.localStorage.getItem('memberId')
-  });
-  console.log(followStatus,followIsError, followIsLoading, followError);
-  
+  const { data: followStatus } = useQuery(["followStatus", id], () =>
+    followStatusGet(id)
+  );
+
   // 팔로우 기능 함수
   const followPost = async (id) => {
     try {
@@ -169,21 +168,31 @@ const Profile = ({ myPage, id }) => {
           headers: { Authorization: localStorage.getItem("accessToken") },
         }
       );
-      // await fetch(`${process.env.REACT_APP_BASE_URL}api/members/${id}/follow`, {
-      //   method: 'POST',
-      //   headers: { Authorization: localStorage.getItem("accessToken") }
-      // })
+      window.location.href = `/userpage/${id}`;
     } catch (error) {
       alert("팔로우 실패");
       console.log(error.message);
     }
-    // const res = await axiosInstance.post(`api/members/${id}/follow`,
-    // {
-    //   headers: { Authorization: localStorage.getItem("accessToken") },
-    // })
-    // return res
   };
-  const { mutate:followMutate } = useMutation(() => followPost(id));
+  const { mutate: followMutate } = useMutation(() => followPost(id));
+
+  // 언팔로우 기능 함수
+  const unfollowPost = async (id) => {
+    try {
+      await axiosInstance.post(
+        `api/members/${id}/unfollow`,
+        { body: "unfollow" },
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        }
+      );
+      window.location.href = `/userpage/${id}`;
+    } catch (error) {
+      alert("언팔로우 실패");
+      console.log(error.message);
+    }
+  };
+  const { mutate: unfollowMutate } = useMutation(() => unfollowPost(id));
 
   return (
     <ProfileWrapper>
@@ -211,20 +220,31 @@ const Profile = ({ myPage, id }) => {
           </TempWrap>
           <InfoWrapper>
             <ButtonWrapper>
-              {myPage ? "" : <Button onClick={followMutate}>팔로우</Button>}
+              {myPage ? (
+                ""
+              ) : (
+                <Button
+                  className={followStatus ? "disabled" : "active"}
+                  onClick={() =>
+                    followStatus ? unfollowMutate() : followMutate()
+                  }
+                >
+                  {followStatus ? "언팔로우" : "팔로우"}
+                </Button>
+              )}
             </ButtonWrapper>
             <Name>{userData.nickname}</Name>
             <Text>{userData.aboutMe}</Text>
             <Link to={`/userpage/followcheck/${id}`} className="followCheck">
               <FollowWrapper>
                 <div className="countWrap">
-                  <span className="count">0</span>
-                  팔로잉
+                  <span className="count">{userData.following}</span>
+                  팔로워
                 </div>
                 <span className="line" />
                 <div className="countWrap">
-                  <span className="count">0</span>
-                  팔로워
+                  <span className="count">{userData.follower}</span>
+                  팔로우
                 </div>
               </FollowWrapper>
             </Link>
