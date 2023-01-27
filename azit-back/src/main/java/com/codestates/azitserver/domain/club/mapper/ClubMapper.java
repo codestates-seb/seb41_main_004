@@ -38,4 +38,7 @@ public interface ClubMapper {
 	ClubDto.Response clubToClubDtoResponse(Club club);
 
 	List<ClubDto.Response> clubToClubDtoResponse(List<Club> clubList);
+
+	@Mapping(source = "fileInfo", target = "bannerImage")
+	ClubDto.ClubMemberStatusClubInfoResponse clubToClubMemberStatusClubInfoResponse(Club club);
 }
