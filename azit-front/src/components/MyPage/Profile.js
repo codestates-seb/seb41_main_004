@@ -43,7 +43,7 @@ const Button = styled.button`
   width: 5.5rem;
   height: 2rem;
   cursor: pointer;
-  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   &.active {
     background-color: #bb2649;
     color: white;

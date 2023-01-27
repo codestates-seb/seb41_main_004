@@ -13,26 +13,23 @@ const useAxios = () => {
   axiosInstance.interceptors.request.use(async (req) => {
     const expired = Date.now() >= jwtDecode(accessToken).exp * 1000;
 
-    // console.log(refreshToken);
-    // console.log(expired);
-
     if (!expired) return req;
 
     try {
       const res = await axios.get(
-        `api/auth/re-issue/${email}`,
+        `${process.env.REACT_APP_BASE_URL}api/auth/re-issue/${email}`,
         {
           headers: {
             Refresh: refreshToken,
           },
         },
-        { withCredentials : true }
+        { withCredentials: true }
       );
       console.log(res);
 
       localStorage.setItem("accessToken", res.headers.get("Authorization"));
     } catch (e) {
-      console.dir("에러" , e);
+      console.log("에러", e);
     }
 
     return req;
