@@ -59,6 +59,7 @@ const UserReport = () => {
         headers: { Authorization: localStorage.getItem("accessToken") },
       });
       navigate(-1);
+      alert("신고가 완료되었습니다.");
       console.log("보내짐");
     } catch (error) {
       alert(error.message);
@@ -92,7 +93,7 @@ const UserReport = () => {
           <textarea
             maxLength={128}
             onChange={handleReportReason}
-            placeholder="신고 사유를 간략하게 입력해 주세요."
+            placeholder="신고 사유를 간략하게 입력해 주세요.(128자 제한)"
           ></textarea>
         </div>
         <div></div>
