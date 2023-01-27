@@ -13,8 +13,9 @@ import {
   timeConvert,
 } from "../util/azitPreviewDateConvert";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../util/axios";
 import { useNavigate } from "react-router-dom";
+import useAxios from "../util/useAxios";
+
 
 const AzitPreviewWrap = styled.div`
   width: 100%;
@@ -239,6 +240,7 @@ const ImgWrap = styled.div`
 `;
 
 const AzitPreview = () => {
+  const axiosInstance = useAxios();
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -295,12 +297,10 @@ const AzitPreview = () => {
         headers: { Authorization: accessToken },
         "Content-Type": "multipart/form-data",
       });
-
-      console.log(res);
       alert("아지트가 생성되었습니다.");
       navigate(`/azit/detail/${res.data.data.clubId}`, { replace: true });
     } catch (e) {
-      console.log("아지트 생성 실패");
+      alert("아지트 생성 실패");
     }
   };
 

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useQuery, useMutation } from "react-query";
 import Loading from "../components/common/Loading";
 import { useNavigate, useParams } from "react-router-dom";
@@ -46,6 +46,7 @@ const EtcWrap = styled.div`
 
 const AzitJoin = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const [joinQuestion, setJoinQuestion] = useState("");
   const [joinAnswer, setJoinAnswer] = useState("");
 

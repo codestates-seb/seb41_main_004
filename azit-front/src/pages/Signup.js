@@ -34,38 +34,34 @@ const Signup = () => {
   const email = getValues("email");
 
   const nicknameCheckBtnClick = async () => {
-    console.log(nickname);
     const data = { "nickname" : nickname }
     try {
       const res = await axiosInstance.get(
         `api/members/nickname`,
         data
       )
-      console.log(res);
       if(res.status === 200 && nicknameRegExp.test(nickname)) {
         setNicknameChecked(true);
         alert("사용 가능한 닉네임입니다.");
       }
     } catch(e) {
-      console.log(e);
+      alert(e);
     }
   }
 
   const emailCheckBtnClick = async () => {
-    console.log(email);
     const data = { "email" : email }
     try {
       const res = await axiosInstance.get(
         `api/members/email`,
         data
       )
-      console.log(res);
       if(res.status === 200) {
         setEmailChecked(true);
         alert("사용 가능한 이메일입니다.");
       }
     } catch(e) {
-      console.log(e);
+      alert(e);
     }
   }
 

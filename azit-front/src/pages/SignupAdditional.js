@@ -37,16 +37,20 @@ const SignupAdditional = () => {
   };
   
   const changeCategoryHandler = (checked, id) => {
-    if (checked) {
-      setCheckedInputs([...checkedInputs, id]);
-    } else {
-      // 체크 해제
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-    }
-    if (checkedInputs.length >= 12) {
-      alert("관심사는 최대 12개까지 선택 가능합니다.");
-      setCheckedInputs(checkedInputs.filter((el) => el !== id));
-      checked = false;
+    if (checkedInputs.length < 12) {
+      if (checked) {
+        setCheckedInputs([...checkedInputs, id]);
+      } else if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      }
+    } else if (checkedInputs.length >= 12) {
+      if (!checked) {
+        // 체크 해제
+        setCheckedInputs(checkedInputs.filter((el) => el !== id));
+      } else {
+        alert("관심사는 최대 12개까지 선택 가능합니다.");
+      }
     }
   };
 

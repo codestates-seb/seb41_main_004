@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
-import { axiosInstance } from "../../util/axios";
 import { useParams } from "react-router-dom";
+import useAxios from "../../util/useAxios";
 
 const ListWrap = styled.li`
   margin-top: 1rem;
@@ -80,7 +80,8 @@ const ListWrap = styled.li`
 
 const MemberList = ({ data, state }) => {
   const { id } = useParams();
-
+  const axiosInstance = useAxios();
+  
   const azitMemberAccept = async () => {
     try {
       const payload = { status: "CLUB_JOINED" };
@@ -95,9 +96,9 @@ const MemberList = ({ data, state }) => {
         }
       );
       window.location.href = `/azit/member/${id}`;
-      console.log("아지트 참가 수락 완료");
+      alert("아지트 참가 수락 완료");
     } catch (e) {
-      console.log("아지트 참가 수락 실패");
+      alert("아지트 참가 수락 실패");
     }
   };
 
@@ -115,9 +116,9 @@ const MemberList = ({ data, state }) => {
         }
       );
       window.location.href = `/azit/member/${id}`;
-      console.log("아지트 참가 거절 완료");
+      alert("아지트 참가 거절 완료");
     } catch (e) {
-      console.log("아지트 참가 거절 실패");
+      alert("아지트 참가 거절 실패");
     }
   };
 
@@ -134,9 +135,9 @@ const MemberList = ({ data, state }) => {
         }
       );
       window.location.href = `/azit/member/${id}`;
-      console.log("아지트 강퇴 완료");
+      alert("아지트 강퇴 완료");
     } catch (e) {
-      console.log("아지트 강퇴 실패");
+      alert("아지트 강퇴 실패");
     }
   };
 

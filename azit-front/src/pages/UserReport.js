@@ -4,7 +4,7 @@ import Button from "../components/common/Button";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserReportData } from "../dummyData/UserReportData";
-import { axiosInstance } from "../util/axios";
+import useAxios from "../util/useAxios";
 import { useMutation } from "react-query";
 
 const ReportWrap = styled.form`
@@ -40,6 +40,7 @@ const Select = styled.select`
 
 const UserReport = () => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const navigate = useNavigate();
   const [reportList, setReportList] = useState(UserReportData[0].value);
   const [reportReason, setReportReason] = useState("");
@@ -60,7 +61,6 @@ const UserReport = () => {
       });
       navigate(-1);
       alert("신고가 완료되었습니다.");
-      console.log("보내짐");
     } catch (error) {
       alert(error.message);
     }

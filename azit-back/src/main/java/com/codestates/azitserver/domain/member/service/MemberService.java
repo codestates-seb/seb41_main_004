@@ -91,11 +91,11 @@ public class MemberService {
 			member.addMemberCategorySmallList(memberCategoryList);
 		}
 
-		return profileImageCombiner(member.getMemberId(), profileImage);
+		return profileImageCombiner(member, profileImage);
 	}
 
-	public Member profileImageCombiner(Long memberId, MultipartFile profileImage) {
-		Member member = getMemberById(memberId);
+	public Member profileImageCombiner(Member member, MultipartFile profileImage) {
+
 
 		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {

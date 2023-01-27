@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../../util/axios";
+import useAxios from "../../util/useAxios";
 import { useQuery } from "react-query";
 const Container = styled.div`
   display: flex;
@@ -21,6 +21,7 @@ const Categorys = styled.span`
 `;
 
 const Category = ({ getCategoryList }) => {
+  const axiosInstance = useAxios();
   const [categoryList, setCategoryList] = useState([]);
   const smallCategory = async () => {
     const res = await axiosInstance.get("/api/categories/small");

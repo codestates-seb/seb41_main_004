@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../util/axios";
+import useAxios from "../../util/useAxios";
 
 const Container = styled.li`
   width: 100%;
@@ -69,6 +69,7 @@ const ButtonBox = styled.div`
 
 const DataList = ({ follow, follower }) => {
   const { id } = useParams();
+  const axiosInstance = useAxios();
   const myId = window.localStorage.getItem("memberId");
   // 마이페이지 여부
   const [myPage, setMyPage] = useState(false);
@@ -102,7 +103,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("팔로우 실패");
-      console.log(error.message);
     }
   };
   const { mutate: followMutate } = useMutation(() => followPost(follower?.follower.memberId));
@@ -120,7 +120,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("언팔로우 실패");
-      console.log(error.message);
     }
   };
   const { mutate: unfollowMutate } = useMutation(() => unfollowPost(followId));
@@ -134,7 +133,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("팔로워 삭제 실패");
-      console.log(error.message);
     }
   };
   const { mutate: deleteMutate } = useMutation(() =>
