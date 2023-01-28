@@ -38,6 +38,8 @@ public enum ExceptionCode {
 	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
 	FOLLOW_NOT_FOUND(40412, "Follow not found"),
 
+	// 406
+	CLUB_MEMBER_FULL(40601, "Club member sold out"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
