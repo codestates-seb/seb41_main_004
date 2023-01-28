@@ -13,7 +13,7 @@ DEPLOY_PATH=/home/ubuntu/action/
 cp $BUILD_JAR $DEPLOY_PATH
 
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> $BUILD_LOG
-CURRENT_PID=$(pgrep -f $JAR_NAME)
+CURRENT_PID=$( lsof -i :8090 | grep java | awk '{print $2}')
 
 if [ -z $CURRENT_PID ]
 then

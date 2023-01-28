@@ -130,7 +130,6 @@ const Login = () => {
         navigate('/');
       } catch (e) {
         // error handling 하기
-        console.log(e);
         if (e.response.status === 401) {
           alert("유효하지 않은 유저 정보입니다.");
         } else if(e.response.status === 500) {

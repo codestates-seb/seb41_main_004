@@ -40,7 +40,7 @@ const Button = styled.button`
   /* position: absolute; */
   margin-top: -1rem;
   font-size: var(--caption-font);
-  width: 5.5rem;
+  min-width: 5.5rem;
   height: 2rem;
   cursor: pointer;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);

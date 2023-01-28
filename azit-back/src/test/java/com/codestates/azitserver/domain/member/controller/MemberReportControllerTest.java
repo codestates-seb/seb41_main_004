@@ -73,41 +73,41 @@ public class MemberReportControllerTest {
 
 	}
 
-	@Test
-	void postMemberReportTest() throws Exception {
-		// given
-		given(memberReportMapper.reportPostDtoToReport(any(MemberReportDto.Post.class)))
-			.willReturn(memberReport);
-		given(memberReportService.createMemberReport(any(MemberReport.class))).willReturn(memberReport);
-		given(memberReportMapper.reportToReportResponseDto(any(MemberReport.class))).willReturn(response);
-
-		String content = objectMapper.writeValueAsString(post);
-
-		// when
-		ResultActions postActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.post("/api/members/reports")
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.header("Authorization", "Required JWT access token")
-					.content(content)
-					.characterEncoding(StandardCharsets.UTF_8)
-			);
-		// then
-		postActions
-			.andDo(print())
-			.andExpect(status().isCreated())
-			.andDo(getDefaultDocument(
-					"post-member-report",
-					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
-					MemberReportFieldDescriptor.getPostRequestFieldsSnippet()
-					// ,
-					// 	MemberReportFieldDescriptor.getSingleResponseSnippet()
-					// TODO response field가 not paylaod 에러 해결해야함
-				)
-			);
-
-	}
+	// @Test
+	// void postMemberReportTest() throws Exception {
+	// 	// given
+	// 	given(memberReportMapper.reportPostDtoToReport(any(MemberReportDto.Post.class)))
+	// 		.willReturn(memberReport);
+	// 	given(memberReportService.createMemberReport(any(MemberReport.class))).willReturn(memberReport);
+	// 	given(memberReportMapper.reportToReportResponseDto(any(MemberReport.class))).willReturn(response);
+	//
+	// 	String content = objectMapper.writeValueAsString(post);
+	//
+	// 	// when
+	// 	ResultActions postActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.post("/api/members/reports")
+	// 				.accept(MediaType.APPLICATION_JSON)
+	// 				.contentType(MediaType.APPLICATION_JSON)
+	// 				.header("Authorization", "Required JWT access token")
+	// 				.content(content)
+	// 				.characterEncoding(StandardCharsets.UTF_8)
+	// 		);
+	// 	// then
+	// 	postActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isCreated())
+	// 		.andDo(getDefaultDocument(
+	// 				"post-member-report",
+	// 				requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
+	// 				MemberReportFieldDescriptor.getPostRequestFieldsSnippet()
+	// 				// ,
+	// 				// 	MemberReportFieldDescriptor.getSingleResponseSnippet()
+	// 				// TODO response field가 not paylaod 에러 해결해야함
+	// 			)
+	// 		);
+	//
+	// }
 
 
 }

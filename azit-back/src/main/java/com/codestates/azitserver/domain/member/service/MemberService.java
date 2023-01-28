@@ -175,7 +175,7 @@ public class MemberService {
 		Member member = getMemberById(memberId);
 
 		// banner image 저장
-		String prefix = "images/member_profileImg";
+		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
@@ -298,14 +298,16 @@ public class MemberService {
 			// Club Info
 			ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse
 				= clubMapper.clubToClubMemberStatusClubInfoResponse(club);
-				// Club Info 에 참여자들 정보 넣기
+				// ======Club Info 에 참여자들 정보 넣기=======
 			List<ClubMember> preParticipants = club.getClubMembers();
 			List<MemberDto.ParticipantResponse> participantResponses= new ArrayList<>();
 			for (ClubMember pre : preParticipants) {
-				participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+				if (pre.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED) {
+					participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+				}
 			}
 			clubInfoResponse.setParticipantList(participantResponses);
-				// 참여자 정보넣기 끗
+				// ============참여자 정보넣기 끗=============
 
 			response.setClubInfoResponse(clubInfoResponse);
 
