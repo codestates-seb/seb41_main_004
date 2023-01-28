@@ -32,11 +32,13 @@ public enum ExceptionCode {
 	AUTH_NUMBER_NOT_FOUND(40409, "String confirmation failed"),
 	REVIEW_NOT_FOUND(40410, "Review not found"),
 
-	REPORT_NOT_FOUND(40408, "Member Report not found"),
+	REPORT_NOT_FOUND(40411, "Member Report not found"),
 
-	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
-	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
-	FOLLOW_NOT_FOUND(40412, "Follow not found"),
+	NICKNAME_EXIST_CHECK_ONLY(40411, "Just checking: Nickname is already in use"),
+	EMAIL_EXIST_CHECK_ONLY(40412, "Just checking: Email is already registered"),
+	FOLLOW_NOT_FOUND(40413, "Follow not found"),
+
+	CATEGORY_SMALL_NOT_FOUND(40414, "Category(small) not found"),
 
 	// 406
 	CLUB_MEMBER_FULL(40601, "Club member sold out"),
