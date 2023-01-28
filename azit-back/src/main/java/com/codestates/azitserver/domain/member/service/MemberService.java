@@ -175,7 +175,7 @@ public class MemberService {
 		Member member = getMemberById(memberId);
 
 		// banner image 저장
-		String prefix = "images/member_profileImg";
+		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 

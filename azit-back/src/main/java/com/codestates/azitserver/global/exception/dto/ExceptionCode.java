@@ -40,6 +40,8 @@ public enum ExceptionCode {
 
 	CATEGORY_SMALL_NOT_FOUND(40414, "Category(small) not found"),
 
+	// 406
+	CLUB_MEMBER_FULL(40601, "Club member sold out"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
