@@ -28,6 +28,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
@@ -242,41 +244,42 @@ class MemberControllerTest {
 	}
 
 	@Test
-	void nickCheckTest() throws Exception {
+	void nicknameCheckTest() throws Exception {
 		// given
-		MemberDto.NicknameCheck nicknameCheck = new MemberDto.NicknameCheck("닉네임");
-		String content = gson.toJson(nicknameCheck);
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("nickname", "닉네임");
 		// when
 		ResultActions getActions =
 			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/nickname")
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
+				RestDocumentationRequestBuilders.get("/api/members/check")
+					.queryParams(queryParams)
+
 			);
+
 		// then
 		getActions
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"nickname-check",
-				MemberFieldDescriptor.getNickCheckFieldsSnippet()
+				requestParameters(
+					List.of(
+						parameterWithName("nickname").description("중복체크할 닉네임")
 				)
-			);
+			)));
 	}
 
 	@Test
 	void emailCheckTest() throws Exception {
 		// given
-		MemberDto.EmailCheck emailCheck = new MemberDto.EmailCheck("kimstub@naver.com");
-		String content = gson.toJson(emailCheck);
+
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		queryParams.add("email", "kimstub@naver.com");
 		// when
 		ResultActions getActions =
 			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/email")
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
+				RestDocumentationRequestBuilders.get("/api/members/check")
+					.queryParams(queryParams)
 			);
 		// then
 		getActions
@@ -284,9 +287,11 @@ class MemberControllerTest {
 			.andExpect(status().isOk())
 			.andDo(getDefaultDocument(
 					"email-check",
-					MemberFieldDescriptor.getEmailCheckFieldsSnippet()
+				requestParameters(
+					List.of(
+						parameterWithName("email").description("중복체크할 이메일")
 				)
-			);
+			)));
 	}
 
 	@Test
