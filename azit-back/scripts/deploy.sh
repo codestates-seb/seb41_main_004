@@ -1,6 +1,6 @@
 #!/bin/bash
-DEPLOY_LOG=/home/ubuntu/action/deploy_production.log
-BUILD_LOG=/home/ubuntu/action/logs/production
+DEPLOY_LOG=/home/ubuntu/action/deploy_develope.log
+BUILD_LOG=/home/ubuntu/action/logs/develope
 PORT=8090
 UUID=$(uuidgen)
 SPRING_OPTIONS=--spring.profiles.active=local,aws
