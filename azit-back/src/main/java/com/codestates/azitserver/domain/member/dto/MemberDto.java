@@ -88,25 +88,25 @@ public class MemberDto {
 
 	}
 
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class NicknameCheck {
-		@NotBlank(message = "Nickname is required")
-		@Length(min = 2, max = 8, message = "Nickname must be between 2 and 8 characters long")
-		private String nickname;
-	}
+	// @Getter
+	// @Setter
+	// @NoArgsConstructor
+	// @AllArgsConstructor
+	// public static class NicknameCheck {
+	// 	@NotBlank(message = "Nickname is required")
+	// 	@Length(min = 2, max = 8, message = "Nickname must be between 2 and 8 characters long")
+	// 	private String nickname;
+	// }
 
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class EmailCheck {
-		@NotBlank(message = "Email is required")
-		@Email(message = "Invalid email address")
-		private String email;
-	}
+	// @Getter
+	// @Setter
+	// @NoArgsConstructor
+	// @AllArgsConstructor
+	// public static class EmailCheck {
+	// 	@NotBlank(message = "Email is required")
+	// 	@Email(message = "Invalid email address")
+	// 	private String email;
+	// }
 
 	@Getter
 	@Setter
@@ -156,4 +156,12 @@ public class MemberDto {
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
 	}
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class CheckPost {
+		private String nickname;
+		private String email;
+	}
+
 }

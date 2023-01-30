@@ -88,10 +88,8 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/members/clubs/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/members/clubs/**/**").authenticated()
 
-				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
-				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/members/nickname").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/members/email").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/check/**").permitAll() // 중복체크
+				.antMatchers(HttpMethod.GET, "/api/members/check/**/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/members/**/clubs").permitAll()
 
 				.antMatchers(HttpMethod.GET, "/api/members/**").authenticated() //특정 회원 조회
