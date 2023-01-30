@@ -58,8 +58,10 @@ const Search = () => {
   // 검색어 저장
   const changeValue = (e) => {
     if (e.target.value.length === 0) {
+      // setValue(null);
       setSearchText(null);
     } else {
+      // setValue(e.target.value);
       setSearchText(e.target.value);
     }
   };
@@ -110,7 +112,7 @@ const Search = () => {
     // if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-
+  // console.log(inView)
   return (
     <>
       <Gnb />
