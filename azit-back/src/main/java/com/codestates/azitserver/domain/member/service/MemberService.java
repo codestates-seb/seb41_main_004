@@ -217,13 +217,6 @@ public class MemberService {
 		return null; //TODO
 	}
 
-	// 닉네임 중복 확인 when just check nickname
-	public void verifyExistNickname(String nickname) {
-		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
-		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
-		}
-	}
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistNickname(Member member) {
 		String nickname = member.getNickname();
@@ -232,13 +225,7 @@ public class MemberService {
 			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
 		}
 	}
-	// 닉네임 중복 확인 when just check nickname
-	public void verifyExistEmail(String email) {
-		Optional<Member> optionalMember = memberRepository.findByEmail(email);
-		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
-		}
-	}
+
 
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistEmail(Member member) {
@@ -246,6 +233,22 @@ public class MemberService {
 		Optional<Member> optionalMember = memberRepository.findByEmail(email);
 		if (optionalMember.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_SIGNUP);
+		}
+	}
+
+	// 닉, 이메일 중복검사만
+	public void justVerifyExistNicknameAndEmail(String nickname, String email) {
+		if (nickname == null && email == null) {
+			throw new BusinessLogicException(ExceptionCode.NO_TARGET_TO_CHECK);
+		}
+
+		Optional<Member> optionalMemberNickname = memberRepository.findByNickname(nickname);
+		if (optionalMemberNickname.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
+		}
+		Optional<Member> optionalMemberEmail = memberRepository.findByEmail(email);
+		if (optionalMemberEmail.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
 		}
 	}
 
