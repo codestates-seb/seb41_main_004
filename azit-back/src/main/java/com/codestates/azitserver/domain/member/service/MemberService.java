@@ -98,7 +98,7 @@ public class MemberService {
 
 
 		String prefix = "/images/member_profileImg";
-		if (!profileImage.isEmpty()) {
+		if (!profileImage.isEmpty() || profileImage != null) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
 			FileInfo fileInfo = new FileInfo();
