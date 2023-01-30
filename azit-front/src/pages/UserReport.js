@@ -61,7 +61,6 @@ const UserReport = () => {
       });
       navigate(-1);
       alert("신고가 완료되었습니다.");
-      console.log("보내짐");
     } catch (error) {
       alert(error.message);
     }

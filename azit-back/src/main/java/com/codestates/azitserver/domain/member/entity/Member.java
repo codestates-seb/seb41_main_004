@@ -42,13 +42,13 @@ public class Member extends Auditable {
 	@JoinColumn(name = "FILE_INFO_ID")
 	private FileInfo fileInfo;
 
-	@Column(nullable = false, unique = true, length = 128)
+	@Column(nullable = false, unique = true, length = 128, updatable = false)
 	private String email;
 
 	@Column(nullable = false, unique = true, length = 16)
 	private String nickname;
 
-	@Column
+	@Column(nullable = false)
 	private String password;
 
 	@Enumerated(value = EnumType.STRING)
@@ -60,7 +60,7 @@ public class Member extends Auditable {
 	@Column(name = "ABOUT_ME", length = 128)
 	private String aboutMe;
 
-	private Integer reputation;
+	private Integer reputation = 10;
 
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "MEMBER_STATUS")

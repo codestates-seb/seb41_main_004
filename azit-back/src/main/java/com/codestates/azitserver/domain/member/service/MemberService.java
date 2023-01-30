@@ -91,11 +91,11 @@ public class MemberService {
 			member.addMemberCategorySmallList(memberCategoryList);
 		}
 
-		return profileImageCombiner(member.getMemberId(), profileImage);
+		return profileImageCombiner(member, profileImage);
 	}
 
-	public Member profileImageCombiner(Long memberId, MultipartFile profileImage) {
-		Member member = getMemberById(memberId);
+	public Member profileImageCombiner(Member member, MultipartFile profileImage) {
+
 
 		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
@@ -175,7 +175,7 @@ public class MemberService {
 		Member member = getMemberById(memberId);
 
 		// banner image 저장
-		String prefix = "images/member_profileImg";
+		String prefix = "/images/member_profileImg";
 		if (!profileImage.isEmpty()) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
@@ -217,13 +217,6 @@ public class MemberService {
 		return null; //TODO
 	}
 
-	// 닉네임 중복 확인 when just check nickname
-	public void verifyExistNickname(String nickname) {
-		Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
-		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
-		}
-	}
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistNickname(Member member) {
 		String nickname = member.getNickname();
@@ -232,13 +225,7 @@ public class MemberService {
 			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
 		}
 	}
-	// 닉네임 중복 확인 when just check nickname
-	public void verifyExistEmail(String email) {
-		Optional<Member> optionalMember = memberRepository.findByEmail(email);
-		if (optionalMember.isPresent()) {
-			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
-		}
-	}
+
 
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistEmail(Member member) {
@@ -246,6 +233,22 @@ public class MemberService {
 		Optional<Member> optionalMember = memberRepository.findByEmail(email);
 		if (optionalMember.isPresent()) {
 			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_SIGNUP);
+		}
+	}
+
+	// 닉, 이메일 중복검사만
+	public void justVerifyExistNicknameAndEmail(String nickname, String email) {
+		if (nickname == null && email == null) {
+			throw new BusinessLogicException(ExceptionCode.NO_TARGET_TO_CHECK);
+		}
+
+		Optional<Member> optionalMemberNickname = memberRepository.findByNickname(nickname);
+		if (optionalMemberNickname.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_CHECK_ONLY);
+		}
+		Optional<Member> optionalMemberEmail = memberRepository.findByEmail(email);
+		if (optionalMemberEmail.isPresent()) {
+			throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST_CHECK_ONLY);
 		}
 	}
 
@@ -298,14 +301,16 @@ public class MemberService {
 			// Club Info
 			ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse
 				= clubMapper.clubToClubMemberStatusClubInfoResponse(club);
-				// Club Info 에 참여자들 정보 넣기
+				// ======Club Info 에 참여자들 정보 넣기=======
 			List<ClubMember> preParticipants = club.getClubMembers();
 			List<MemberDto.ParticipantResponse> participantResponses= new ArrayList<>();
 			for (ClubMember pre : preParticipants) {
-				participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+				if (pre.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED) {
+					participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+				}
 			}
 			clubInfoResponse.setParticipantList(participantResponses);
-				// 참여자 정보넣기 끗
+				// ============참여자 정보넣기 끗=============
 
 			response.setClubInfoResponse(clubInfoResponse);
 

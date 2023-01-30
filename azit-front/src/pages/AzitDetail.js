@@ -118,10 +118,6 @@ const AzitDetailForm = styled.div`
         > a {
           position: relative;
           margin-right: 1rem;
-          > img:first-child {
-            width: 5rem;
-            border-radius: 70%;
-          }
           > .hostIcon {
             top: 0;
             right: 0;
@@ -236,6 +232,14 @@ const AzitDetailForm = styled.div`
   }
 `;
 
+const HostImgWrap = styled.div`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 70%;
+  background-image: url(${(props) => props.imgSrc});
+  background-size: cover;
+`;
+
 const UserImgWrap = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -265,6 +269,7 @@ const EtcWrap = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const AzitDetail = () => {
   const { id } = useParams();
   const axiosInstance = useAxios();
@@ -334,22 +339,18 @@ const AzitDetail = () => {
         setBtnStatus("joined");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clubMember, waitingMembers]);
 
   const AzitCancel = async () => {
     try {
-      const res = await axiosInstance.delete(
-        `/api/clubs/${id}/signups/${memberId}`,
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
-      );
-      console.log(res);
+      await axiosInstance.delete(`/api/clubs/${id}/signups/${memberId}`, {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      });
       alert("가입을 취소하였습니다.");
       navigate(`/`);
     } catch (e) {
-      console.log("가입 취소 실패");
+      alert(e);
     }
   };
 
@@ -384,9 +385,8 @@ const AzitDetail = () => {
                 <label>아지트 정보</label>
                 <div>
                   <Link to={`/userpage/${data.host.memberId}`}>
-                    <img
-                      alt="hostImg"
-                      src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
+                    <HostImgWrap
+                      imgSrc={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
                     />
                     <img alt="HostIcon" src={HostIcon} className="hostIcon" />
                   </Link>

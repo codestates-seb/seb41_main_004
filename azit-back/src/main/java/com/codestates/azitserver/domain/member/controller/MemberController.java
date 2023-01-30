@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
 import org.springframework.http.HttpStatus;
@@ -130,19 +133,11 @@ public class MemberController {
 	}
 
 	// 닉네임 중복 확인
-	@GetMapping("/nickname")
-	public ResponseEntity nicknameCheck(@RequestBody MemberDto.NicknameCheck memberNickCheckDto) {
+	@GetMapping("/check")
+	public ResponseEntity nicknameCheck(@RequestParam(name ="nickname", required = false)  String nickname,
+		@RequestParam(name ="email", required = false) @Email String email) {
 
-
-		memberService.verifyExistNickname(memberNickCheckDto.getNickname());
-
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@GetMapping("/email")
-	public ResponseEntity emailCheck(@RequestBody MemberDto.EmailCheck memberEmailCheckDto) {
-		memberService.verifyExistEmail(memberEmailCheckDto.getEmail());
-
+		memberService.justVerifyExistNicknameAndEmail(nickname, email);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
