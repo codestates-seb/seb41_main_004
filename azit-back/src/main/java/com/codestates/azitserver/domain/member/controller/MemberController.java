@@ -31,11 +31,13 @@ import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
+import com.codestates.azitserver.domain.member.dto.MemberReportDto;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
+import com.codestates.azitserver.global.annotation.LoginMember;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
 import com.codestates.azitserver.global.exception.BusinessLogicException;
 import com.codestates.azitserver.global.exception.dto.ExceptionCode;
@@ -133,10 +135,11 @@ public class MemberController {
 	}
 
 	// 닉네임 중복 확인
-	@GetMapping("/check")
-	public ResponseEntity nicknameCheck(@RequestParam(name ="nickname", required = false)  String nickname,
-		@RequestParam(name ="email", required = false) @Email String email) {
+	@PostMapping("/check")
+	public ResponseEntity nicknameCheck(@RequestBody MemberDto.CheckPost checkPost) {
 
+		String nickname = checkPost.getNickname();
+		String email = checkPost.getEmail();
 		memberService.justVerifyExistNicknameAndEmail(nickname, email);
 
 		return new ResponseEntity<>(HttpStatus.OK);
