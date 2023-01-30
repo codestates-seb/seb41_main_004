@@ -278,7 +278,7 @@ class MemberControllerTest {
 		// when
 		ResultActions getActions =
 			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/check")
+				RestDocumentationRequestBuilders.get("/api/members/check/")
 					.queryParams(queryParams)
 			);
 		// then

@@ -133,7 +133,7 @@ public class MemberController {
 	}
 
 	// 닉네임 중복 확인
-	@GetMapping("/check")
+	@GetMapping("/check/")
 	public ResponseEntity nicknameCheck(@RequestParam(name ="nickname", required = false)  String nickname,
 		@RequestParam(name ="email", required = false) @Email String email) {
 
