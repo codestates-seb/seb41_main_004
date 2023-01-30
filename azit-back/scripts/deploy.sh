@@ -1,6 +1,6 @@
 #!/bin/bash
-DEPLOY_LOG=/home/ubuntu/action/deploy_production.log
-BUILD_LOG=/home/ubuntu/action/logs/production
+DEPLOY_LOG=/home/ubuntu/action/deploy_develope.log
+BUILD_LOG=/home/ubuntu/action/logs/develope
 PORT=8090
 UUID=$(uuidgen)
 SPRING_OPTIONS=--spring.profiles.active=local,aws
@@ -17,7 +17,7 @@ DEPLOY_PATH=/home/ubuntu/action/
 cp $BUILD_JAR $DEPLOY_PATH
 
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> $DEPLOY_LOG
-CURRENT_PID=$( lsof -i :$PORT | grep java | awk '{print $2}')
+CURRENT_PID=$(sudo lsof -i :$PORT | grep java | awk '{print $2}')
 
 if [ -z $CURRENT_PID ]
 then

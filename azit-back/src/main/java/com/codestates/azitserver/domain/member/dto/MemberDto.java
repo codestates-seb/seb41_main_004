@@ -156,4 +156,12 @@ public class MemberDto {
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
 	}
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	public static class CheckPost {
+		private String nickname;
+		private String email;
+	}
+
 }
