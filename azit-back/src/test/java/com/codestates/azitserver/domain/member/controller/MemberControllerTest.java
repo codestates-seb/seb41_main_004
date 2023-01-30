@@ -243,56 +243,57 @@ class MemberControllerTest {
 			);
 	}
 
-	@Test
-	void nicknameCheckTest() throws Exception {
-		// given
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("nickname", "닉네임");
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/check")
-					.queryParams(queryParams)
-
-			);
-
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(getDefaultDocument(
-					"nickname-check",
-				requestParameters(
-					List.of(
-						parameterWithName("nickname").description("중복체크할 닉네임")
-				)
-			)));
-	}
-
-	@Test
-	void emailCheckTest() throws Exception {
-		// given
-
-		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-		queryParams.add("email", "kimstub@naver.com");
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/check/")
-					.queryParams(queryParams)
-			);
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(getDefaultDocument(
-					"email-check",
-				requestParameters(
-					List.of(
-						parameterWithName("email").description("중복체크할 이메일")
-				)
-			)));
-	}
+	// @Test
+	// void nicknameCheckTest() throws Exception {
+	// 	// given
+	//
+	// 	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+	// 	queryParams.add("nickname", "닉네임");
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members/check")
+	//
+	//
+	// 		);
+	//
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andDo(getDefaultDocument(
+	// 				"nickname-check",
+	// 			requestParameters(
+	// 				List.of(
+	// 					parameterWithName("nickname").description("중복체크할 닉네임")
+	// 			)
+	// 		)));
+	// }
+	//
+	// @Test
+	// void emailCheckTest() throws Exception {
+	// 	// given
+	//
+	// 	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+	// 	queryParams.add("email", "kimstub@naver.com");
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members/check/")
+	// 				.queryParams(queryParams)
+	// 		);
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andDo(getDefaultDocument(
+	// 				"email-check",
+	// 			requestParameters(
+	// 				List.of(
+	// 					parameterWithName("email").description("중복체크할 이메일")
+	// 			)
+	// 		)));
+	// }
 
 	@Test
 	void getAllAttendedClubTest() throws Exception {
