@@ -1,6 +1,7 @@
 package com.codestates.azitserver.domain.follow.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,11 +24,11 @@ public class Follow extends Auditable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long followId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FOLLOWER_ID")
 	private Member follower;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FOLLOWEE_ID")
 	private Member followee;
 

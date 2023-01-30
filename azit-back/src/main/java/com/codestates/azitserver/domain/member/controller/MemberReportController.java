@@ -53,6 +53,22 @@ public class MemberReportController {
 	}
 
 	// 신고 생성
+	// @PostMapping(value = "/{reportee-id:[0-9]+}",consumes = {MediaType.APPLICATION_JSON_VALUE},
+	// 	produces = {MediaType.APPLICATION_JSON_VALUE})
+	// public ResponseEntity<?> postMemberReport(@Positive @PathVariable("reportee-id") Long reporteeId,
+	// 	@RequestBody @Valid MemberReportDto.Post reportPostDto, @LoginMember Member reporter) {
+	//
+	// 	// TODO 중복 신고 불가한지 확인
+	// 	// memberReportService.verifyExistingReport(reportPostDto.getReporterId(), reportPostDto.getReporterId())
+	//
+	// 	MemberReport tempMemberReport = memberReportMapper.reportPostDtoToReport(reportPostDto);
+	// 	MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(tempMemberReport);
+	// 	response.setReporter(memberMapper.memberToMemberResponseDto(reporter));
+	// 	response.setReportee(memberMapper.memberToMemberResponseDto(memberService.getMemberById(reporteeId)));
+	// 	memberReportService.createMemberReport(tempMemberReport);
+	// 	return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+	// }
+
 	@PostMapping(value = "/{reportee-id:[0-9]+}",consumes = {MediaType.APPLICATION_JSON_VALUE},
 		produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> postMemberReport(@Positive @PathVariable("reportee-id") Long reporteeId,
@@ -62,10 +78,11 @@ public class MemberReportController {
 		// memberReportService.verifyExistingReport(reportPostDto.getReporterId(), reportPostDto.getReporterId())
 
 		MemberReport tempMemberReport = memberReportMapper.reportPostDtoToReport(reportPostDto);
-		MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(tempMemberReport);
-		response.setReporter(memberMapper.memberToMemberResponseDto(reporter));
-		response.setReportee(memberMapper.memberToMemberResponseDto(memberService.getMemberById(reporteeId)));
-		memberReportService.createMemberReport(tempMemberReport);
+		tempMemberReport.setReporterId(reporter.getMemberId());
+		tempMemberReport.setReporteeId(reporteeId);
+
+		MemberReport memberReport = memberReportService.createMemberReport(tempMemberReport);
+		MemberReportDto.Response response = memberReportMapper.reportToReportResponseDto(memberReport);
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	}
 
