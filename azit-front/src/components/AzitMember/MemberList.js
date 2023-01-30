@@ -16,9 +16,6 @@ const ListWrap = styled.li`
       overflow: hidden;
       border-radius: 50%;
       margin-right: 1rem;
-      > img {
-        max-width: 100%;
-      }
     }
     > .etcWrap {
       flex: 1;
@@ -78,10 +75,17 @@ const ListWrap = styled.li`
   }
 `;
 
+const MemberWrap = styled.div`
+  width: 5rem;
+  height: 5rem;
+  background-size: cover;
+  background-image: url(${(props) => props.imgSrc});
+`;
+
 const MemberList = ({ data, state }) => {
   const { id } = useParams();
   const axiosInstance = useAxios();
-  
+
   const azitMemberAccept = async () => {
     try {
       const payload = { status: "CLUB_JOINED" };
@@ -95,6 +99,7 @@ const MemberList = ({ data, state }) => {
           },
         }
       );
+
       window.location.href = `/azit/member/${id}`;
       alert("아지트 참가 수락 완료");
     } catch (e) {
@@ -145,9 +150,8 @@ const MemberList = ({ data, state }) => {
     <ListWrap key={data.clubMemberId}>
       <div className="userWrap">
         <Link to={`/userpage/${data.member.memberId}`} className="avatarWrap">
-          <img
-            alt={data.userName}
-            src={`${process.env.REACT_APP_S3_URL}${data.member.fileInfo.fileUrl}/${data.member.fileInfo.fileName}`}
+          <MemberWrap
+            imgSrc={`${process.env.REACT_APP_S3_URL}${data.member.fileInfo.fileUrl}/${data.member.fileInfo.fileName}`}
           />
         </Link>
         <div className="etcWrap">

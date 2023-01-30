@@ -30,38 +30,46 @@ const Signup = () => {
   const [nicknameChecked, setNicknameChecked] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
 
-  const nickname = getValues("nickname");
-  const email = getValues("email");
+  const nickname = watch("nickname");
+  const email = watch("email");
 
   const nicknameCheckBtnClick = async () => {
-    const data = { "nickname" : nickname }
+    const body = {"nickname" : nickname}
     try {
-      const res = await axiosInstance.get(
-        `api/members/nickname`,
-        data
+      const res = await axiosInstance.post(
+        `api/members/check`,
+        body,
       )
       if(res.status === 200 && nicknameRegExp.test(nickname)) {
         setNicknameChecked(true);
         alert("사용 가능한 닉네임입니다.");
       }
     } catch(e) {
-      alert(e);
+      if(e.response.data.status === 404) {
+        alert(e.response.data.message);
+      } else {
+        alert("요청하신 작업을 수행할 수 없습니다.")
+      }
     }
   }
 
   const emailCheckBtnClick = async () => {
-    const data = { "email" : email }
+    const body = {"email" : email}
     try {
-      const res = await axiosInstance.get(
-        `api/members/email`,
-        data
+      const res = await axiosInstance.post(
+        `api/members/check`,
+        body,
       )
       if(res.status === 200) {
         setEmailChecked(true);
         alert("사용 가능한 이메일입니다.");
       }
     } catch(e) {
-      alert(e);
+      if(e.response.data.status === 404) {
+        alert(e.response.data.message);
+      } else {
+        alert("요청하신 작업을 수행할 수 없습니다.")
+      }
     }
   }
 
