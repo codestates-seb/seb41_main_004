@@ -105,10 +105,28 @@ const Search = () => {
     );
 
   useEffect(() => {
-    const debounce = setTimeout(() => {
+    const throttling = () => {
+      let throttleCheck;
+
+      return {
+        throttle(callback, milliseconds) {
+          if (!throttleCheck) {
+            throttleCheck = setTimeout(() => {
+              callback(...arguments);
+              throttleCheck = false;
+            }, milliseconds);
+          }
+        },
+      };
+    };
+    const throttler = throttling();
+    throttler.throttle(() => {
       if (inView) fetchNextPage();
-    }, 300); // setTimeout 설정, 이와 같은 경우 최소 300밀리초마다 요청을 보낸다.
-    return () => clearTimeout(debounce); // clearTimeout 바로 타이머 제거
+    }, 300);
+    // const debounce = setTimeout(() => {
+    //   if (inView) fetchNextPage();
+    // }, 300); // setTimeout 설정, 이와 같은 경우 최소 300밀리초마다 요청을 보낸다.
+    // return () => clearTimeout(debounce); // clearTimeout 바로 타이머 제거
     // if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
