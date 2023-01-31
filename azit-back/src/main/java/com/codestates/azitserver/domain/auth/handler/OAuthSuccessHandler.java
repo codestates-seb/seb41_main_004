@@ -154,8 +154,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		return UriComponentsBuilder
 			.newInstance()
 			.scheme("http")
-			.host("localhost") // TODO : 프런트 배포하면 변경 필요!
-			.port(3000)
+			// .host("localhost")
+			// .port(3000)
+			.host("http://azit-front.s3-website.ap-northeast-2.amazonaws.com")// TODO : 프런트 배포하면 변경 필요!
 			.path("/oauth")
 			.queryParams(queryParams)
 			.build()

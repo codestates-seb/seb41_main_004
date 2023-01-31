@@ -22,7 +22,6 @@ import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberReport;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.mapper.MemberReportMapper;
-import com.codestates.azitserver.domain.member.service.MemberMemberReportService;
 import com.codestates.azitserver.domain.member.service.MemberReportService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.annotation.LoginMember;
@@ -69,7 +68,7 @@ public class MemberReportController {
 	// 	return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
 	// }
 
-	@PostMapping(value = "/{reportee-id:[0-9]+}",consumes = {MediaType.APPLICATION_JSON_VALUE},
+	@PostMapping(value = "/{reportee-id:[0-9]+}", consumes = {MediaType.APPLICATION_JSON_VALUE},
 		produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> postMemberReport(@Positive @PathVariable("reportee-id") Long reporteeId,
 		@RequestBody @Valid MemberReportDto.Post reportPostDto, @LoginMember Member reporter) {

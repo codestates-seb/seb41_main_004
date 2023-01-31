@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Profile({"local","test", "default"})
+@Profile({"local", "test", "default"})
 public class StorageServiceLocal implements StorageService {
 	@Override
 	public Map<String, String> upload(String prefix, MultipartFile file) {
@@ -30,7 +30,7 @@ public class StorageServiceLocal implements StorageService {
 		log.info("로컬 저장 디렉토리 {} : ", path);
 
 		// contents exist
-		if (file ==null || file.isEmpty()) {
+		if (file == null || file.isEmpty()) {
 			throw new StorageException("Failed to store empty file.");
 		}
 

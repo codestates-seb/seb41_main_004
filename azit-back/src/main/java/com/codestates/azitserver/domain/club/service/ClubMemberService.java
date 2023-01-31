@@ -85,7 +85,7 @@ public class ClubMemberService {
 				.stream()
 				.filter(c -> c.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED)
 				.count();
-			if (club.getMemberLimit() <= count ) {
+			if (club.getMemberLimit() <= count) {
 				throw new BusinessLogicException(ExceptionCode.CLUB_MEMBER_FULL);
 			}
 		}
