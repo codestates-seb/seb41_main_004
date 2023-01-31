@@ -69,7 +69,7 @@ public class ReviewController {
 	}
 
 	//특정 회원에 대한 리뷰 전체 조회
-	@GetMapping("/reviewee/{reviewee-id:[0-9+]}")
+	@GetMapping("/reviewee/{reviewee-id:[0-9]+}")
 	public ResponseEntity<?> findAllByMember(@Positive @RequestParam(name = "page") int page,
 		@Positive @RequestParam(name = "size") int size, @PathVariable("reviewee-id") Long revieweeId,
 		@LoginMember Member member) {

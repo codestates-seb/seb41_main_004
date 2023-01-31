@@ -79,6 +79,17 @@ public class ClubMemberService {
 			throw new BusinessLogicException(ExceptionCode.INVALID_CLUB_MEMBER_STATUS);
 		}
 
+		// 참여 수락시 아지트의 정원이 꽉 차면 수락을 받을 수 없습니다.
+		if (status == ClubMember.ClubMemberStatus.CLUB_JOINED) {
+			long count = club.getClubMembers()
+				.stream()
+				.filter(c -> c.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED)
+				.count();
+			if (club.getMemberLimit() <= count ) {
+				throw new BusinessLogicException(ExceptionCode.CLUB_MEMBER_FULL);
+			}
+		}
+
 		clubMember.setClubMemberStatus(status);
 		clubMemberRepository.save(clubMember);
 	}
@@ -172,8 +183,7 @@ public class ClubMemberService {
 					filteredClubMemberList.add(clubMember);
 				}
 			}
-		}
-		else {
+		} else {
 			for (ClubMember clubMember : clubMemberList) {
 				LocalDate meetingDate = clubMember.getClub().getMeetingDate();
 				LocalTime meetingTime = clubMember.getClub().getMeetingTime();

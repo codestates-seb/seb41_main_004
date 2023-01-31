@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberReport;
 
 import lombok.AllArgsConstructor;
@@ -20,12 +21,6 @@ public class MemberReportDto {
 	@AllArgsConstructor
 	public static class Post {
 
-		@NotNull(message = "Reporter Id is required")
-		private Long reporterId;
-
-		@NotNull(message = "Reportee Id is required")
-		private Long reporteeId;
-
 		private MemberReport.ReportCategory reportCategory;
 
 		@Length(max = 128, message = "Reason for report must be no longer than 128 characters")
@@ -36,8 +31,8 @@ public class MemberReportDto {
 	@Setter
 	public static class Response {
 		private Long reportId;
-		private Long reporterId;
-		private Long reporteeId;
+		private MemberDto.Response reporter;
+		private MemberDto.Response reportee;
 		private MemberReport.ReportCategory reportCategory;
 		private String reportReason;
 	}
