@@ -28,8 +28,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
@@ -136,7 +134,7 @@ class MemberControllerTest {
 						partWithName("data").description("이미지를 제외한 데이터"),
 						partWithName("image").description("이미지").optional()
 					)),
-					MemberFieldDescriptor.getPostRequestPartFieldsSnippet()	,
+					MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
@@ -204,7 +202,7 @@ class MemberControllerTest {
 					"patch-member-image",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					pathParameters(List.of(
-					parameterWithName("member-id").description("회원 고유 식별자"))),
+						parameterWithName("member-id").description("회원 고유 식별자"))),
 					requestParts(List.of(
 						partWithName("image").description("이미지").optional()
 					)),
@@ -219,7 +217,6 @@ class MemberControllerTest {
 		// given
 		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
-
 
 		// when
 		ResultActions getActions =

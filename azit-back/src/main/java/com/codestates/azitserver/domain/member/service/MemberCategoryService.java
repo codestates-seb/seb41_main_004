@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberCategoryService {
 
-
 	private final MemberCategoryRepository memberCategoryRepository;
 
 	// MemberCategory 조회

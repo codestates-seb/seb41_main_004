@@ -115,8 +115,8 @@ public class MemberFieldDescriptor {
 
 	public static ResponseFieldsSnippet getMultiMyDetailsResponseSnippet() {
 		return responseFields(
-				fieldWithPath("[].clubMemberId").type(JsonFieldType.NUMBER)
-					.description("아지트-회원 연관 테이블 엔티티 고유 식별자"))
+			fieldWithPath("[].clubMemberId").type(JsonFieldType.NUMBER)
+				.description("아지트-회원 연관 테이블 엔티티 고유 식별자"))
 			.and(fieldWithPath("[].clubInfoResponse").type(JsonFieldType.OBJECT).description("아지트 정보 객체"))
 			.andWithPrefix("[].clubInfoResponse.",
 				fieldWithPath("clubId").type(JsonFieldType.NUMBER).description("아지트 고유 식별자"),
@@ -143,7 +143,8 @@ public class MemberFieldDescriptor {
 				fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 저장 경로"),
 				fieldWithPath("fileName").type(JsonFieldType.STRING).description("파일 이름")
 			).and(
-				fieldWithPath("[].clubInfoResponse.participantList.[]").type(JsonFieldType.ARRAY).description("아지트 호스트 정보")
+				fieldWithPath("[].clubInfoResponse.participantList.[]").type(JsonFieldType.ARRAY)
+					.description("아지트 호스트 정보")
 			)
 			.andWithPrefix("[].clubInfoResponse.participantList.[].",
 				fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 고유 식별자"),
@@ -154,7 +155,8 @@ public class MemberFieldDescriptor {
 				fieldWithPath("fileUrl").type(JsonFieldType.STRING).description("파일 저장 경로"),
 				fieldWithPath("fileName").type(JsonFieldType.STRING).description("파일 이름"))
 			.and(
-				fieldWithPath("[].clubInfoResponse.categorySmall").type(JsonFieldType.OBJECT).description("아지트 소분류 카테고리")
+				fieldWithPath("[].clubInfoResponse.categorySmall").type(JsonFieldType.OBJECT)
+					.description("아지트 소분류 카테고리")
 			).andWithPrefix("[].clubInfoResponse.categorySmall.",
 				fieldWithPath("categorySmallId").type(JsonFieldType.NUMBER).description("아지트 소분류 카테고리 고유 식별자"),
 				fieldWithPath("categoryName").type(JsonFieldType.STRING).description("아지트 소분류 카테고리 이름").optional(),

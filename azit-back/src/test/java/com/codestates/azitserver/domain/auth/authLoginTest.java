@@ -29,7 +29,6 @@ import com.codestates.azitserver.domain.auth.dto.AuthDto;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
-import com.codestates.azitserver.domain.stub.FileInfoStubData;
 import com.google.gson.Gson;
 
 @AutoConfigureRestDocs
@@ -109,11 +108,6 @@ public class authLoginTest {
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
 			.andExpect(header().exists("Refresh"))
-			// .andExpect(jsonPath("$.memberId").exists())
-			// .andExpect(jsonPath("$.email").exists())
-			// .andExpect(jsonPath("$.nickname").exists())
-			// .andExpect(jsonPath("$.profileUrl").exists())
-			// .andExpect(jsonPath("$.profileImageName").exists())
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),

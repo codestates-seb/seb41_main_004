@@ -1,11 +1,9 @@
 package com.codestates.azitserver.domain.member.controller.descriptor;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.snippet.Attributes.*;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
-import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.snippet.Snippet;
 
 public class MemberReportFieldDescriptor {
@@ -17,6 +15,7 @@ public class MemberReportFieldDescriptor {
 			fieldWithPath("reportReason").type(JsonFieldType.STRING).description("신고 사유").optional()
 		);
 	}
+
 	public static Snippet getSingleResponseSnippet() {
 		return responseFields(
 			fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터")
@@ -26,7 +25,7 @@ public class MemberReportFieldDescriptor {
 			fieldWithPath("reporteeId").type(JsonFieldType.NUMBER).description("피신고자 고유 식별자"),
 			fieldWithPath("reportCategory").type(JsonFieldType.STRING).description("신고 카테고리"),
 			fieldWithPath("reportReason").type(JsonFieldType.STRING).description("신고 사유")
-			);
+		);
 	}
 
 }
