@@ -177,9 +177,9 @@ const Login = () => {
         <Link to="/signup">회원가입하기</Link>
       </LoginFooter>
       <Line />
-      <a href={googleLogin}>
+      {/* <a href={googleLogin}>
         <SnsLoginButton>Sign in with Google</SnsLoginButton>
-      </a>
+      </a> */}
     </LoginContainer>
   );
 };
