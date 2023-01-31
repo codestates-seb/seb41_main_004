@@ -1,11 +1,7 @@
 package com.codestates.azitserver.domain.member.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 
-import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.entity.MemberReport;
 
 import lombok.AllArgsConstructor;

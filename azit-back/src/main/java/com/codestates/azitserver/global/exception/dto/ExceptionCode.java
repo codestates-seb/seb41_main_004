@@ -55,7 +55,6 @@ public enum ExceptionCode {
 	REVIEW_ALREADY_EXIST(40906, "Review already exist"),
 	FOLLOW_EXIST(40907, "Follow already exist"),
 
-
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");
 

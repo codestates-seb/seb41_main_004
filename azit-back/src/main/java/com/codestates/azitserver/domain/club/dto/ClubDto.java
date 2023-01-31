@@ -181,7 +181,7 @@ public class ClubDto {
 	@Getter
 	@Setter
 	@NoArgsConstructor
-	public static class ClubMemberResponse{
+	public static class ClubMemberResponse {
 		private Long clubId;
 		private String clubName;
 		private ClubMember.ClubMemberStatus clubMemberStatus;
