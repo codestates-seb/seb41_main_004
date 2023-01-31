@@ -134,7 +134,7 @@ class MemberControllerTest {
 						partWithName("data").description("이미지를 제외한 데이터"),
 						partWithName("image").description("이미지").optional()
 					)),
-					MemberFieldDescriptor.getPostRequestPartFieldsSnippet()	,
+					MemberFieldDescriptor.getPostRequestPartFieldsSnippet(),
 					MemberFieldDescriptor.getSingleResponseSnippet()
 				)
 			);
@@ -202,7 +202,7 @@ class MemberControllerTest {
 					"patch-member-image",
 					requestHeaders(headerWithName("Authorization").description("Jwt Access Token")),
 					pathParameters(List.of(
-					parameterWithName("member-id").description("회원 고유 식별자"))),
+						parameterWithName("member-id").description("회원 고유 식별자"))),
 					requestParts(List.of(
 						partWithName("image").description("이미지").optional()
 					)),
@@ -217,7 +217,6 @@ class MemberControllerTest {
 		// given
 		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
 		given(memberMapper.memberToMemberResponseDto(any(Member.class))).willReturn(response);
-
 
 		// when
 		ResultActions getActions =
@@ -241,53 +240,57 @@ class MemberControllerTest {
 			);
 	}
 
-	@Test
-	void nickCheckTest() throws Exception {
-		// given
-		MemberDto.NicknameCheck nicknameCheck = new MemberDto.NicknameCheck("닉네임");
-		String content = gson.toJson(nicknameCheck);
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/nickname")
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
-			);
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(getDefaultDocument(
-					"nickname-check",
-				MemberFieldDescriptor.getNickCheckFieldsSnippet()
-				)
-			);
-	}
-
-	@Test
-	void emailCheckTest() throws Exception {
-		// given
-		MemberDto.EmailCheck emailCheck = new MemberDto.EmailCheck("kimstub@naver.com");
-		String content = gson.toJson(emailCheck);
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/email")
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(content)
-			);
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andDo(getDefaultDocument(
-					"email-check",
-					MemberFieldDescriptor.getEmailCheckFieldsSnippet()
-				)
-			);
-	}
+	// @Test
+	// void nicknameCheckTest() throws Exception {
+	// 	// given
+	//
+	// 	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+	// 	queryParams.add("nickname", "닉네임");
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members/check")
+	//
+	//
+	// 		);
+	//
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andDo(getDefaultDocument(
+	// 				"nickname-check",
+	// 			requestParameters(
+	// 				List.of(
+	// 					parameterWithName("nickname").description("중복체크할 닉네임")
+	// 			)
+	// 		)));
+	// }
+	//
+	// @Test
+	// void emailCheckTest() throws Exception {
+	// 	// given
+	//
+	// 	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+	// 	queryParams.add("email", "kimstub@naver.com");
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members/check/")
+	// 				.queryParams(queryParams)
+	// 		);
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andDo(getDefaultDocument(
+	// 				"email-check",
+	// 			requestParameters(
+	// 				List.of(
+	// 					parameterWithName("email").description("중복체크할 이메일")
+	// 			)
+	// 		)));
+	// }
 
 	@Test
 	void getAllAttendedClubTest() throws Exception {

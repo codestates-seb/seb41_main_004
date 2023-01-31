@@ -1,6 +1,5 @@
 package com.codestates.azitserver.domain.member.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,20 +21,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
-import com.codestates.azitserver.domain.member.entity.MemberCategory;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 import com.codestates.azitserver.domain.member.service.MemberCategoryService;
 import com.codestates.azitserver.domain.member.service.MemberService;
 import com.codestates.azitserver.global.dto.SingleResponseDto;
-import com.codestates.azitserver.global.exception.BusinessLogicException;
-import com.codestates.azitserver.global.exception.dto.ExceptionCode;
 
 @RestController
 @RequestMapping(value = "/api/members", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -130,19 +125,12 @@ public class MemberController {
 	}
 
 	// 닉네임 중복 확인
-	@GetMapping("/nickname")
-	public ResponseEntity nicknameCheck(@RequestBody MemberDto.NicknameCheck memberNickCheckDto) {
+	@PostMapping("/check")
+	public ResponseEntity nicknameCheck(@RequestBody MemberDto.CheckPost checkPost) {
 
-
-		memberService.verifyExistNickname(memberNickCheckDto.getNickname());
-
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@GetMapping("/email")
-	public ResponseEntity emailCheck(@RequestBody MemberDto.EmailCheck memberEmailCheckDto) {
-		memberService.verifyExistEmail(memberEmailCheckDto.getEmail());
-
+		String nickname = checkPost.getNickname();
+		String email = checkPost.getEmail();
+		memberService.justVerifyExistNicknameAndEmail(nickname, email);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -172,7 +160,6 @@ public class MemberController {
 		return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.ACCEPTED);
 	}
 
-
 	//참여상태무관 전체조회
 	@GetMapping("/{member-id}/clubs")
 	public ResponseEntity getAttendedClub(@Positive @PathVariable("member-id") Long memberId) {
@@ -184,13 +171,14 @@ public class MemberController {
 		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}
 	// 참여상태별 조회
+
 	/** TODO 참여상태 넘버링 변경
-	// my-details-index 0 : CLUB_WAITING
-	// my-details-index 1 : CLUB_JOINED
-	// my-details-index 2 : 종료된 아지트
-	// my-details-index 3 : CLUB_REJECTED (미사용)
-	// my-details-index 4 : CLUB_KICKED (미사용)
-	**/
+	 // my-details-index 0 : CLUB_WAITING
+	 // my-details-index 1 : CLUB_JOINED
+	 // my-details-index 2 : 종료된 아지트
+	 // my-details-index 3 : CLUB_REJECTED (미사용)
+	 // my-details-index 4 : CLUB_KICKED (미사용)
+	 **/
 	@GetMapping("/{member-id}/clubs/{my-details-index}")
 	public ResponseEntity getAttendedClubByStatus(@Positive @PathVariable("member-id") Long memberId,
 		@PathVariable("my-details-index") int myDetailsIndex) {

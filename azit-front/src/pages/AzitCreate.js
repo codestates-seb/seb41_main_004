@@ -45,6 +45,11 @@ const AzitCreate = () => {
 
   const resetImgFile = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
+    setCroppedImage(null);
+  };
+
+  const acceptImgFile = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
     setImgFile(null);
   };
 
@@ -75,6 +80,7 @@ const AzitCreate = () => {
             modalHandler={modalHandler}
             resetImgFile={resetImgFile}
             saveImgFile={saveImgFile}
+            acceptImgFile={acceptImgFile}
             imgRef={imgRef}
             onCrop={onCrop}
             imgFile={imgFile}

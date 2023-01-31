@@ -88,10 +88,8 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.GET, "/api/members/clubs/**").authenticated()
 				.antMatchers(HttpMethod.GET, "/api/members/clubs/**/**").authenticated()
 
-				.antMatchers(HttpMethod.GET, "/api/members/nickname/**").permitAll() // 중복체크
-				.antMatchers(HttpMethod.GET, "/api/members/email/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/members/nickname").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/members/email").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/members/check/**").permitAll() // 중복체크
+				.antMatchers(HttpMethod.GET, "/api/members/check/**/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/members/**/clubs").permitAll()
 
 				.antMatchers(HttpMethod.GET, "/api/members/**").authenticated() //특정 회원 조회
@@ -108,14 +106,10 @@ public class SecurityConfig {
 
 
 				/*==========category==========*/
-				.antMatchers(HttpMethod.GET, "/api/member/reports/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/member/reports").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/member/reports").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/members/reports/**").permitAll()
-
-				/*==========report==========*/
 				.antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+				/*==========report==========*/
+
 
 				/*==========review==========*/
 				.antMatchers(HttpMethod.GET, "/api/reviews").permitAll()  // 회원에 대한 리뷰 조회
@@ -173,7 +167,8 @@ public class SecurityConfig {
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService, redisTemplate);
+			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils,
+				memberDetailsService, redisTemplate);
 
 			builder.addFilter(jwtAuthenticationFilter)
 				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)

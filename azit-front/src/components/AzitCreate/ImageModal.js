@@ -9,6 +9,7 @@ export const ImageModal = ({
   saveImgFile,
   imgRef,
   onCrop,
+  acceptImgFile,
 }) => {
   return (
     <>
@@ -36,7 +37,7 @@ export const ImageModal = ({
           )}
           <div className="buttonWrap">
             <button onClick={resetImgFile}>취소</button>
-            <button className="accept" onClick={resetImgFile}>
+            <button className="accept" onClick={acceptImgFile}>
               확인
             </button>
           </div>

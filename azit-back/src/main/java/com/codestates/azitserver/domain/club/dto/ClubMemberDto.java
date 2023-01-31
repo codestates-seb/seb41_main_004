@@ -1,18 +1,11 @@
 package com.codestates.azitserver.domain.club.dto;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.codestates.azitserver.domain.category.dto.CategoryDto;
-import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
-import com.codestates.azitserver.domain.fileInfo.dto.FileInfoDto;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.global.validator.EnumValue;
 
@@ -64,6 +57,5 @@ public class ClubMemberDto {
 		private Boolean isHidden;
 		private Boolean isReviewed;
 	}
-
 
 }

@@ -32,12 +32,18 @@ public enum ExceptionCode {
 	AUTH_NUMBER_NOT_FOUND(40409, "String confirmation failed"),
 	REVIEW_NOT_FOUND(40410, "Review not found"),
 
-	REPORT_NOT_FOUND(40408, "Member Report not found"),
+	REPORT_NOT_FOUND(40411, "Member Report not found"),
 
-	NICKNAME_EXIST_CHECK_ONLY(40410, "Just checking: Nickname is already in use"),
-	EMAIL_EXIST_CHECK_ONLY(40411, "Just checking: Email is already registered"),
-	FOLLOW_NOT_FOUND(40412, "Follow not found"),
+	NICKNAME_EXIST_CHECK_ONLY(40411, "Just checking: Nickname is already in use"),
+	EMAIL_EXIST_CHECK_ONLY(40412, "Just checking: Email is already registered"),
+	FOLLOW_NOT_FOUND(40413, "Follow not found"),
 
+	CATEGORY_SMALL_NOT_FOUND(40414, "Category(small) not found"),
+
+	NO_TARGET_TO_CHECK(40415, "Just checking: Type at least one object(Nickname or Email)"),
+
+	// 406
+	CLUB_MEMBER_FULL(40601, "Club member sold out"),
 
 	// 409
 	MEMBER_VERIFICATION_FAILED(40901, "Member verification failed"),
@@ -48,7 +54,6 @@ public enum ExceptionCode {
 	RESTRICTED_UPDATE_FIELDS(40906, "Cannot update the azit because participants exist"),
 	REVIEW_ALREADY_EXIST(40906, "Review already exist"),
 	FOLLOW_EXIST(40907, "Follow already exist"),
-
 
 	// 500
 	INVALID_REFRESH_TOKEN(50401, "RefreshToken is invalid.");

@@ -68,7 +68,7 @@ const AzitSetting = () => {
       alert("아지트를 닫았습니다.");
       navigate(`/`);
     } catch (e) {
-      console.log("아지트 삭제 실패");
+      alert("아지트 삭제 실패")
     }
   };
 

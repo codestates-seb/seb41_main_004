@@ -8,8 +8,9 @@ import useAxios from "../../util/useAxios";
 
 const RecommendTab = () => {
   const { ref, inView } = useInView();
+  const axiosPrivate = useAxios();
   const [memberId, setMemberId] = useState(0);
-  const axiosInstance = useAxios();
+
   useEffect(() => {
     if (localStorage.getItem("memberId")) {
       setMemberId(localStorage.getItem("memberId"));
@@ -17,8 +18,9 @@ const RecommendTab = () => {
   }, []);
   // 무한스크롤 함수 0번이 guest
 
+
   const fetchInfiniteList = async (pageParam, memberId) => {
-    const res = await axiosInstance.get(
+    const res = await axiosPrivate.get(
       `/api/clubs/recommend/${memberId}?page=${pageParam}&size=5`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
@@ -52,7 +54,7 @@ const RecommendTab = () => {
     if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-
+  
   return (
     <>
       <article className="resultCell">

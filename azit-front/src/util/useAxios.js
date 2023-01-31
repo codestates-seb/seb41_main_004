@@ -10,30 +10,33 @@ const useAxios = () => {
   const refreshToken = getCookie("refreshToken");
   const email = localStorage.getItem("email");
 
-  axiosInstance.interceptors.request.use(async (req) => {
-    const expired = Date.now() >= jwtDecode(accessToken).exp * 1000;
-
-    if (!expired) return req;
-
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}api/auth/re-issue/${email}`,
-        {
-          headers: {
-            Refresh: refreshToken,
+  if(accessToken) {
+    axiosInstance.interceptors.request.use(async (req) => {
+      const expired = Date.now() >= jwtDecode(accessToken).exp * 1000;
+      
+      if (!expired) return req;
+  
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}api/auth/re-issue/${email}`,
+          {
+            headers: {
+              Refresh: refreshToken,
+            },
           },
-        },
-        { withCredentials: true }
-      );
-      // console.log(res);
-
-      localStorage.setItem("accessToken", res.headers.get("Authorization"));
-    } catch (e) {
-      console.log("에러", e);
-    }
-
-    return req;
-  });
+          { withCredentials: true }
+        );
+        // console.log(res);
+  
+        localStorage.setItem("accessToken", res.headers.get("Authorization"));
+        window.location.replace()
+      } catch (e) {
+        console.log("에러", e);
+      }
+  
+      return req;
+    });
+  }
 
   return axiosInstance;
 };

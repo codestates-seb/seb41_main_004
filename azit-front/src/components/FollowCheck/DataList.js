@@ -103,7 +103,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("팔로우 실패");
-      console.log(error.message);
     }
   };
   const { mutate: followMutate } = useMutation(() => followPost(follower?.follower.memberId));
@@ -121,7 +120,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("언팔로우 실패");
-      console.log(error.message);
     }
   };
   const { mutate: unfollowMutate } = useMutation(() => unfollowPost(followId));
@@ -135,7 +133,6 @@ const DataList = ({ follow, follower }) => {
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("팔로워 삭제 실패");
-      console.log(error.message);
     }
   };
   const { mutate: deleteMutate } = useMutation(() =>

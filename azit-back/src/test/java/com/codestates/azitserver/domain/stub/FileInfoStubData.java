@@ -24,5 +24,4 @@ public class FileInfoStubData {
 		return response;
 	}
 
-
 }
