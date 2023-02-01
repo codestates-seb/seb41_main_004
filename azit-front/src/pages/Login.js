@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import Button from "../components/common/Button";
 import Logo from "../images/logo.png";
-import google from "../images/googleLogo.png";
+// import google from "../images/googleLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { loginStatusSlice } from "../redux/loginSlice";
 import { setCookie } from "../util/cookie/cookie";
 import { useDispatch } from "react-redux";
-import { googleLogin } from "../util/oauthGoogle";
+// import { googleLogin } from "../util/oauthGoogle";
 import axios from "axios";
 import axiosInstance from "../util/axios";
 
@@ -63,28 +63,28 @@ const LoginFooter = styled.div`
   }
 `;
 
-const SnsLoginButton = styled.button`
-  width: 100%;
-  height: 5.5rem;
-  border: none;
-  border-radius: 5px;
-  /* 카카오 버튼 디자인 */
-  /* background-color: #fee500;
-  color: #181600; */
-  border:1px solid var(--border-color);
-  background-color: #fff;
-  color: #181600;
-  font-size: var(--big-font);
-  background-image: url(${google});
-  background-repeat: no-repeat;
-  background-position: 2.5rem center;
-  background-size: 2.5rem;
-  cursor: pointer;
-  transition: 0.3s all;
-  :hover {
-    opacity: 0.7;
-  }
-`;
+// const SnsLoginButton = styled.button`
+//   width: 100%;
+//   height: 5.5rem;
+//   border: none;
+//   border-radius: 5px;
+//   /* 카카오 버튼 디자인 */
+//   /* background-color: #fee500;
+//   color: #181600; */
+//   border:1px solid var(--border-color);
+//   background-color: #fff;
+//   color: #181600;
+//   font-size: var(--big-font);
+//   background-image: url(${google});
+//   background-repeat: no-repeat;
+//   background-position: 2.5rem center;
+//   background-size: 2.5rem;
+//   cursor: pointer;
+//   transition: 0.3s all;
+//   :hover {
+//     opacity: 0.7;
+//   }
+// `;
 
 const Line = styled.hr`
   width: 100%;
