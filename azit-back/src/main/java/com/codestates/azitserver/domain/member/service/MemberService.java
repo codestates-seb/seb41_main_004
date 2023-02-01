@@ -23,9 +23,6 @@ import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
-import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
-import com.codestates.azitserver.domain.club.repository.ClubRepository;
-import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
@@ -59,6 +56,7 @@ public class MemberService {
 
 	private final ClubMapper clubMapper;
 	private final MemberMapper memberMapper;
+
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
@@ -96,9 +94,8 @@ public class MemberService {
 
 	public Member profileImageCombiner(Member member, MultipartFile profileImage) {
 
-
 		String prefix = "/images/member_profileImg";
-		if (!profileImage.isEmpty()) {
+		if (!profileImage.isEmpty() || profileImage != null) {
 			Map<String, String> map = storageService.upload(prefix, profileImage);
 
 			FileInfo fileInfo = new FileInfo();
@@ -201,7 +198,6 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
-
 	//팔로우, 언팔로우
 	public Member followMember(Member member) {
 		return null; //TODO
@@ -225,7 +221,6 @@ public class MemberService {
 			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
 		}
 	}
-
 
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistEmail(Member member) {
@@ -277,19 +272,21 @@ public class MemberService {
 		}
 		ClubMember.ClubMemberStatus status = ClubMember.ClubMemberStatus.CLUB_WAITING;
 		switch (clubMemberStatusNumber) {
-			case 0 : break;
-			case 1 : status = ClubMember.ClubMemberStatus.CLUB_JOINED;
-					break;
-			case 3 : status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
-					break;
-			case 4 : status = ClubMember.ClubMemberStatus.CLUB_KICKED;
-					break;
+			case 0:
+				break;
+			case 1:
+				status = ClubMember.ClubMemberStatus.CLUB_JOINED;
+				break;
+			case 3:
+				status = ClubMember.ClubMemberStatus.CLUB_REJECTED;
+				break;
+			case 4:
+				status = ClubMember.ClubMemberStatus.CLUB_KICKED;
+				break;
 
 		}
 		return status;
 	}
-
-
 
 	public List<ClubMemberDto.ClubMemberStatusResponse>
 	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
@@ -301,35 +298,34 @@ public class MemberService {
 			// Club Info
 			ClubDto.ClubMemberStatusClubInfoResponse clubInfoResponse
 				= clubMapper.clubToClubMemberStatusClubInfoResponse(club);
-				// ======Club Info 에 참여자들 정보 넣기=======
+			// ======Club Info 에 참여자들 정보 넣기=======
 			List<ClubMember> preParticipants = club.getClubMembers();
-			List<MemberDto.ParticipantResponse> participantResponses= new ArrayList<>();
+			List<MemberDto.ParticipantResponse> participantResponses = new ArrayList<>();
 			for (ClubMember pre : preParticipants) {
 				if (pre.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED) {
 					participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
 				}
 			}
 			clubInfoResponse.setParticipantList(participantResponses);
-				// ============참여자 정보넣기 끗=============
+			// ============참여자 정보넣기 끗=============
 
 			response.setClubInfoResponse(clubInfoResponse);
 
 			// Host 여부
-			response.setIsHost(clubMember.getClub().getHost().getMemberId()==clubMember.getMember().getMemberId());
+			response.setIsHost(clubMember.getClub().getHost().getMemberId() == clubMember.getMember().getMemberId());
 			// 숨김상태인지
 			response.setIsHidden(false);
 			// 리뷰 작성 했는지
 			Member member = clubMember.getMember();
 			List<Review> reviewList = reviewRepository.findAllReviewsByReviewerAndClub(member, club);
-			if ( reviewList != null && !reviewList.isEmpty()) {
+			if (reviewList != null && !reviewList.isEmpty()) {
 				response.setIsReviewed(true);
-			}
-			else response.setIsReviewed(false);
+			} else
+				response.setIsReviewed(false);
 
 			clubMemberStatusResponseList.add(response);
 		}
 		return clubMemberStatusResponseList;
 	}
-
 
 }

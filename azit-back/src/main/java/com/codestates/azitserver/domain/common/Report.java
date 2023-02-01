@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Report extends Auditable{
+public abstract class Report extends Auditable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPORTER_ID", nullable = false, updatable = false)
 	private Member member;

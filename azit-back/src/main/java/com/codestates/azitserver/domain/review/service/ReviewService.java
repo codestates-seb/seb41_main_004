@@ -76,7 +76,7 @@ public class ReviewService {
 	public Page<Review> findReviewByRevieweeId(Member member, Long revieweeId, int page, int size) {
 		// 조회 요청자가 본인이 아닐때(비로그인 포함)에는 숨김처리 안 한 것들만 조회합니다.
 		// 조회 요청자가 본인일때는 숨김처리된 것들까지 조회합니다.
-		if (member == null ||!member.getMemberId().equals(revieweeId)) {
+		if (member == null || !member.getMemberId().equals(revieweeId)) {
 			return reviewRepository.findAllReviewsByRevieweeIdWithoutHide(revieweeId,
 				PageRequest.of(page, size, Sort.by("createdAt").descending()));
 		} else {

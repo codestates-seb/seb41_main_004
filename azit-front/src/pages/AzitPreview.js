@@ -14,7 +14,8 @@ import {
 } from "../util/azitPreviewDateConvert";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAxios from "../util/useAxios";
+import axiosInstance from "../util/axios";
+
 
 
 const AzitPreviewWrap = styled.div`
@@ -240,7 +241,6 @@ const ImgWrap = styled.div`
 `;
 
 const AzitPreview = () => {
-  const axiosInstance = useAxios();
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -293,10 +293,7 @@ const AzitPreview = () => {
     );
 
     try {
-      const res = await axiosInstance.post(`/api/clubs`, formData, {
-        headers: { Authorization: accessToken },
-        "Content-Type": "multipart/form-data",
-      });
+      const res = await axiosInstance.post(`/api/clubs`, formData,);
       alert("아지트가 생성되었습니다.");
       navigate(`/azit/detail/${res.data.data.clubId}`, { replace: true });
     } catch (e) {

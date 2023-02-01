@@ -8,8 +8,8 @@ import { loginStatusSlice } from "../redux/loginSlice";
 import { setCookie } from "../util/cookie/cookie";
 import { useDispatch } from "react-redux";
 import { googleLogin } from "../util/oauthGoogle";
-import { axiosInstance } from "../util/axios";
-
+import axios from "axios";
+import axiosInstance from "../util/axios";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -126,15 +126,17 @@ const Login = () => {
         localStorage.setItem('memberId', memberId);
         localStorage.setItem('profileName', profileName);
         setCookie('refreshToken', refreshToken);
+        axios.defaults.headers.common['Authorization'] = `${accessToken}`
         dispatch(loginStatusSlice.actions.login());
         navigate('/');
       } catch (e) {
         // error handling 하기
-        if (e.response.status === 401) {
-          alert("유효하지 않은 유저 정보입니다.");
-        } else if(e.response.status === 500) {
-          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
-        }
+        // if (e.response.status === 401) {
+        //   alert("유효하지 않은 유저 정보입니다.");
+        // } else if(e.response.status === 500) {
+        //   alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+        // }
+        console.log(e);
       }
     };
 
@@ -177,9 +179,9 @@ const Login = () => {
         <Link to="/signup">회원가입하기</Link>
       </LoginFooter>
       <Line />
-      <a href={googleLogin}>
+      {/* <a href={googleLogin}>
         <SnsLoginButton>Sign in with Google</SnsLoginButton>
-      </a>
+      </a> */}
     </LoginContainer>
   );
 };

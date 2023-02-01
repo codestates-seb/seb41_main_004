@@ -3,7 +3,6 @@ import AzitDetailHeader from "../components/AzitDetail/AzitDetailHeader";
 import { Link, useNavigate } from "react-router-dom";
 import HostIcon from "../images/AzitDetailHost.png";
 import { useParams } from "react-router-dom";
-import useAxios from "../util/useAxios";
 import { useQuery } from "react-query";
 import {
   PriceFormat,
@@ -15,6 +14,7 @@ import {
 } from "../util/azitPreviewDateConvert";
 import Loading from "../components/common/Loading";
 import { useState, useEffect } from "react";
+import axiosInstance from "../util/axios";
 
 const AzitDetailWrap = styled.div`
   width: 100%;
@@ -272,7 +272,6 @@ const EtcWrap = styled.div`
 
 const AzitDetail = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [clubMember, setClubMember] = useState([]);
   const [waitingMembers, setWaitingMembers] = useState([]);
   const memberId = Number(localStorage.getItem("memberId"));
@@ -281,7 +280,7 @@ const AzitDetail = () => {
   const [btnStatus, setBtnStatus] = useState("join");
 
   const azitLookup = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    const res = await axiosInstance.get(`/api/clubs/${id}`,);
     return res.data.data;
   };
 
@@ -344,9 +343,7 @@ const AzitDetail = () => {
 
   const AzitCancel = async () => {
     try {
-      await axiosInstance.delete(`/api/clubs/${id}/signups/${memberId}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
+      await axiosInstance.delete(`/api/clubs/${id}/signups/${memberId}`,);
       alert("가입을 취소하였습니다.");
       navigate(`/`);
     } catch (e) {

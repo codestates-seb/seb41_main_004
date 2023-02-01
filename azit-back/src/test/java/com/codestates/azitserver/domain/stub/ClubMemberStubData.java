@@ -39,7 +39,6 @@ public class ClubMemberStubData {
 		return signup;
 	}
 
-
 	public static ClubMemberDto.Patch getClubMemberPatch() {
 		ClubMemberDto.Patch patch = new ClubMemberDto.Patch();
 
@@ -102,7 +101,7 @@ public class ClubMemberStubData {
 		MemberDto.ParticipantResponse response = new MemberDto.ParticipantResponse();
 
 		response.setMemberId(index);
-		response.setNickname("참여자"+index);
+		response.setNickname("참여자" + index);
 		response.setFileInfo(FileInfoStubData.getFileInfoDtoResponse());
 
 		return response;

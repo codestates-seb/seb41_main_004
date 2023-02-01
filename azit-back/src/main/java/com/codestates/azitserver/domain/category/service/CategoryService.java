@@ -32,7 +32,8 @@ public class CategoryService {
 		Optional<CategorySmall> optionalCategorySmall =
 			categorySmallRepository.findByCategorySmallId(categorySmallId);
 		CategorySmall foundCategoryId =
-			optionalCategorySmall.orElseThrow( () ->
+			optionalCategorySmall.orElseThrow(() ->
 				new BusinessLogicException(ExceptionCode.CATEGORY_SMALL_NOT_FOUND));
-		return foundCategoryId; }
+		return foundCategoryId;
+	}
 }

@@ -156,6 +156,7 @@ public class MemberDto {
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
 	}
+
 	@Getter
 	@Setter
 	@NoArgsConstructor

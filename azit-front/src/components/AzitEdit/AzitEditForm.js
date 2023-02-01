@@ -7,7 +7,7 @@ import Loading from "../common/Loading";
 import { PriceFormat } from "../../util/azitPreviewDateConvert";
 import Button from "../common/Button";
 import { useNavigate } from "react-router-dom";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
 
 const EditFormWrap = styled.div`
   flex: 1;
@@ -137,7 +137,6 @@ const EtcWrap = styled.div`
 
 const AzitEditForm = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [clubName, setClubName] = useState("");
   const [clubInfo, setClubInfo] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -155,7 +154,7 @@ const AzitEditForm = () => {
   const [memberStatus, setmemberStatus] = useState([]);
 
   const azitLookup = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    const res = await axiosInstance.get(`/api/clubs/${id}`,);
     return res.data.data;
   };
 
@@ -301,14 +300,7 @@ const AzitEditForm = () => {
     e.preventDefault();
     try {
       const payload = body;
-
-      await axiosInstance.patch(`api/clubs/${id}`, payload, {
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-          "Content-Type": "application/json",
-        },
-      });
-
+      await axiosInstance.patch(`api/clubs/${id}`, payload);
       navigate(-2);
     } catch (error) {
       alert(error.message);

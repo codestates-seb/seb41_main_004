@@ -3,7 +3,6 @@ package com.codestates.azitserver.domain.member.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import com.codestates.azitserver.domain.member.dto.MemberReportDto;
 import com.codestates.azitserver.domain.member.entity.MemberReport;

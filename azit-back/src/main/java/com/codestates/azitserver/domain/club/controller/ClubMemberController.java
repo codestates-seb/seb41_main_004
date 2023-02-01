@@ -95,7 +95,7 @@ public class ClubMemberController {
 
 	@DeleteMapping("/signups/{member-id:[0-9]+}")
 	public ResponseEntity<?> deleteClubMembers(@Positive @PathVariable("club-id") Long clubId,
-	@Positive @PathVariable("member-id") Long memberId, @LoginMember Member member) {
+		@Positive @PathVariable("member-id") Long memberId, @LoginMember Member member) {
 		clubMemberService.deleteClubMember(member, clubId, memberId);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
