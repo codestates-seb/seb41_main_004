@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import Null from "./Null";
 import { useInView } from "react-intersection-observer";
-import { axiosInstance } from "../../util/axios";
 import { useInfiniteQuery } from "react-query";
 import Loading from "../common/Loading";
+import axiosInstance from "../../util/axios";
 
 const DateTab = () => {
   const [days, setDays] = useState(0);

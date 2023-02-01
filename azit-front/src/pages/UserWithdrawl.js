@@ -2,10 +2,8 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
-import useAxios from "../util/useAxios";
 import { useState } from "react";
-
-
+import axiosInstance from "../util/axios";
 
 const FormContainer = styled.form`
   display: flex;
@@ -41,11 +39,9 @@ const FormContainer = styled.form`
 `;
 
 const UserWithdrawl = () => {
-  const axiosInstance = useAxios();
 
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem("accessToken");
   const memberId = localStorage.getItem("memberId");
 
   const [isAgreed, setAgree] = useState(false);
@@ -60,9 +56,6 @@ const UserWithdrawl = () => {
       // eslint-disable-next-line
       const res = await axiosInstance.delete(
         `/api/members/${memberId}`,
-        {
-          headers: { Authorization: accessToken }
-        }
       )
       alert('회원 탈퇴가 완료되었습니다. azit를 이용해 주셔서 감사합니다.');
       navigate('/login', { replace: true });

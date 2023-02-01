@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
 import { useParams } from "react-router-dom";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
 import { useState } from "react";
 import { KickModal } from "./KickModal";
 
@@ -86,7 +86,6 @@ const MemberWrap = styled.div`
 
 const MemberList = ({ data, state }) => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHandler = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
@@ -98,12 +97,6 @@ const MemberList = ({ data, state }) => {
       await axiosInstance.patch(
         `api/clubs/${id}/signups/${data.member.memberId}`,
         payload,
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
       );
 
       window.location.href = `/azit/member/${id}`;
@@ -118,13 +111,7 @@ const MemberList = ({ data, state }) => {
       const payload = { status: "CLUB_REJECTED" };
       await axiosInstance.patch(
         `api/clubs/${id}/signups/${data.member.memberId}`,
-        payload,
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
+        payload
       );
       window.location.href = `/azit/member/${id}`;
       alert("아지트 참가 거절 완료");
@@ -138,12 +125,6 @@ const MemberList = ({ data, state }) => {
       await axiosInstance.patch(
         `api/clubs/${id}/kicks/${data.member.memberId}`,
         { body: "hello" },
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
       );
       window.location.href = `/azit/member/${id}`;
       alert("선택한 유저를 강퇴하였습니다");

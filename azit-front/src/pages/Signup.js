@@ -4,9 +4,8 @@ import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import { axiosInstance } from "../util/axios";
 import { useState } from "react";
-
+import axiosInstance from "../util/axios";
 
 const Signup = () => {
 

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
 import AzitList from "../common/AzitList";
 import Null from "../Home/Null";
 
@@ -66,7 +66,6 @@ const Container = styled.div`
 `;
 
 const ActivityHistory = ({ myPage }) => {
-  const axiosInstance = useAxios();
   const [hostCheck, setHostCheck] = useState(false); //host 체크될때
   const [selectCheck, setSelectCheck] = useState("전체보기"); //select 박스 선택한값 가져오기
   const [getData, setGetData] = useState([]);
@@ -86,12 +85,7 @@ const ActivityHistory = ({ myPage }) => {
   useEffect(() => {
     const isClosedData = async () => {
       await axiosInstance
-        .get(`api/members/${id}/clubs/2`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/2`)
         .then((res) => {
           setClosedClubId(res.data.map((data) => data.clubMemberId));
         })
@@ -113,12 +107,7 @@ const ActivityHistory = ({ myPage }) => {
     };
     if (hostCheck === false && selectCheck === "전체보기") {
       axiosInstance
-        .get(`api/members/${id}/clubs`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs`)
         .then((res) => {
           setGetData(
             res.data.map((data) =>
@@ -133,12 +122,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === false && selectCheck === "신청한 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/0`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/0`)
         .then((res) => {
           setGetData(res.data);
         })
@@ -147,12 +131,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === false && selectCheck === "참여중인 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/1`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/1`)
         .then((res) => {
           setGetData(res.data.filter((data) => !closedClubId.includes(data.clubMemberId)));
         })
@@ -161,12 +140,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === false && selectCheck === "종료된 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/2`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/2`)
         .then((res) => {
           setGetData(res.data.map((data) => Object.assign(data, isClosed)));
         })
@@ -175,12 +149,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === true && selectCheck === "전체보기") {
       axiosInstance
-        .get(`api/members/${id}/clubs/`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/`)
         .then((res) => {
           setFilterList(
             res.data.filter((member) => {
@@ -200,12 +169,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === true && selectCheck === "신청한 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/0`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/0`)
         .then((res) => {
           setFilterList(
             res.data.filter((member) => {
@@ -219,12 +183,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === true && selectCheck === "참여중인 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/1`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/1`)
         .then((res) => {
           setFilterList(
             res.data.filter((member) => {
@@ -238,12 +197,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === true && selectCheck === "종료된 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/2`, {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}/clubs/2`,)
         .then((res) => {
           setGetData(res.data);
           setFilterList(
