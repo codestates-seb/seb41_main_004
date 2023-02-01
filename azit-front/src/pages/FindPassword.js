@@ -47,23 +47,25 @@ const FindPassword = () => {
       "email":`${email}`,
       "authNum":`${verifyNum}`
     }
-    try {
-      // eslint-disable-next-line
-      const res = await axiosInstance.post(
-        `/api/auth/refresh/passwords`,
-        payload,
-      )
-      alert('이메일이 전송되었습니다. 전송된 비밀번호로 로그인 후 비밀번호를 변경해주세요.');
-      navigate('/login');
-    } catch (error) {
-      if (error.response.status === 404) {
-        alert("인증 번호가 일치하지 않습니다.")
-      } else {
-        alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+    if(isClicked) {
+      try {
+        // eslint-disable-next-line
+        const res = await axiosInstance.post(
+          `/api/auth/refresh/passwords`,
+          payload,
+        )
+        alert('이메일이 전송되었습니다. 전송된 비밀번호로 로그인 후 비밀번호를 변경해주세요.');
+        navigate('/login');
+      } catch (error) {
+        if (error.response.status === 404) {
+          alert("인증 번호가 일치하지 않습니다.")
+        } else {
+          alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
+        }
       }
     }
   };
-
+  
   return (
     <>
       <Header title="비밀번호 찾기"></Header>
@@ -79,10 +81,10 @@ const FindPassword = () => {
                 placeholder="가입한 계정을 입력해 주세요."
                 />
             </div>
-              <button 
+              <span 
                 onClick={emailSubmitClick} 
                 className={isClicked ? "disabled" : "emailSubmitButton"}
-              >전송</button>
+              >전송</span>
           </div>
           <div className={isClicked ? "" : "verifyInputHidden"}>
             <input
@@ -126,6 +128,7 @@ const FormContainer = styled.form`
       }
       > .disabled {
         display: none;
+        pointer-events: none;
       }
     }
     > div {

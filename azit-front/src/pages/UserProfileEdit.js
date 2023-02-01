@@ -102,7 +102,6 @@ const UserProfileEdit = () => {
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem("accessToken");
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];

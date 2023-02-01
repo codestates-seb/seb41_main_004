@@ -28,8 +28,8 @@ axiosInstance.interceptors.response.use(
   },
   async (err) => {
     const { config, response: { status }} = err;
-    console.dir(err)
-    if(err.response.status === 401 && !config._retry) {
+    // console.dir(err)
+    if(status === 401 && !config._retry) {
       const originalRequest = config;
       const refreshToken = await getCookie('refreshToken');
       const email = await localStorage.getItem('email');
