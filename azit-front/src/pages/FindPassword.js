@@ -3,9 +3,7 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../util/axios";
-
-
+import axiosInstance from "../util/axios";
 
 const FindPassword = () => {
   const navigate = useNavigate();

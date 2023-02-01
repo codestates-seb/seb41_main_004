@@ -5,10 +5,10 @@ import searchIcon from "../images/searchIcon.png";
 import AzitList from "../components/common/AzitList";
 import React, { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
-import { axiosInstance } from "../util/axios";
 import Loading from "../components/common/Loading";
 import { useInView } from "react-intersection-observer";
 import Default from "../components/Search/Defalut";
+import axiosInstance from "../util/axios";
 
 const SearchWrap = styled.section`
   > .resultCell {

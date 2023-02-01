@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
 
 const Container = styled.li`
   width: 100%;
@@ -69,7 +69,6 @@ const ButtonBox = styled.div`
 
 const DataList = ({ follow, follower }) => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const myId = window.localStorage.getItem("memberId");
   // 마이페이지 여부
   const [myPage, setMyPage] = useState(false);
@@ -96,9 +95,6 @@ const DataList = ({ follow, follower }) => {
       await axiosInstance.post(
         `api/members/${followerId}/follow`,
         { body: "follow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
       );
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
@@ -113,9 +109,6 @@ const DataList = ({ follow, follower }) => {
       await axiosInstance.post(
         `api/members/${followId}/unfollow`,
         { body: "unfollow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
       );
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
@@ -127,9 +120,7 @@ const DataList = ({ follow, follower }) => {
   // 팔로워 삭제 함수
   const followerDelete = async (id, followerId) => {
     try {
-      await axiosInstance.delete(`api/members/${id}/follower/${followerId}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
+      await axiosInstance.delete(`api/members/${id}/follower/${followerId}`);
       window.location.href = `/userpage/followcheck/${id}`;
     } catch (error) {
       alert("팔로워 삭제 실패");

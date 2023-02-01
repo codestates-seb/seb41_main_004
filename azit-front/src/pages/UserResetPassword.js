@@ -3,9 +3,8 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useRef } from "react";
 import { useForm } from 'react-hook-form'; 
-import useAxios from "../util/useAxios";
 import { useNavigate } from "react-router-dom";
-
+import axiosInstance from "../util/axios";
 
 const ResetForm = styled.form`
   display: flex;
@@ -38,7 +37,6 @@ const ResetInputWrap = styled.div`
 `
 
 const UserResetPassword = () => {
-  const axiosInstance = useAxios();
 
   const newPasswordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
   // eslint-disable-next-line
@@ -48,7 +46,6 @@ const UserResetPassword = () => {
 
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem("accessToken");
   const memberId = localStorage.getItem("memberId");
 
   const ResetButtonClick = async(data) => {
@@ -56,9 +53,6 @@ const UserResetPassword = () => {
       await axiosInstance.patch(
         `/api/auth/${memberId}/passwords`,
         data,
-        {
-          headers: { Authorization: accessToken }
-        }
       );
       navigate("/login", { replace: true });
     } catch (e) {

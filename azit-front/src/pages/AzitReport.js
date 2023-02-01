@@ -3,9 +3,9 @@ import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 import { useState } from "react";
 import { ReportData } from "../dummyData/ReportData";
-import useAxios from "../util/useAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
+import axiosInstance from "../util/axios";
 
 const ReportWrap = styled.form`
   position: relative;
@@ -43,7 +43,6 @@ const Select = styled.select`
 `
 
 const AzitReport = () => {
-  const axiosInstance = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
   const [reportCategory, setReportCategory] = useState(ReportData[0].value);
@@ -58,9 +57,7 @@ const AzitReport = () => {
     e.preventDefault();
     try {
       const payload = { reportCategory, reportReason };
-      await axiosInstance.post(`/api/clubs/reports/${id}`, payload, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
+      await axiosInstance.post(`/api/clubs/reports/${id}`, payload,);
       navigate(-1);
     } catch (error) {
       alert(error.message);
