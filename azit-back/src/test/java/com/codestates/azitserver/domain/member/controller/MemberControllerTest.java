@@ -34,6 +34,8 @@ import org.springframework.util.MultiValueMap;
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.controller.descriptor.MemberFieldDescriptor;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
@@ -70,6 +72,12 @@ class MemberControllerTest {
 	private MemberMapper memberMapper;
 	@MockBean
 	private ClubMemberMapper clubMemberMapper;
+
+	@MockBean
+	private ClubMemberRepository clubMemberRepository;
+	@MockBean
+	private ClubRepository clubRepository;
+
 	@Autowired
 	private Gson gson;
 

@@ -59,6 +59,8 @@ public class MemberService {
 
 	private final ClubMapper clubMapper;
 	private final MemberMapper memberMapper;
+
+	private final ClubRepository clubRepository;
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
@@ -309,6 +311,8 @@ public class MemberService {
 					participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
 				}
 			}
+
+
 			clubInfoResponse.setParticipantList(participantResponses);
 				// ============참여자 정보넣기 끗=============
 
@@ -328,6 +332,7 @@ public class MemberService {
 
 			clubMemberStatusResponseList.add(response);
 		}
+
 		return clubMemberStatusResponseList;
 	}
 

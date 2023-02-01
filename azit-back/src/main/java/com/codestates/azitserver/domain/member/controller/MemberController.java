@@ -27,8 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
+import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.dto.MemberReportDto;
@@ -53,14 +56,20 @@ public class MemberController {
 	private final ClubMemberService clubMemberService;
 	private final ClubMemberMapper clubMemberMapper;
 
+	private final ClubRepository clubRepository;
+
+	private final ClubMemberRepository clubMemberRepository;
 	public MemberController(MemberService memberService, MemberMapper memberMapper,
 		MemberCategoryService memberCategoryService, ClubMemberService clubMemberService,
-		ClubMemberMapper clubMemberMapper) {
+		ClubMemberMapper clubMemberMapper, ClubMemberRepository clubMemberRepository,
+		ClubRepository clubRepository) {
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.memberCategoryService = memberCategoryService;
 		this.clubMemberService = clubMemberService;
 		this.clubMemberMapper = clubMemberMapper;
+		this.clubMemberRepository = clubMemberRepository;
+		this.clubRepository = clubRepository;
 	}
 
 	//회원 생성
@@ -176,6 +185,11 @@ public class MemberController {
 	public ResponseEntity getAttendedClub(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
+		List<Club> iAmHostClub = clubRepository.findAllByHost(member);
+		for (Club club : iAmHostClub) {
+			ClubMember iAmHostClubMember = clubMemberRepository.findClubMembersByClub(club).get(0);
+			clubMemberList.add(iAmHostClubMember);
+		}
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(clubMemberList);
 
