@@ -4,9 +4,8 @@ import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import { axiosInstance } from "../util/axios";
 import { useState } from "react";
-
+import axiosInstance from "../util/axios";
 
 const Signup = () => {
 
@@ -14,7 +13,7 @@ const Signup = () => {
   const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
 
-  const { register, watch, handleSubmit, getValues, formState: {errors, isValid} } = useForm({mode: "onChange"});
+  const { register, watch, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const password = useRef();
   password.current = watch('password');
 

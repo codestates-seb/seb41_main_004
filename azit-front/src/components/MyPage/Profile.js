@@ -5,7 +5,9 @@ import Category from "./Category";
 import Tab from "./Tab";
 import Loading from "../common/Loading";
 import { useMutation } from "react-query";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const ProfileWrapper = styled.div`
   margin: 2rem 0 0;
@@ -131,12 +133,11 @@ const EtcWrap = styled.article`
   justify-content: center;
 `;
 const Profile = ({ myPage, id }) => {
-  const axiosInstance = useAxios();
+  const [followStatus, setFollowStatus] = useState(false);
+
   // 유저 데이터를 받아오는 함수
-  const userDataGet = async () => {
-    const res = await axiosInstance.get(`/api/members/${id}`, {
-      headers: { Authorization: localStorage.getItem("accessToken") },
-    });
+  const userDataGet = async (id) => {
+    const res = await axiosInstance.get(`/api/members/${id}`,);
     return res.data.data;
   };
 
@@ -145,34 +146,33 @@ const Profile = ({ myPage, id }) => {
     isError,
     isLoading,
     error,
-  } = useQuery("userData", () => userDataGet());
+  } = useQuery(["userData", id, followStatus], () => userDataGet(id));
 
   // 팔로우 여부 확인 함수
   const followStatusGet = async (id) => {
-    const res = await axiosInstance.get(`api/members/${id}/follow-status`, {
-      headers: { Authorization: localStorage.getItem("accessToken") },
-    });
+    const res = await axiosInstance.get(`api/members/${id}/follow-status`,);
     return res.data.data.result;
   };
 
-  const { data: followStatus } = useQuery(["followStatus", id], () =>
+  const { data: followStatusData } = useQuery(["followStatus", id], () =>
     followStatusGet(id)
   );
-
+  useEffect(() => {
+    setFollowStatus(followStatusData);
+  },[followStatusData]);
+  
   // 팔로우 기능 함수
   const followPost = async (id) => {
     try {
       await axiosInstance.post(
         `api/members/${id}/follow`,
         { body: "follow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
       );
-      window.location.href = `/userpage/${id}`;
+      setFollowStatus(true);
+      // window.location.href = `/userpage/${id}`;
     } catch (error) {
       alert("팔로우 실패");
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
   const { mutate: followMutate } = useMutation(() => followPost(id));
@@ -183,14 +183,12 @@ const Profile = ({ myPage, id }) => {
       await axiosInstance.post(
         `api/members/${id}/unfollow`,
         { body: "unfollow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
       );
-      window.location.href = `/userpage/${id}`;
+      setFollowStatus(false);
+      // window.location.href = `/userpage/${id}`;
     } catch (error) {
       alert("언팔로우 실패");
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
   const { mutate: unfollowMutate } = useMutation(() => unfollowPost(id));

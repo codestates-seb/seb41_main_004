@@ -50,7 +50,7 @@ public class ReviewController {
 	@PostMapping
 	public ResponseEntity<?> postReviews(@RequestBody List<ReviewDto.Post> posts, @LoginMember Member member) {
 		List<ReviewDto.Response> response = new ArrayList<>();
-		for (ReviewDto.Post post: posts ) {
+		for (ReviewDto.Post post : posts) {
 			ResponseEntity<?> responseEntity = postReview(post, member);
 			response.add((ReviewDto.Response)responseEntity.getBody());
 		}

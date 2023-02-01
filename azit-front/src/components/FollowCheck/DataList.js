@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import useAxios from "../../util/useAxios";
 
 const Container = styled.li`
   width: 100%;
@@ -67,9 +65,15 @@ const ButtonBox = styled.div`
   }
 `;
 
-const DataList = ({ follow, follower }) => {
+const DataList = ({
+  follow,
+  follower,
+  unfollowMutate,
+  followMutate,
+  deleteMutate,
+  refetch
+}) => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const myId = window.localStorage.getItem("memberId");
   // 마이페이지 여부
   const [myPage, setMyPage] = useState(false);
@@ -89,55 +93,6 @@ const DataList = ({ follow, follower }) => {
       setMyPage(true);
     }
   }, [id, myId]);
-
-  // 팔로우 기능 함수
-  const followPost = async (followerId) => {
-    try {
-      await axiosInstance.post(
-        `api/members/${followerId}/follow`,
-        { body: "follow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
-      );
-      window.location.href = `/userpage/followcheck/${id}`;
-    } catch (error) {
-      alert("팔로우 실패");
-    }
-  };
-  const { mutate: followMutate } = useMutation(() => followPost(follower?.follower.memberId));
-
-  // 언팔로우 기능 함수
-  const unfollowPost = async (followId) => {
-    try {
-      await axiosInstance.post(
-        `api/members/${followId}/unfollow`,
-        { body: "unfollow" },
-        {
-          headers: { Authorization: localStorage.getItem("accessToken") },
-        }
-      );
-      window.location.href = `/userpage/followcheck/${id}`;
-    } catch (error) {
-      alert("언팔로우 실패");
-    }
-  };
-  const { mutate: unfollowMutate } = useMutation(() => unfollowPost(followId));
-
-  // 팔로워 삭제 함수
-  const followerDelete = async (id, followerId) => {
-    try {
-      await axiosInstance.delete(`api/members/${id}/follower/${followerId}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
-      window.location.href = `/userpage/followcheck/${id}`;
-    } catch (error) {
-      alert("팔로워 삭제 실패");
-    }
-  };
-  const { mutate: deleteMutate } = useMutation(() =>
-    followerDelete(id, followerId)
-  );
 
   return (
     <>
@@ -160,7 +115,7 @@ const DataList = ({ follow, follower }) => {
               {isFollow ? follow?.nickname : followerData?.nickname}
             </Link>
             {!isFollow && myPage && (
-              <button onClick={deleteMutate}>삭제</button>
+              <button onClick={() => deleteMutate(followerId)}>삭제</button>
             )}
           </h3>
           <p>{isFollow ? follow?.aboutMe : followerData?.aboutMe}</p>
@@ -169,13 +124,15 @@ const DataList = ({ follow, follower }) => {
           <ButtonBox>
             {/* 상황에 따라 맞는 버튼이 오도록 하기 필요 */}
             {isFollow ? (
-              <button onClick={unfollowMutate}>해제</button>
+              <button onClick={() => {unfollowMutate(followId);}}>해제</button>
             ) : (
               <>
                 {/* <button className="disabled">팔로잉</button> */}
                 <button
                   className={follower.matpal ? "disabled" : "active"}
-                  onClick={followMutate}
+                  onClick={() => {
+                    followMutate(follower?.follower.memberId);
+                  }}
                 >
                   {follower.matpal ? "팔로잉" : "팔로우"}
                 </button>

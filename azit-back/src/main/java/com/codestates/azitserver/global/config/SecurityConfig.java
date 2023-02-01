@@ -167,7 +167,8 @@ public class SecurityConfig {
 			jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
 			jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService, redisTemplate);
+			JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils,
+				memberDetailsService, redisTemplate);
 
 			builder.addFilter(jwtAuthenticationFilter)
 				.addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)

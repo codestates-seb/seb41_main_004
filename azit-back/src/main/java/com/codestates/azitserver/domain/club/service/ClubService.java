@@ -193,7 +193,7 @@ public class ClubService {
 	}
 
 	public List<ClubMember.ClubMemberStatus> getClubMemberStatusList(Member member) {
-		List<ClubMember> clubMemberList =  clubMemberRepository.findClubMembersByMember(member);
+		List<ClubMember> clubMemberList = clubMemberRepository.findClubMembersByMember(member);
 		List<ClubMember.ClubMemberStatus> clubMemberStatusList = new ArrayList<>();
 
 		for (ClubMember clubMember : clubMemberList) {

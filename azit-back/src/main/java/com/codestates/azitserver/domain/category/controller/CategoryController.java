@@ -26,7 +26,6 @@ public class CategoryController {
 	private final CategoryService categoryService;
 	private final CategoryMapper mapper;
 
-
 	@GetMapping
 	public ResponseEntity<?> getAllCategory() {
 		List<CategoryLarge> categoryLargeList = categoryService.getAllLargeCategory();

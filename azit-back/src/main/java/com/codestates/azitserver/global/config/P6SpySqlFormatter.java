@@ -22,7 +22,8 @@ public class P6SpySqlFormatter implements MessageFormattingStrategy {
 	}
 
 	@Override
-	public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
+	public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared,
+		String sql, String url) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.lineSeparator())
 			.append("\t[")
@@ -52,6 +53,7 @@ public class P6SpySqlFormatter implements MessageFormattingStrategy {
 	}
 
 	private boolean isBasic(String sql) {
-		return sql.startsWith("select") || sql.startsWith("insert") || sql.startsWith("update") || sql.startsWith("delete");
+		return sql.startsWith("select") || sql.startsWith("insert") || sql.startsWith("update") || sql.startsWith(
+			"delete");
 	}
 }

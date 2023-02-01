@@ -1,11 +1,11 @@
 import AzitList from "../common/AzitList";
 import React, { useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
-import { axiosInstance } from "../../util/axios";
 import CategoryPicker from "./CategoryPicker";
 import { useInView } from "react-intersection-observer";
 import Loading from "../common/Loading";
 import Null from "./Null";
+import axiosInstance from "../../util/axios";
 
 const CategoryTab = () => {
   const [selectCategory, setSelectCategory] = useState(1);
