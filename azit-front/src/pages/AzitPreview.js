@@ -261,7 +261,6 @@ const AzitPreview = () => {
   const meetingTime = state.meetingTime;
   const memberLimit = state.memberLimit;
 
-  const accessToken = localStorage.getItem("accessToken");
   const profileUrl = localStorage.getItem("profileUrl");
   const profileName = localStorage.getItem("profileName");
 

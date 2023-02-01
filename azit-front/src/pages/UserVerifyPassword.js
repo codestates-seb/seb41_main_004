@@ -32,7 +32,6 @@ const UserVerifyPassword = () => {
   const { register, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem("accessToken");
   const memberId = localStorage.getItem("memberId");
 
   const verifyButtonClick = async(data) => {

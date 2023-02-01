@@ -77,8 +77,6 @@ const UserPageSetting = () => {
   }
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem('accessToken');
-
   const LogoutButtonClick = async() => {
     try {
       const res = await axiosInstance.post(
