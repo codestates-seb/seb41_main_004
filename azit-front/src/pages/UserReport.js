@@ -4,8 +4,8 @@ import Button from "../components/common/Button";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserReportData } from "../dummyData/UserReportData";
-import useAxios from "../util/useAxios";
 import { useMutation } from "react-query";
+import axiosInstance from "../util/axios";
 
 const ReportWrap = styled.form`
   position: relative;
@@ -40,7 +40,6 @@ const Select = styled.select`
 
 const UserReport = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const navigate = useNavigate();
   const [reportList, setReportList] = useState(UserReportData[0].value);
   const [reportReason, setReportReason] = useState("");
@@ -56,9 +55,7 @@ const UserReport = () => {
     e.preventDefault();
     try {
       const payload = { reportList, reportReason };
-      await axiosInstance.post(`api/members/reports/${id}`, payload, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
+      await axiosInstance.post(`api/members/reports/${id}`, payload,);
       navigate(-1);
       alert("신고가 완료되었습니다.");
     } catch (error) {

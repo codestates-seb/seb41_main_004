@@ -2,11 +2,11 @@ import Header from "../components/common/Header";
 import WaitingMember from "../components/AzitMember/WaitingMember";
 import styled from "styled-components";
 import Member from "../components/AzitMember/Member";
-import useAxios from "../util/useAxios";
 import { useQuery } from "react-query";
 import Loading from "../components/common/Loading";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axiosInstance from "../util/axios";
 
 const MemberWrap = styled.section`
   padding-top: 55px;
@@ -26,17 +26,11 @@ const EtcWrap = styled.div`
 
 const AzitMember = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [waitingMembers, setWaitingMembers] = useState([]);
   const [joinMembers, setJoinMembers] = useState([]);
 
   const azitMembers = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}/signups`, {
-      headers: {
-        Authorization: localStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axiosInstance.get(`/api/clubs/${id}/signups`,);
     return res.data.data;
   };
 

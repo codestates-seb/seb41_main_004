@@ -7,9 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { interests } from "../dummyData/Category";
 import { SignupYear } from "../dummyData/SignupYear";
-import { axiosInstance } from "../util/axios";
-
-
+import axiosInstance from "../util/axios";
 
 const SignupAdditional = () => {
   const navigate = useNavigate()

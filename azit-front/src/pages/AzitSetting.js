@@ -5,7 +5,7 @@ import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { useParams } from "react-router-dom";
 import { AzitDeleteModal } from "../components/AzitSetting/AzitDeleteModal";
 import { useState } from "react";
-import useAxios from "../util/useAxios";
+import axiosInstance from "../util/axios";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -52,7 +52,6 @@ const DeleteBtnWrap = styled.div`
 
 const AzitSetting = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHandler = () => {
     modalOpen ? setModalOpen(false) : setModalOpen(true);
@@ -61,10 +60,7 @@ const AzitSetting = () => {
 
   const DeleteButtonClick = async () => {
     try {
-      await axiosInstance.delete(`/api/clubs/${id}`, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
-
+      await axiosInstance.delete(`/api/clubs/${id}`,);
       alert("아지트를 닫았습니다.");
       navigate(`/`);
     } catch (e) {

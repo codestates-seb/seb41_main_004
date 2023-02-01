@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import CreateItem from "../components/ReviewCreate/CreateItem";
-import useAxios from "../util/useAxios";
+import axiosInstance from "../util/axios";
 
 const CreateWrap = styled.form`
   padding: 7.5rem 2rem 2rem;
@@ -80,7 +80,6 @@ const Null = styled.article`
   padding: 8rem 0;
 `;
 const ReviewCreate = () => {
-  const axiosInstance = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
   const hostId = JSON.parse(window.localStorage.getItem("memberId"));
@@ -89,7 +88,7 @@ const ReviewCreate = () => {
   const [postData, setPostData] = useState([]);
 
   const azitLookup = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}`);
+    const res = await axiosInstance.get(`/api/clubs/${id}`,);
     return res.data.data;
   };
   const { data: azitData } = useQuery("azitLookup", azitLookup);
@@ -127,9 +126,7 @@ const ReviewCreate = () => {
   const posting = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post(`/api/reviews`, postData, {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      });
+      await axiosInstance.post(`/api/reviews`, postData,);
       navigate(-1);
     } catch (error) {
       alert(error.message);
