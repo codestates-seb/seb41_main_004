@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ExportIcon from "../../images/exportIcon.png";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../util/axios";
+import { useState } from "react";
+import { KickModal } from "./KickModal";
 
 const ListWrap = styled.li`
   margin-top: 1rem;
@@ -84,6 +86,10 @@ const MemberWrap = styled.div`
 
 const MemberList = ({ data, state }) => {
   const { id } = useParams();
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalHandler = () => {
+    modalOpen ? setModalOpen(false) : setModalOpen(true);
+  };
 
   const azitMemberAccept = async () => {
     try {
@@ -121,7 +127,7 @@ const MemberList = ({ data, state }) => {
         { body: "hello" },
       );
       window.location.href = `/azit/member/${id}`;
-      alert("아지트 강퇴 완료");
+      alert("선택한 유저를 강퇴하였습니다");
     } catch (e) {
       alert("아지트 강퇴 실패");
     }
@@ -151,9 +157,17 @@ const MemberList = ({ data, state }) => {
                 </button>
               </>
             ) : (
-              <button className="export" onClick={azitMemberKicks}>
-                <img alt="exportIcon" src={ExportIcon} />
-              </button>
+              <>
+                {modalOpen && (
+                  <KickModal
+                    modalHandler={modalHandler}
+                    azitMemberKicks={azitMemberKicks}
+                  />
+                )}
+                <button className="export" onClick={modalHandler}>
+                  <img alt="exportIcon" src={ExportIcon} />
+                </button>
+              </>
             )}
           </div>
         </div>
