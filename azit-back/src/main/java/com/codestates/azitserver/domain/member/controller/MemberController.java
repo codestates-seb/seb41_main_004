@@ -174,11 +174,6 @@ public class MemberController {
 	public ResponseEntity getAttendedClub(@Positive @PathVariable("member-id") Long memberId) {
 		Member member = memberService.getMemberById(memberId);
 		List<ClubMember> clubMemberList = clubMemberService.getAllClubMemberByMemberId(memberId);
-		List<Club> iAmHostClub = clubRepository.findAllByHost(member);
-		for (Club club : iAmHostClub) {
-			ClubMember iAmHostClubMember = clubMemberRepository.findClubMembersByClub(club).get(0);
-			clubMemberList.add(iAmHostClubMember);
-		}
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(clubMemberList);
 
