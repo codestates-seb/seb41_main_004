@@ -55,12 +55,16 @@ const AzitCreate = () => {
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
-    const reader = new FileReader();
+    if (file.size > 1 * 1024 * 1024) {
+      alert("1MB 미만의 파일을 첨부해주세요");
+    } else {
+      const reader = new FileReader();
 
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgFile(reader.result);
-    };
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImgFile(reader.result);
+      };
+    }
   };
 
   const onCrop = () => {
