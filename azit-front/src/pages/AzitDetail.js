@@ -351,7 +351,6 @@ const AzitDetail = () => {
     }
   };
 
-  console.log(data);
   return (
     <AzitDetailWrap>
       <AzitDetailHeader clubData={data} />
