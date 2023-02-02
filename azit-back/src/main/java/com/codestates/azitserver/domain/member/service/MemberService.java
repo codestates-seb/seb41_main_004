@@ -316,7 +316,10 @@ public class MemberService {
 			List<MemberDto.ParticipantResponse> participantResponses = new ArrayList<>();
 			for (ClubMember pre : preParticipants) {
 				if (pre.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED) {
-					participantResponses.add(memberMapper.memberToParticipantResponse(pre.getMember()));
+					MemberDto.ParticipantResponse
+						preResponse = memberMapper.memberToParticipantResponse(pre.getMember());
+						preResponse.setClubMemberId(pre.getClubMemberId());
+					participantResponses.add(preResponse);
 				}
 			}
 			clubInfoResponse.setParticipantList(participantResponses);
@@ -344,7 +347,20 @@ public class MemberService {
 	public List<ClubMemberDto.ClubMemberStatusResponse>
 	responseSorter(List<ClubMemberDto.ClubMemberStatusResponse> responses) {
 		Collections.sort(responses, new MeetingTimeComparator().reversed());
+		for (ClubMemberDto.ClubMemberStatusResponse response : responses) {
+			List<MemberDto.ParticipantResponse> list = response.getClubInfoResponse().getParticipantList();
+			Collections.sort(list, new ParticipationTimeComparator());
+			ClubDto.ClubMemberStatusClubInfoResponse infoResponse = response.getClubInfoResponse();
+			infoResponse.setParticipantList(list);
+			response.setClubInfoResponse(infoResponse);
+		}
 		return responses;
+	}
+	public class ParticipationTimeComparator implements Comparator<MemberDto.ParticipantResponse> {
+		@Override
+		public int compare(MemberDto.ParticipantResponse response1, MemberDto.ParticipantResponse response2) {
+			return Integer.valueOf(response1.getClubMemberId().compareTo(response2.getClubMemberId()));
+		};
 	}
 
 	public class MeetingTimeComparator implements Comparator<ClubMemberDto.ClubMemberStatusResponse> {
