@@ -1,6 +1,11 @@
 package com.codestates.azitserver.domain.member.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -333,7 +338,27 @@ public class MemberService {
 
 			clubMemberStatusResponseList.add(response);
 		}
+
 		return clubMemberStatusResponseList;
 	}
+	public List<ClubMemberDto.ClubMemberStatusResponse>
+	responseSorter(List<ClubMemberDto.ClubMemberStatusResponse> responses) {
+		Collections.sort(responses, new MeetingTimeComparator().reversed());
+		return responses;
+	}
 
+	public class MeetingTimeComparator implements Comparator<ClubMemberDto.ClubMemberStatusResponse> {
+		@Override
+		public int compare(ClubMemberDto.ClubMemberStatusResponse response1,
+			ClubMemberDto.ClubMemberStatusResponse response2) {
+			return Integer.valueOf(getTime(response1).compareTo(getTime(response2)));
+		}
+	}
+
+	public LocalDateTime getTime(ClubMemberDto.ClubMemberStatusResponse response) {
+		LocalDate meetingDate = response.getClubInfoResponse().getMeetingDate();
+		LocalTime meetingTime = response.getClubInfoResponse().getMeetingTime();
+
+		return LocalDateTime.of(meetingDate, meetingTime);
+	}
 }
