@@ -136,7 +136,6 @@ const Login = () => {
         } else if(e.response.status === 500) {
           alert("요청하신 작업을 수행하지 못했습니다. 일시적인 현상이니 잠시 후 다시 시작해주세요.")
         }
-        console.log(e);
       }
     };
 
