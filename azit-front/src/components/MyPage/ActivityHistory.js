@@ -96,6 +96,7 @@ const ActivityHistory = ({ myPage }) => {
     isClosedData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  //console.log(closedClubId); -> [13, 19, 25, 31, 37, 43, 47] 이런식으로 됨
 
   useEffect(() => {
     let filterList = [];
@@ -133,7 +134,9 @@ const ActivityHistory = ({ myPage }) => {
       axiosInstance
         .get(`api/members/${id}/clubs/1`)
         .then((res) => {
-          setGetData(res.data.filter((data) => !closedClubId.includes(data.clubMemberId)));
+          setGetData(
+            res.data.filter((data) => !closedClubId.includes(data.clubMemberId))
+          );
         })
         .catch((error) => {
           console.log("error : ", error);
@@ -197,7 +200,7 @@ const ActivityHistory = ({ myPage }) => {
         });
     } else if (hostCheck === true && selectCheck === "종료된 모임") {
       axiosInstance
-        .get(`api/members/${id}/clubs/2`,)
+        .get(`api/members/${id}/clubs/2`)
         .then((res) => {
           setGetData(res.data);
           setFilterList(
@@ -223,7 +226,7 @@ const ActivityHistory = ({ myPage }) => {
       )
     );
   }, [getData]);
-  
+
   return (
     <Container>
       <>
