@@ -220,7 +220,7 @@ public class AuthService {
 		msg += "<h3 style='color:navy;'>인증번호를 azit 화면에 입력해주세요.</h3>";
 		msg += "<div style='font-size:130%'>";
 		msg += "인증번호 : <strong>";
-		msg += authNum + "</strong><div><br/> ";
+		msg += authNum + "</strong><div><br/>";
 		msg += "</div>";
 		msg += "</div>";
 		msg += "</div>";
@@ -259,7 +259,7 @@ public class AuthService {
 		msg += "<h3 style='color:navy;'>로그인 후 비밀번호를 변경해 주세요.</h3>";
 		msg += "<div style='font-size:130%'>";
 		msg += "임시 비밀번호 : <strong>";
-		msg += tempPassword + "</strong><div><br/> ";
+		msg += tempPassword + "</strong><div><br/>";
 		msg += "</div>";
 		msg += "</div>";
 		msg += "</div>";

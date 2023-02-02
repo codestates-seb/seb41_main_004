@@ -59,7 +59,7 @@ public class ReviewDto {
 		private Long reviewId;
 		private Long revieweeId;
 		private ClubDto.ReviewClubResponse club;
-		private String  commentCategory;
+		private String commentCategory;
 		private String commentBody;
 		private Boolean reviewStatus;
 	}

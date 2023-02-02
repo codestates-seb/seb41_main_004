@@ -11,7 +11,8 @@ import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.fileInfo.mapper.FileInfoMapper;
 import com.codestates.azitserver.domain.member.mapper.MemberMapper;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, ClubMemberMapper.class, MemberMapper.class, FileInfoMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, ClubMemberMapper.class, MemberMapper.class,
+	FileInfoMapper.class})
 public interface ClubMapper {
 	@Mapping(target = "clubId", ignore = true)
 	@Mapping(target = "clubStatus", ignore = true)

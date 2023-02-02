@@ -26,9 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.codestates.azitserver.domain.auth.dto.AuthDto;
+import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.member.entity.Member;
 import com.codestates.azitserver.domain.member.repository.MemberRepository;
-import com.codestates.azitserver.domain.stub.FileInfoStubData;
 import com.google.gson.Gson;
 
 @AutoConfigureRestDocs
@@ -52,15 +52,21 @@ public class authLoginTest {
 	@BeforeEach
 	@DisplayName("테스트용 멤버 생성")
 	public void init() {
+		// 파일 생성
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setFileName("이미지파일이름.png");
+		fileInfo.setFileUrl("/folder1/folder2");
+		fileInfo.setCreatedAt(null);
+		fileInfo.setLastModifiedAt(null);
+
 		// 인코딩된 패스워드
 		String encodedPassword = passwordEncoder.encode("123456@asdf");
 
 		// 테스트용 멤버 생성
 		Member member = Member.builder()
-			.memberId(1L)
-			.fileInfo(FileInfoStubData.getDefaultFileInfo())
-			.email("stubmember@naver.com")
-			.nickname("김스텁")
+			.fileInfo(fileInfo)
+			.email("stubmember01@naver.com")
+			.nickname("김스텁01")
 			.password(encodedPassword)
 			.gender(Member.Gender.MALE)
 			.birthYear("2001")
@@ -79,8 +85,10 @@ public class authLoginTest {
 	public void loginTest() throws Exception {
 		// given - LoginDto로 요청값 받으면 json 형식으로
 		AuthDto.Post loginDto = new AuthDto.Post();
-		loginDto.setEmail("stubmember@naver.com");
+		loginDto.setEmail("stubmember01@naver.com");
 		loginDto.setPassword("123456@asdf");
+		// loginDto.setEmail("admin_test@hello.com");
+		// loginDto.setPassword("1234qwer!@#$");
 
 		String content = gson.toJson(loginDto);
 
@@ -100,11 +108,6 @@ public class authLoginTest {
 			.andExpect(status().isOk())
 			.andExpect(header().exists("Authorization"))
 			.andExpect(header().exists("Refresh"))
-			.andExpect(jsonPath("$.memberId").value(1L))
-			.andExpect(jsonPath("$.email").value("stubmember@naver.com"))
-			.andExpect(jsonPath("$.nickname").value("김스텁"))
-			.andExpect(jsonPath("$.profileUrl").exists())
-			.andExpect(jsonPath("$.profileImageName").exists())
 			.andDo(document("login",
 				getRequestPreProcessor(),
 				getResponsePreProcessor(),

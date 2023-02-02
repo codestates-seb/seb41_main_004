@@ -54,7 +54,7 @@ const RecommendTab = () => {
     if (inView) fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-
+  
   return (
     <>
       <article className="resultCell">

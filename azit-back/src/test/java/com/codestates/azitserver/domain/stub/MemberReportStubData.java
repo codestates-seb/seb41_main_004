@@ -13,20 +13,20 @@ public class MemberReportStubData {
 		Member reporter = reporter();
 		Member reportee = reportee();
 		memberReport.setMemberMemberReportList(
-			List.of(tempMemberMemberReport(1L, reporter, reportee)				)
+			List.of(tempMemberMemberReport(1L, reporter, reportee))
 		);
 		return memberReport;
 	}
 
 	public static MemberReport tempStubMemberReport() {
 		MemberReport tempMemberReport = new MemberReport();
-			tempMemberReport.setReportId(1L);
-			tempMemberReport.setReporterId(4L);
-			tempMemberReport.setReporteeId(5L);
-			tempMemberReport.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
-			tempMemberReport.setReportReason("불법도박광고했어요");
+		tempMemberReport.setReportId(1L);
+		tempMemberReport.setReporterId(4L);
+		tempMemberReport.setReporteeId(5L);
+		tempMemberReport.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
+		tempMemberReport.setReportReason("불법도박광고했어요");
 
-			return tempMemberReport;
+		return tempMemberReport;
 	}
 
 	public static MemberMemberReport tempMemberMemberReport(Long memberMemberReportId,
@@ -43,8 +43,6 @@ public class MemberReportStubData {
 	public static MemberReportDto.Post stubMemberReportDtoPost() {
 		MemberReportDto.Post post = new MemberReportDto.Post();
 
-		post.setReporterId(4L);
-		post.setReporteeId(5L);
 		post.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
 		post.setReportReason("불법도박광고했어요");
 
@@ -55,14 +53,11 @@ public class MemberReportStubData {
 		MemberReportDto.Response response = new MemberReportDto.Response();
 
 		response.setReportId(1L);
-		response.setReporterId(4L);
-		response.setReporteeId(5L);
 		response.setReportCategory(MemberReport.ReportCategory.ADVERTISE);
 		response.setReportReason("불법도박광고했어요");
 
 		return response;
 	}
-
 
 	public static Member reporter() {
 		Member tempStubMember = Member.builder()

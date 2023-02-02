@@ -29,7 +29,11 @@ const useAxios = () => {
         // console.log(res);
   
         localStorage.setItem("accessToken", res.headers.get("Authorization"));
+<<<<<<< HEAD
         window.location.replace();
+=======
+        window.location.replace()
+>>>>>>> e7d8333c9546a31e6203e14cfc8ee9ec4eaaf8b6
       } catch (e) {
         console.log("에러", e);
       }
