@@ -8,7 +8,6 @@ import axiosInstance from "../../util/axios";
 
 const RecommendTab = () => {
   const { ref, inView } = useInView();
-  const axiosPrivate = useAxios();
   const [memberId, setMemberId] = useState(0);
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const RecommendTab = () => {
 
 
   const fetchInfiniteList = async (pageParam, memberId) => {
-    const res = await axiosPrivate.get(
+    const res = await axiosInstance.get(
       `/api/clubs/recommend/${memberId}?page=${pageParam}&size=5`,
     );
 
