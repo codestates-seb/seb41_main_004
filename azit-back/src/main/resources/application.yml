@@ -9,8 +9,8 @@ spring:
       mode: always
   servlet:
     multipart: # multipart 설정
-      max-file-size: 1MB
-      max-request-size: 3MB
+      max-file-size: 8MB
+      max-request-size: 8MB
   security:
     oauth2:
       client:
