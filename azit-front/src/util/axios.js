@@ -51,10 +51,6 @@ axiosInstance.interceptors.response.use(
         return axios(originalRequest);
     } catch(e) {
       console.dir(e);
-      localStorage.removeItem('accessToken');
-      localStorage.clear();
-      removeCookie('refreshToken');
-      window.location.href = '/';
     }
   }
   return Promise.reject(err)

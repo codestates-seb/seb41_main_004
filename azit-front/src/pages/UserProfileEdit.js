@@ -205,7 +205,6 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-
     axiosInstance
       .patch(`api/members/${id}`, body,)
       .then((res) => {
