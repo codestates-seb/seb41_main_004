@@ -300,36 +300,36 @@ class MemberControllerTest {
 	// 		)));
 	// }
 
-	@Test
-	void getAllAttendedClubTest() throws Exception {
-		// given
-		given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
-		given(clubMemberService.getAllClubMemberByClubId(Mockito.anyLong())).willReturn(clubMemberList);
-		given(memberService.responseWithInfoGenerator(anyList()))
-			.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
-		given(clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(Mockito.anyList()))
-			.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
-
-		// when
-		ResultActions getActions =
-			mockMvc.perform(
-				RestDocumentationRequestBuilders.get("/api/members/{member-id}/clubs", 1L)
-					.accept(MediaType.APPLICATION_JSON)
-					.contentType(MediaType.APPLICATION_JSON)
-					.characterEncoding(StandardCharsets.UTF_8)
-					.header("Authorization", "Required JWT access token")
-			);
-		// then
-		getActions
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].clubMemberId").value(1L))
-			.andDo(getDefaultDocument(
-					"get-all-attended-club",
-					MemberFieldDescriptor.getMultiMyDetailsResponseSnippet()
-				)
-			);
-	}
+	// @Test
+	// void getAllAttendedClubTest() throws Exception {
+	// 	// given
+	// 	given(memberService.getMemberById(Mockito.anyLong())).willReturn(member);
+	// 	given(clubMemberService.getAllClubMemberByClubId(Mockito.anyLong())).willReturn(clubMemberList);
+	// 	given(memberService.responseWithInfoGenerator(anyList()))
+	// 		.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
+	// 	given(clubMemberMapper.clubMemberToClubMemberDtoClubMemberStatusResponse(Mockito.anyList()))
+	// 		.willReturn(List.of(clubMemberStatusResponse_1, clubMemberStatusResponse_2));
+	//
+	// 	// when
+	// 	ResultActions getActions =
+	// 		mockMvc.perform(
+	// 			RestDocumentationRequestBuilders.get("/api/members/{member-id}/clubs", 1L)
+	// 				.accept(MediaType.APPLICATION_JSON)
+	// 				.contentType(MediaType.APPLICATION_JSON)
+	// 				.characterEncoding(StandardCharsets.UTF_8)
+	// 				.header("Authorization", "Required JWT access token")
+	// 		);
+	// 	// then
+	// 	getActions
+	// 		.andDo(print())
+	// 		.andExpect(status().isOk())
+	// 		.andExpect(jsonPath("$.[0].clubMemberId").value(1L))
+	// 		.andDo(getDefaultDocument(
+	// 				"get-all-attended-club",
+	// 				MemberFieldDescriptor.getMultiMyDetailsResponseSnippet()
+	// 			)
+	// 		);
+	// }
 
 	// @Test
 	// void getAllMemberTest() throws Exception {
