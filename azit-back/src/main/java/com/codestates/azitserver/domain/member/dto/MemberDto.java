@@ -152,6 +152,7 @@ public class MemberDto {
 	@Setter
 	@NoArgsConstructor
 	public static class ParticipantResponse {
+		private Long clubMemberId;
 		private Long memberId;
 		private String nickname;
 		private FileInfoDto.Response fileInfo;
