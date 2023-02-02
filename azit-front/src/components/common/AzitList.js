@@ -178,8 +178,8 @@ const AzitList = ({ data, myPage, activityData }) => {
   const repeatAvatar = (data) => {
     let result = [];
     // console.log(data);
-    if (data.length >= 4) {
-      for (let i = 0; i < 4; i++) {
+    if (data.length >= 5) {
+      for (let i = 0; i < 5; i++) {
         result.push(
           <div
             key={
@@ -222,7 +222,7 @@ const AzitList = ({ data, myPage, activityData }) => {
 
     return <>{result}</>;
   };
-
+  console.log(activityData);
   return (
     <ListWrap>
       <DetailWrap>
@@ -262,18 +262,18 @@ const AzitList = ({ data, myPage, activityData }) => {
             </div>
             <div className="etcCell">
               <div className="profileAvatar">
-                <div className="imgWrap">
+                {/* <div className="imgWrap">
                   <img
                     alt={data.host.nickname}
                     src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
                   />
-                </div>
+                </div> */}
                 {clubMember ? repeatAvatar(clubMember) : null}
               </div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{clubMember.length + 1} </span>/
+                  <span className="current">{clubMember.length} </span>/
                   <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>
