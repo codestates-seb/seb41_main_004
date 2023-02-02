@@ -178,9 +178,9 @@ const AzitList = ({ data, myPage, activityData }) => {
   const repeatAvatar = (data) => {
     //console.log(data); // [{memberId: 2, nickname: 'user', fileInfo: {…}}]
     let result = [];
-
-    if (data.length >= 4) {
-      for (let i = 0; i < 4; i++) {
+    // console.log(data);
+    if (data.length >= 5) {
+      for (let i = 0; i < 5; i++) {
         result.push(
           <div
             key={
@@ -223,7 +223,7 @@ const AzitList = ({ data, myPage, activityData }) => {
 
     return <>{result}</>;
   };
-
+  // console.log(activityData);
   return (
     <ListWrap>
       <DetailWrap>
