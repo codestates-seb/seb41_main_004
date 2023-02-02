@@ -222,7 +222,7 @@ const AzitList = ({ data, myPage, activityData }) => {
 
     return <>{result}</>;
   };
-  console.log(activityData);
+  // console.log(activityData);
   return (
     <ListWrap>
       <DetailWrap>
