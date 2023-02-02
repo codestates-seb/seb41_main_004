@@ -188,7 +188,8 @@ public class ClubMemberService {
 				LocalDate meetingDate = clubMember.getClub().getMeetingDate();
 				LocalTime meetingTime = clubMember.getClub().getMeetingTime();
 				LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingTime);
-				if (meetingDate.isBefore(LocalDate.now())) {
+				if (meetingDate.isBefore(LocalDate.now()) &&
+					clubMember.getClubMemberStatus() == ClubMember.ClubMemberStatus.CLUB_JOINED) {
 					filteredClubMemberList.add(clubMember);
 				}
 			}
