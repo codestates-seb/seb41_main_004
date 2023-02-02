@@ -32,7 +32,7 @@ export const ImageModal = ({
             />
           ) : (
             <label className="bannerImgLabel" htmlFor="bannerImg">
-              이미지를 첨부해주세요
+              1MB 미만의 이미지를 첨부해주세요
             </label>
           )}
           <div className="buttonWrap">
