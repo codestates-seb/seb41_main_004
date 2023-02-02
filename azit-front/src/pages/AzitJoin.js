@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Header from "../components/common/Header";
 import Button from "../components/common/Button";
-import useAxios from "../util/useAxios";
 import { useQuery, useMutation } from "react-query";
 import Loading from "../components/common/Loading";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axiosInstance from "../util/axios";
 
 const JoinWrap = styled.div`
   position: relative;
@@ -46,12 +46,11 @@ const EtcWrap = styled.div`
 
 const AzitJoin = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [joinQuestion, setJoinQuestion] = useState("");
   const [joinAnswer, setJoinAnswer] = useState("");
 
   const azitQuestion = async () => {
-    const res = await axiosInstance.get(`api/clubs/${id}/join-question`);
+    const res = await axiosInstance.get(`api/clubs/${id}/join-question`,);
     return res.data.data;
   };
 
@@ -80,12 +79,7 @@ const AzitJoin = () => {
     try {
       const payload = body;
 
-      await axiosInstance.post(`api/clubs/${id}/signups`, payload, {
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-          "Content-Type": "application/json",
-        },
-      });
+      await axiosInstance.post(`api/clubs/${id}/signups`, payload,);
       alert("아지트 참가 신청이 완료되었습니다");
       navigate(-1);
     } catch (error) {

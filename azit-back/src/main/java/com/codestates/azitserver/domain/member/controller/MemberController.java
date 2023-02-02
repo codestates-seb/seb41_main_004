@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.member.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codestates.azitserver.domain.club.dto.ClubMemberDto;
+import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
 import com.codestates.azitserver.domain.club.service.ClubMemberService;
 import com.codestates.azitserver.domain.member.dto.MemberDto;
 import com.codestates.azitserver.domain.member.entity.Member;
@@ -43,14 +47,20 @@ public class MemberController {
 	private final ClubMemberService clubMemberService;
 	private final ClubMemberMapper clubMemberMapper;
 
+	private final ClubRepository clubRepository;
+
+	private final ClubMemberRepository clubMemberRepository;
 	public MemberController(MemberService memberService, MemberMapper memberMapper,
 		MemberCategoryService memberCategoryService, ClubMemberService clubMemberService,
-		ClubMemberMapper clubMemberMapper) {
+		ClubMemberMapper clubMemberMapper, ClubMemberRepository clubMemberRepository,
+		ClubRepository clubRepository) {
 		this.memberService = memberService;
 		this.memberMapper = memberMapper;
 		this.memberCategoryService = memberCategoryService;
 		this.clubMemberService = clubMemberService;
 		this.clubMemberMapper = clubMemberMapper;
+		this.clubMemberRepository = clubMemberRepository;
+		this.clubRepository = clubRepository;
 	}
 
 	//회원 생성
@@ -168,7 +178,7 @@ public class MemberController {
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(clubMemberList);
 
-		return new ResponseEntity<>(responses, HttpStatus.OK);
+		return new ResponseEntity<>(memberService.responseSorter(responses), HttpStatus.OK);
 	}
 	// 참여상태별 조회
 
@@ -191,7 +201,7 @@ public class MemberController {
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(filteredClubMemberList);
 
-		return new ResponseEntity<>(responses, HttpStatus.OK);
+		return new ResponseEntity<>(memberService.responseSorter(responses), HttpStatus.OK);
 	}
 
 	//TODO 팔로우, 언팔로우

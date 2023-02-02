@@ -5,8 +5,8 @@ import ImgAddIcon from "../images/imgAddIcon.png";
 import { interests } from "../dummyData/Category";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAxios from "../util/useAxios";
 import { useFirstRender } from "../util/useDidMountEffect";
+import axiosInstance from "../util/axios";
 
 const ProfileEditForm = styled.form`
   display: flex;
@@ -95,7 +95,6 @@ const ProfileImage = styled.div`
 
 const UserProfileEdit = () => {
   const { id } = useParams();
-  const axiosInstance = useAxios();
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [imgFile, setImgFile] = useState("");
   const [getImgFile, setGetImgFile] = useState(""); //이미지 get으로 받아오는것
@@ -103,7 +102,6 @@ const UserProfileEdit = () => {
   const [intro, setIntro] = useState(""); //소개 get으로 받아오는것
   const imgRef = useRef();
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem("accessToken");
 
   const saveImgFile = () => {
     const file = imgRef.current.files[0];
@@ -142,12 +140,7 @@ const UserProfileEdit = () => {
       formData.append("image", file);
       const postFile = async () => {
         try {
-          const res = await axiosInstance.post(`api/members/${id}`, formData, {
-            headers: {
-              Authorization: accessToken,
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          const res = await axiosInstance.post(`api/members/${id}`, formData,);
           localStorage.setItem("profileUrl", res.data.data.fileInfo.fileUrl);
           localStorage.setItem("profileName", res.data.data.fileInfo.fileName);
 
@@ -164,12 +157,7 @@ const UserProfileEdit = () => {
   useEffect(() => {
     const startGet = async () => {
       await axiosInstance
-        .get(`api/members/${id}`, {
-          headers: {
-            Authorization: accessToken,
-            "Content-Type": "application/json",
-          },
-        })
+        .get(`api/members/${id}`,)
         .then((res) => {
           setDefaultName(res.data.data.nickname);
           setIntro(res.data.data.aboutMe);
@@ -217,14 +205,8 @@ const UserProfileEdit = () => {
       // fileName: imgFile,
       categorySmallId: checkedInputs,
     };
-
     axiosInstance
-      .patch(`api/members/${id}`, body, {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
+      .patch(`api/members/${id}`, body,)
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           navigate(`/userpage/${id}`);

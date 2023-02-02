@@ -1,23 +1,21 @@
 import React from "react";
+// import { useState } from "react";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import { useParams } from "react-router-dom";
-import useAxios from "../../util/useAxios";
+import axiosInstance from "../../util/axios";
 import Loading from "../common/Loading";
 import Null from "../Home/Null";
 import DataList from "./DataList";
 
-const FollowingData = () => {
+const FollowingData = ({change, setChange}) => {
   const { ref, inView } = useInView();
   const { id } = useParams();
-  const axiosInstance = useAxios();
+  // const [change, setChange] = useState(false);
   const fetchInfiniteList = async (pageParam, id) => {
     const res = await axiosInstance.get(
-      `/api/members/${id}/follower?page=${pageParam}&size=15`,
-      {
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      }
+      `/api/members/${id}/follower?page=${pageParam}&size=15`
     );
 
     return {
@@ -51,6 +49,35 @@ const FollowingData = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
+  // 팔로우 기능 함수
+  const followPost = async (followerId) => {
+    try {
+      await axiosInstance.post(`api/members/${followerId}/follow`, {
+        body: "follow",
+      });
+      window.location.href = `/userpage/followcheck/${id}`;
+    } catch (error) {
+      alert("팔로우 실패");
+    }
+  };
+  const { mutate: followMutate } = useMutation((followerId) =>
+    followPost(followerId)
+  );
+  // follower?.follower.memberId
+
+  // 팔로워 삭제 함수
+  const followerDelete = async (id, followerId) => {
+    try {
+      await axiosInstance.delete(`api/members/${id}/follower/${followerId}`);
+      window.location.href = `/userpage/followcheck/${id}`;
+    } catch (error) {
+      alert("팔로워 삭제 실패");
+    }
+  };
+  const { mutate: deleteMutate } = useMutation((followerId) =>
+    followerDelete(id, followerId)
+  );
+
   return (
     <>
       {status === "loading" ? (
@@ -62,7 +89,12 @@ const FollowingData = () => {
           <React.Fragment key={index}>
             {page.board_page.length > 0 ? (
               page.board_page.map((follower) => (
-                <DataList key={follower.followId} follower={follower} />
+                <DataList
+                  key={follower.followId}
+                  follower={follower}
+                  followMutate={followMutate}
+                  deleteMutate={deleteMutate}
+                />
               ))
             ) : (
               <Null text="팔로워가 없습니다." />

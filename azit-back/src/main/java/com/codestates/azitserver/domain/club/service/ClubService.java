@@ -37,8 +37,8 @@ public class ClubService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Club> beanUtils;
 	private final StorageService storageService;
-
 	private final ClubMemberRepository clubMemberRepository;
+
 
 	public Club createClub(Club toClub, MultipartFile bannerImage) {
 		// online offline 외 문자열이 들어올 경우 예외처리
@@ -53,11 +53,28 @@ public class ClubService {
 				throw new BusinessLogicException(ExceptionCode.INVALID_MEETING_METHOD);
 		}
 
+
 		// 데이터 저장
 		Club club = clubRepository.save(toClub);
 
+		// Host 정보 클럽에 넣기
+		Club createdClub = findClubById(club.getClubId());
+			// Member(=host), 방금 생성한 클럽을 필드로 가지는 clubMember 생성
+		ClubMember clubMember = new ClubMember(createdClub.getHost(), createdClub, "");
+			// 참가 상태는 "JOINED"
+		clubMember.setClubMemberStatus(ClubMember.ClubMemberStatus.CLUB_JOINED);
+			// 생성한 clubMember를 DB에 저장
+		clubMemberRepository.save(clubMember);
+
+		List<ClubMember> clubMemberList = new ArrayList<>();
+		clubMemberList.add(clubMember);
+			// 저장한 clubMember를 방금 생성한 클럽에도 입력
+		createdClub.setClubMembers(clubMemberList);
+		// 최종적으로 host를 갖고있는 club을 DB에 저장
+		Club updatedClub = clubRepository.save(createdClub);
+
 		// banner image 저장 후 리턴
-		return updateClubImage(club.getClubId(), bannerImage);
+		return updateClubImage(updatedClub.getClubId(), bannerImage);
 	}
 
 	/**

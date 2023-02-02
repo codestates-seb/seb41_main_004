@@ -140,7 +140,6 @@ const Status = styled.div`
   }
 `;
 const AzitList = ({ data, myPage, activityData }) => {
-  // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
   const [activeHide, setActiveHide] = useState(false);
@@ -149,16 +148,18 @@ const AzitList = ({ data, myPage, activityData }) => {
 
   useEffect(() => {
     setUserStatus(
-      activityData?.clubMemberStatus === "CLUB_WAITING"
-        ? "신청중"
-        : activityData?.isClosed
+      activityData?.isClosed
         ? "종료됨"
+        : activityData?.clubMemberStatus === "CLUB_WAITING"
+        ? "신청중"
         : "참여중"
     );
   }, [activityData]);
+
   const handleActiveHide = () => {
     setActiveHide(!activeHide);
   };
+
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers
@@ -167,17 +168,17 @@ const AzitList = ({ data, myPage, activityData }) => {
         })
       : data.participantList;
     setClubMember(filterMember);
+    //console.log(filterMember) -> [{memberId: 1, nickname: 'admin', fileInfo: {…}}]
   }, [data]);
-  // console.log(activityData);
-  //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
   }, [data.meetingDate, data.meetingTime]);
 
   const repeatAvatar = (data) => {
+    //console.log(data); // [{memberId: 2, nickname: 'user', fileInfo: {…}}]
     let result = [];
-    // console.log(data);
+
     if (data.length >= 4) {
       for (let i = 0; i < 4; i++) {
         result.push(
@@ -262,18 +263,18 @@ const AzitList = ({ data, myPage, activityData }) => {
             </div>
             <div className="etcCell">
               <div className="profileAvatar">
-                <div className="imgWrap">
+                {/* <div className="imgWrap">
                   <img
                     alt={data.host.nickname}
                     src={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
                   />
-                </div>
+                </div> */}
                 {clubMember ? repeatAvatar(clubMember) : null}
               </div>
               <div className="limitCell">
                 <img src={UserListIcon} alt="limitIcon" />
                 <div className="limitWrap">
-                  <span className="current">{clubMember.length + 1} </span>/
+                  <span className="current">{clubMember.length} </span>/
                   <span className="limit"> {data.memberLimit}</span>명
                 </div>
               </div>

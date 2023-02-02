@@ -4,9 +4,8 @@ import Button from "../components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import { axiosInstance } from "../util/axios";
 import { useState } from "react";
-
+import axiosInstance from "../util/axios";
 
 const Signup = () => {
 
@@ -14,7 +13,7 @@ const Signup = () => {
   const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()])[0-9a-zA-Z~!@#$%^&*()]{8,16}$/i;
 
-  const { register, watch, handleSubmit, getValues, formState: {errors, isValid} } = useForm({mode: "onChange"});
+  const { register, watch, handleSubmit, formState: {errors, isValid} } = useForm({mode: "onChange"});
   const password = useRef();
   password.current = watch('password');
 
@@ -38,8 +37,7 @@ const Signup = () => {
     try {
       const res = await axiosInstance.post(
         `api/members/check`,
-        body,
-      )
+        body)
       if(res.status === 200 && nicknameRegExp.test(nickname)) {
         setNicknameChecked(true);
         alert("사용 가능한 닉네임입니다.");
@@ -58,8 +56,7 @@ const Signup = () => {
     try {
       const res = await axiosInstance.post(
         `api/members/check`,
-        body,
-      )
+        body)
       if(res.status === 200) {
         setEmailChecked(true);
         alert("사용 가능한 이메일입니다.");
@@ -201,6 +198,7 @@ const SignupInputWrap = styled.div`
   }
   & > .hidden {
     visibility: hidden;
+    visibility: hidden;
   }
 `
 
@@ -237,6 +235,8 @@ const ConfirmAvailableCheck = styled.div`
   left: 1.5rem;
   display: ${props => props.display || ""};
 `
+
+
 
 
 

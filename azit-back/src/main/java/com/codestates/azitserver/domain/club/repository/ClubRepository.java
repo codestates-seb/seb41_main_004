@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.codestates.azitserver.domain.category.entity.CategorySmall;
 import com.codestates.azitserver.domain.club.entity.Club;
+import com.codestates.azitserver.domain.club.entity.ClubMember;
+import com.codestates.azitserver.domain.member.entity.Member;
 
 public interface ClubRepository extends JpaRepository<Club, Long> {
 	@Query("select c from Club c where c.clubStatus <> 'CLUB_CANCEL'")
@@ -30,4 +32,8 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 	// SELECT * FROM CATEGORY_SMALL WHERE CATEGORY_SMALL_ID IN (1,7)
 	@Query("select c from Club  c where c.categorySmall in :categorySmall and c.clubStatus <> 'CLUB_CANCEL'")
 	Page<Club> findAllClubByCategorySmallIds(List<CategorySmall> categorySmall, Pageable pageable);
+
+	List<Club> findAllByHost(Member host);
+
+
 }

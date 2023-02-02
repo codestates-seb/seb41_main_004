@@ -5,7 +5,7 @@ import AzitSettingBarArrow from "../images/AzitSettingBarArrow.png";
 import { LogoutRequestModal } from "../components/Logout/LogoutRequestModal";
 import { useState } from "react";
 import { removeCookie } from "../util/cookie/cookie";
-import useAxios from "../util/useAxios";
+import axiosInstance from "../util/axios";
 
 const AzitSettingWrap = styled.div`
   display: flex;
@@ -71,23 +71,17 @@ const DeleteBtnWrap = styled.div`
 `;
 
 const UserPageSetting = () => {
-  const axiosInstance = useAxios();
   const [modalOpen, setModalOpen] = useState(false);
   const modalHandler = () => {
   modalOpen ? setModalOpen(false) : setModalOpen(true);
   }
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem('accessToken');
-
   const LogoutButtonClick = async() => {
     try {
       const res = await axiosInstance.post(
         `/api/auth/logout`,
         {"body" : ""},
-        {
-          headers: { Authorization: accessToken }
-        }
       )
       if(res.status === 200) {
         removeCookie('refreshToken');
