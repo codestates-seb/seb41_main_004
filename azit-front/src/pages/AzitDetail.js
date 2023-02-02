@@ -280,7 +280,7 @@ const AzitDetail = () => {
   const [btnStatus, setBtnStatus] = useState("join");
 
   const azitLookup = async () => {
-    const res = await axiosInstance.get(`/api/clubs/${id}`,);
+    const res = await axiosInstance.get(`/api/clubs/${id}`);
     return res.data.data;
   };
 
@@ -343,7 +343,7 @@ const AzitDetail = () => {
 
   const AzitCancel = async () => {
     try {
-      await axiosInstance.delete(`/api/clubs/${id}/signups/${memberId}`,);
+      await axiosInstance.delete(`/api/clubs/${id}/signups/${memberId}`);
       alert("가입을 취소하였습니다.");
       navigate(`/`);
     } catch (e) {
@@ -351,6 +351,7 @@ const AzitDetail = () => {
     }
   };
 
+  console.log(data);
   return (
     <AzitDetailWrap>
       <AzitDetailHeader clubData={data} />
@@ -374,7 +375,7 @@ const AzitDetail = () => {
             <div className="desc">
               <span>{data.categorySmall.categoryName}</span>
               <p>
-                {clubMember.length + 1}/{data.memberLimit}명
+                {clubMember.length}/{data.memberLimit}명
               </p>
             </div>
             <div className="azitInfo">
@@ -413,14 +414,6 @@ const AzitDetail = () => {
             <div className="memberList">
               <h3>참여 멤버</h3>
               <ul className="selectWrap">
-                <li>
-                  <Link to={`/userpage/${data.host.memberId}`}>
-                    <UserImgWrap
-                      userUrl={`${process.env.REACT_APP_S3_URL}${data.host.fileInfo.fileUrl}/${data.host.fileInfo.fileName}`}
-                    />
-                    <p>{data.host.nickname}</p>
-                  </Link>
-                </li>
                 {clubMember.map((member) => (
                   <li key={member.clubMemberId}>
                     <Link to={`/userpage/${member.member.memberId}`}>
