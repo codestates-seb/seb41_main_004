@@ -1,6 +1,11 @@
 package com.codestates.azitserver.domain.member.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +28,9 @@ import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
+import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
+import com.codestates.azitserver.domain.club.repository.ClubRepository;
+import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
@@ -57,10 +65,7 @@ public class MemberService {
 	private final ClubMapper clubMapper;
 	private final MemberMapper memberMapper;
 
-<<<<<<< HEAD
 	private final ClubRepository clubRepository;
-=======
->>>>>>> main
 	//회원 생성
 	public Member createMember(Member tempMember, MultipartFile profileImage, List<Long> categorySmallIdList) {
 		// 닉네임 중복 확인
@@ -202,6 +207,7 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
+
 	//팔로우, 언팔로우
 	public Member followMember(Member member) {
 		return null; //TODO
@@ -225,10 +231,7 @@ public class MemberService {
 			throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST_SIGNUP);
 		}
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 
 	// 닉네임 중복 확인 when sign-up
 	public void verifyExistEmail(Member member) {
@@ -296,6 +299,8 @@ public class MemberService {
 		return status;
 	}
 
+
+
 	public List<ClubMemberDto.ClubMemberStatusResponse>
 	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
 		List<ClubMemberDto.ClubMemberStatusResponse> clubMemberStatusResponseList = new ArrayList<>();
@@ -333,7 +338,27 @@ public class MemberService {
 
 			clubMemberStatusResponseList.add(response);
 		}
+
 		return clubMemberStatusResponseList;
 	}
+	public List<ClubMemberDto.ClubMemberStatusResponse>
+	responseSorter(List<ClubMemberDto.ClubMemberStatusResponse> responses) {
+		Collections.sort(responses, new MeetingTimeComparator().reversed());
+		return responses;
+	}
 
+	public class MeetingTimeComparator implements Comparator<ClubMemberDto.ClubMemberStatusResponse> {
+		@Override
+		public int compare(ClubMemberDto.ClubMemberStatusResponse response1,
+			ClubMemberDto.ClubMemberStatusResponse response2) {
+			return Integer.valueOf(getTime(response1).compareTo(getTime(response2)));
+		}
+	}
+
+	public LocalDateTime getTime(ClubMemberDto.ClubMemberStatusResponse response) {
+		LocalDate meetingDate = response.getClubInfoResponse().getMeetingDate();
+		LocalTime meetingTime = response.getClubInfoResponse().getMeetingTime();
+
+		return LocalDateTime.of(meetingDate, meetingTime);
+	}
 }

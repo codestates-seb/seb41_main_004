@@ -1,5 +1,6 @@
 package com.codestates.azitserver.domain.member.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -177,7 +178,7 @@ public class MemberController {
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(clubMemberList);
 
-		return new ResponseEntity<>(responses, HttpStatus.OK);
+		return new ResponseEntity<>(memberService.responseSorter(responses), HttpStatus.OK);
 	}
 	// 참여상태별 조회
 
@@ -200,7 +201,7 @@ public class MemberController {
 		List<ClubMemberDto.ClubMemberStatusResponse> responses =
 			memberService.responseWithInfoGenerator(filteredClubMemberList);
 
-		return new ResponseEntity<>(responses, HttpStatus.OK);
+		return new ResponseEntity<>(memberService.responseSorter(responses), HttpStatus.OK);
 	}
 
 	//TODO 팔로우, 언팔로우

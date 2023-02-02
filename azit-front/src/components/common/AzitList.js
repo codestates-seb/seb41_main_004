@@ -140,7 +140,6 @@ const Status = styled.div`
   }
 `;
 const AzitList = ({ data, myPage, activityData }) => {
-  // console.log(data); //console.log 지우지 말아주세요.
   const [meetDate, setMeetDate] = useState("00월 00일 00:00");
   const [clubMember, setClubMember] = useState([]);
   const [activeHide, setActiveHide] = useState(false);
@@ -156,9 +155,11 @@ const AzitList = ({ data, myPage, activityData }) => {
         : "참여중"
     );
   }, [activityData]);
+
   const handleActiveHide = () => {
     setActiveHide(!activeHide);
   };
+
   // 상태가 대기중이 아닌사람 filter하는 로직
   useEffect(() => {
     let filterMember = data.clubMembers
@@ -167,15 +168,15 @@ const AzitList = ({ data, myPage, activityData }) => {
         })
       : data.participantList;
     setClubMember(filterMember);
+    //console.log(filterMember) -> [{memberId: 1, nickname: 'admin', fileInfo: {…}}]
   }, [data]);
-  // console.log(activityData);
-  //이런식으로 들어옴[{clubMemberId: 1, clubMemberStatus: 'CLUB_JOINED', joinAnswer: '1번 아지트 저도 참가할래요!', member: {…}}]
 
   useEffect(() => {
     setMeetDate(toDateFormatOfMonthDay(data.meetingDate, data.meetingTime));
   }, [data.meetingDate, data.meetingTime]);
 
   const repeatAvatar = (data) => {
+    //console.log(data); // [{memberId: 2, nickname: 'user', fileInfo: {…}}]
     let result = [];
     // console.log(data);
     if (data.length >= 5) {
