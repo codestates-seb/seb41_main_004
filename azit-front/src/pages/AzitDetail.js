@@ -312,7 +312,7 @@ const AzitDetail = () => {
       if (data.clubStatus !== "CLUB_ACTIVE") {
         setBtnStatus("close");
         // 호스트가 아니고, 참가 신청을 하지 않고, 참가하지 않은 사람
-      } else if (data.memberLimit === joinId.length + 1) {
+      } else if (data.memberLimit === joinId.length) {
         setBtnStatus("full");
       } else if (
         memberId !== data.host.memberId &&
