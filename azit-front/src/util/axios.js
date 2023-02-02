@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie, removeCookie } from "./cookie/cookie";
+import { getCookie } from "./cookie/cookie";
 
 // axios.defaults.withCredentials = true;
 

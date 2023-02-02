@@ -148,10 +148,10 @@ const AzitList = ({ data, myPage, activityData }) => {
 
   useEffect(() => {
     setUserStatus(
-      activityData?.clubMemberStatus === "CLUB_WAITING"
-        ? "신청중"
-        : activityData?.isClosed
+      activityData?.isClosed
         ? "종료됨"
+        : activityData?.clubMemberStatus === "CLUB_WAITING"
+        ? "신청중"
         : "참여중"
     );
   }, [activityData]);

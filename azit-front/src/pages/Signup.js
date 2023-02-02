@@ -37,8 +37,7 @@ const Signup = () => {
     try {
       const res = await axiosInstance.post(
         `api/members/check`,
-        body,
-      )
+        body)
       if(res.status === 200 && nicknameRegExp.test(nickname)) {
         setNicknameChecked(true);
         alert("사용 가능한 닉네임입니다.");
@@ -57,8 +56,7 @@ const Signup = () => {
     try {
       const res = await axiosInstance.post(
         `api/members/check`,
-        body,
-      )
+        body)
       if(res.status === 200) {
         setEmailChecked(true);
         alert("사용 가능한 이메일입니다.");
@@ -200,6 +198,7 @@ const SignupInputWrap = styled.div`
   }
   & > .hidden {
     visibility: hidden;
+    visibility: hidden;
   }
 `
 
@@ -236,6 +235,8 @@ const ConfirmAvailableCheck = styled.div`
   left: 1.5rem;
   display: ${props => props.display || ""};
 `
+
+
 
 
 
