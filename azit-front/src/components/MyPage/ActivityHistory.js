@@ -226,7 +226,7 @@ const ActivityHistory = ({ myPage }) => {
       )
     );
   }, [getData]);
-
+  
   return (
     <Container>
       <>

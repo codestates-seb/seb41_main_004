@@ -28,9 +28,6 @@ import com.codestates.azitserver.domain.club.entity.Club;
 import com.codestates.azitserver.domain.club.entity.ClubMember;
 import com.codestates.azitserver.domain.club.mapper.ClubMapper;
 import com.codestates.azitserver.domain.club.mapper.ClubMemberMapper;
-import com.codestates.azitserver.domain.club.repository.ClubMemberRepository;
-import com.codestates.azitserver.domain.club.repository.ClubRepository;
-import com.codestates.azitserver.domain.club.service.ClubService;
 import com.codestates.azitserver.domain.common.CustomBeanUtils;
 import com.codestates.azitserver.domain.fileInfo.entity.FileInfo;
 import com.codestates.azitserver.domain.fileInfo.service.StorageService;
@@ -207,7 +204,6 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
-
 	//팔로우, 언팔로우
 	public Member followMember(Member member) {
 		return null; //TODO
@@ -298,8 +294,6 @@ public class MemberService {
 		}
 		return status;
 	}
-
-
 
 	public List<ClubMemberDto.ClubMemberStatusResponse>
 	responseWithInfoGenerator(List<ClubMember> clubMemberList) {
