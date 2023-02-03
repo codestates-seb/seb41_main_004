@@ -135,7 +135,7 @@ _취미를 함께하고 공유하는 추억을 제공합니다._
 <a href="https://github.com/hionpu"><img src="https://img.shields.io/badge/github-hionpu-bb2649?style=flat-square&logo=github"/></a>
 </summary>
 <div>
-(회고를 여기에 입력해주세요)
+프리프로젝트에서 전혀 개발 경험을 하지 못하고 메인프로젝트에 진입하게 돼서 걱정을 많이 했다. 개발 속도가 느려서 계획 단계에서 내가 담당하기로 한 부분 중 꽤 많은 부분을 다른 팀원분이 많이 가져가셨지만 나머지 부분은 제법 나름 뿌듯한 수준으로 구현했다. 이제 뭘 더 공부해야 하는지도 알았으니 공부에 매진해야지.
 </div>
 </details>
 <p>
