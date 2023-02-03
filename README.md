@@ -103,7 +103,7 @@ _취미를 함께하고 공유하는 추억을 제공합니다._
 <a href="https://github.com/CHOGANGYEOL"><img src="https://img.shields.io/badge/github-CHOGANGYEOL-bb2649?style=flat-square&logo=github"/></a>
 </summary>
 <div>
-(회고를 여기에 입력해주세요)
+한달간, 아주 유익하고 재밌는 시간이였습니다. 처음부터 기획해서 개발까지 한다는 경험은 앞으로도 많이 없을 것 같아 새롭게 알아가는 기술도 많았고, 이렇게 프로젝트를 진행했다는 점이 너무 좋았습니다. 아직 구현못한 기능은 차차 리팩토링 시간을 가져 마무리를 짓고 싶은 마음입니다.
 </div>
 </details>
 <p>
